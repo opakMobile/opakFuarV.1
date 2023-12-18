@@ -4,6 +4,7 @@ void main() {
   runApp(const MyApp());
 }
 //asa
+//degil
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
