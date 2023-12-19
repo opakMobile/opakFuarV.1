@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:opak_fuar/pages/cariListePage.dart';
+
 import 'package:opak_fuar/raporlar/raporBelgeSecim.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 

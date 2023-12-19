@@ -1,8 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/model/raporModel.dart';
-import 'package:opak_fuar/pages/cariDetayPage.dart';
-import 'package:opak_fuar/pages/cariFormPage.dart';
+
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';

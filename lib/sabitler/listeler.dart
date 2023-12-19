@@ -1,4 +1,5 @@
 import 'package:opak_fuar/model/raporModel.dart';
+import 'package:opak_fuar/model/stokModel.dart';
 
 class Listeler{
   static List<RaporModel> listRapor = [
@@ -12,5 +13,88 @@ class Listeler{
     RaporModel(ID: 8, UUID: '123456789', CARIADI: 'Cari Adı 3', SATIRSAYISI: 30, IL: 'Afyonkarahisar', TOPLAMTUTAR: 3000),
     RaporModel(ID: 9, UUID: '123456789', CARIADI: 'Cari Adı 4', SATIRSAYISI: 40, IL: 'Şırnak', TOPLAMTUTAR: 4000),
     RaporModel(ID: 10, UUID: '123456789', CARIADI: 'Cari Adı 5', SATIRSAYISI: 50, IL: 'İstanbul', TOPLAMTUTAR: 5000),
+  ];
+   static List<StokModel> StokModelListesi = [
+    StokModel(
+      stokAdi: "Mikro Sx200 Versatil Kalem Çiçek Figürlü",
+      stokBarkodu: "123456",
+      kdv: 0.18,
+      iskonto: 60,
+      malFazlasi: 15,
+      miktar: 10,
+      birim: "Adet",
+      fiyat: 50.0,
+    ),
+    StokModel(
+      stokAdi: "Mikro Sx200 Versatil Kalem Çiçek Figürlü",
+      stokBarkodu: "789012",
+      kdv: 0.08,
+      iskonto: 50,
+      malFazlasi: 15,
+      miktar: 5,
+      birim: "Kilogram",
+      fiyat: 20.0,
+    ),
+    StokModel(
+      stokAdi: "Mikro Sx200 Versatil Kalem Çiçek Figürlü",
+      stokBarkodu: "789012",
+      kdv: 0.08,
+      iskonto: 50,
+      malFazlasi: 15,
+      miktar: 5,
+      birim: "Kilogram",
+      fiyat: 20.0,
+    ),
+    StokModel(
+      stokAdi: "Mikro Sx200 Versatil Kalem Çiçek Figürlü",
+      stokBarkodu: "789012",
+      kdv: 0.08,
+      iskonto: 50,
+      malFazlasi: 15,
+      miktar: 5,
+      birim: "Kilogram",
+      fiyat: 20.0,
+    ),
+    StokModel(
+      stokAdi: "Mikro Sx200 Versatil Kalem Çiçek Figürlü",
+      stokBarkodu: "789012",
+      kdv: 0.08,
+      iskonto: 50,
+      malFazlasi: 15,
+      miktar: 5,
+      birim: "Kilogram",
+      fiyat: 20.0,
+    ),
+    StokModel(
+      stokAdi: "Mikro Sx200 Versatil Kalem Çiçek Figürlü",
+      stokBarkodu: "789012",
+      kdv: 0.08,
+      iskonto: 50,
+      malFazlasi: 15,
+      miktar: 5,
+      birim: "Kilogram",
+      fiyat: 20.0,
+    ),
+    StokModel(
+      stokAdi: "Mikro Sx200 Versatil Kalem Çiçek Figürlü",
+      stokBarkodu: "789012",
+      kdv: 0.08,
+      iskonto: 50,
+      malFazlasi: 15,
+      miktar: 5,
+      birim: "Kilogram",
+      fiyat: 20.0,
+    ),
+    StokModel(
+      stokAdi: "Mikro Sx200 Versatil Kalem Çiçek Figürlü",
+      stokBarkodu: "789012",
+      kdv: 0.08,
+      iskonto: 50,
+      malFazlasi: 15,
+      miktar: 5,
+      birim: "Kilogram",
+      fiyat: 20.0,
+    ),
+    
   ];
 }

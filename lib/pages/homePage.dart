@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:opak_fuar/pages/cariIslemlerPage.dart';
+import 'package:opak_fuar/cari/cariIslemlerPage.dart';
+
 import 'package:opak_fuar/raporlar/raporlar.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/siparis/siparisCariList.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,7 +37,10 @@ class _HomePageState extends State<HomePage> {
                 // ! Siparis Al
                 GestureDetector(
                   onTap: () {
-                    //? siparisAlPage
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SiparisCariList()));
                   },
                   child: Card(
                     shape: RoundedRectangleBorder(

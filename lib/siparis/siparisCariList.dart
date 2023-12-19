@@ -1,18 +1,19 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:opak_fuar/pages/cariDetayPage.dart';
-import 'package:opak_fuar/pages/cariFormPage.dart';
+import 'package:opak_fuar/cari/cariDetayPage.dart';
+import 'package:opak_fuar/cari/cariFormPage.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 
-class CariListePage extends StatefulWidget {
-  CariListePage({required this.islem});
+class SiparisCariList extends StatefulWidget {
+  SiparisCariList();
 
-  final bool islem;
+
   @override
-  State<CariListePage> createState() => _CariListePageState();
+  State<SiparisCariList> createState() => _SiparisCariListState();
 }
 
-class _CariListePageState extends State<CariListePage> {
+class _SiparisCariListState extends State<SiparisCariList> {
   Color randomColor() {
     Random random = Random();
     int red = random.nextInt(128); // 0-127 arasında rastgele bir değer
@@ -187,22 +188,14 @@ class _CariListePageState extends State<CariListePage> {
                                     Text(deneme[index]["surname"].toString()),
                               ),
                               onTap: () {
-                                if (widget.islem) {
+                                
                                   // cariye gidecek bilgisine
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              CariDetayPage()));
-                                } else {
-                                  // cari listesine gidecek
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => CariFormPage(
-                                                yeniKayit: false,
-                                              )));
-                                }
+                                              SiparisUrunAra()));
+                             
                               },
                             ),
                             Divider(

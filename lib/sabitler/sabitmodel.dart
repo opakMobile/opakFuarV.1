@@ -78,7 +78,7 @@ bottombarDizayn(context) {
   );
 }
 
-UcCizgi() {
+Widget UcCizgi() {
   return Align(
     alignment: Alignment.topLeft,
     child: IconButton(
