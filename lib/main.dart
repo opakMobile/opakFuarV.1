@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opak_fuar/pages/homePage.dart';
 
 void main() {
   runApp(MyApp());
@@ -8,7 +9,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
     );
   }
 }
@@ -19,12 +21,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Widget currentContent =
-      Denemewidget1(); 
+  Widget currentContent = Denemewidget1();
 
   void degistir() {
     setState(() {
-      currentContent = DenemeWidget2();
+      currentContent = HomePage();
     });
   }
 
@@ -38,12 +39,11 @@ class _MyHomePageState extends State<MyHomePage> {
             expandedHeight: 200.0,
             flexibleSpace: FlexibleSpaceBar(
               title: Text('Üst'),
-              
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              currentContent, 
+              currentContent,
             ]),
           ),
           SliverToBoxAdapter(
@@ -105,7 +105,7 @@ class _DenemeWidget2State extends State<DenemeWidget2> {
           onPressed: () {
             sayiArt();
           },
-          child: Text("DENEME Sayi bas buraya = "+sayi.toString()),
+          child: Text("DENEME Sayi bas buraya = " + sayi.toString()),
         ),
       ),
     );
