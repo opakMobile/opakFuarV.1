@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/pages/cariIslemlerPage.dart';
+import 'package:opak_fuar/raporlar/raporlar.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 
 class HomePage extends StatefulWidget {
@@ -201,56 +202,64 @@ class _HomePageState extends State<HomePage> {
                       )),
                 ),
                 // ! Raporlar
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  elevation: 3,
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.13,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 25.0, right: 25.0, top: 10.0, bottom: 10.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.receipt_long,
-                                  size: 70,
-                                ),
-                                Spacer(),
-                                Text('Raporlar',
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.pink)),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.375,
-                                  height: 3,
-                                  color: Colors.pink,
-                                ),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.375,
-                                  height: 3,
-                                  color: Colors.grey,
-                                ),
-                              ],
-                            )
-                          ],
+                GestureDetector(
+                  onTap: (){
+                     Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RaporlarPage()));
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 3,
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 0.13,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      )),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 10.0, bottom: 10.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.receipt_long,
+                                    size: 70,
+                                  ),
+                                  Spacer(),
+                                  Text('Raporlar',
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.pink)),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.375,
+                                    height: 3,
+                                    color: Colors.pink,
+                                  ),
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.375,
+                                    height: 3,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        )),
+                  ),
                 ),
               ],
             ),
