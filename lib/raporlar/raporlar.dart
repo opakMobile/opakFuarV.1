@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/pages/cariListePage.dart';
+import 'package:opak_fuar/raporlar/raporBelgeSecim.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 
-import 'cariFormPage.dart';
 
-class CariIslemlerPage extends StatefulWidget {
-  const CariIslemlerPage({super.key});
+
+class RaporlarPage extends StatefulWidget {
+  const RaporlarPage({super.key});
 
   @override
-  State<CariIslemlerPage> createState() => _CariIslemlerPageState();
+  State<RaporlarPage> createState() => _RaporlarPageState();
 }
 
-class _CariIslemlerPageState extends State<CariIslemlerPage> {
+class _RaporlarPageState extends State<RaporlarPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -39,8 +40,8 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CariListePage(
-                                  islem: false,
+                            builder: (context) => RaporBelgeSecim(
+                                  baslik: "Plasiyer Satış Raporu",
                                 )));
                   },
                   child: Card(
@@ -50,7 +51,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                     elevation: 3,
                     child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.17,
+                        height: MediaQuery.of(context).size.height * 0.13,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
@@ -63,13 +64,13 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                               Row(
                                 children: [
                                   Icon(
-                                    Icons.search,
+                                      Icons.receipt_long,
                                     size: 70,
-                                    color: Colors.orange,
+                                    color: Colors.blue,
                                   ),
                                   Spacer(),
                                   Text(
-                                    'Cari Listesi',
+                                    'Plasiyer Satış Raporu',
                                         maxLines: 2,
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
@@ -81,7 +82,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.03,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Row(
                                 children: [
@@ -89,7 +90,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                     width: MediaQuery.of(context).size.width *
                                         0.375,
                                     height: 3,
-                                    color: Colors.orange,
+                                    color: Colors.blue,
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.width *
@@ -110,8 +111,8 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CariListePage(
-                                  islem: true,
+                            builder: (context) => RaporBelgeSecim(
+                                  baslik: "Bayi Satış Raporu",
                                 )));
                   },
                   child: Card(
@@ -121,7 +122,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                     elevation: 3,
                     child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.17,
+                        height: MediaQuery.of(context).size.height * 0.13,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
@@ -136,11 +137,11 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                   Icon(
                                     Icons.receipt_long,
                                     size: 70,
-                                    color: Colors.pink,
+                                    color: Colors.green,
                                   ),
                                   Spacer(),
                                   Text(
-                                    'Cari Bilgi Raporu',
+                                    'Bayi Satış Raporu',
                                       maxLines: 2,
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
@@ -153,7 +154,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.03,
+                                  MediaQuery.of(context).size.height * 0.01,
                               ),
                               Row(
                                 children: [
@@ -161,7 +162,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                     width: MediaQuery.of(context).size.width *
                                         0.375,
                                     height: 3,
-                                    color: Colors.pink,
+                                    color: Colors.green,
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.width *
@@ -182,8 +183,8 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CariFormPage(
-                                  yeniKayit: true,
+                            builder: (context) => RaporBelgeSecim(
+                                  baslik: "Alıcı Satış Raporu",
                                 )));
                   },
                   child: Card(
@@ -193,7 +194,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                     elevation: 3,
                     child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.17,
+                        height: MediaQuery.of(context).size.height * 0.13,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
@@ -206,13 +207,13 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                               Row(
                                 children: [
                                   Icon(
-                                    Icons.person_add_alt_1_sharp,
+                                     Icons.receipt_long,
                                     size: 70,
-                                    color: Colors.blue,
+                                    color: Colors.orange,
                                   ),
                                   Spacer(),
                                   Text(
-                                    'Yeni Cari Ekle',
+                                    'Alıcı Satış Raporu',
                                     maxLines: 2,
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
@@ -224,7 +225,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.03,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Row(
                                 children: [
@@ -232,7 +233,77 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                     width: MediaQuery.of(context).size.width *
                                         0.375,
                                     height: 3,
-                                    color: Colors.blue,
+                                    color: Colors.orange,
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.375,
+                                    height: 3,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        )),
+                  ),
+                ),
+                 GestureDetector(
+                  onTap: () {
+                   Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RaporBelgeSecim(
+                                  baslik: "Stok Satış Raporu",
+                                )));
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 3,
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 0.13,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 10.0, bottom: 10.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                     Icons.receipt_long,
+                                    size: 70,
+                                    color: Colors.pink,
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    'Stok Satış Raporu',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height:
+                                   MediaQuery.of(context).size.height * 0.01,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.375,
+                                    height: 3,
+                                    color: Colors.pink,
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.width *
