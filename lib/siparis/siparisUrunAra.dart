@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:opak_fuar/model/stokModel.dart';
+import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/siparisTamamla.dart';
@@ -223,10 +223,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height * 0.5,
                             child: ListView.builder(
-                              itemCount: Listeler.StokModelListesi.length,
+                              itemCount: listeler.listStok.length,
                               itemBuilder: (context, index) {
-                                StokModel stokModel =
-                                    Listeler.StokModelListesi[index];
+                                StokKart stokModel =
+                                    listeler.listStok[index];
                                 return Column(
                                   children: [
                                     Row(
@@ -237,11 +237,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(stokModel.stokAdi),
-                                            Text(stokModel.stokBarkodu +
+                                            Text(stokModel.ADI!),
+                                            Text(stokModel.KOD! +
                                                 "  " +
                                                 "KDV " +
-                                                stokModel.kdv.toString()),
+                                                stokModel.SATIS_KDV.toString()),
                                           ],
                                         ),
                                         Card(
@@ -294,7 +294,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.iskonto
+                                                    stokModel.SATISISK!
                                                         .toStringAsFixed(2),
                                                   ),
                                                 ),
@@ -324,8 +324,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.malFazlasi
-                                                        .toStringAsFixed(2),
+                                                    "MF"
                                                   ),
                                                 ),
                                               )
@@ -354,8 +353,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.miktar
-                                                        .toStringAsFixed(2),
+                                                   "1"
                                                   ),
                                                 ),
                                               )
@@ -383,7 +381,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.birim,
+                                                    stokModel.OLCUBIRIM1!,
                                                     style:
                                                         TextStyle(fontSize: 12),
                                                   ),
@@ -413,7 +411,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.fiyat
+                                                    stokModel.SFIYAT1!
                                                         .toStringAsFixed(2),
                                                   ),
                                                 ),
@@ -454,7 +452,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                   color: Colors.orange),
                                             ),
                                             Text(
-                                              stokModel.fiyat
+                                              stokModel.SFIYAT1!
                                                   .toStringAsFixed(2),
                                               style: TextStyle(
                                                 fontSize: 12,
@@ -471,7 +469,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                   color: Colors.orange),
                                             ),
                                             Text(
-                                              stokModel.fiyat
+                                              stokModel.SFIYAT1!
                                                   .toStringAsFixed(2),
                                               style: TextStyle(
                                                 fontSize: 12,
@@ -488,7 +486,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                   color: Colors.orange),
                                             ),
                                             Text(
-                                              stokModel.fiyat
+                                              stokModel.SATIS_KDV!
                                                   .toStringAsFixed(2),
                                               style: TextStyle(
                                                 fontSize: 12,
@@ -505,7 +503,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                   color: Colors.orange),
                                             ),
                                             Text(
-                                              stokModel.fiyat
+                                              stokModel.SFIYAT1!
                                                   .toStringAsFixed(2),
                                               style: TextStyle(
                                                 fontSize: 12,
@@ -530,10 +528,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height * 0.5,
                             child: ListView.builder(
-                              itemCount: Listeler.StokModelListesi.length,
+                              itemCount: listeler.listStok.length,
                               itemBuilder: (context, index) {
-                                StokModel stokModel =
-                                    Listeler.StokModelListesi[index];
+                                StokKart stokModel =
+                                    listeler.listStok[index];
 
                                 return Column(
                                   children: [
@@ -545,11 +543,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(stokModel.stokAdi),
-                                            Text(stokModel.stokBarkodu +
+                                            Text(stokModel.ADI!),
+                                            Text(stokModel.KOD! +
                                                 "  " +
                                                 "KDV " +
-                                                stokModel.kdv.toString()),
+                                                stokModel.SATIS_KDV.toString()),
                                           ],
                                         ),
                                         SizedBox(
@@ -622,7 +620,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.iskonto
+                                                    stokModel.SATISISK!
                                                         .toStringAsFixed(2),
                                                   ),
                                                 ),
@@ -652,7 +650,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.malFazlasi
+                                                    stokModel.SATISISK!
                                                         .toStringAsFixed(2),
                                                   ),
                                                 ),
@@ -682,8 +680,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.miktar
-                                                        .toStringAsFixed(2),
+                                                   "1"
                                                   ),
                                                 ),
                                               )
@@ -711,7 +708,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.birim,
+                                                    stokModel.OLCUBIRIM1!,
                                                     style:
                                                         TextStyle(fontSize: 12),
                                                   ),
@@ -741,7 +738,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    stokModel.fiyat
+                                                    stokModel.SFIYAT1!
                                                         .toStringAsFixed(2),
                                                   ),
                                                 ),

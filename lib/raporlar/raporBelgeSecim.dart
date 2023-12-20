@@ -123,9 +123,9 @@ class _RaporBelgeSecimState extends State<RaporBelgeSecim> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.55,
                     child: ListView.builder(
-                      itemCount: Listeler.listRapor.length,
+                      itemCount: listeler.listRapor.length,
                       itemBuilder: (context, index) {
-                        RaporModel model = Listeler.listRapor[index];
+                        RaporModel model = listeler.listRapor[index];
                        
                         String harf1 = Ctanim.cariIlkIkiDon(model.CARIADI!)[0];
                         String harf2 = Ctanim.cariIlkIkiDon(model.CARIADI!)[1];

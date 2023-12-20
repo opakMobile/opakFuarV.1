@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:opak_fuar/db/dataBaseHelper.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
+import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -159,6 +161,14 @@ class _settings_pageState extends State<settings_page> {
                                                    setState(() {
                                                      enable = true;
                                                    });
+                                                   DatabaseHelper dt =
+                                                              DatabaseHelper(
+                                                                  "opak" +
+                                                                      lisans
+                                                                          .text +
+                                                                      ".db");
+                                                          Ctanim.db = await dt
+                                                              .database();
                                                      Navigator.pop(context);
                                                   },
                                                   secondButtonText: "İptal",

@@ -2,6 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/cari/cariDetayPage.dart';
 import 'package:opak_fuar/cari/cariFormPage.dart';
+import 'package:opak_fuar/model/cariModel.dart';
+import 'package:opak_fuar/sabitler/Ctanim.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 
 class CariListePage extends StatefulWidget {
@@ -157,17 +160,13 @@ class _CariListePageState extends State<CariListePage> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.55,
                     child: ListView.builder(
-                      itemCount: deneme.length,
+                      itemCount: listeler.listCari.length,
                       itemBuilder: (context, index) {
-                        String trim = deneme[index]["name"].toString().trim();
-                        String harf1 = "";
-                        String harf2 = "";
-                        harf1 = trim[0];
-                        if (trim.length == 1) {
-                          harf2 = "K";
-                        } else {
-                          harf2 = trim[1];
-                        }
+                        Cari cari = listeler.listCari[index];
+                       
+                        String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                        String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                     
                         return Column(
                           children: [
                             ListTile(
@@ -179,12 +178,12 @@ class _CariListePageState extends State<CariListePage> {
                                 ),
                               ),
                               title: Text(
-                                deneme[index]["name"].toString(),
+                                cari.ADI.toString(),
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child:
-                                    Text(deneme[index]["surname"].toString()),
+                                    Text(cari.IL!.toString()),
                               ),
                               onTap: () {
                                 if (widget.islem) {
@@ -204,6 +203,7 @@ class _CariListePageState extends State<CariListePage> {
                                               )));
                                 }
                               },
+                              trailing: Text(cari.BAKIYE.toString()),
                             ),
                             Divider(
                               thickness: 2,

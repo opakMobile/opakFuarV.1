@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:opak_fuar/db/dataBaseHelper.dart';
 import 'package:opak_fuar/pages/homePage.dart';
 import 'package:opak_fuar/pages/login.dart';
+import 'package:opak_fuar/sabitler/Ctanim.dart';
 
-void main() {
+void main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+  DatabaseHelper dt = DatabaseHelper("opak1.db");
+    Ctanim.db = await dt.database();
   runApp(MyApp());
 }
 

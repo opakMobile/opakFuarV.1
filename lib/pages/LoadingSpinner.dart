@@ -12,7 +12,7 @@ class LoadingSpinner extends StatelessWidget {
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                     Image.asset('images/ee1.gif', width: 80, height: 80),
+                     Image.asset('assets/ee1.gif', width: 80, height: 80),
                     //CircularProgressIndicator(), deneme için silindi ama hoşta oldu
                     SizedBox(height: 16),
                     Text(message+'...'),

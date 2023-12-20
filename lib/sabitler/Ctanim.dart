@@ -1,4 +1,16 @@
 class Ctanim {
+  //degiskenler
+  static var db;
+
+
+
+
+
+
+
+
+
+  //fonksiyonalar
   static List cariIlkIkiDon(String text) {
     String trim = text.trim();
     String harf1 = "";
