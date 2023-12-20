@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/pages/homePage.dart';
+import 'package:opak_fuar/pages/login.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: LoginPage(title: '',),
     );
   }
 }
