@@ -49,9 +49,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
+                      /* SizedBox(
                           width: MediaQuery.of(context).size.width * 0.05,
-                          child: UcCizgi()),
+                          child: UcCizgi()),*/
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.35,
                         child: Row(
@@ -119,17 +119,15 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        'Ömer Akkaya Dağıtım Matbaa Kırtasiye Gıda San. Tic. Ltd. Şti.',
-                        maxLines: 1,
-                        style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red),
-                      ),
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      'Ömer Akkaya Dağıtım Matbaa Kırtasiye Gıda San. Tic. Ltd. Şti.',
+                      maxLines: 1,
+                      style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
                     ),
                   ),
                   Row(
@@ -161,7 +159,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 15,
+                    height: MediaQuery.of(context).size.height * 0.05,
                     child: Padding(
                       padding: EdgeInsets.only(top: 15.0),
                       child: DropdownButtonHideUnderline(
@@ -185,14 +183,14 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                       ),
                     ),
                   ),
-                    Divider(
-                                thickness: 2,
-                                color: Colors.black87,
-                              ),
+                  Divider(
+                    thickness: 1.5,
+                    color: Colors.black87,
+                  ),
                   SingleChildScrollView(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.41,
+                      height: MediaQuery.of(context).size.height * 0.5,
                       child: ListView.builder(
                         itemCount: Listeler.StokModelListesi.length,
                         itemBuilder: (context, index) {
@@ -262,7 +260,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                   .size
                                                   .height *
                                               0.04,
-                                           width: MediaQuery.of(context)
+                                          width: MediaQuery.of(context)
                                                   .size
                                                   .width *
                                               0.15,
@@ -316,7 +314,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                   .size
                                                   .height *
                                               0.04,
-                                           width: MediaQuery.of(context)
+                                          width: MediaQuery.of(context)
                                                   .size
                                                   .width *
                                               0.15,
@@ -382,7 +380,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 ),
                               ),
                               Divider(
-                                thickness: 2,
+                                thickness: 1.5,
                                 color: Colors.black87,
                               )
                             ],

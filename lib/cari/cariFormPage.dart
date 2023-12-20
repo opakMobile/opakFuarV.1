@@ -42,7 +42,7 @@ class _CariFormPageState extends State<CariFormPage> {
                       // ! Üst Kısım
                       Row(
                         children: [
-                          UcCizgi(),
+                        //  UcCizgi(),
                           Spacer(),
                           IconButton(
                             onPressed: () {

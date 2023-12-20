@@ -116,7 +116,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                 // ! Üst Kısım
                 Row(
                   children: [
-                    UcCizgi(),
+                  //  UcCizgi(),
                     Spacer(),
                     IconButton(
                       onPressed: () {

@@ -4,10 +4,10 @@ import 'package:opak_fuar/pages/homePage.dart';
 
 appBarDizayn(context) {
   return PreferredSize(
-    preferredSize: Size.fromHeight(130.0),
+    preferredSize: Size.fromHeight(95.0),
     child: Container(
       width: MediaQuery.of(context).size.width,
-      height: 130,
+      //  height: 90,
       color: Colors.white,
       child: Center(
         child: Column(
@@ -25,7 +25,6 @@ appBarDizayn(context) {
                   fontStyle: FontStyle.italic,
                   color: Colors.black),
             ),
-         
           ],
         ),
       ),
@@ -78,6 +77,7 @@ bottombarDizayn(context) {
   );
 }
 
+/*
 Widget UcCizgi() {
   return Align(
     alignment: Alignment.topLeft,
@@ -90,7 +90,7 @@ Widget UcCizgi() {
     ),
   );
 }
-
+*/
 CartYapisi(context, height, String text, Icon icon, Color color) {
   return Card(
     shape: RoundedRectangleBorder(

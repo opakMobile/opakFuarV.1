@@ -115,7 +115,7 @@ class _CariListePageState extends State<CariListePage> {
                 // ! Üst Kısım
                 Row(
                   children: [
-                    UcCizgi(),
+                  //  UcCizgi(),
                     Spacer(),
                     IconButton(
                       onPressed: () {

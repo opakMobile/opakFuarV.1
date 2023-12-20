@@ -44,7 +44,7 @@ class _RaporBelgeSecimState extends State<RaporBelgeSecim> {
                 // ! Üst Kısım
                 Row(
                   children: [
-                    UcCizgi(),
+                 //   UcCizgi(),
                     Spacer(),
                     IconButton(
                       onPressed: () {

@@ -29,7 +29,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                 top: MediaQuery.of(context).size.height * 0.01),
             child: Column(
               children: [
-                UcCizgi(),
+              //  UcCizgi(),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),

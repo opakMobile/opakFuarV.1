@@ -81,7 +81,7 @@ class _CariDetayPageState extends State<CariDetayPage> {
               // ! Üst Kısım
               Row(
                 children: [
-                  UcCizgi(),
+                //  UcCizgi(),
                   Spacer(),
                   IconButton(
                     onPressed: () {
