@@ -32,7 +32,7 @@ appBarDizayn(context) {
   );
 }
 
-bottombarDizayn(context) {
+bottombarDizayn(context, {Widget? button, bool buttonVarMi = false}) {
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 70,
@@ -49,8 +49,8 @@ bottombarDizayn(context) {
             ),
             child: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                Navigator.pushAndRemoveUntil(context,
+                    MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
               },
               icon: Icon(
                 Icons.home,
@@ -58,6 +58,12 @@ bottombarDizayn(context) {
               ),
             ),
           ),
+          Padding(
+              padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.05,
+                top: MediaQuery.of(context).size.height * 0.02,
+              ),
+              child: button),
           Padding(
             padding: EdgeInsets.only(
               right: MediaQuery.of(context).size.width * 0.12,
