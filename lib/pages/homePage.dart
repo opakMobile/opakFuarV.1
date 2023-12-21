@@ -43,7 +43,9 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SiparisCariList()));
+                            builder: (context) => SiparisCariList(
+                                  islem: false,
+                                )));
                   },
                   child: Card(
                     shape: RoundedRectangleBorder(
@@ -158,56 +160,66 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 // ! Sepet İşlemleri
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  elevation: 3,
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.13,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 25.0, right: 25.0, top: 10.0, bottom: 10.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.shopping_basket,
-                                  size: 70,
-                                ),
-                                Spacer(),
-                                Text('\t\t\tSepet\nİşlemleri',
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green)),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.375,
-                                  height: 3,
-                                  color: Colors.green,
-                                ),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.375,
-                                  height: 3,
-                                  color: Colors.grey,
-                                ),
-                              ],
-                            )
-                          ],
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SiparisCariList(
+                                  islem: true,
+                                )));
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 3,
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 0.13,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      )),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 10.0, bottom: 10.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.shopping_basket,
+                                    size: 70,
+                                  ),
+                                  Spacer(),
+                                  Text('\t\t\tSepet\nİşlemleri',
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green)),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.375,
+                                    height: 3,
+                                    color: Colors.green,
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.375,
+                                    height: 3,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        )),
+                  ),
                 ),
                 // ! Raporlar
                 GestureDetector(

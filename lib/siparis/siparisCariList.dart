@@ -1,14 +1,17 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:opak_fuar/cari/cariDetayPage.dart';
-import 'package:opak_fuar/cari/cariFormPage.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/sepet/sepetDetay.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
+
+import '../model/cariModel.dart';
+import '../sabitler/Ctanim.dart';
 
 class SiparisCariList extends StatefulWidget {
-  SiparisCariList();
+  SiparisCariList({required this.islem});
 
-
+  final bool islem;
   @override
   State<SiparisCariList> createState() => _SiparisCariListState();
 }
@@ -116,7 +119,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                 // ! Üst Kısım
                 Row(
                   children: [
-                  //  UcCizgi(),
+                    //  UcCizgi(),
                     Spacer(),
                     IconButton(
                       onPressed: () {
@@ -152,23 +155,20 @@ class _SiparisCariListState extends State<SiparisCariList> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
                 // ! Cari Listesi
                 SingleChildScrollView(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.55,
+                    height: MediaQuery.of(context).size.height * 0.6,
                     child: ListView.builder(
-                      itemCount: deneme.length,
+                      itemCount: listeler.listCari.length,
                       itemBuilder: (context, index) {
-                        String trim = deneme[index]["name"].toString().trim();
-                        String harf1 = "";
-                        String harf2 = "";
-                        harf1 = trim[0];
-                        if (trim.length == 1) {
-                          harf2 = "K";
-                        } else {
-                          harf2 = trim[1];
-                        }
+                        Cari cari = listeler.listCari[index];
+                        String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                        String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                         return Column(
                           children: [
                             ListTile(
@@ -180,22 +180,34 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                 ),
                               ),
                               title: Text(
-                                deneme[index]["name"].toString(),
+                                cari.ADI.toString(),
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 10),
-                                child:
-                                    Text(deneme[index]["surname"].toString()),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(cari.IL!.toString()),
+                                    widget.islem == true
+                                        ? Text(cari.BAKIYE.toString())
+                                        : Container(),
+                                  ],
+                                ),
                               ),
                               onTap: () {
-                                
-                                  // cariye gidecek bilgisine
+                                if (widget.islem) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SepetDetay()));
+                                } else {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               SiparisUrunAra()));
-                             
+                                }
                               },
                             ),
                             Divider(

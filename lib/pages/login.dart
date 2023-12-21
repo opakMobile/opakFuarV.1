@@ -7,6 +7,7 @@ import 'package:opak_fuar/pages/homePage.dart';
 import 'package:opak_fuar/pages/settingsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../webServis/base.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key, required this.title, this.sifre = ''}) : super(key: key);
@@ -24,12 +25,12 @@ class iskontoFiyat {
 }
 
 class _LoginPageState extends State<LoginPage> {
-    SharedPreferences? _prefs;
+  BaseService bs = BaseService();
 
+  SharedPreferences? _prefs;
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
-  
 
   bool _beniHatirla = false;
   bool dis_kullanim = true;
@@ -55,8 +56,6 @@ class _LoginPageState extends State<LoginPage> {
     */
     // ctanim şirketi doldurur
   }
-
-
 
   Future<void> hataGoster(
       {String? mesaj, bool? mesajVarMi, bool ikinciGeriOlsunMu = true}) async {
@@ -98,22 +97,27 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> click() async {
     _formKey.currentState!.save();
 
-
     if (_userNameController.text == "" || _passwordController.text == "") {
       hataGoster(mesajVarMi: false);
       return;
-    }else{
-            Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()
-          ));
+    } else {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return LoadingSpinner(
+            color: Colors.black,
+            message: "Tüm Veriler Güncelleniyor. Lütfen Bekleyiniz...",
+          );
+        },
+      );
 
+      await bs.tumVerileriGuncelle();
+      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) => HomePage()), (r) => false);
     }
-   
   }
-
-
-
 
   Future<void> _getSavedPassword() async {
     _prefs = await SharedPreferences.getInstance();
@@ -146,9 +150,9 @@ class _LoginPageState extends State<LoginPage> {
         child: FloatingActionButton(
           onPressed: () {
             Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => settings_page()),
-          );
+              context,
+              MaterialPageRoute(builder: (context) => settings_page()),
+            );
           },
           backgroundColor: Color.fromRGBO(181, 182, 184, 1),
           mini: true,
@@ -394,7 +398,7 @@ class _LoginPageState extends State<LoginPage> {
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(10.0)),
                                             )),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           if (_formKey.currentState != null &&
                                               _formKey.currentState!
                                                   .validate()) {
@@ -408,8 +412,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-
-                   
                     ],
                   ),
                 ),
@@ -449,8 +451,6 @@ showAlertDialogLogin(BuildContext context, String mesaj) {
     },
   );
 }
-
-
 
 showAlertDialogLogin2(BuildContext context, String mesaj) {
   // set up the button

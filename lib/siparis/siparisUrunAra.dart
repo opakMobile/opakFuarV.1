@@ -45,13 +45,16 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SiparisTamamla()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SiparisTamamla()));
                 },
                 child: Text(
                   "Siparişi Tamamla",
                   style: TextStyle(
                     color: Colors.red,
-                   fontSize: 16,
+                    fontSize: 16,
                   ),
                 )),
           ),
@@ -187,31 +190,42 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                       ),
                     ],
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.05,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 15.0),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: seciliAltHesap,
-                          items: altHesaplar.map((String banka) {
-                            return DropdownMenuItem<String>(
-                              value: banka,
-                              child: Text(
-                                banka,
-                                style: TextStyle(fontSize: 14),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? selected) {
-                            setState(() {
-                              seciliAltHesap = selected!;
-                            });
-                          },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Alt Hesap:",
+                        style: TextStyle(
+                          fontSize: 15,
                         ),
                       ),
-                    ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 15.0),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: seciliAltHesap,
+                              items: altHesaplar.map((String banka) {
+                                return DropdownMenuItem<String>(
+                                  value: banka,
+                                  child: Text(
+                                    banka,
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? selected) {
+                                setState(() {
+                                  seciliAltHesap = selected!;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   Divider(
                     thickness: 1.5,
@@ -225,8 +239,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             child: ListView.builder(
                               itemCount: listeler.listStok.length,
                               itemBuilder: (context, index) {
-                                StokKart stokModel =
-                                    listeler.listStok[index];
+                                StokKart stokModel = listeler.listStok[index];
                                 return Column(
                                   children: [
                                     Row(
@@ -237,29 +250,40 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(stokModel.ADI!),
+                                            Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.65,
+                                                child: Text(
+                                                  stokModel.ADI!,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )),
                                             Text(stokModel.KOD! +
                                                 "  " +
                                                 "KDV " +
                                                 stokModel.SATIS_KDV.toString()),
                                           ],
                                         ),
-                                        Card(
-                                          elevation: 10,
-                                          child: TextButton.icon(
-                                              onPressed: () {},
-                                              icon: Icon(
-                                                Icons.recycling,
-                                                size: 12,
-                                                color: Colors.blue,
-                                              ),
-                                              label: Text(
-                                                "Değiştir",
-                                                style: TextStyle(
-                                                  fontSize: 8,
-                                                  color: Colors.blue,
-                                                ),
-                                              )),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.19,
+                                          child: Card(
+                                            elevation: 10,
+                                            child: TextButton(
+                                                onPressed: () {},
+                                                child: Text(
+                                                  "Değiştir",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.blue,
+                                                  ),
+                                                )),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -323,9 +347,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       color: Colors.grey),
                                                 ),
                                                 child: Center(
-                                                  child: Text(
-                                                    "MF"
-                                                  ),
+                                                  child: Text("MF"),
                                                 ),
                                               )
                                             ],
@@ -352,9 +374,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       color: Colors.grey),
                                                 ),
                                                 child: Center(
-                                                  child: Text(
-                                                   "1"
-                                                  ),
+                                                  child: Text("1"),
                                                 ),
                                               )
                                             ],
@@ -418,22 +438,23 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                               )
                                             ],
                                           ),
-                                          Card(
-                                            elevation: 10,
-                                            child: TextButton.icon(
-                                                onPressed: () {},
-                                                icon: Icon(
-                                                  Icons.delete,
-                                                  size: 12,
-                                                  color: Colors.red,
-                                                ),
-                                                label: Text(
-                                                  "Sil",
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: Colors.red,
-                                                  ),
-                                                )),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.19,
+                                            child: Card(
+                                              elevation: 10,
+                                              child: TextButton(
+                                                  onPressed: () {},
+                                                  child: Text(
+                                                    "Sil",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.red,
+                                                    ),
+                                                  )),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -530,58 +551,73 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             child: ListView.builder(
                               itemCount: listeler.listStok.length,
                               itemBuilder: (context, index) {
-                                StokKart stokModel =
-                                    listeler.listStok[index];
-
+                                StokKart stokModel = listeler.listStok[index];
                                 return Column(
                                   children: [
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(stokModel.ADI!),
-                                            Text(stokModel.KOD! +
-                                                "  " +
-                                                "KDV " +
-                                                stokModel.SATIS_KDV.toString()),
-                                          ],
-                                        ),
                                         SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.15,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              .07,
-                                          child: Center(
+                                              0.75,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                stokModel.ADI!,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(stokModel.KOD! +
+                                                  "  " +
+                                                  "KDV " +
+                                                  stokModel.SATIS_KDV
+                                                      .toString()),
+                                            ],
+                                          ),
+                                        ),
+                                        Card(
+                                          elevation: 10,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(7),
+                                          ),
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.12,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                .06,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              border:
+                                                  Border.all(color: Colors.grey),
+                                            ),
                                             child: TextFormField(
                                               autocorrect: true,
                                               //controller: t1,
                                               onEditingComplete: () {},
-
+                                        
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
                                                 hintText: "1",
                                                 hintStyle: TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.grey),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
+                                                border: InputBorder.none,
                                               ),
-                                              keyboardType:
-                                                  TextInputType.number,
+                                              keyboardType: TextInputType.number,
                                               inputFormatters: [
-                                                FilteringTextInputFormatter
-                                                    .allow(
-                                                        RegExp(r'^[\d\.]*$')),
+                                                FilteringTextInputFormatter.allow(
+                                                    RegExp(r'^[\d\.]*$')),
                                               ],
                                               onChanged: (newValue) {},
                                             ),
@@ -679,9 +715,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       color: Colors.grey),
                                                 ),
                                                 child: Center(
-                                                  child: Text(
-                                                   "1"
-                                                  ),
+                                                  child: Text("1"),
                                                 ),
                                               )
                                             ],

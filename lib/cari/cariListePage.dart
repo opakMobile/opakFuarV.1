@@ -24,80 +24,6 @@ class _CariListePageState extends State<CariListePage> {
     return Color.fromARGB(255, red, green, blue);
   }
 
-  List<Map> deneme = [
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-  ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -118,7 +44,7 @@ class _CariListePageState extends State<CariListePage> {
                 // ! Üst Kısım
                 Row(
                   children: [
-                  //  UcCizgi(),
+                    //  UcCizgi(),
                     Spacer(),
                     IconButton(
                       onPressed: () {
@@ -163,10 +89,8 @@ class _CariListePageState extends State<CariListePage> {
                       itemCount: listeler.listCari.length,
                       itemBuilder: (context, index) {
                         Cari cari = listeler.listCari[index];
-                       
                         String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                         String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                     
                         return Column(
                           children: [
                             ListTile(
@@ -182,8 +106,7 @@ class _CariListePageState extends State<CariListePage> {
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 10),
-                                child:
-                                    Text(cari.IL!.toString()),
+                                child: Text(cari.IL!.toString()),
                               ),
                               onTap: () {
                                 if (widget.islem) {
@@ -203,7 +126,6 @@ class _CariListePageState extends State<CariListePage> {
                                               )));
                                 }
                               },
-                              trailing: Text(cari.BAKIYE.toString()),
                             ),
                             Divider(
                               thickness: 2,

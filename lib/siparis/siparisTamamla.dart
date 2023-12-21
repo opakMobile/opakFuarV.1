@@ -359,6 +359,10 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.17,
                     child: Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
                       child: TextFormField(
                         maxLines: 8,
                         decoration: InputDecoration(
@@ -385,6 +389,10 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.1,
                     child: Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
                       child: TextFormField(
                         maxLines: 8,
                         decoration: InputDecoration(
@@ -392,7 +400,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                               vertical: MediaQuery.of(context).size.height * 0.05,
                             ),*/
 
-                          hintText: 'Sipariş Açıklaması',
+                          hintText: 'Bayi Seçimi',
                           hintStyle: TextStyle(
                             color: Colors.grey.shade400,
                             fontWeight: FontWeight.w400,

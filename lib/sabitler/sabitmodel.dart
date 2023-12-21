@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/pages/homePage.dart';
 
+import '../pages/hesapMakinesi.dart';
+
 appBarDizayn(context) {
   return PreferredSize(
     preferredSize: Size.fromHeight(95.0),
@@ -49,8 +51,10 @@ bottombarDizayn(context, {Widget? button, bool buttonVarMi = false}) {
             ),
             child: IconButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(context,
-                    MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                    (route) => false);
               },
               icon: Icon(
                 Icons.home,
@@ -69,7 +73,13 @@ bottombarDizayn(context, {Widget? button, bool buttonVarMi = false}) {
               right: MediaQuery.of(context).size.width * 0.12,
             ),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return const HesapMakinesi();
+                    });
+              },
               icon: Icon(
                 Icons.calculate,
                 color: Colors.orange,

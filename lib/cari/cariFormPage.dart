@@ -42,7 +42,7 @@ class _CariFormPageState extends State<CariFormPage> {
                       // ! Üst Kısım
                       Row(
                         children: [
-                        //  UcCizgi(),
+                          //  UcCizgi(),
                           Spacer(),
                           IconButton(
                             onPressed: () {
@@ -335,26 +335,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                               onPrimary: Colors.white,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(32.0),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.01,
-                                          ),
-                                          ElevatedButton.icon(
-                                            onPressed: () {},
-                                            icon: Icon(Icons.save),
-                                            label: Text("Kaydet"),
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.green,
-                                              onPrimary: Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(32.0),
+                                                    BorderRadius.circular(12.0),
                                               ),
                                             ),
                                           ),
@@ -373,7 +354,26 @@ class _CariFormPageState extends State<CariFormPage> {
                                               onPrimary: Colors.white,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(32.0),
+                                                    BorderRadius.circular(12.0),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.01,
+                                          ),
+                                          ElevatedButton.icon(
+                                            onPressed: () {},
+                                            icon: Icon(Icons.save),
+                                            label: Text("Kaydet"),
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors.green,
+                                              onPrimary: Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
                                               ),
                                             ),
                                           ),
@@ -381,7 +381,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                       ),
                                     )
                                   : Container(
-                                       height:
+                                      height:
                                           MediaQuery.of(context).size.height *
                                               0.05,
                                       child: Center(
@@ -394,11 +394,10 @@ class _CariFormPageState extends State<CariFormPage> {
                                             onPrimary: Colors.white,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(32.0),
+                                                  BorderRadius.circular(12.0),
                                             ),
-                                     
+                                          ),
                                         ),
-                                      ),
                                       ),
                                     )
                             ],
