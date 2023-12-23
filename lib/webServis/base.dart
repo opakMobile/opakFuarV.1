@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:opak_fuar/db/veriTaban%C4%B1Islemleri.dart';
+import 'package:opak_fuar/db/veriTabaniIslemleri.dart';
 import 'package:opak_fuar/model/ShataModel.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
@@ -11,20 +13,31 @@ import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:xml/xml.dart' as xml;
 
+import '../model/kullaniciModel.dart';
+import '../model/kullanıcıYetki.dart';
+import '../sabitler/Ctanim.dart';
+import '../sabitler/sharedPreferences.dart';
+
 class BaseService {
-
   Future<void> tumVerileriGuncelle() async {
-    await getirStoklar(
-        sirket: "AAGENELOPAK", kullaniciKodu: "1"); 
-    await getirCariler(
-        sirket: "AAGENELOPAK", kullaniciKodu: "1");
-    await getirCariAltHesap(sirket: "AAGENELOPAK");        
+    await getirStoklar(sirket: "AAGENELOPAK", kullaniciKodu: "1");
+    await getirCariler(sirket: "AAGENELOPAK", kullaniciKodu: "1");
+    await getirCariAltHesap(sirket: "AAGENELOPAK");
   }
-
 
   String temizleKontrolKarakterleri(String metin) {
     final kontrolKarakterleri = RegExp(r'[\x00-\x1F\x7F]');
     return metin.replaceAll(kontrolKarakterleri, '');
+  }
+
+  List<String> parseSoapResponse(String soapResponse) {
+    var document = xml.XmlDocument.parse(soapResponse);
+    var envelope = document.findAllElements('soap:Envelope').single;
+    var body = envelope.findElements('soap:Body').single;
+    var response = body.findElements('GetirAPKServisIPResponse').single;
+    var result = response.findElements('GetirAPKServisIPResult').single;
+    List<String> donecek = result.text.split("|");
+    return donecek;
   }
 
   Future<String> getirStoklar({required sirket, required kullaniciKodu}) async {
@@ -96,9 +109,9 @@ class BaseService {
           e.toString();
     }
   }
-    Future<String> getirCariler({required sirket, required kullaniciKodu}) async {
-     var url = Uri.parse(
-        "https://apkwebservis.nativeb4b.com/MobilService.asmx");
+
+  Future<String> getirCariler({required sirket, required kullaniciKodu}) async {
+    var url = Uri.parse("https://apkwebservis.nativeb4b.com/MobilService.asmx");
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
       'SOAPAction': 'http://tempuri.org/GetirCari'
@@ -168,11 +181,68 @@ class BaseService {
       return "Cariler için Webservisten veri çekilemedi. Hata Mesajı : " +
           e.toString();
     }
-    
   }
-    Future<String> getirCariAltHesap({required String sirket}) async {
-        var url = Uri.parse(
-        "https://apkwebservis.nativeb4b.com/MobilService.asmx");// dış ve iç denecek;
+
+  Future<String> getKullanicilar(
+      {required String kullaniciKodu,
+      required String sirket,
+      required String IP}) async {
+    var url = Uri.parse(IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirPlasiyerParam'
+    };
+
+    String body = '''<?xml version="1.0" encoding="utf-8"?>
+      <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+        <soap:Body>
+          <GetirPlasiyerParam xmlns="http://tempuri.org/">
+            <Sirket>$sirket</Sirket>
+            <PlasiyerKod>$kullaniciKodu</PlasiyerKod>
+          </GetirPlasiyerParam>
+        </soap:Body>
+      </soap:Envelope>''';
+
+    try {
+      var response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+        Map<String, dynamic> jsonData =
+            jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          String modelNode = gelenHata.HataMesaj!;
+          List<dynamic> parsedList = json.decode(modelNode);
+
+          Map<String, dynamic> kullaniciJson = parsedList[0];
+          Ctanim.kullanici = KullaniciModel.fromjson(kullaniciJson);
+          return "";
+        }
+      } else {
+        print('SOAP isteği başarısız: ${response.statusCode}');
+        return " Kullanıcı Bilgileri Getirilirken İstek Oluşturulamadı. " +
+            response.statusCode.toString();
+      }
+    } catch (e) {
+      print('Hata: $e');
+      return " Kullanıcı bilgiler için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
+    }
+  }
+
+  Future<String> getirCariAltHesap({required String sirket}) async {
+    var url = Uri.parse(
+        "https://apkwebservis.nativeb4b.com/MobilService.asmx"); // dış ve iç denecek;
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
       'SOAPAction': 'http://tempuri.org/GetirCariAltHesap'
@@ -243,4 +313,181 @@ class BaseService {
     }
   }
 
+  Future<String?> _getId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id; // unique ID on Android
+    }
+  }
+
+  Future<String> kullaniciSayisiSorgula({
+    required String LisansNo,
+  }) async {
+    var url = Uri.parse('http://setuppro.opakyazilim.net/Service1.asmx');
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/MobilLisansSorgula'
+    };
+    String? privateID = await _getId();
+    print(privateID);
+
+    String body = '''<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <MobilLisansSorgula xmlns="http://tempuri.org/">
+      <_MacAdres>$privateID</_MacAdres>
+      <_LisansNo>$LisansNo</_LisansNo>
+    </MobilLisansSorgula>
+  </soap:Body>
+</soap:Envelope>''';
+
+    try {
+      var response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+        String jsonData = temizleKontrolKarakterleri(parsedXml.innerText);
+        if (jsonData == "OK") {
+          return jsonData;
+        } else {
+          return "";
+        }
+      } else {
+        print('SOAP isteği başarısız: ${response.statusCode}');
+        return " Kullanıcı Bilgileri Getirilirken İstek Oluşturulamadı. " +
+            response.statusCode.toString();
+      }
+    } catch (e) {
+      print('Hata: $e');
+      return " Kullanıcı bilgiler için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
+    }
+  }
+
+  Future<List<String>> makeSoapRequest(String lisansNumarasi) async {
+    var url = Uri.parse('http://setuppro.opakyazilim.net/Service1.asmx');
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirAPKServisIP'
+    };
+
+    var body = "<?xml version=\"1.0\" encoding=\"utf-8\"?>  " +
+        " <soap:Envelope xmlns:xsi=\"http:\/\/www.w3.org\/2001\/XMLSchema-instance\" xmlns:xsd=\"http:\/\/www.w3.org\/2001\/XMLSchema\" " +
+        " xmlns:soap=\"http:\/\/schemas.xmlsoap.org\/soap\/envelope\/\">" +
+        " <soap:Body>" +
+        "<GetirAPKServisIP xmlns=\"http:\/\/tempuri.org\/\">" +
+        "  <SipNo>$lisansNumarasi</SipNo>" +
+        "</GetirAPKServisIP>" +
+        " <\/soap:Body> " +
+        " <\/soap:Envelope> ";
+
+    try {
+      var response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        var tt = parseSoapResponse(response.body);
+        return tt;
+      } else {
+        print('SOAP isteği başarısız: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Hata: $e');
+      return [];
+    }
+  }
+
+  Future<String> getirPlasiyerYetki({
+    required String sirket,
+    required String kullaniciKodu,
+    required String IP,
+  }) async {
+    var url = Uri.parse(IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirPlasiyeYetki'
+    };
+
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetirPlasiyeYetki xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+      <PlasiyerKod>$kullaniciKodu</PlasiyerKod>
+    </GetirPlasiyeYetki>
+  </soap:Body>
+</soap:Envelope>
+''';
+
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+
+        Map<String, dynamic> jsonData = jsonDecode(parsedXml.innerText);
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          if (gelenHata.Hata == "false" && gelenHata.HataMesaj == "") {
+            return "Veri Bulunamadı";
+          }
+          String modelNode = gelenHata.HataMesaj!;
+          Iterable l = json.decode(modelNode);
+          listeler.yetki.clear();
+
+          listeler.yetki = List<KullaniciYetki>.from(
+              l.map((model) => KullaniciYetki.fromJson(model)));
+
+          for (var element in listeler.yetki) {
+            print(element);
+            bool sonBool;
+            if (element.deger == "False") {
+              sonBool = false;
+            } else {
+              sonBool = true;
+            }
+            listeler.plasiyerYetkileri.removeAt(element.sira!);
+            listeler.plasiyerYetkileri.insert(element.sira!, sonBool);
+          }
+          await SharedPrefsHelper.yetkiKaydet(
+              listeler.plasiyerYetkileri, "yetkiler");
+
+          return "";
+        }
+      } else {
+        Exception(
+            'Plasiyer Yetki Alınamadı. StatusCode: ${response.statusCode}');
+
+        return 'Plasiyer Yetki Alınamadı. StatusCode: ${response.statusCode}';
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+
+      return "Plasiyer Yetki için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
+    }
+  }
 }

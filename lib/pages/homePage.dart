@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/cari/cariIslemlerPage.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
-
 import 'package:opak_fuar/raporlar/raporlar.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
@@ -16,12 +15,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   BaseService bs = BaseService();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: appBarDizayn(context),
         bottomNavigationBar: bottombarDizayn(context),
+        resizeToAvoidBottomInset: false,
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -68,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Icon(
                                     Icons.shopping_cart,
-                                    size: 70,
+                                    size: 55,
                                   ),
                                   Spacer(),
                                   Text('Siparis Al',
@@ -128,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Icon(
                                     Icons.search,
-                                    size: 70,
+                                    size: 55,
                                   ),
                                   Spacer(),
                                   Text('\t\t\tCari\nİşlemleri',
@@ -190,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Icon(
                                     Icons.shopping_basket,
-                                    size: 70,
+                                    size: 55,
                                   ),
                                   Spacer(),
                                   Text('\t\t\tSepet\nİşlemleri',
@@ -250,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Icon(
                                     Icons.receipt_long,
-                                    size: 70,
+                                    size: 55,
                                   ),
                                   Spacer(),
                                   Text('Raporlar',
@@ -284,19 +285,130 @@ class _HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap: () async {
                     showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return LoadingSpinner(
-                          color: Colors.black,
-                          message:
-                              "Tüm Veriler Güncelleniyor. Lütfen Bekleyiniz...",
-                        );
-                      },
-                    );
+                        context: context,
+                        builder: (context) => Center(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.1),
+                                        child: Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            "Verileri Güncelle",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black87,
+                                                decoration:
+                                                    TextDecoration.none),
+                                          ),
+                                        ),
+                                      ),
+                                      Divider(
+                                        color: Colors.black45,
+                                        height: 2,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.green),
+                                            ),
+                                            onPressed: () async {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return LoadingSpinner(
+                                                    color: Colors.black,
+                                                    message:
+                                                        "Tüm Veriler Güncelleniyor. Lütfen Bekleyiniz...",
+                                                  );
+                                                },
+                                              );
 
-                    await bs.tumVerileriGuncelle();
-                    Navigator.pop(context);
+                                              await bs.tumVerileriGuncelle();
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                            },
+                                            child:
+                                                Text("Tüm Verileri Güncelle")),
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.orange),
+                                            ),
+                                            onPressed: () {},
+                                            child: Text(
+                                                "Sadece Cari Verileri Güncelle")),
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        child: ElevatedButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                                "Sadece Stok Verileri Güncelle")),
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.amber),
+                                            ),
+                                            onPressed: () {},
+                                            child: Text(
+                                                "Sabit Parametreleri Güncelle")),
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.pink),
+                                            ),
+                                            onPressed: () {},
+                                            child: Text(
+                                                "Kaydedilen Verileri Gönder")),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ));
                   },
                   child: Card(
                     shape: RoundedRectangleBorder(
@@ -319,7 +431,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Icon(
                                     Icons.update,
-                                    size: 70,
+                                    size: 55,
                                   ),
                                   Spacer(),
                                   Text('Verileri Güncelle',

@@ -1,15 +1,15 @@
-import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:opak_fuar/db/dataBaseHelper.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
+import '../model/kullaniciModel.dart';
+import '../sabitler/sharedPreferences.dart';
+import 'login.dart';
 
 class settings_page extends StatefulWidget {
   const settings_page({super.key});
@@ -25,7 +25,6 @@ class _settings_pageState extends State<settings_page> {
     print("Tüm SharedPreferences verileri silindi");
   }
 
-
   bool resimSeciliMi = false;
   bool islemOnayi = false;
 
@@ -35,16 +34,12 @@ class _settings_pageState extends State<settings_page> {
   bool disardaKullan = false;
   List<String> donenAPIler = [];
   TextEditingController lisans = TextEditingController();
+  TextEditingController kullanici = TextEditingController();
   TextEditingController kullaniciCont = TextEditingController();
   TextEditingController sirket = TextEditingController();
   TextEditingController deneme = TextEditingController();
   bool enable = false;
   String? sirketKullaniciDoluMu;
-
-
-
-
-
 
   @override
   void initState() {
@@ -158,26 +153,93 @@ class _settings_pageState extends State<settings_page> {
                                                   message:
                                                       'Bu işleme devam edildiği taktirde veri tabanı silinecektir. Onaylıyor musunuz?',
                                                   onPres: () async {
-                                                   setState(() {
-                                                     enable = true;
-                                                   });
-                                                   DatabaseHelper dt =
+                                                    if (await Connectivity()
+                                                            .checkConnectivity() ==
+                                                        ConnectivityResult
+                                                            .none) {
+                                                      Future.delayed(
+                                                          Duration.zero,
+                                                          () =>
+                                                              showAlertDialogSettings1(
+                                                                context,
+                                                                "İnternet bağlantısı bulunamadı.",
+                                                              ));
+                                                    } else {
+                                                      //DB Yİ DROPLA
+                                                      showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            false,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return LoadingSpinner(
+                                                            color: Colors.blue,
+                                                            message:
+                                                                'Lisans Sorgulanıyor...',
+                                                          );
+                                                        },
+                                                      );
+
+                                                      String kullanici = await bs
+                                                          .kullaniciSayisiSorgula(
+                                                              LisansNo:
+                                                                  lisans.text);
+                                                      if (kullanici == "OK") {
+                                                        await SharedPrefsHelper
+                                                            .IpSil();
+                                                        donenAPIler = await bs
+                                                            .makeSoapRequest(
+                                                                lisans.text);
+
+                                                        Navigator.pop(context);
+
+                                                        if (donenAPIler.length >
+                                                            1) {
+                                                          clearAllPreferences();
+                                                          await DatabaseHelper
+                                                              .deleteDatabase();
+
+                                                          DatabaseHelper dt =
                                                               DatabaseHelper(
-                                                                  "opak" +
-                                                                      lisans
-                                                                          .text +
-                                                                      ".db");
+                                                                  "opak1.db");
                                                           Ctanim.db = await dt
                                                               .database();
-                                                     Navigator.pop(context);
+
+                                                          enable = true;
+                                                          await SharedPrefsHelper
+                                                              .lisansNumarasiKaydet(
+                                                                  lisans.text);
+                                                          // ŞİRKETLE KULLANICI KODU KAYDET
+                                                          setState(() {});
+                                                        } else {
+                                                          Future.delayed(
+                                                              Duration.zero,
+                                                              () =>
+                                                                  showAlertDialogSettings1(
+                                                                    context,
+                                                                    "İp Bilgisi Alınamadı.",
+                                                                  ));
+                                                        }
+                                                      } else {
+                                                        print("KULAŞ");
+                                                        Future.delayed(
+                                                            Duration.zero,
+                                                            () =>
+                                                                showAlertDialogSettings1(
+                                                                  context,
+                                                                  ikinciGeri:
+                                                                      true,
+                                                                  "Kullanıcı sayısı aşılmış. Mesaj: $kullanici",
+                                                                ));
+                                                      }
+                                                    }
+                                                    Navigator.pop(context);
                                                   },
                                                   secondButtonText: "İptal",
                                                   onSecondPress: () {
                                                     Navigator.pop(context);
                                                   },
-                                                
                                                   buttonText: 'Onay',
-                                                  
                                                 );
                                               });
                                         },
@@ -303,13 +365,9 @@ class _settings_pageState extends State<settings_page> {
                                       ),
                                     )
                                   : Container(),
-
-                      
-
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                 
                                   enable == true
                                       ? SizedBox(
                                           width: ekranGenisligi * .4,
@@ -393,6 +451,204 @@ class _settings_pageState extends State<settings_page> {
                                                       );
                                                     },
                                                   );
+                                                  KullaniciModel.clearUser();
+                                                  Ctanim.kullanici = null;
+
+                                                  if (disardaKullan == false) {
+                                                    if (donenAPIler[0] != "") {
+                                                      sirketKullaniciDoluMu =
+                                                          await bs.getKullanicilar(
+                                                              IP: donenAPIler[
+                                                                  0],
+                                                              kullaniciKodu:
+                                                                  kullaniciCont
+                                                                      .text,
+                                                              sirket:
+                                                                  sirket.text);
+
+                                                      if (sirketKullaniciDoluMu ==
+                                                          "") {
+                                                        print("o dan aldım");
+                                                        await bs
+                                                            .getirPlasiyerYetki(
+                                                                sirket:
+                                                                    sirket.text,
+                                                                kullaniciKodu:
+                                                                    kullaniciCont
+                                                                        .text,
+                                                                IP: donenAPIler[
+                                                                    0]);
+                                                        await SharedPrefsHelper
+                                                            .saveList([]);
+
+                                                        await SharedPrefsHelper
+                                                            .IpKaydet(
+                                                                donenAPIler[0]);
+                                                        print(Ctanim.IP
+                                                            .toString());
+                                                        await KullaniciModel
+                                                            .saveUser(Ctanim
+                                                                .kullanici!);
+                                                        await SharedPrefsHelper
+                                                            .sirketSil();
+                                                        SharedPrefsHelper
+                                                            .sirketKaydet(
+                                                                sirket.text);
+                                                        await SharedPrefsHelper
+                                                            .kullaniciKoduKaydet(
+                                                                kullaniciCont
+                                                                    .text);
+                                                        showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return CustomAlertDialog(
+                                                                textColor:
+                                                                    Colors
+                                                                        .green,
+                                                                align: TextAlign
+                                                                    .left,
+                                                                title:
+                                                                    'Kayıt Başarılı',
+                                                                message:
+                                                                    'Şirket ve Kullanıcı Bilgileri Başarıyla Alındı. Giriş Sayfasına Yönlendiriliyorsunuz.',
+                                                                onPres: () {
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            LoginPage(
+                                                                              title: '',
+                                                                            )),
+                                                                  );
+                                                                  setState(
+                                                                      () {});
+                                                                },
+                                                                buttonText:
+                                                                    'Tamam',
+                                                              );
+                                                            });
+                                                      } else {
+                                                        Future.delayed(
+                                                            Duration.zero,
+                                                            () =>
+                                                                showAlertDialogSettings1(
+                                                                  ikinciGeri:
+                                                                      true,
+                                                                  context,
+                                                                  sirketKullaniciDoluMu!,
+                                                                ));
+                                                      }
+                                                    } else {
+                                                      Future.delayed(
+                                                          Duration.zero,
+                                                          () =>
+                                                              showAlertDialogSettings1(
+                                                                ikinciGeri:
+                                                                    true,
+                                                                context,
+                                                                "İç IP tanımlanmamış. Lütfen yetkli bayiniz ile iletişime geçiniz",
+                                                              ));
+                                                    }
+                                                  } else {
+                                                    if (donenAPIler[1] != "") {
+                                                      sirketKullaniciDoluMu =
+                                                          await bs.getKullanicilar(
+                                                              IP: donenAPIler[
+                                                                  1],
+                                                              kullaniciKodu:
+                                                                  kullaniciCont
+                                                                      .text,
+                                                              sirket:
+                                                                  sirket.text);
+
+                                                      if (sirketKullaniciDoluMu ==
+                                                          "") {
+                                                        print("1 dan aldım");
+                                                        await bs
+                                                            .getirPlasiyerYetki(
+                                                                sirket:
+                                                                    sirket.text,
+                                                                kullaniciKodu:
+                                                                    kullaniciCont
+                                                                        .text,
+                                                                IP: donenAPIler[
+                                                                    1]);
+                                                        await SharedPrefsHelper
+                                                            .saveList([]);
+
+                                                        await SharedPrefsHelper
+                                                            .IpKaydet(
+                                                                donenAPIler[1]);
+                                                        print(Ctanim.IP
+                                                            .toString());
+                                                        await KullaniciModel
+                                                            .saveUser(Ctanim
+                                                                .kullanici!);
+                                                        await SharedPrefsHelper
+                                                            .sirketSil();
+                                                        SharedPrefsHelper
+                                                            .sirketKaydet(
+                                                                sirket.text);
+                                                        await SharedPrefsHelper
+                                                            .kullaniciKoduKaydet(
+                                                                kullaniciCont
+                                                                    .text);
+                                                        showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return CustomAlertDialog(
+                                                                textColor:
+                                                                    Colors
+                                                                        .green,
+                                                                align: TextAlign
+                                                                    .left,
+                                                                title:
+                                                                    'Kayıt Başarılı',
+                                                                message:
+                                                                    'Şirket ve Kullanıcı Bilgileri Başarıyla Alındı. Giriş Sayfasına Yönlendiriliyorsunuz.',
+                                                                onPres: () {
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            LoginPage(
+                                                                              title: '',
+                                                                            )),
+                                                                  );
+                                                                  setState(
+                                                                      () {});
+                                                                },
+                                                                buttonText:
+                                                                    'Tamam',
+                                                              );
+                                                            });
+                                                      } else {
+                                                        Future.delayed(
+                                                            Duration.zero,
+                                                            showAlertDialogSettings1(
+                                                              ikinciGeri: true,
+                                                              context,
+                                                              sirketKullaniciDoluMu!,
+                                                            ));
+                                                      }
+                                                    } else {
+                                                      Future.delayed(
+                                                          Duration.zero,
+                                                          () =>
+                                                              showAlertDialogSettings1(
+                                                                ikinciGeri:
+                                                                    true,
+                                                                context,
+                                                                "Dış IP tanımlanmamış. Lütfen yetkli bayiniz ile iletişime geçiniz",
+                                                              ));
+                                                    }
+
+                                                    /*
+                                                  
+                                                    */
+                                                  }
                                                 }
                                               },
                                             ),
@@ -430,8 +686,6 @@ class _settings_pageState extends State<settings_page> {
   }
 }
 
-
-
 showAlertDialogForLisans(BuildContext context, String lisansText) {
   // set up the buttons
   Widget cancelButton = TextButton(
@@ -458,6 +712,75 @@ showAlertDialogForLisans(BuildContext context, String lisansText) {
     actions: [
       cancelButton,
       continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+showAlertDialogSettings1(BuildContext context, String mesaj,
+    {bool ikinciGeri = false}) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      if (ikinciGeri == true) {
+//        Get.back();
+        Navigator.pop(context);
+      }
+      //  Get.back();
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text(
+      "Hatalı İşlem!",
+      style: TextStyle(color: Colors.red),
+    ),
+    content: Text(mesaj),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+showAlertDialog(BuildContext context, String mesaj, {bool ikinciGeri = false}) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      if (ikinciGeri == true) {
+        Navigator.pop(context);
+      }
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text(
+      "Hatalı İşlem!",
+      style: TextStyle(color: Colors.red),
+    ),
+    content: Text(mesaj),
+    actions: [
+      okButton,
     ],
   );
 

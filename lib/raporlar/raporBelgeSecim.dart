@@ -46,17 +46,14 @@ class _RaporBelgeSecimState extends State<RaporBelgeSecim> {
             child: SingleChildScrollView(
               child: Column(children: [
                 // ! Üst Kısım
-                Row(
-                  children: [
-                    //   UcCizgi(),
-                    Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back_ios),
-                    )
-                  ],
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back_ios),
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,

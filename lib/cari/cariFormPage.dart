@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 
-class CariFormPage extends StatefulWidget {
-  CariFormPage({required this.yeniKayit});
+import '../model/cariModel.dart';
 
-  bool yeniKayit = true;
+class CariFormPage extends StatefulWidget {
+  CariFormPage({required this.yeniKayit, Cari? cari = null}) {
+    if (cari != null) {
+      this.cari = cari;
+    }
+  }
+
+  late Cari cari;
+  bool yeniKayit;
   @override
   State<CariFormPage> createState() => _CariFormPageState();
 }
@@ -12,8 +19,39 @@ class CariFormPage extends StatefulWidget {
 class _CariFormPageState extends State<CariFormPage> {
   bool AliciMusteri = false;
   bool AliciBayi = false;
+  TextEditingController _SirketIsmi = TextEditingController();
+  TextEditingController _AdresBilgileri = TextEditingController();
+  TextEditingController _YetkiliKisi = TextEditingController();
+  TextEditingController _UlkeSeciniz = TextEditingController();
+  TextEditingController _SehirSeciniz = TextEditingController();
+  TextEditingController _IlceSeciniz = TextEditingController();
+  TextEditingController _VergiDairesi = TextEditingController();
+  TextEditingController _VergiNumarasi = TextEditingController();
+  TextEditingController _CepTelefonu = TextEditingController();
+  TextEditingController _MailAdresi = TextEditingController();
+  TextEditingController _Aciklama = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (widget.yeniKayit == false) {
+      _SirketIsmi.text = widget.cari.ADI!;
+      _AdresBilgileri.text = widget.cari.ADRES!;
+      _YetkiliKisi.text = widget.cari.PLASIYERID!.toString();
+      _UlkeSeciniz.text = widget.cari.ULKEID!.toString();
+      _SehirSeciniz.text = widget.cari.IL!;
+      _IlceSeciniz.text = widget.cari.ILCE!;
+      _VergiDairesi.text = widget.cari.VERGIDAIRESI ?? "";
+      _VergiNumarasi.text = widget.cari.VERGINO!;
+      _CepTelefonu.text = widget.cari.TELEFON!;
+      _MailAdresi.text = widget.cari.EMAIL!;
+      _Aciklama.text = widget.cari.WEB!;
+    }
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
@@ -40,17 +78,14 @@ class _CariFormPageState extends State<CariFormPage> {
                   Stack(
                     children: [
                       // ! Üst Kısım
-                      Row(
-                        children: [
-                          //  UcCizgi(),
-                          Spacer(),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(Icons.arrow_back_ios),
-                          )
-                        ],
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.arrow_back_ios),
+                        ),
                       ),
 
                       // ! Form
@@ -66,6 +101,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                     MediaQuery.of(context).size.height * 0.08,
                                 child: Center(
                                   child: TextFormField(
+                                    controller: _SirketIsmi,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -82,6 +118,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                     MediaQuery.of(context).size.height * 0.05,
                                 child: Center(
                                   child: TextFormField(
+                                    controller: _AdresBilgileri,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -100,6 +137,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.05,
                                 child: TextFormField(
+                                  controller: _YetkiliKisi,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -117,6 +155,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.05,
                                 child: TextFormField(
+                                  controller: _UlkeSeciniz,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -137,6 +176,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                   children: [
                                     Expanded(
                                       child: TextFormField(
+                                        controller: _SehirSeciniz,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(
                                             borderRadius:
@@ -152,6 +192,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                     ),
                                     Expanded(
                                       child: TextFormField(
+                                        controller: _IlceSeciniz,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(
                                             borderRadius:
@@ -173,6 +214,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.05,
                                 child: TextFormField(
+                                  controller: _VergiDairesi,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -190,6 +232,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.05,
                                 child: TextFormField(
+                                  controller: _VergiNumarasi,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -207,6 +250,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.05,
                                 child: TextFormField(
+                                  controller: _CepTelefonu,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -224,6 +268,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.05,
                                 child: TextFormField(
+                                  controller: _MailAdresi,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -273,7 +318,10 @@ class _CariFormPageState extends State<CariFormPage> {
                                                 value: AliciMusteri,
                                                 onChanged: (value) {
                                                   setState(() {
-                                                    //   AliciMusteri = value;
+                                                    AliciMusteri = value!;
+                                                    if (AliciMusteri == true) {
+                                                      AliciBayi = false;
+                                                    }
                                                   });
                                                 }),
                                             Text("Alıcı Müşteri"),
@@ -299,7 +347,10 @@ class _CariFormPageState extends State<CariFormPage> {
                                                 value: AliciBayi,
                                                 onChanged: (value) {
                                                   setState(() {
-                                                    //   AliciBayi = value;
+                                                    AliciBayi = value!;
+                                                    if (AliciBayi == true) {
+                                                      AliciMusteri = false;
+                                                    }
                                                   });
                                                 }),
                                             Text(" Bayi"),

@@ -12,12 +12,14 @@ class CariIslemlerPage extends StatefulWidget {
 }
 
 class _CariIslemlerPageState extends State<CariIslemlerPage> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: appBarDizayn(context),
         bottomNavigationBar: bottombarDizayn(context),
+        resizeToAvoidBottomInset: false,
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -29,7 +31,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                 top: MediaQuery.of(context).size.height * 0.01),
             child: Column(
               children: [
-              //  UcCizgi(),
+                //  UcCizgi(),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
@@ -64,13 +66,13 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                 children: [
                                   Icon(
                                     Icons.search,
-                                    size: 70,
+                                    size: 55,
                                     color: Colors.orange,
                                   ),
                                   Spacer(),
                                   Text(
                                     'Cari Listesi',
-                                        maxLines: 2,
+                                    maxLines: 2,
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
                                       fontSize: 22,
@@ -135,18 +137,17 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                 children: [
                                   Icon(
                                     Icons.receipt_long,
-                                    size: 70,
+                                    size: 55,
                                     color: Colors.pink,
                                   ),
                                   Spacer(),
                                   Text(
                                     'Cari Bilgi Raporu',
-                                      maxLines: 2,
+                                    maxLines: 2,
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
-                                      
                                     ),
                                   ),
                                 ],
@@ -207,7 +208,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                 children: [
                                   Icon(
                                     Icons.person_add_alt_1_sharp,
-                                    size: 70,
+                                    size: 55,
                                     color: Colors.blue,
                                   ),
                                   Spacer(),

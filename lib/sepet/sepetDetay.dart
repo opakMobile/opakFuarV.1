@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import '../model/cariModel.dart';
 import '../model/stokKartModel.dart';
 import '../sabitler/sabitmodel.dart';
 
 class SepetDetay extends StatefulWidget {
-  const SepetDetay({super.key});
+  SepetDetay({required this.cari});
+
+  late Cari cari;
 
   @override
   State<SepetDetay> createState() => _SepetDetayState();
@@ -57,7 +61,7 @@ class _SepetDetayState extends State<SepetDetay> {
               child: Column(
                 children: [
                   Align(
-                    alignment: Alignment.topRight,
+                    alignment: Alignment.centerLeft,
                     child: IconButton(
                       onPressed: () {
                         Navigator.pop(context);
@@ -68,32 +72,71 @@ class _SepetDetayState extends State<SepetDetay> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    height: MediaQuery.of(context).size.height * 0.05,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.search),
-                        hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14.0,
-                        ),
-                        border: OutlineInputBorder(
+                  Row(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
                         ),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            suffixIcon: Icon(Icons.search),
+                            hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
+                            hintStyle: TextStyle(
+                              color: Colors.grey.shade400,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        height: MediaQuery.of(context).size.height * .1,
+                        child: IconButton(
+                            onPressed: () async {
+                              var res = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SimpleBarcodeScannerPage(),
+                                  ));
+
+                              ///!!!!! buraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                              /*     setState(() {
+                                if (res is String) {
+                                  result = res;
+                                  editingController.text = result;
+                                }
+                                SatisTipiModel m = SatisTipiModel(
+                                    ID: -1,
+                                    TIP: "",
+                                    FIYATTIP: "",
+                                    ISK1: "",
+                                    ISK2: "");
+                                stokKartEx.searchC(result, "", "Fiyat1", m,
+                                    Ctanim.seciliStokFiyatListesi);
+                              });*/
+                            },
+                            icon: Icon(
+                              Icons.camera_alt,
+                              size: 40,
+                              color: Colors.black54,
+                            )
+                            //    height: 60, width: 60),
+                            ),
+                      ),
+                    ],
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
-                      'Ömer Akkaya Dağıtım Matbaa Kırtasiye Gıda San. Tic. Ltd. Şti.',
+                      widget.cari.ADI!.toString(),
                       maxLines: 1,
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,

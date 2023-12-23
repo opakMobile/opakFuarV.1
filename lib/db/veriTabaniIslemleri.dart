@@ -1,21 +1,25 @@
-
-
-
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 
-class VeriIslemleri{
+import '../controller/cariController.dart';
+import '../controller/stokKartController.dart';
 
+CariController cariEx = Get.find();
+final StokKartController stokKartEx = Get.find();
+
+class VeriIslemleri {
   Future<List<StokKart>?> stokGetir() async {
     var result = await Ctanim.db?.query("TBLSTOKSB");
     List<Map<String, dynamic>> maps = await Ctanim.db?.query("TBLSTOKSB");
     listeler.listStok =
         List.generate(maps.length, (i) => StokKart.fromJson(maps[i]));
-    //stokKartEx.searchList.assignAll(listeler.listStok);
+    stokKartEx.searchList.assignAll(listeler.listStok);
+
     return listeler.listStok;
   }
 
@@ -179,11 +183,15 @@ class VeriIslemleri{
       print("Hata: $e");
     }
   }
-    Future<List<Cari>?> cariGetir() async {
+
+  Future<List<Cari>?> cariGetir() async {
     //   var result = await Ctanim.db?.query("TBLCARISB");
     List<Map<String, dynamic>> maps = await Ctanim.db?.query("TBLCARISB");
     listeler.listCari =
         List.generate(maps.length, (i) => Cari.fromJson(maps[i]));
+
+    cariEx.searchCariList.assignAll(listeler.listCari);
+
     await cariAltHesapGetir();
     return listeler.listCari;
   }
@@ -307,6 +315,4 @@ class VeriIslemleri{
       print(e);
     }
   }
-
-
 }

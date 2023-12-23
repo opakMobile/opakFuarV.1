@@ -65,7 +65,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                 children: [
                                   Icon(
                                       Icons.receipt_long,
-                                    size: 70,
+                                    size: 55,
                                     color: Colors.blue,
                                   ),
                                   Spacer(),
@@ -136,7 +136,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                 children: [
                                   Icon(
                                     Icons.receipt_long,
-                                    size: 70,
+                                    size: 55,
                                     color: Colors.green,
                                   ),
                                   Spacer(),
@@ -208,7 +208,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                 children: [
                                   Icon(
                                      Icons.receipt_long,
-                                    size: 70,
+                                    size: 55,
                                     color: Colors.orange,
                                   ),
                                   Spacer(),
@@ -278,7 +278,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                 children: [
                                   Icon(
                                      Icons.receipt_long,
-                                    size: 70,
+                                    size: 55,
                                     color: Colors.pink,
                                   ),
                                   Spacer(),

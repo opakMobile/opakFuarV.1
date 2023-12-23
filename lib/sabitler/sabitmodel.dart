@@ -44,12 +44,15 @@ bottombarDizayn(context, {Widget? button, bool buttonVarMi = false}) {
           EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width * 0.05,
-            ),
+            padding:
+                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.06),
             child: IconButton(
+              padding: EdgeInsets.only(
+                right: MediaQuery.of(context).size.width * 0.08,
+              ),
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                     context,
@@ -64,15 +67,17 @@ bottombarDizayn(context, {Widget? button, bool buttonVarMi = false}) {
           ),
           Padding(
               padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.05,
-                top: MediaQuery.of(context).size.height * 0.02,
+                left: MediaQuery.of(context).size.width * 0.0,
+                bottom: MediaQuery.of(context).size.height * 0.01,
               ),
               child: button),
           Padding(
             padding: EdgeInsets.only(
-              right: MediaQuery.of(context).size.width * 0.12,
-            ),
+                right: MediaQuery.of(context).size.width * 0.06),
             child: IconButton(
+              padding: EdgeInsets.only(
+                right: MediaQuery.of(context).size.width * 0.07,
+              ),
               onPressed: () {
                 showDialog(
                     context: context,
@@ -83,7 +88,7 @@ bottombarDizayn(context, {Widget? button, bool buttonVarMi = false}) {
               icon: Icon(
                 Icons.calculate,
                 color: Colors.orange,
-                size: 60,
+                size: 55,
               ),
             ),
           ),
@@ -106,7 +111,7 @@ Widget UcCizgi() {
     ),
   );
 }
-*/
+*//*
 CartYapisi(context, height, String text, Icon icon, Color color) {
   return Card(
     shape: RoundedRectangleBorder(
@@ -155,3 +160,4 @@ CartYapisi(context, height, String text, Icon icon, Color color) {
         )),
   );
 }
+*/

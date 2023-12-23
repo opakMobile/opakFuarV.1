@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/siparis/siparisUrunAra.dart';
+
+import '../model/cariModel.dart';
 
 class CariDetayPage extends StatefulWidget {
-  const CariDetayPage({super.key});
+  CariDetayPage({required this.cari});
+
+  late Cari cari;
 
   @override
   State<CariDetayPage> createState() => _CariDetayPageState();
@@ -79,17 +84,15 @@ class _CariDetayPageState extends State<CariDetayPage> {
           child: Column(
             children: [
               // ! Üst Kısım
-              Row(
-                children: [
-                  //  UcCizgi(),
-                  Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back_ios),
-                  )
-                ],
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  onPressed: () {
+                    
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.arrow_back_ios),
+                ),
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
@@ -101,11 +104,12 @@ class _CariDetayPageState extends State<CariDetayPage> {
                 color: Colors.red,
                 child: Center(
                   child: Text(
-                    'Firma Adı',
+                    widget.cari.ADI.toString(),
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                        color: Colors.white,
+                        overflow: TextOverflow.ellipsis),
                   ),
                 ),
               ),
@@ -270,13 +274,20 @@ class _CariDetayPageState extends State<CariDetayPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SiparisUrunAra(
+                                          cari: widget.cari,
+                                        )));
+                          },
                           icon: Icon(
-                            Icons.save,
+                            Icons.shopping_cart_checkout,
                             size: 30,
                           ),
                           label: Text(
-                            "Kaydet",
+                            "Sipariş Al",
                             style: TextStyle(
                               fontSize: 20,
                             ),

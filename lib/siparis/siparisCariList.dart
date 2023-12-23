@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/sepet/sepetDetay.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
-import 'package:opak_fuar/sabitler/listeler.dart';
-
+import '../db/veriTabaniIslemleri.dart';
 import '../model/cariModel.dart';
 import '../sabitler/Ctanim.dart';
 
@@ -25,80 +25,13 @@ class _SiparisCariListState extends State<SiparisCariList> {
     return Color.fromARGB(255, red, green, blue);
   }
 
-  List<Map> deneme = [
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-    },
-  ];
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    cariEx.searchCari("");
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -117,17 +50,14 @@ class _SiparisCariListState extends State<SiparisCariList> {
             child: SingleChildScrollView(
               child: Column(children: [
                 // ! Üst Kısım
-                Row(
-                  children: [
-                    //  UcCizgi(),
-                    Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back_ios),
-                    )
-                  ],
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back_ios),
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
@@ -153,6 +83,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
+                    onChanged: ((value) => cariEx.searchCari(value)),
                   ),
                 ),
                 SizedBox(
@@ -163,61 +94,67 @@ class _SiparisCariListState extends State<SiparisCariList> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.6,
-                    child: ListView.builder(
-                      itemCount: listeler.listCari.length,
-                      itemBuilder: (context, index) {
-                        Cari cari = listeler.listCari[index];
-                        String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                        String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                        return Column(
-                          children: [
-                            ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: randomColor(),
-                                child: Text(
-                                  harf1 + harf2,
-                                  style: TextStyle(color: Colors.white),
+                    child: Obx(() {
+                      return ListView.builder(
+                        itemCount: cariEx.searchCariList.length,
+                        itemBuilder: (context, index) {
+                          Cari cari = cariEx.searchCariList[index];
+                          String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                          String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                          return Column(
+                            children: [
+                              ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: randomColor(),
+                                  child: Text(
+                                    harf1 + harf2,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                              ),
-                              title: Text(
-                                cari.ADI.toString(),
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(cari.IL!.toString()),
-                                    widget.islem == true
-                                        ? Text(cari.BAKIYE.toString())
-                                        : Container(),
-                                  ],
+                                title: Text(
+                                  cari.ADI.toString(),
                                 ),
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(cari.IL!.toString()),
+                                      widget.islem == true
+                                          ? Text(cari.BAKIYE.toString())
+                                          : Container(),
+                                    ],
+                                  ),
+                                ),
+                                onTap: () {
+                                  if (widget.islem) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => SepetDetay(
+                                                  cari: cari,
+                                                )));
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SiparisUrunAra(
+                                                  cari: cari,
+                                                )));
+                                  }
+                                },
                               ),
-                              onTap: () {
-                                if (widget.islem) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SepetDetay()));
-                                } else {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SiparisUrunAra()));
-                                }
-                              },
-                            ),
-                            Divider(
-                              thickness: 2,
-                              color: Colors.black87,
-                            )
-                          ],
-                        );
-                      },
-                    ),
+                              Divider(
+                                thickness: 2,
+                                color: Colors.black87,
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }),
                   ),
                 ),
               ]),

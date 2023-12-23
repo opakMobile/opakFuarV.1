@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/siparisTamamla.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+
+import '../controller/stokKartController.dart';
+import '../model/cariModel.dart';
+import '../model/satisTipiModel.dart';
+import '../sabitler/Ctanim.dart';
 
 class SiparisUrunAra extends StatefulWidget {
-  const SiparisUrunAra({super.key});
+  SiparisUrunAra({required this.cari});
+
+  late Cari cari;
 
   @override
   State<SiparisUrunAra> createState() => _SiparisUrunAraState();
 }
 
 class _SiparisUrunAraState extends State<SiparisUrunAra> {
+  String result = '';
   bool aramaModu = true;
   bool okumaModu = false;
+  TextEditingController editingController = TextEditingController();
+  final StokKartController stokKartEx = Get.find();
+
   String seciliAltHesap = "Peşin";
   List<String> altHesaplar = [
     "Peşin",
@@ -23,6 +37,30 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     "Sezon",
     "Ara Ödeme"
   ];
+
+/*  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    stokKartEx.tempList.addAll(stokKartEx.searchList);
+    tempTempStok.addAll(stokKartEx.tempList);
+    for (var element in stokKartEx.searchList) {
+      if (!markalar.contains(element.MARKA) && element.MARKA != "") {
+        markalar.add(element.MARKA!);
+        Ctanim.seciliMarkalarFiltreMap.add({false: element.MARKA!});
+      }
+    }
+  }*/
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Ctanim.secililiMarkalarFiltre.clear();
+    //Ctanim.seciliMarkalarFiltreMap.clear();
+    /* stokKartEx.searchC(
+        "", "", "", Ctanim.seciliIslemTip, Ctanim.seciliStokFiyatListesi);*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +118,15 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                           width: MediaQuery.of(context).size.width * 0.05,
                           child: UcCizgi()),*/
                       SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.05,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.arrow_back_ios),
+                        ),
+                      ),
+                      SizedBox(
                         width: MediaQuery.of(context).size.width * 0.35,
                         child: Row(
                           children: [
@@ -115,46 +162,88 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.05,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(Icons.arrow_back_ios),
-                        ),
-                      )
                     ],
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    height: MediaQuery.of(context).size.height * 0.05,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.search),
-                        hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14.0,
-                        ),
-                        border: OutlineInputBorder(
+                  Row(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
                         ),
+                        child: TextFormField(
+                          controller: editingController,
+                          onChanged: ((value) {
+                            /*
+                            SatisTipiModel m = SatisTipiModel(
+                                ID: -1,
+                                TIP: "",
+                                FIYATTIP: "",
+                                ISK1: "",
+                                ISK2: "");
+                            stokKartEx.searchC(value, "", "Fiyat1", m,
+                                Ctanim.seciliStokFiyatListesi);
+                            // setState(() {});*/
+                          }),
+                          decoration: InputDecoration(
+                            suffixIcon: Icon(Icons.search),
+                            hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
+                            hintStyle: TextStyle(
+                              color: Colors.grey.shade400,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        height: MediaQuery.of(context).size.height * .1,
+                        child: IconButton(
+                            onPressed: () async {
+                              var res = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SimpleBarcodeScannerPage(),
+                                  ));
+                              /*   setState(() {
+                                if (res is String) {
+                                  result = res;
+                                  editingController.text = result;
+                                }
+                                SatisTipiModel m = SatisTipiModel(
+                                    ID: -1,
+                                    TIP: "",
+                                    FIYATTIP: "",
+                                    ISK1: "",
+                                    ISK2: "");
+                                stokKartEx.searchC(result, "", "Fiyat1", m,
+                                    Ctanim.seciliStokFiyatListesi);
+                              });*/
+                            },
+                            icon: Icon(
+                              Icons.camera_alt,
+                              size: 40,
+                              color: Colors.black54,
+                            )
+                            //    height: 60, width: 60),
+                            ),
+                      ),
+                    ],
                   ),
+                  // ! Firma adı
                   Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
-                      'Ömer Akkaya Dağıtım Matbaa Kırtasiye Gıda San. Tic. Ltd. Şti.',
+                      widget.cari.ADI!.toString(),
                       maxLines: 1,
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,
@@ -163,6 +252,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                           color: Colors.red),
                     ),
                   ),
+                  // ! Satış Toplamı
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -190,6 +280,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                       ),
                     ],
                   ),
+                  // ! Alt Hesap
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -236,7 +327,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height * 0.5,
-                            child: ListView.builder(
+
+                            //!! Sepet Listesi Buraya Gelecek
+                            /*   child: ListView.builder(
                               itemCount: listeler.listStok.length,
                               itemBuilder: (context, index) {
                                 StokKart stokModel = listeler.listStok[index];
@@ -542,6 +635,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 );
                               },
                             ),
+                        */
                           ),
                         )
                       : SingleChildScrollView(
@@ -549,9 +643,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height * 0.5,
                             child: ListView.builder(
-                              itemCount: listeler.listStok.length,
+                              itemCount: stokKartEx.searchList.length,
                               itemBuilder: (context, index) {
-                                StokKart stokModel = listeler.listStok[index];
+                                StokKart stokModel =
+                                    stokKartEx.searchList[index];
                                 return Column(
                                   children: [
                                     Row(
@@ -598,14 +693,14 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(5),
-                                              border:
-                                                  Border.all(color: Colors.grey),
+                                              border: Border.all(
+                                                  color: Colors.grey),
                                             ),
                                             child: TextFormField(
                                               autocorrect: true,
                                               //controller: t1,
                                               onEditingComplete: () {},
-                                        
+
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
                                                 hintText: "1",
@@ -614,10 +709,12 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     color: Colors.grey),
                                                 border: InputBorder.none,
                                               ),
-                                              keyboardType: TextInputType.number,
+                                              keyboardType:
+                                                  TextInputType.number,
                                               inputFormatters: [
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'^[\d\.]*$')),
+                                                FilteringTextInputFormatter
+                                                    .allow(
+                                                        RegExp(r'^[\d\.]*$')),
                                               ],
                                               onChanged: (newValue) {},
                                             ),
@@ -795,7 +892,489 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 size: 40,
                                                 color: Colors.green,
                                               ),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                // ! Miktar Gir ve iskonto mal fazlası fiyat değiştir
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.1,
+                                                          ),
+                                                          Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.8,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                            child: Column(
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Text(
+                                                                  "Miktar",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          22),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                  children: [
+                                                                    Material(
+                                                                      shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(25)),
+                                                                      child: IconButton(
+                                                                          onPressed: () {},
+                                                                          icon: Icon(
+                                                                            Icons.remove_circle,
+                                                                            size:
+                                                                                40,
+                                                                            color:
+                                                                                Colors.red,
+                                                                          )),
+                                                                    ),
+                                                                    Container(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width *
+                                                                          0.4,
+                                                                      height: MediaQuery.of(context)
+                                                                              .size
+                                                                              .height *
+                                                                          0.05,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.grey),
+                                                                      ),
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            EdgeInsets.all(8.0),
+                                                                        child: Material(
+                                                                            shape: RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(10),
+                                                                            ),
+                                                                            child: TextFormField(
+                                                                              decoration: InputDecoration(
+                                                                                border: InputBorder.none,
+                                                                                hintText: "1",
+                                                                                hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                                                                              ),
+                                                                            )),
+                                                                      ),
+                                                                    ),
+                                                                    Material(
+                                                                      shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(25)),
+                                                                      child: IconButton(
+                                                                          onPressed: () {},
+                                                                          icon: Icon(
+                                                                            Icons.add_circle,
+                                                                            size:
+                                                                                40,
+                                                                            color:
+                                                                                Colors.green,
+                                                                          )),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Divider(
+                                                                  endIndent: 20,
+                                                                  indent: 20,
+                                                                  thickness: 1,
+                                                                  color: Colors
+                                                                      .black45,
+                                                                ),
+                                                                // !
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Text(
+                                                                  "İskonto",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          22),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                  children: [
+                                                                    Column(
+                                                                      children: [
+                                                                        Text(
+                                                                          "İskonto 1",
+                                                                          style:
+                                                                              TextStyle(fontSize: 14),
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              MediaQuery.of(context).size.width * 0.15,
+                                                                          height:
+                                                                              MediaQuery.of(context).size.height * 0.05,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey),
+                                                                          ),
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(8.0),
+                                                                            child: Material(
+                                                                                shape: RoundedRectangleBorder(
+                                                                                  borderRadius: BorderRadius.circular(10),
+                                                                                ),
+                                                                                child: TextFormField(
+                                                                                  decoration: InputDecoration(
+                                                                                    border: InputBorder.none,
+                                                                                    hintText: "1",
+                                                                                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                                                                                  ),
+                                                                                )),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    Column(
+                                                                      children: [
+                                                                        Text(
+                                                                          "İskonto 2",
+                                                                          style:
+                                                                              TextStyle(fontSize: 14),
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              MediaQuery.of(context).size.width * 0.15,
+                                                                          height:
+                                                                              MediaQuery.of(context).size.height * 0.05,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey),
+                                                                          ),
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(8.0),
+                                                                            child: Material(
+                                                                                shape: RoundedRectangleBorder(
+                                                                                  borderRadius: BorderRadius.circular(10),
+                                                                                ),
+                                                                                child: TextFormField(
+                                                                                  decoration: InputDecoration(
+                                                                                    border: InputBorder.none,
+                                                                                    hintText: "1",
+                                                                                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                                                                                  ),
+                                                                                )),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    Column(
+                                                                      children: [
+                                                                        Text(
+                                                                          "İskonto 3",
+                                                                          style:
+                                                                              TextStyle(fontSize: 14),
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              MediaQuery.of(context).size.width * 0.15,
+                                                                          height:
+                                                                              MediaQuery.of(context).size.height * 0.05,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey),
+                                                                          ),
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(8.0),
+                                                                            child: Material(
+                                                                                shape: RoundedRectangleBorder(
+                                                                                  borderRadius: BorderRadius.circular(10),
+                                                                                ),
+                                                                                child: TextFormField(
+                                                                                  decoration: InputDecoration(
+                                                                                    border: InputBorder.none,
+                                                                                    hintText: "1",
+                                                                                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                                                                                  ),
+                                                                                )),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Divider(
+                                                                  endIndent: 20,
+                                                                  indent: 20,
+                                                                  thickness: 1,
+                                                                  color: Colors
+                                                                      .black45,
+                                                                ),
+                                                                // !
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Text(
+                                                                  "Mal Fazlası",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          22),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Container(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.4,
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.05,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .grey),
+                                                                  ),
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Material(
+                                                                        shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10),
+                                                                        ),
+                                                                        child: TextFormField(
+                                                                          decoration:
+                                                                              InputDecoration(
+                                                                            border:
+                                                                                InputBorder.none,
+                                                                            hintText:
+                                                                                "1",
+                                                                            hintStyle:
+                                                                                TextStyle(fontSize: 14, color: Colors.grey),
+                                                                          ),
+                                                                        )),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Divider(
+                                                                  endIndent: 20,
+                                                                  indent: 20,
+                                                                  thickness: 1,
+                                                                  color: Colors
+                                                                      .black87,
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Text(
+                                                                  "Fiyat",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          22),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Container(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.4,
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.05,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .grey),
+                                                                  ),
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Material(
+                                                                        shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10),
+                                                                        ),
+                                                                        child: TextFormField(
+                                                                          decoration:
+                                                                              InputDecoration(
+                                                                            border:
+                                                                                InputBorder.none,
+                                                                            hintText:
+                                                                                "1",
+                                                                            hintStyle:
+                                                                                TextStyle(fontSize: 14, color: Colors.grey),
+                                                                          ),
+                                                                        )),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                Divider(
+                                                                  endIndent: 20,
+                                                                  indent: 20,
+                                                                  thickness: 1,
+                                                                  color: Colors
+                                                                      .black45,
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                                ElevatedButton(
+                                                                  style:
+                                                                      ButtonStyle(
+                                                                    minimumSize: MaterialStateProperty.all(Size(
+                                                                        MediaQuery.of(context).size.width *
+                                                                            0.3,
+                                                                        MediaQuery.of(context).size.height *
+                                                                            0.05)),
+                                                                  ),
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                  child: Text(
+                                                                      "Uygula"),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.01,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    });
+                                              },
                                             )),
                                           ),
                                         ],

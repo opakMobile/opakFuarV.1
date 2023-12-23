@@ -3,6 +3,11 @@ import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:path/path.dart';
 import 'dart:async';
 import 'package:sqflite/sqflite.dart';
+
+import '../webServis/base.dart';
+
+BaseService bs = BaseService();
+
 class DatabaseHelper {
   DatabaseHelper(String databaseName) {
     _databaseName = "";
@@ -41,15 +46,11 @@ class DatabaseHelper {
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     print(oldVersion);
     print(newVersion);
-    for (int i = oldVersion; i <= newVersion; i++) {
-    
-    }
+    for (int i = oldVersion; i <= newVersion; i++) {}
     if (oldVersion < newVersion) {
       //    db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN  INTEGER;");
 
-      if (newVersion == 7) {
-    
-      }
+      if (newVersion == 7) {}
       // db.execute("ALTER TABLE tabEmployee ADD COLUMN newCol TEXT;");
     }
   }
@@ -218,9 +219,7 @@ class DatabaseHelper {
       print(e);
     }
 
-  
-
-  try{
+    try {
       String Sorgu = """
     CREATE TABLE TBLFISSB (
     ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -502,7 +501,7 @@ class DatabaseHelper {
     } on PlatformException catch (e) {
       print(e);
     }
-   
+
     try {
       String sorgu = """
     CREATE TABLE TBLSTOKDEPOSB (
@@ -520,5 +519,3 @@ class DatabaseHelper {
     return _initDatabase();
   }
 }
-
-

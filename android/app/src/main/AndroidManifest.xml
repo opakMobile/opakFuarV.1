@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="opak_fuar"
+        android:label="Fair Sales"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

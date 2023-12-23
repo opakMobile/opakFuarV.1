@@ -1,11 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:opak_fuar/cari/cariDetayPage.dart';
 import 'package:opak_fuar/cari/cariFormPage.dart';
 import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import '../db/veriTabaniIslemleri.dart';
 
 class CariListePage extends StatefulWidget {
   CariListePage({required this.islem});
@@ -22,6 +25,13 @@ class _CariListePageState extends State<CariListePage> {
     int green = random.nextInt(128);
     int blue = random.nextInt(128);
     return Color.fromARGB(255, red, green, blue);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    cariEx.searchCari("");
   }
 
   @override
@@ -42,17 +52,14 @@ class _CariListePageState extends State<CariListePage> {
             child: SingleChildScrollView(
               child: Column(children: [
                 // ! Üst Kısım
-                Row(
-                  children: [
-                    //  UcCizgi(),
-                    Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back_ios),
-                    )
-                  ],
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back_ios),
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
@@ -78,6 +85,7 @@ class _CariListePageState extends State<CariListePage> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
+                    onChanged: ((value) => cariEx.searchCari(value)),
                   ),
                 ),
                 // ! Cari Listesi
@@ -85,56 +93,62 @@ class _CariListePageState extends State<CariListePage> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.55,
-                    child: ListView.builder(
-                      itemCount: listeler.listCari.length,
-                      itemBuilder: (context, index) {
-                        Cari cari = listeler.listCari[index];
-                        String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                        String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                        return Column(
-                          children: [
-                            ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: randomColor(),
-                                child: Text(
-                                  harf1 + harf2,
-                                  style: TextStyle(color: Colors.white),
+                    child: Obx(() => ListView.builder(
+                          itemCount: cariEx.searchCariList.length,
+                          itemBuilder: (context, index) {
+                            Cari cari = cariEx.searchCariList[index];
+                            String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                            String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                            return Column(
+                              children: [
+                                ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: randomColor(),
+                                    child: Text(
+                                      harf1 + harf2,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  title: Text(
+                                    cari.ADI.toString(),
+                                  ),
+                                  subtitle: Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Text(cari.IL!.toString()),
+                                  ),
+                                  onTap: () {
+                                    if (widget.islem) {
+                                      // cariye gidecek bilgisine
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CariDetayPage(
+                                                    cari: cariEx
+                                                        .searchCariList[index],
+                                                  )));
+                                    } else {
+                                      // cari listesine gidecek
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CariFormPage(
+                                                    yeniKayit: false,
+                                                    cari: cariEx
+                                                        .searchCariList[index],
+                                                  )));
+                                    }
+                                  },
                                 ),
-                              ),
-                              title: Text(
-                                cari.ADI.toString(),
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Text(cari.IL!.toString()),
-                              ),
-                              onTap: () {
-                                if (widget.islem) {
-                                  // cariye gidecek bilgisine
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CariDetayPage()));
-                                } else {
-                                  // cari listesine gidecek
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => CariFormPage(
-                                                yeniKayit: false,
-                                              )));
-                                }
-                              },
-                            ),
-                            Divider(
-                              thickness: 2,
-                              color: Colors.black87,
-                            )
-                          ],
-                        );
-                      },
-                    ),
+                                Divider(
+                                  thickness: 2,
+                                  color: Colors.black87,
+                                )
+                              ],
+                            );
+                          },
+                        )),
                   ),
                 ),
               ]),

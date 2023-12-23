@@ -1,12 +1,17 @@
 import 'dart:ui';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/pages/homePage.dart';
 import 'package:opak_fuar/pages/settingsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../sabitler/listeler.dart';
+import '../model/kullaniciModel.dart';
+import '../sabitler/Ctanim.dart';
+import '../sabitler/sharedPreferences.dart';
 import '../webServis/base.dart';
 
 class LoginPage extends StatefulWidget {
@@ -44,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _getSavedPassword();
-    /*
     KullaniciModel.getUser().then((value) {
       if (value == null) {
         // showAlertDialog2(context, "İlk Girişte Kullanıcı Kaydı zorunludur.");
@@ -53,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
         _userNameController.text = Ctanim.kullanici!.KOD!;
       }
     });
-    */
+
     // ctanim şirketi doldurur
   }
 
@@ -96,8 +100,414 @@ class _LoginPageState extends State<LoginPage> {
   bool paremetreHatasiVarMi = false;
   Future<void> click() async {
     _formKey.currentState!.save();
+    _formKey.currentState!.save();
 
-    if (_userNameController.text == "" || _passwordController.text == "") {
+    if (Ctanim.kullanici != null) {
+      await SharedPrefsHelper.sirketGetir();
+      if (Ctanim.sirket == null || Ctanim.sirket == "") {
+        hataGoster(
+            mesajVarMi: true,
+            mesaj: "Şirket İsmi Kaydedilmemiş",
+            ikinciGeriOlsunMu: false);
+      } else {
+        await SharedPrefsHelper.IpGetir();
+
+        //     String bankaHata = "";
+        ///     String bankaSozlesmeHata = "";
+
+        //  String islemTipiHata = "";
+        if (_passwordController.text == Ctanim.kullanici?.SIFRE &&
+            _userNameController.text == Ctanim.kullanici!.KOD) {
+          /*   
+        //!!!!!!!!!!!!!!!!
+          int value = await SharedPrefsHelper.faturaNumarasiGetir();
+          if (value != -1) {
+            Ctanim.faturaNumarasi = value;
+          } else {
+            if (Ctanim.kullanici!.FATNO == "0" &&
+                Ctanim.kullanici!.FATURASERISERINO != "") {
+              paremetreHatasiVarMi = true;
+              print("fatNO");
+            } else {
+              Ctanim.faturaNumarasi =
+                  int.parse(Ctanim.kullanici!.FATNO.toString());
+              SharedPrefsHelper.faturaNumarasiKaydet(
+                  int.parse(Ctanim.kullanici!.FATNO.toString()));
+            }
+          }
+          int value1 = await SharedPrefsHelper.siparisNumarasiGetir();
+          if (value1 != -1) {
+            Ctanim.siparisNumarasi = value1;
+          } else {
+            Ctanim.siparisNumarasi = 1;
+            SharedPrefsHelper.siparisNumarasiKaydet(Ctanim.siparisNumarasi);
+          }
+          int value2 = await SharedPrefsHelper.irsaliyeNumarasiGetir();
+          if (value2 != -1) {
+            Ctanim.irsaliyeNumarasi = value2;
+          } else {
+            if (Ctanim.kullanici!.IRSNO == "0" &&
+                Ctanim.kullanici!.IRSALIYESERISERINO != "") {
+              paremetreHatasiVarMi = true;
+              print("ırsNO");
+            } else {
+              Ctanim.irsaliyeNumarasi =
+                  int.parse(Ctanim.kullanici!.IRSNO.toString());
+              SharedPrefsHelper.irsaliyeNumarasiKaydet(
+                  int.parse(Ctanim.kullanici!.IRSNO.toString()));
+            }
+          }
+          int value3 = await SharedPrefsHelper.eirsaliyeNumarasiGetir();
+          if (value3 != -1) {
+            Ctanim.eirsaliyeNumarasi = value3;
+          } else {
+            if (Ctanim.kullanici!.EIRSNO == "0" &&
+                Ctanim.kullanici!.EIRSALIYESERINO != "" &&
+                Ctanim.kullanici!.EIRSALIYE == "E") {
+              paremetreHatasiVarMi = true;
+              print("EirsNO");
+            } else {
+              Ctanim.eirsaliyeNumarasi =
+                  int.parse(Ctanim.kullanici!.EIRSNO.toString());
+              SharedPrefsHelper.eirsaliyeNumarasiKaydet(
+                  int.parse(Ctanim.kullanici!.EIRSNO.toString()));
+            }
+          }
+          int value4 = await SharedPrefsHelper.perakendeSatisNumGetir();
+          if (value4 != -1) {
+            Ctanim.perakendeSatisNumarasi = value4;
+          } else {
+            Ctanim.perakendeSatisNumarasi = 1;
+            SharedPrefsHelper.perakendeSatisNumKaydet(
+                Ctanim.perakendeSatisNumarasi);
+          }
+          int value5 = await SharedPrefsHelper.depoTransferNumGetir();
+          if (value5 != -1) {
+            Ctanim.depolarArasiTransfer = value5;
+          } else {
+            Ctanim.depolarArasiTransfer = 1;
+            SharedPrefsHelper.depoTransferNumKaydet(
+                Ctanim.depolarArasiTransfer);
+          }
+          int value6 = await SharedPrefsHelper.efaturaNumarasiGetir();
+          if (value6 != -1) {
+            Ctanim.eFaturaNumarasi = value6;
+          } else {
+            if (Ctanim.kullanici!.EFATNO == "0" &&
+                Ctanim.kullanici!.EFATURASERINO != "" &&
+                Ctanim.kullanici!.EFATURA == "E") {
+              paremetreHatasiVarMi = true;
+              print("EfatNO");
+            } else {
+              Ctanim.eFaturaNumarasi =
+                  int.parse(Ctanim.kullanici!.EFATNO.toString());
+              SharedPrefsHelper.efaturaNumarasiKaydet(
+                  int.parse(Ctanim.kullanici!.EFATNO.toString()));
+            }
+          }
+          int value7 = await SharedPrefsHelper.eArsivNumarasiGetir();
+          if (value7 != -1) {
+            Ctanim.eArsivNumarasi = value7;
+          } else {
+            if (Ctanim.kullanici!.EARSIVNO == "0" &&
+                Ctanim.kullanici!.EARSIVSERINO != "" &&
+                Ctanim.kullanici!.EARSIV == "E") {
+              paremetreHatasiVarMi = true;
+              print("EarsivNO");
+            } else {
+              Ctanim.eArsivNumarasi =
+                  int.parse(Ctanim.kullanici!.EARSIVNO.toString());
+              SharedPrefsHelper.eArsivNumarasiKaydet(
+                  int.parse(Ctanim.kullanici!.EARSIVNO.toString()));
+            }
+          }
+          int value8 = await SharedPrefsHelper.acikFaturaNumarasiGetir();
+          if (value8 != -1) {
+            Ctanim.acikFaturaNumrasi = value8;
+          } else {
+            if (Ctanim.kullanici!.FATACIKNO == "0" &&
+                Ctanim.kullanici!.FATURAACIKSERI_SERINO != "") {
+              paremetreHatasiVarMi = true;
+              print("acikFatura");
+            } else {
+              Ctanim.acikFaturaNumrasi =
+                  int.parse(Ctanim.kullanici!.FATACIKNO.toString());
+              SharedPrefsHelper.acikFaturaNumarasiKaydet(
+                  int.parse(Ctanim.kullanici!.FATACIKNO.toString()));
+            }
+          }
+          */
+          if (_beniHatirla == true) {
+            _savePassword();
+          }
+          /*      Ctanim.satisFiyatListesi.clear();
+          if (Ctanim.kullanici!.SFIYAT1 == "E") {
+            Ctanim.satisFiyatListesi.add("Fiyat1");
+          }
+          if (Ctanim.kullanici!.SFIYAT2 == "E") {
+            Ctanim.satisFiyatListesi.add("Fiyat2");
+          }
+          if (Ctanim.kullanici!.SFIYAT3 == "E") {
+            Ctanim.satisFiyatListesi.add("Fiyat3");
+          }
+          if (Ctanim.kullanici!.SFIYAT4 == "E") {
+            Ctanim.satisFiyatListesi.add("Fiyat4");
+          }
+          if (Ctanim.kullanici!.SFIYAT5 == "E") {
+            Ctanim.satisFiyatListesi.add("Fiyat5");
+          }
+
+          if (Ctanim.kullanici!.GISK1 == "E") {
+            Ctanim.genelIskontoListesi.add("GISK1");
+          }
+          if (Ctanim.kullanici!.GISK2 == "E") {
+            Ctanim.genelIskontoListesi.add("GISK2");
+          }
+          //GISK2 den sonrası alınmadı.
+        */
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return LoadingSpinner(
+                color: Colors.black,
+                message:
+                    "Opak Mobil\'e Hoşgeldiniz Uygulama Sizin İçin Hazırlanıyor...",
+              );
+            },
+          );
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return LoadingSpinner(
+                color: Colors.black,
+                message: "Tüm Veriler Güncelleniyor. Lütfen Bekleyiniz...",
+              );
+            },
+          );
+          await SharedPrefsHelper.yetkiCek("yetkiler");
+          await bs.tumVerileriGuncelle();
+          await bs.getirCariAltHesap(sirket: "AAGENELOPAK");
+          Navigator.pop(context);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+              (r) => false);
+
+          /*  List<bool> retrievedList = [];
+          await SharedPrefsHelper.getList().then((value) {
+            retrievedList = value;
+
+            if (retrievedList.length == 0) {
+              listeler.sayfaDurum.clear();
+              for (var element in listeler.plasiyerYetkileri) {
+                listeler.sayfaDurum.add(element);
+              }
+            } else {
+              for (int i = 0; i < retrievedList.length; i++) {
+                if (listeler.plasiyerYetkileri[i] == false &&
+                    retrievedList[i] == true) {
+                  retrievedList[i] == false;
+                }
+              }
+              listeler.sayfaDurum = retrievedList;
+            }
+          });*/
+          /*   await SharedPrefsHelper.saveList(listeler.sayfaDurum);
+          veriislemi.veriGetir().then((value) async {
+            if (value == 0) {
+              print("Veri Tabanı yok.");
+
+              const snackBar1 = SnackBar(
+                content: Text(
+                  'Yerel Hafızada Veri Kaydı Yok Veriler Ana Makineden Çekilecek',
+                  style: TextStyle(fontSize: 16),
+                ),
+                showCloseIcon: true,
+                backgroundColor: Color.fromARGB(255, 66, 82, 97),
+                closeIconColor: Colors.white,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar1);
+
+              if (await Connectivity().checkConnectivity() ==
+                  ConnectivityResult.none) {
+                print("İnternet bağlantısı yok.");
+                const snackBar = SnackBar(
+                  content: Text(
+                    'İnternet bağlantısı yok. Webservisten veri çekilemedi.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  showCloseIcon: true,
+                  backgroundColor: Colors.blue,
+                  closeIconColor: Colors.white,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else {
+                String genelHata = "";
+                List<String?> hatalar = [];
+                hatalar.add(await bs.getirFisEkParam(sirket: Ctanim.sirket!));
+                hatalar.add(await bs.getirOndalikParam(
+                    subeId: int.parse(Ctanim.kullanici!.YERELSUBEID!),
+                    sirket: Ctanim.sirket!));
+                //hatalar.add(await bs.getirPlasiyerYetki(sirket: Ctanim.sirket!, kullaniciKodu:  Ctanim.kullanici!.KOD!,IP: Ctanim.IP));
+                hatalar.add(await bs.getirPlasiyerBanka(
+                    sirket: Ctanim.sirket!,
+                    kullaniciKodu: Ctanim.kullanici!.KOD!));
+                hatalar.add(await bs.getirPlasiyerBankaSozlesme(
+                    sirket: Ctanim.sirket!,
+                    kullaniciKodu: Ctanim.kullanici!.KOD!));
+                hatalar.add(await bs.getirIslemTip(
+                    sirket: Ctanim.sirket!,
+                    kullaniciKodu: Ctanim.kullanici!.KOD!));
+                hatalar.add(await bs.getirRaf(sirket: Ctanim.sirket!));
+                hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
+                hatalar.add(await stokKartEx.servisStokGetir());
+                hatalar.add(await cariEx.servisCariGetir());
+                hatalar.add(await bs.getirSubeDepo(sirket: Ctanim.sirket!));
+                hatalar.add(await bs.getirStokKosul(sirket: Ctanim.sirket!));
+                hatalar.add(await bs.getirCariKosul(sirket: Ctanim.sirket!));
+                hatalar
+                    .add(await bs.getirCariStokKosul(sirket: Ctanim.sirket!));
+                hatalar.add(await bs.getirKur(sirket: Ctanim.sirket!));
+                hatalar.add(
+                    await bs.getirStokFiyatListesi(sirket: Ctanim.sirket!));
+                hatalar.add(
+                    await bs.getirStokFiyatHarListesi(sirket: Ctanim.sirket!));
+                hatalar.add(await bs.getirDahaFazlaBarkod(
+                    sirket: Ctanim.sirket!,
+                    kullaniciKodu: Ctanim.kullanici!.KOD!));
+                hatalar.add(await bs.getirStokDepo(
+                    sirket: Ctanim.sirket!,
+                    plasiyerKod: Ctanim.kullanici!.KOD!));
+                if (hatalar.length > 0) {
+                  for (var element in hatalar) {
+                    if (element != "") {
+                      genelHata = genelHata + "\n" + element!;
+                    }
+                  }
+                }
+                if (genelHata != "") {
+                  if (paremetreHatasiVarMi == false) {
+                    LogModel log = LogModel(
+                      TABLOADI: "LOGİN İLK GİRİŞ",
+                      HATAACIKLAMA: genelHata,
+                    );
+                    await VeriIslemleri().logKayitEkle(log);
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => MainPage()),
+                      (route) => false,
+                    );
+                    /*
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomAlertDialog(
+                            align: TextAlign.left,
+                            title: 'Hata',
+                            message:
+                                'Web Servisten Veri Alınırken Bazı Hatalar İle Karşılaşıldı:\n' +
+                                    genelHata,
+                            onPres: () async {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage()),
+                                (route) => false,
+                              );
+                            },
+                            buttonText: 'Devam Et',
+                          );
+                        });
+                        */
+                  } else {
+                    hataGoster(
+                        mesajVarMi: true,
+                        mesaj:
+                            "Web Servisten Veri Alınırken Bazı Hatalar İle Karşılaşıldı:\n" +
+                                genelHata);
+                  }
+                } else {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage()),
+                    (route) => false,
+                  );
+                }
+              }
+
+              // BaseService bs = BaseService();
+              //bool hasInternet = await checkInternetConnectivity();
+              //if (!hasInternet) {
+
+              // } else {
+              ///////print("GİRİŞ İNTERNET VAR LİSTE DURUMU: " +
+              // listeler.listKur.length.toString());
+              //listeler.listKur.clear();
+              //await bs.getirKur();
+              //print("GİRİŞ İNTERNET VAR LİSTE TEMİZLENİP GÜNCELLENDİ: " +
+              //  listeler.listKur.length.toString());
+              //}
+
+              //  Get.to(() => MainPage());
+              //Navigator.pop(context);
+            } else {
+              if (Ctanim.kullanici!.ONLINE == "H") {
+                if (paremetreHatasiVarMi == true) {
+                  hataGoster();
+                } else {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage()),
+                    (route) => false,
+                  );
+                }
+              } else {
+                showAlertDialogLogin(
+                    context, "Kullanıcının Ofline Giriş İzni Yok");
+              }
+            }
+          });
+*/
+          // Şifre doğru, giriş yapılıyor
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                          width: MediaQuery.of(context).size.width / 3,
+                          height: 40,
+                          // color: Colors.red,
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                //   Get.back();
+                              },
+                              icon: Icon(Icons.cancel))),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 3.0),
+                        child: Text("Şifre Hatalı. ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                            )),
+                      ),
+                      Text("Lütfen tekrar deneyin.")
+                    ],
+                  ),
+                );
+              });
+        }
+      }
+    } else {
+      showAlertDialogLogin1(context, "Kullanıcı Tanımı Yapılamış.");
+    }
+    /*  if (_userNameController.text == "" || _passwordController.text == "") {
       hataGoster(mesajVarMi: false);
       return;
     } else {
@@ -113,10 +523,11 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       await bs.tumVerileriGuncelle();
+      await bs.getirCariAltHesap(sirket: "AAGENELOPAK");
       Navigator.pop(context);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) => HomePage()), (r) => false);
-    }
+    }*/
   }
 
   Future<void> _getSavedPassword() async {
@@ -431,6 +842,36 @@ showAlertDialogLogin(BuildContext context, String mesaj) {
     onPressed: () {
       Navigator.pop(context);
       Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Hatalı İşlem!"),
+    content: Text(mesaj),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+showAlertDialogLogin1(BuildContext context, String mesaj) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => settings_page()),
+      );
     },
   );
 
