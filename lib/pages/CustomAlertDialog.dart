@@ -50,7 +50,7 @@ class CustomAlertDialog extends StatelessWidget {
                     width: 100,
                     height: 100,
                     child: Image.asset(
-                      'images/pdf.png',
+                      'assets/pdf.png',
                     ),
                   ),
                 )

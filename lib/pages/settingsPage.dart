@@ -201,7 +201,7 @@ class _settings_pageState extends State<settings_page> {
 
                                                           DatabaseHelper dt =
                                                               DatabaseHelper(
-                                                                  "opak1.db");
+                                                                  "fuar.db");
                                                           Ctanim.db = await dt
                                                               .database();
 

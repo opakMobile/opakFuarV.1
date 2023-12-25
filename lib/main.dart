@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:opak_fuar/controller/fisController.dart';
 import 'package:opak_fuar/db/dataBaseHelper.dart';
 import 'package:opak_fuar/pages/login.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
@@ -10,7 +11,7 @@ import 'controller/stokKartController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  DatabaseHelper dt = DatabaseHelper("opak1.db");
+  DatabaseHelper dt = DatabaseHelper("fuar.db");
   Ctanim.db = await dt.database();
   runApp(MyApp());
 }
@@ -18,7 +19,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final cariEx = Get.put(CariController());
   final stokKartEx = Get.put(StokKartController());
-
+  final fisEx = Get.put(FisController());
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -1,6 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:intl/intl.dart';
+import 'package:opak_fuar/controller/fisController.dart';
+import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/sepet/sepetDetay.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
@@ -17,6 +21,7 @@ class SiparisCariList extends StatefulWidget {
 }
 
 class _SiparisCariListState extends State<SiparisCariList> {
+  FisController fisEx = Get.find();
   Color randomColor() {
     Random random = Random();
     int red = random.nextInt(128); // 0-127 arasında rastgele bir değer
@@ -136,6 +141,14 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                                   cari: cari,
                                                 )));
                                   } else {
+                                  Fis fis = Fis.empty();
+                                  fisEx.fis!.value = fis;
+                                  fisEx.fis!.value.cariKart = cari;
+                                  fisEx.fis!.value.CARIKOD = cari.KOD;
+                                  fisEx.fis!.value.CARIADI = cari.ADI;
+                                  fisEx.fis!.value.BELGENO = "SONRA BAĞLANACAK";
+                                  fisEx.fis!.value.TARIH = DateFormat("yyyy-MM-dd").format(DateTime.now());
+
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(

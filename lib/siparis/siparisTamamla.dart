@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:opak_fuar/model/fis.dart';
+import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/siparis/PdfOnizleme.dart';
 
 class SiparisTamamla extends StatefulWidget {
-  const SiparisTamamla({super.key});
+  const SiparisTamamla({super.key, required this.fiss});
+  final Fis fiss;
 
   @override
   State<SiparisTamamla> createState() => _SiparisTamamlaState();
@@ -27,7 +31,37 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                        showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomAlertDialog(
+                            secondButtonText: "Tamam",
+                            onSecondPress: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            pdfSimgesi: true,
+                            align: TextAlign.center,
+                            title: 'Kayıt Başarılı',
+                            message:
+                                'Fatura Kaydedildi. PDF Dosyasını Görüntülemek İster misiniz?',
+                            onPres: () async {
+                              
+                        Navigator.pop(context);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => PdfOnizleme(
+                                    m: widget.fiss,
+                                    fastReporttanMiGelsin: false,
+                                  )),
+                        );
+                        
+                            },
+                            buttonText: 'Pdf\'i\ Gör',
+                          );
+                        });
+                  },
                   child: Text(
                     "Siparişi Yazdır",
                     style: TextStyle(

@@ -1,5 +1,7 @@
+import 'package:opak_fuar/model/KurModel.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
+import 'package:opak_fuar/model/olcuBirimModel.dart';
 import 'package:opak_fuar/model/raporModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 
@@ -89,9 +91,10 @@ class listeler {
   static List<CariStokKosulModel> listCariStokKosul = [];
   static List<StokFiyatListesiHarModel> listStokFiyatListesiHar = [];
   static List<DahaFazlaBarkod> listDahaFazlaBarkod = [];
+  static List<KurModel> listKur = [];
 
   static List<Cari> listCari = [];
-
+  static List<OlcuBirimModel> listOlcuBirim = [];
   static List<CariAltHesap> listCariAltHesap = [];
   static List<KullaniciYetki> yetki = [];
   static List<bool> plasiyerYetkileri = [

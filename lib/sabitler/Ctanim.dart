@@ -1,3 +1,5 @@
+import 'package:money_formatter/money_formatter.dart';
+
 import '../model/kullaniciModel.dart';
 import '../model/satisTipiModel.dart';
 import '../model/stokFiyatListesiModel.dart';
@@ -52,7 +54,34 @@ class Ctanim {
     16: "Musteri_Siparis",
   };
 
+
   //fonksiyonalar
+  static String donusturMusteri(String inText) {
+    MoneyFormatter fmf = MoneyFormatter(amount: double.parse(inText));
+    MoneyFormatterOutput fo = fmf.output;
+    String tempSonTutar = fo.nonSymbol.toString();
+
+    if (tempSonTutar.contains(",")) {
+      String kusurat = "";
+      List<String> gecici = tempSonTutar.split(",");
+      for (int i = 1; i < gecici.length; i++) {
+        if (i == gecici.length - 1) {
+          String eklen = gecici[i].replaceAll(".", ",");
+          kusurat = kusurat + eklen;
+        } else {
+          kusurat = kusurat + gecici[i] + ".";
+        }
+      }
+      // String kusuratSon = kusurat.replaceAll(".", ",");
+      String sonYazilacak = gecici[0] + "." + kusurat;
+      return sonYazilacak;
+    } else {
+      String sonYazilacak = tempSonTutar.replaceAll(".", ",");
+      return sonYazilacak;
+    }
+  }
+
+
   static List cariIlkIkiDon(String text) {
     String trim = text.trim();
     String harf1 = "";
