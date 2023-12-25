@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:opak_fuar/controller/fisController.dart';
@@ -22,6 +23,8 @@ class MyApp extends StatelessWidget {
   final fisEx = Get.put(FisController());
   @override
   Widget build(BuildContext context) {
+       SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(
