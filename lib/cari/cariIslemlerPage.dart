@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:opak_fuar/cari/cariListePage.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 
@@ -12,7 +13,6 @@ class CariIslemlerPage extends StatefulWidget {
 }
 
 class _CariIslemlerPageState extends State<CariIslemlerPage> {
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -74,7 +74,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                     'Cari Listesi',
                                     maxLines: 2,
                                     textAlign: TextAlign.right,
-                                    style: TextStyle(
+                                    style: GoogleFonts.doppioOne(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -145,7 +145,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                     'Cari Bilgi Raporu',
                                     maxLines: 2,
                                     textAlign: TextAlign.right,
-                                    style: TextStyle(
+                                    style: GoogleFonts.doppioOne(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -216,7 +216,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                     'Yeni Cari Ekle',
                                     maxLines: 2,
                                     textAlign: TextAlign.right,
-                                    style: TextStyle(
+                                    style: GoogleFonts.doppioOne(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
                                     ),

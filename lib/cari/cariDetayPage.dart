@@ -77,6 +77,7 @@ class _CariDetayPageState extends State<CariDetayPage> {
       child: Scaffold(
         appBar: appBarDizayn(context),
         bottomNavigationBar: bottombarDizayn(context),
+        resizeToAvoidBottomInset: false,
         body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -88,7 +89,6 @@ class _CariDetayPageState extends State<CariDetayPage> {
                 alignment: Alignment.centerLeft,
                 child: IconButton(
                   onPressed: () {
-                    
                     Navigator.pop(context);
                   },
                   icon: Icon(Icons.arrow_back_ios),

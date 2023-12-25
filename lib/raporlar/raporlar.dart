@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:opak_fuar/raporlar/raporBelgeSecim.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
-
-
 
 class RaporlarPage extends StatefulWidget {
   const RaporlarPage({super.key});
@@ -30,7 +29,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                 top: MediaQuery.of(context).size.height * 0.01),
             child: Column(
               children: [
-               // UcCizgi(),
+                // UcCizgi(),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
@@ -64,20 +63,18 @@ class _RaporlarPageState extends State<RaporlarPage> {
                               Row(
                                 children: [
                                   Icon(
-                                      Icons.receipt_long,
+                                    Icons.receipt_long,
                                     size: 55,
                                     color: Colors.blue,
                                   ),
                                   Spacer(),
-                                  Text(
-                                    'Plasiyer Satış Raporu',
-                                        maxLines: 2,
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  Text('Plasiyer Satış Raporu',
+                                      maxLines: 2,
+                                      textAlign: TextAlign.right,
+                                      style: GoogleFonts.doppioOne(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      )),
                                 ],
                               ),
                               SizedBox(
@@ -142,19 +139,18 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                   Spacer(),
                                   Text(
                                     'Bayi Satış Raporu',
-                                      maxLines: 2,
+                                    maxLines: 2,
                                     textAlign: TextAlign.right,
-                                    style: TextStyle(
+                                    style: GoogleFonts.doppioOne(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
-                                      
                                     ),
                                   ),
                                 ],
                               ),
                               SizedBox(
                                 height:
-                                  MediaQuery.of(context).size.height * 0.01,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Row(
                                 children: [
@@ -207,7 +203,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                               Row(
                                 children: [
                                   Icon(
-                                     Icons.receipt_long,
+                                    Icons.receipt_long,
                                     size: 55,
                                     color: Colors.orange,
                                   ),
@@ -216,7 +212,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                     'Alıcı Satış Raporu',
                                     maxLines: 2,
                                     textAlign: TextAlign.right,
-                                    style: TextStyle(
+                                    style: GoogleFonts.doppioOne(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -248,9 +244,9 @@ class _RaporlarPageState extends State<RaporlarPage> {
                         )),
                   ),
                 ),
-                 GestureDetector(
+                GestureDetector(
                   onTap: () {
-                   Navigator.push(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => RaporBelgeSecim(
@@ -277,7 +273,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                               Row(
                                 children: [
                                   Icon(
-                                     Icons.receipt_long,
+                                    Icons.receipt_long,
                                     size: 55,
                                     color: Colors.pink,
                                   ),
@@ -286,7 +282,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                     'Stok Satış Raporu',
                                     maxLines: 2,
                                     textAlign: TextAlign.right,
-                                    style: TextStyle(
+                                    style: GoogleFonts.doppioOne(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -295,7 +291,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                               ),
                               SizedBox(
                                 height:
-                                   MediaQuery.of(context).size.height * 0.01,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Row(
                                 children: [

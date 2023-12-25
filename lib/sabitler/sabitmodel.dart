@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:opak_fuar/pages/homePage.dart';
 
 import '../pages/hesapMakinesi.dart';
@@ -21,7 +22,7 @@ appBarDizayn(context) {
             ),
             Text(
               'fair sales',
-              style: TextStyle(
+              style: GoogleFonts.varelaRound(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,

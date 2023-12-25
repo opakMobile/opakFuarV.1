@@ -96,41 +96,38 @@ class _SepetDetayState extends State<SepetDetay> {
                           ),
                         ),
                       ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * .1,
-                        child: IconButton(
-                            onPressed: () async {
-                              var res = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SimpleBarcodeScannerPage(),
-                                  ));
+                      IconButton(
+                          onPressed: () async {
+                            var res = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SimpleBarcodeScannerPage(),
+                                ));
 
-                              ///!!!!! buraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                              /*     setState(() {
-                                if (res is String) {
-                                  result = res;
-                                  editingController.text = result;
-                                }
-                                SatisTipiModel m = SatisTipiModel(
-                                    ID: -1,
-                                    TIP: "",
-                                    FIYATTIP: "",
-                                    ISK1: "",
-                                    ISK2: "");
-                                stokKartEx.searchC(result, "", "Fiyat1", m,
-                                    Ctanim.seciliStokFiyatListesi);
-                              });*/
-                            },
-                            icon: Icon(
-                              Icons.camera_alt,
-                              size: 40,
-                              color: Colors.black54,
-                            )
-                            //    height: 60, width: 60),
-                            ),
-                      ),
+                            ///!!!!! buraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                            /*     setState(() {
+                              if (res is String) {
+                                result = res;
+                                editingController.text = result;
+                              }
+                              SatisTipiModel m = SatisTipiModel(
+                                  ID: -1,
+                                  TIP: "",
+                                  FIYATTIP: "",
+                                  ISK1: "",
+                                  ISK2: "");
+                              stokKartEx.searchC(result, "", "Fiyat1", m,
+                                  Ctanim.seciliStokFiyatListesi);
+                            });*/
+                          },
+                          icon: Icon(
+                            Icons.camera_alt,
+                            size: 40,
+                            color: Colors.black54,
+                          )
+                          //    height: 60, width: 60),
+                          ),
                     ],
                   ),
                   Padding(

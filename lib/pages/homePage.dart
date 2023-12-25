@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:opak_fuar/cari/cariIslemlerPage.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/raporlar/raporlar.dart';
@@ -72,8 +73,8 @@ class _HomePageState extends State<HomePage> {
                                     size: 55,
                                   ),
                                   Spacer(),
-                                  Text('Siparis Al',
-                                      style: TextStyle(
+                                  Text('Sipariş Al',
+                                      style: GoogleFonts.doppioOne(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.blue)),
@@ -132,8 +133,8 @@ class _HomePageState extends State<HomePage> {
                                     size: 55,
                                   ),
                                   Spacer(),
-                                  Text('\t\t\tCari\nİşlemleri',
-                                      style: TextStyle(
+                                  Text('Cari İşlemleri',
+                                      style: GoogleFonts.doppioOne(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.orange)),
@@ -194,11 +195,14 @@ class _HomePageState extends State<HomePage> {
                                     size: 55,
                                   ),
                                   Spacer(),
-                                  Text('\t\t\tSepet\nİşlemleri',
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.green)),
+                                  Text(
+                                    'Sepet İşlemleri',
+                                    style: GoogleFonts.doppioOne(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
+                                    ),
+                                  ),
                                 ],
                               ),
                               Row(
@@ -254,11 +258,14 @@ class _HomePageState extends State<HomePage> {
                                     size: 55,
                                   ),
                                   Spacer(),
-                                  Text('Raporlar',
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.pink)),
+                                  Text(
+                                    'Raporlar',
+                                    style: GoogleFonts.doppioOne(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.pink,
+                                    ),
+                                  ),
                                 ],
                               ),
                               Row(
@@ -282,132 +289,13 @@ class _HomePageState extends State<HomePage> {
                         )),
                   ),
                 ),
+                // ! Verileri Güncelle
                 GestureDetector(
                   onTap: () async {
                     showDialog(
                         context: context,
                         builder: (context) => Center(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.4,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.1),
-                                        child: Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "Verileri Güncelle",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black87,
-                                                decoration:
-                                                    TextDecoration.none),
-                                          ),
-                                        ),
-                                      ),
-                                      Divider(
-                                        color: Colors.black45,
-                                        height: 2,
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.green),
-                                            ),
-                                            onPressed: () async {
-                                              showDialog(
-                                                context: context,
-                                                barrierDismissible: false,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return LoadingSpinner(
-                                                    color: Colors.black,
-                                                    message:
-                                                        "Tüm Veriler Güncelleniyor. Lütfen Bekleyiniz...",
-                                                  );
-                                                },
-                                              );
-
-                                              await bs.tumVerileriGuncelle();
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
-                                            },
-                                            child:
-                                                Text("Tüm Verileri Güncelle")),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.orange),
-                                            ),
-                                            onPressed: () {},
-                                            child: Text(
-                                                "Sadece Cari Verileri Güncelle")),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        child: ElevatedButton(
-                                            onPressed: () {},
-                                            child: Text(
-                                                "Sadece Stok Verileri Güncelle")),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.amber),
-                                            ),
-                                            onPressed: () {},
-                                            child: Text(
-                                                "Sabit Parametreleri Güncelle")),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        child: ElevatedButton(
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.pink),
-                                            ),
-                                            onPressed: () {},
-                                            child: Text(
-                                                "Kaydedilen Verileri Gönder")),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              child: verilerGuncelle(bs: bs),
                             ));
                   },
                   child: Card(
@@ -434,11 +322,18 @@ class _HomePageState extends State<HomePage> {
                                     size: 55,
                                   ),
                                   Spacer(),
-                                  Text('Verileri Güncelle',
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.amber)),
+                                  Text(
+                                    'Verileri Güncelle',
+                                    style: GoogleFonts.doppioOne(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.amber,
+                                    ),
+                                    /* TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.amber),*/
+                                  ),
                                 ],
                               ),
                               Row(
@@ -464,6 +359,233 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class verilerGuncelle extends StatelessWidget {
+  const verilerGuncelle({
+    super.key,
+    required this.bs,
+  });
+
+  final BaseService bs;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      height: MediaQuery.of(context).size.height * 0.5,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: MediaQuery.of(context).size.width * 0.07,
+            right: MediaQuery.of(context).size.width * 0.07,
+            top: MediaQuery.of(context).size.height * 0.01,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              //!!!!!!!!!!!!!!!!!!!!!!!! stok miktar ve bakiye güncelleme
+              Align(
+                alignment: Alignment.topLeft,
+                child: Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Verileri Güncelle",
+                        style: GoogleFonts.lato(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.black,
+                            decoration: TextDecoration.none),
+                      ),
+                    ),
+                    Spacer(),
+                    Material(
+                      color: Colors.transparent,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(
+                          Icons.close,
+                          size: 30,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: TextButton(
+                    onPressed: () async {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return LoadingSpinner(
+                            color: Colors.black,
+                            message:
+                                "Tüm Veriler Güncelleniyor. Lütfen Bekleyiniz...",
+                          );
+                        },
+                      );
+
+                      await bs.tumVerileriGuncelle();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.update,
+                          size: 30,
+                          color: Colors.green,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.02,
+                        ),
+                        Text(
+                          "Tüm Verileri Güncelle",
+                          style: GoogleFonts.lato(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+              Align(
+                alignment: Alignment.topLeft,
+                child: TextButton(
+                    onPressed: () {},
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.file_upload_outlined,
+                          size: 30,
+                          color: Colors.pink,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.02,
+                        ),
+                        Text("Sadece Cari Verileri Güncelle",
+                            style: GoogleFonts.lato(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                            )),
+                      ],
+                    )),
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: TextButton(
+                    onPressed: () {},
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.file_upload,
+                          size: 30,
+                          color: Colors.orange,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.02,
+                        ),
+                        Text("Sadece Stok Verileri Güncelle",
+                            style: GoogleFonts.lato(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                            )),
+                      ],
+                    )),
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: TextButton(
+                    onPressed: () {},
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.wifi_protected_setup_outlined,
+                          size: 30,
+                          color: Colors.blue,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.02,
+                        ),
+                        Expanded(
+                          child: Text("Stok Miktarı ve Bakiye Güncelleme",
+                              style: GoogleFonts.lato(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black,
+                              )),
+                        ),
+                      ],
+                    )),
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: TextButton(
+                    onPressed: () {},
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.update,
+                          size: 30,
+                          color: Colors.amber,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.02,
+                        ),
+                        Text("Sabit Parametreleri Güncelle",
+                            style: GoogleFonts.lato(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                            )),
+                      ],
+                    )),
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: TextButton(
+                    onPressed: () {},
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.backup,
+                          size: 30,
+                          color: Colors.red,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.02,
+                        ),
+                        Text("Kaydedilen Verileri Gönder",
+                            style: GoogleFonts.lato(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                            )),
+                      ],
+                    )),
+              ),
+            ],
           ),
         ),
       ),
