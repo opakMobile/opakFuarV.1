@@ -3,6 +3,7 @@ import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 
 import '../model/cariModel.dart';
+import 'cariDetayIncele.dart';
 
 class CariDetayPage extends StatefulWidget {
   CariDetayPage({required this.cari});
@@ -241,7 +242,15 @@ class _CariDetayPageState extends State<CariDetayPage> {
                                         0.09,
                                     child: Center(
                                       child: TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CariDetayIncele(
+                                                        cari: widget.cari,
+                                                      )));
+                                        },
                                         child: Text(
                                           "İncele",
                                           style: TextStyle(

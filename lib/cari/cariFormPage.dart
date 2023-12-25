@@ -22,7 +22,6 @@ class _CariFormPageState extends State<CariFormPage> {
   TextEditingController _SirketIsmi = TextEditingController();
   TextEditingController _AdresBilgileri = TextEditingController();
   TextEditingController _YetkiliKisi = TextEditingController();
-  TextEditingController _UlkeSeciniz = TextEditingController();
   TextEditingController _SehirSeciniz = TextEditingController();
   TextEditingController _IlceSeciniz = TextEditingController();
   TextEditingController _VergiDairesi = TextEditingController();
@@ -43,7 +42,6 @@ class _CariFormPageState extends State<CariFormPage> {
       _SirketIsmi.text = widget.cari.ADI!;
       _AdresBilgileri.text = widget.cari.ADRES!;
       _YetkiliKisi.text = widget.cari.PLASIYERID!.toString();
-      _UlkeSeciniz.text = widget.cari.ULKEID!.toString();
       _SehirSeciniz.text = widget.cari.IL!;
       _IlceSeciniz.text = widget.cari.ILCE!;
       _VergiDairesi.text = widget.cari.VERGIDAIRESI ?? "";
@@ -95,10 +93,14 @@ class _CariFormPageState extends State<CariFormPage> {
                         child: Form(
                           child: Column(
                             children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
+                              ),
                               // ! Müşteri / Şirket İsmi Giriniz
                               Container(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.08,
+                                    MediaQuery.of(context).size.height * 0.07,
                                 child: Center(
                                   child: TextFormField(
                                     controller: _SirketIsmi,
@@ -113,6 +115,10 @@ class _CariFormPageState extends State<CariFormPage> {
                                 ),
                               ),
                               // ! Adres Bilgileri Giriniz
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
+                              ),
                               Container(
                                 height:
                                     MediaQuery.of(context).size.height * 0.05,
@@ -131,7 +137,7 @@ class _CariFormPageState extends State<CariFormPage> {
                               // ! Yetkili Kişi Giriniz
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Container(
                                 height:
@@ -146,28 +152,10 @@ class _CariFormPageState extends State<CariFormPage> {
                                   ),
                                 ),
                               ),
-                              // ! Ülke Seçiniz
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.005,
-                              ),
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
-                                child: TextFormField(
-                                  controller: _UlkeSeciniz,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    label: Text('Ülke Seçiniz'),
-                                  ),
-                                ),
-                              ),
                               // ! Şehir Seçiniz ve İlçe Seçiniz
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Container(
                                 height:
@@ -208,7 +196,7 @@ class _CariFormPageState extends State<CariFormPage> {
                               // ! Vergi Dairesi Giriniz
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Container(
                                 height:
@@ -226,7 +214,7 @@ class _CariFormPageState extends State<CariFormPage> {
                               // ! Vergi Numarası Giriniz
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Container(
                                 height:
@@ -244,7 +232,7 @@ class _CariFormPageState extends State<CariFormPage> {
                               // ! Cep Telefonu Giriniz
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Container(
                                 height:
@@ -262,7 +250,7 @@ class _CariFormPageState extends State<CariFormPage> {
                               // ! Mail Adresi Giriniz
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Container(
                                 height:
@@ -280,7 +268,7 @@ class _CariFormPageState extends State<CariFormPage> {
                               // ! Açıklama Giriniz
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Container(
                                 height:
@@ -297,7 +285,7 @@ class _CariFormPageState extends State<CariFormPage> {
                               // ! Alıcı Müşteri veya Bayi
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Container(
                                 height:
@@ -364,7 +352,7 @@ class _CariFormPageState extends State<CariFormPage> {
                               // ! Kaydet Butonu sil Değiştir
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               widget.yeniKayit == false
                                   ? Container(

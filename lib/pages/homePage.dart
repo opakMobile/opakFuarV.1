@@ -471,7 +471,22 @@ class verilerGuncelle extends StatelessWidget {
               Align(
                 alignment: Alignment.topLeft,
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return LoadingSpinner(
+                            color: Colors.black,
+                            message:
+                                "Cari Veriler Güncelleniyor. Lütfen Bekleyiniz...",
+                          );
+                        },
+                      );
+                      await bs.cariVerileriGuncelle();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
                     child: Row(
                       children: [
                         Icon(
@@ -494,7 +509,22 @@ class verilerGuncelle extends StatelessWidget {
               Align(
                 alignment: Alignment.topLeft,
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return LoadingSpinner(
+                            color: Colors.black,
+                            message:
+                                "Stok Veriler Güncelleniyor. Lütfen Bekleyiniz...",
+                          );
+                        },
+                      );
+                      await bs.stokVerileriGuncelle();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
                     child: Row(
                       children: [
                         Icon(

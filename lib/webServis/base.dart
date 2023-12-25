@@ -25,6 +25,15 @@ class BaseService {
     await getirCariAltHesap(sirket: "AAGENELOPAK");
   }
 
+  Future<void> cariVerileriGuncelle() async {
+    await getirCariler(sirket: "AAGENELOPAK", kullaniciKodu: "1");
+    await getirCariAltHesap(sirket: "AAGENELOPAK");
+  }
+
+  Future<void> stokVerileriGuncelle() async {
+    await getirStoklar(sirket: "AAGENELOPAK", kullaniciKodu: "1");
+  }
+
   String temizleKontrolKarakterleri(String metin) {
     final kontrolKarakterleri = RegExp(r'[\x00-\x1F\x7F]');
     return metin.replaceAll(kontrolKarakterleri, '');
