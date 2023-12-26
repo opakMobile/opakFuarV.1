@@ -75,7 +75,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                     children: [
                                       Icon(
                                         Icons.search,
-                                        size: 55,
+                                        size: MediaQuery.of(context).size.height * 0.09,
                                         color: Colors.orange,
                                       ),
                                       Spacer(),
@@ -151,7 +151,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                   children: [
                                     Icon(
                                       Icons.receipt_long,
-                                      size: 55,
+                                   size: MediaQuery.of(context).size.height * 0.09,
                                       color: Colors.pink,
                                     ),
                                     Spacer(),
@@ -226,7 +226,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                   children: [
                                     Icon(
                                       Icons.person_add_alt_1_sharp,
-                                      size: 55,
+                                    size: MediaQuery.of(context).size.height * 0.09,
                                       color: Colors.blue,
                                     ),
                                     Spacer(),

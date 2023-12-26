@@ -88,8 +88,8 @@ class _settings_pageState extends State<settings_page> {
                             )),
                         Container(
                           height: enable == true
-                              ? ekranYuksekligi / 1.6
-                              : ekranYuksekligi / 6.5,
+                              ? ekranYuksekligi / 1.2
+                              : ekranYuksekligi / 5.5,
                           decoration: BoxDecoration(
                             color: Colors.white
                                 .withOpacity(0.5), // Şeffaf arka plan rengi

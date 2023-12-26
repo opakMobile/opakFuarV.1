@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:opak_fuar/cari/cariIslemlerPage.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/raporlar/raporlar.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/sepet/sepetCariList.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/webServis/base.dart';
+
+import '../controller/fisController.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   BaseService bs = BaseService();
+  FisController fisEx = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -175,11 +180,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                   // ! Sepet İşlemleri
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      fisEx.list_fis_gidecek.clear();
+                      await fisEx.listGidecekFisGetir();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SiparisCariList(
+                              builder: (context) => SepetCariList(
                                     islem: true,
                                   )));
                     },
@@ -208,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Icon(
                                       Icons.shopping_basket,
-                                      size:MediaQuery.of(context).size.height *
+                                      size: MediaQuery.of(context).size.height *
                                           0.09,
                                     ),
                                     Spacer(),
@@ -483,15 +490,12 @@ class verilerGuncelle extends StatelessWidget {
                           Navigator.pop(context);
                         },
                         child: Row(
-                          
                           children: [
                             Icon(
                               Icons.update,
                               size: 30,
                               color: Colors.green,
                             ),
-                            
-                           
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
@@ -529,14 +533,12 @@ class verilerGuncelle extends StatelessWidget {
                           Navigator.pop(context);
                         },
                         child: Row(
-                         
                           children: [
                             Icon(
                               Icons.file_upload_outlined,
                               size: 30,
                               color: Colors.pink,
                             ),
-                     
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text("Sadece Cari Verileri Güncelle",
@@ -578,7 +580,6 @@ class verilerGuncelle extends StatelessWidget {
                               size: 30,
                               color: Colors.orange,
                             ),
-                           
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text("Sadece Stok Verileri Güncelle",
@@ -605,9 +606,8 @@ class verilerGuncelle extends StatelessWidget {
                               size: 30,
                               color: Colors.blue,
                             ),
-                           
                             Padding(
-                              padding:  EdgeInsets.only(left: 8),
+                              padding: EdgeInsets.only(left: 8),
                               child: Text("Stok Miktarı ve Bakiye Güncelleme",
                                   style: GoogleFonts.lato(
                                     fontSize: 14,
@@ -632,7 +632,6 @@ class verilerGuncelle extends StatelessWidget {
                               size: 30,
                               color: Colors.amber,
                             ),
-                            
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text("Sabit Parametreleri Güncelle",
@@ -659,7 +658,6 @@ class verilerGuncelle extends StatelessWidget {
                               size: 30,
                               color: Colors.red,
                             ),
-                           
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text("Kaydedilen Verileri Gönder",

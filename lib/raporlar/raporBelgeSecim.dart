@@ -171,7 +171,7 @@ class _RaporBelgeSecimState extends State<RaporBelgeSecim> {
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * 0.15,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.05,
+                                      MediaQuery.of(context).size.height * 0.07,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(color: Colors.grey),
@@ -181,7 +181,7 @@ class _RaporBelgeSecimState extends State<RaporBelgeSecim> {
                                     onPressed: () {},
                                     child: Text("İncele",
                                         style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: 11,
                                             color: Colors.amber,
                                             fontWeight: FontWeight.bold)),
                                   )),

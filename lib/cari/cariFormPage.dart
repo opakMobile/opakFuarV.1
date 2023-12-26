@@ -89,7 +89,7 @@ class _CariFormPageState extends State<CariFormPage> {
                       // ! Form
                       Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.05),
+                            top: MediaQuery.of(context).size.height * 0.07),
                         child: Form(
                           child: Column(
                             children: [
@@ -368,7 +368,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                           ElevatedButton.icon(
                                             onPressed: () {},
                                             icon: Icon(Icons.delete),
-                                            label: Text("Sil"),
+                                            label: Text("Sil",style: TextStyle(fontSize: 11),),
                                             style: ElevatedButton.styleFrom(
                                               primary: Colors.red,
                                               onPrimary: Colors.white,
@@ -387,7 +387,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                           ElevatedButton.icon(
                                             onPressed: () {},
                                             icon: Icon(Icons.edit),
-                                            label: Text("Değiştir"),
+                                            label: Text("Değiştir",style: TextStyle(fontSize: 11),),
                                             style: ElevatedButton.styleFrom(
                                               primary: Colors.blue,
                                               onPrimary: Colors.white,
@@ -403,16 +403,22 @@ class _CariFormPageState extends State<CariFormPage> {
                                                     .width *
                                                 0.01,
                                           ),
-                                          ElevatedButton.icon(
-                                            onPressed: () {},
-                                            icon: Icon(Icons.save),
-                                            label: Text("Kaydet"),
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.green,
-                                              onPrimary: Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.3,
+                                            child: ElevatedButton.icon(
+                                              onPressed: () {},
+                                              icon: Icon(Icons.save),
+                                              label: Text("Kaydet",style: TextStyle(fontSize: 11),),
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Colors.green,
+                                                onPrimary: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12.0),
+                                                ),
                                               ),
                                             ),
                                           ),

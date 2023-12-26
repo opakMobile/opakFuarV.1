@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:opak_fuar/model/fis.dart';
+import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
+import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../model/cariModel.dart';
 import '../model/stokKartModel.dart';
@@ -36,7 +39,9 @@ class _SepetDetayState extends State<SepetDetay> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Fis.empty().fisEkle(fis: fisEx.fis!.value!, belgeTipi: "YOK");
+                },
                 child: Text(
                   "Siparişi Yazdır",
                   style: TextStyle(
@@ -76,7 +81,7 @@ class _SepetDetayState extends State<SepetDetay> {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.75,
-                        height: MediaQuery.of(context).size.height * 0.05,
+                        height: MediaQuery.of(context).size.height * 0.07,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
@@ -151,9 +156,9 @@ class _SepetDetayState extends State<SepetDetay> {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.7,
                       child: ListView.builder(
-                        itemCount: listeler.listStok.length,
+                        itemCount: fisEx.fis!.value!.fisStokListesi.length,
                         itemBuilder: (context, index) {
-                          StokKart stokModel = listeler.listStok[index];
+                          FisHareket stokModel = fisEx.fis!.value!.fisStokListesi[index];
                           return Column(
                             children: [
                               Row(
@@ -170,14 +175,14 @@ class _SepetDetayState extends State<SepetDetay> {
                                                   .width *
                                               0.65,
                                           child: Text(
-                                            stokModel.ADI!,
+                                            stokModel.STOKADI!,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                           )),
-                                      Text(stokModel.KOD! +
+                                      Text(stokModel.STOKKOD! +
                                           "  " +
                                           "KDV " +
-                                          stokModel.SATIS_KDV.toString()),
+                                          stokModel.KDVORANI.toString()),
                                     ],
                                   ),
                                   SizedBox(
@@ -229,7 +234,7 @@ class _SepetDetayState extends State<SepetDetay> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              stokModel.SATISISK!
+                                              stokModel.ISK!
                                                   .toStringAsFixed(2),
                                             ),
                                           ),
@@ -239,7 +244,7 @@ class _SepetDetayState extends State<SepetDetay> {
                                     Column(
                                       children: [
                                         Text(
-                                          "Mal Fazlası",
+                                          "M.Fazlası",
                                           style: TextStyle(fontSize: 13),
                                         ),
                                         Container(
@@ -285,7 +290,9 @@ class _SepetDetayState extends State<SepetDetay> {
                                                 Border.all(color: Colors.grey),
                                           ),
                                           child: Center(
-                                            child: Text("1"),
+                                            child: Text(
+                                              stokModel.MIKTAR!
+                                                  .toStringAsFixed(2),)
                                           ),
                                         )
                                       ],
@@ -311,7 +318,7 @@ class _SepetDetayState extends State<SepetDetay> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              stokModel.OLCUBIRIM1!,
+                                              stokModel.BIRIM!,
                                               style: TextStyle(fontSize: 12),
                                             ),
                                           ),
@@ -339,7 +346,7 @@ class _SepetDetayState extends State<SepetDetay> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              stokModel.SFIYAT1!
+                                              stokModel.BRUTFIYAT!
                                                   .toStringAsFixed(2),
                                             ),
                                           ),
@@ -366,71 +373,74 @@ class _SepetDetayState extends State<SepetDetay> {
                                 ),
                               ),
                               //! Toplam, İskonto, KDV, Genel Toplam
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Toplam: ",
-                                        style: TextStyle(
-                                            fontSize: 11, color: Colors.orange),
-                                      ),
-                                      Text(
-                                        stokModel.SFIYAT1!.toStringAsFixed(2),
-                                        style: TextStyle(
-                                          fontSize: 12,
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Toplam: ",
+                                          style: TextStyle(
+                                              fontSize: 11, color: Colors.orange),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "İskonto: ",
-                                        style: TextStyle(
-                                            fontSize: 11, color: Colors.orange),
-                                      ),
-                                      Text(
-                                        stokModel.SFIYAT1!.toStringAsFixed(2),
-                                        style: TextStyle(
-                                          fontSize: 12,
+                                        Text(
+                                          stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "İskonto: ",
+                                          style: TextStyle(
+                                              fontSize: 11, color: Colors.orange),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "KDV: ",
-                                        style: TextStyle(
-                                            fontSize: 11, color: Colors.orange),
-                                      ),
-                                      Text(
-                                        stokModel.SATIS_KDV!.toStringAsFixed(2),
-                                        style: TextStyle(
-                                          fontSize: 12,
+                                        Text(
+                                          stokModel.ISKONTOTOPLAM!.toStringAsFixed(2),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "KDV: ",
+                                          style: TextStyle(
+                                              fontSize: 11, color: Colors.orange),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Genel Toplam: ",
-                                        style: TextStyle(
-                                            fontSize: 11, color: Colors.orange),
-                                      ),
-                                      Text(
-                                        stokModel.SFIYAT1!.toStringAsFixed(2),
-                                        style: TextStyle(
-                                          fontSize: 12,
+                                        Text(
+                                          stokModel.KDVTOPLAM!.toStringAsFixed(2),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Genel Toplam: ",
+                                          style: TextStyle(
+                                              fontSize: 11, color: Colors.orange),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                        Text(
+                                          stokModel.KDVDAHILNETTOPLAM!.toStringAsFixed(2),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                               Divider(
                                 thickness: 1.5,

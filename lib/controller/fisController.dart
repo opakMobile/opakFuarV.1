@@ -149,20 +149,20 @@ class FisController extends GetxController {
     return tt1;
   }
 
-  Future<void> listGidecekFisGetir({required String belgeTip}) async {
-    List<Fis> tt = await getGidecekfis(belgeTip);
+  Future<void> listGidecekFisGetir() async {
+    List<Fis> tt = await getGidecekfis();
     for (var i = 0; i < tt.length; i++) {
       var element = tt[i];
       List<FisHareket> fisHar = await getFisHar(element.ID!);
       element.fisStokListesi = fisHar;
-      if (belgeTip != "Depo_Transfer") {
+      
         element.cariKart =
             cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
-      }
+      
     }
     list_fis_gidecek.addAll(tt);
   }
-    Future<List<Fis>> getGidecekfis(String belgeTip) async {
+    Future<List<Fis>> getGidecekfis() async {
     List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
         where: 'DURUM = ? AND AKTARILDIMI = ?',
         whereArgs: [true,false]);

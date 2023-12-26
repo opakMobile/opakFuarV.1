@@ -37,6 +37,74 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     for (int i = 0; i < stokKartEx.searchList.length; i++) {
       aramaMiktarController.add(TextEditingController(text: "1"));
     }
+        stokKartEx.tempList.clear();
+        SatisTipiModel satisTipiModel  = SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
+    if (stokKartEx.searchList.length > 100) {
+      for (int i = 0; i < 100; i++) {
+        print(Ctanim.seciliStokFiyatListesi.ADI);
+
+        List<dynamic> gelenFiyatVeIskonto = stokKartEx.fiyatgetir(
+            stokKartEx.searchList[i],
+            widget.cari.KOD!,
+            "Fiyat1",
+            satisTipiModel,
+            Ctanim.seciliStokFiyatListesi);
+
+        stokKartEx.searchList[i].guncelDegerler!.fiyat =
+            double.parse(gelenFiyatVeIskonto[0].toString());
+        stokKartEx.searchList[i].guncelDegerler!.iskonto =
+            double.parse(gelenFiyatVeIskonto[1].toString());
+        stokKartEx.searchList[i].guncelDegerler!.guncelBarkod =
+            stokKartEx.searchList[i].KOD;
+        stokKartEx.searchList[i].guncelDegerler!.seciliFiyati =
+            gelenFiyatVeIskonto[2].toString();
+        stokKartEx.searchList[i].guncelDegerler!.fiyatDegistirMi =
+            gelenFiyatVeIskonto[3];
+        stokKartEx.searchList[i].guncelDegerler!.carpan = 1.0;
+
+        stokKartEx.searchList[i].guncelDegerler!.netfiyat =
+            stokKartEx.searchList[i].guncelDegerler!.hesaplaNetFiyat();
+        //fiyat listesi koşul arama fonksiyonua gönderiliyor orda ekleme yapsanda buraya eklemez giyatListesiKosulu cTanima ekle !
+        if (!Ctanim.fiyatListesiKosul
+            .contains(stokKartEx.searchList[i].guncelDegerler!.seciliFiyati)) {
+          Ctanim.fiyatListesiKosul
+              .add(stokKartEx.searchList[i].guncelDegerler!.seciliFiyati!);
+        }
+        stokKartEx.tempList.add(stokKartEx.searchList[i]);
+      }
+    } else {
+      for (int i = 0; i < stokKartEx.searchList.length; i++) {
+        List<dynamic> gelenFiyatVeIskonto = stokKartEx.fiyatgetir(
+            stokKartEx.searchList[i],
+            widget.cari.KOD!,
+            "Fiyat1",
+            satisTipiModel,
+            Ctanim.seciliStokFiyatListesi);
+        stokKartEx.searchList[i].guncelDegerler!.guncelBarkod =
+            stokKartEx.searchList[i].KOD;
+        stokKartEx.searchList[i].guncelDegerler!.carpan = 1.0;
+        stokKartEx.searchList[i].guncelDegerler!.fiyat =
+            double.parse(gelenFiyatVeIskonto[0].toString());
+
+        stokKartEx.searchList[i].guncelDegerler!.iskonto =
+            double.parse(gelenFiyatVeIskonto[1].toString());
+        stokKartEx.searchList[i].guncelDegerler!.seciliFiyati =
+            gelenFiyatVeIskonto[2].toString();
+        stokKartEx.searchList[i].guncelDegerler!.fiyatDegistirMi =
+            gelenFiyatVeIskonto[3];
+
+        stokKartEx.searchList[i].guncelDegerler!.netfiyat =
+            stokKartEx.searchList[i].guncelDegerler!.hesaplaNetFiyat();
+        //fiyat listesi koşul arama fonksiyonua gönderiliyor orda ekleme yapsanda buraya eklemez giyatListesiKosulu cTanima ekle !
+        if (!Ctanim.fiyatListesiKosul
+            .contains(stokKartEx.searchList[i].guncelDegerler!.seciliFiyati)) {
+          Ctanim.fiyatListesiKosul
+              .add(stokKartEx.searchList[i].guncelDegerler!.seciliFiyati!);
+        }
+        stokKartEx.tempList.add(stokKartEx.searchList[i]);
+      }
+    }
+   
   }
 
   String result = '';
@@ -195,7 +263,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.75,
-                        height: MediaQuery.of(context).size.height * 0.05,
+                        height: MediaQuery.of(context).size.height * 0.07,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
@@ -302,16 +370,20 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                   // ! Alt Hesap
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              
                     children: [
-                      Text(
-                        "Alt Hesap:",
-                        style: TextStyle(
-                          fontSize: 15,
+                      Padding(
+                        padding:  EdgeInsets.only(top: 20),
+                        child: Text(
+                          "Alt Hesap:",
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.6,
-                        height: MediaQuery.of(context).size.height * 0.04,
+                        height: MediaQuery.of(context).size.height * 0.07,
                         child: Padding(
                           padding: EdgeInsets.only(top: 15.0),
                           child: DropdownButtonHideUnderline(

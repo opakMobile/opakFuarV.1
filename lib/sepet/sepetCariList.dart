@@ -12,15 +12,15 @@ import '../db/veriTabaniIslemleri.dart';
 import '../model/cariModel.dart';
 import '../sabitler/Ctanim.dart';
 
-class SiparisCariList extends StatefulWidget {
-  SiparisCariList({required this.islem});
+class SepetCariList extends StatefulWidget {
+  SepetCariList({required this.islem});
 
   final bool islem;
   @override
-  State<SiparisCariList> createState() => _SiparisCariListState();
+  State<SepetCariList> createState() => _SepetCariListState();
 }
 
-class _SiparisCariListState extends State<SiparisCariList> {
+class _SepetCariListState extends State<SepetCariList> {
   FisController fisEx = Get.find();
   Color randomColor() {
     Random random = Random();
@@ -28,6 +28,16 @@ class _SiparisCariListState extends State<SiparisCariList> {
     int green = random.nextInt(128);
     int blue = random.nextInt(128);
     return Color.fromARGB(255, red, green, blue);
+  }
+  List<Cari> listenecekCariler = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    for(var element in fisEx.list_fis_gidecek) {
+      listenecekCariler.add(element.cariKart);
+    }
+
   }
 
   @override
@@ -99,11 +109,11 @@ class _SiparisCariListState extends State<SiparisCariList> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.6,
-                    child: Obx(() {
-                      return ListView.builder(
-                        itemCount: cariEx.searchCariList.length,
+                    child: 
+                    ListView.builder(
+                        itemCount: listenecekCariler.length,
                         itemBuilder: (context, index) {
-                          Cari cari = cariEx.searchCariList[index];
+                          Cari cari = listenecekCariler[index];
                           String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                           String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                           return Column(
@@ -134,6 +144,9 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                 ),
                                 onTap: () {
                                   if (widget.islem) {
+                                    fisEx.fis!.value = fisEx.list_fis_gidecek[index];
+                                    //Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
+
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -166,8 +179,8 @@ class _SiparisCariListState extends State<SiparisCariList> {
                             ],
                           );
                         },
-                      );
-                    }),
+                      )
+                  
                   ),
                 ),
               ]),

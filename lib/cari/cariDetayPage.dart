@@ -101,7 +101,7 @@ class _CariDetayPageState extends State<CariDetayPage> {
               // ! Firma Adı
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.03,
+                height: MediaQuery.of(context).size.height * 0.04,
                 color: Colors.red,
                 child: Center(
                   child: Text(
@@ -114,11 +114,13 @@ class _CariDetayPageState extends State<CariDetayPage> {
                   ),
                 ),
               ),
+              
               Padding(
                 padding: EdgeInsets.only(
                     left: MediaQuery.of(context).size.width * 0.05,
                     right: MediaQuery.of(context).size.width * 0.05,
-                    top: MediaQuery.of(context).size.height * 0.01),
+                    top: MediaQuery.of(context).size.height * 0.01,
+                    ),
                 child: Column(
                   children: [
                     // ! Sipariş Toplamı
@@ -129,7 +131,7 @@ class _CariDetayPageState extends State<CariDetayPage> {
                       ),
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.1,
+                        height: MediaQuery.of(context).size.height * 0.11,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
@@ -164,13 +166,11 @@ class _CariDetayPageState extends State<CariDetayPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
+                   
                     SingleChildScrollView(
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.45,
+                        height: MediaQuery.of(context).size.height*.28,
                         child: ListView.builder(
                           itemCount: aaa.length,
                           itemBuilder: (BuildContext context, int index) {
@@ -254,7 +254,7 @@ class _CariDetayPageState extends State<CariDetayPage> {
                                         child: Text(
                                           "İncele",
                                           style: TextStyle(
-                                            fontSize: 18,
+                                            fontSize: 12,
                                           ),
                                         ),
                                       ),

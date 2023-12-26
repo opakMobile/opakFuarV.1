@@ -67,7 +67,7 @@ class _CariListePageState extends State<CariListePage> {
                 // ! Search Bar
                 Container(
                   width: MediaQuery.of(context).size.width * 0.95,
-                  height: MediaQuery.of(context).size.height * 0.05,
+                  height: MediaQuery.of(context).size.height * 0.07,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10.0),
