@@ -6,17 +6,13 @@ import 'package:intl/intl.dart';
 import 'package:opak_fuar/controller/fisController.dart';
 import 'package:opak_fuar/model/KurModel.dart';
 import 'package:opak_fuar/model/fis.dart';
-import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
-import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
-import 'package:opak_fuar/siparis/PdfOnizleme.dart';
 import 'package:opak_fuar/siparis/fisHareketDuzenle.dart';
 import 'package:opak_fuar/siparis/okumaModuTasarim.dart';
 import 'package:opak_fuar/siparis/siparisTamamla.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
-
 import '../controller/stokKartController.dart';
 import '../model/cariModel.dart';
 import '../model/satisTipiModel.dart';
@@ -34,8 +30,6 @@ class SiparisUrunAra extends StatefulWidget {
 }
 
 class _SiparisUrunAraState extends State<SiparisUrunAra> {
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -117,8 +111,6 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                     await Fis.empty()
                         .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
 
-                  
-
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -140,9 +132,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
           color: Colors.white,
           child: Padding(
             padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.05,
-                right: MediaQuery.of(context).size.width * 0.05,
-                top: MediaQuery.of(context).size.height * 0.01),
+              left: MediaQuery.of(context).size.width * 0.05,
+              right: MediaQuery.of(context).size.width * 0.05,
+            ),
             child: SingleChildScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
               scrollDirection: Axis.vertical,
@@ -166,8 +158,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.4,
                         child: CheckboxListTile(
-                            title: Text("Okuma Modu",style: TextStyle(fontSize: 12),),
-                            
+                            title: Text(
+                              "Okuma Modu",
+                              style: TextStyle(fontSize: 12),
+                            ),
                             value: okumaModu,
                             onChanged: (value) {
                               setState(() {
@@ -181,7 +175,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.4,
                         child: CheckboxListTile(
-                            title: Text("Arama Modu",style: TextStyle(fontSize: 12),),
+                            title: Text(
+                              "Arama Modu",
+                              style: TextStyle(fontSize: 12),
+                            ),
                             value: aramaModu,
                             onChanged: (value) {
                               setState(() {
@@ -206,7 +203,15 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         child: TextFormField(
                           controller: editingController,
                           onChanged: ((value) {
-                          
+                            SatisTipiModel m = SatisTipiModel(
+                                ID: -1,
+                                TIP: "",
+                                FIYATTIP: "",
+                                ISK1: "",
+                                ISK2: "");
+                            stokKartEx.searchC(value, "", "Fiyat1", m,
+                                Ctanim.seciliStokFiyatListesi);
+                            setState(() {});
                           }),
                           decoration: InputDecoration(
                             suffixIcon: Icon(Icons.search),
@@ -230,20 +235,30 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   builder: (context) =>
                                       const SimpleBarcodeScannerPage(),
                                 ));
-                          
+                            SatisTipiModel m = SatisTipiModel(
+                                ID: -1,
+                                TIP: "",
+                                FIYATTIP: "",
+                                ISK1: "",
+                                ISK2: "");
+                            if (res is String) {
+                              result = res;
+                              editingController.text = result;
+                            }
+                            stokKartEx.searchC(result, "", "Fiyat1", m,
+                                Ctanim.seciliStokFiyatListesi);
+                            setState(() {});
                           },
                           icon: Icon(
                             Icons.camera_alt,
-                            size: 40,
+                            size: 40, //MediaQuery.of(context).size.width * 0.1,
                             color: Colors.black54,
-                          )
-                          //    height: 60, width: 60),
-                          ),
+                          )),
                     ],
                   ),
                   // ! Firma adı
                   Padding(
-                    padding: EdgeInsets.all(5.0),
+                    padding: EdgeInsets.all(3.0),
                     child: Text(
                       widget.cari.ADI!.toString(),
                       maxLines: 1,
@@ -274,7 +289,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         ),
                         child: Center(
                             child: Text(
-                          Ctanim.donusturMusteri(fisEx.fis!.value.GENELTOPLAM.toString()),
+                          Ctanim.donusturMusteri(
+                              fisEx.fis!.value.GENELTOPLAM.toString()),
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.red,
@@ -332,10 +348,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height * 0.5,
                             child: ListView.builder(
-                              itemCount: stokKartEx.searchList.length,
+                              itemCount: stokKartEx.tempList
+                                  .length, // stokKartEx.searchList.length,
                               itemBuilder: (context, index) {
-                                StokKart stokModel =
-                                    stokKartEx.searchList[index];
+                                StokKart stokModel = stokKartEx.tempList[index];
+                                //    stokKartEx.searchList[index];
                                 return Column(
                                   children: [
                                     Row(
@@ -598,10 +615,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                             gelenMiktar,
                                                       );
                                                     }).then((value) {
-                                                      setState(() {
-                                                        Ctanim.genelToplamHesapla(fisEx);
-                                                      });
-                                                    });
+                                                  setState(() {
+                                                    Ctanim.genelToplamHesapla(
+                                                        fisEx);
+                                                  });
+                                                });
                                               },
                                               child: IconButton(
                                                 icon: Icon(
@@ -611,10 +629,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 onPressed: () {
                                                   KurModel kur = KurModel(
-                                                      ID: 1,
-                                                      ACIKLAMA: "USD",
-                                                      KUR: 30,
+                                                      ID: -1,
+                                                      ACIKLAMA: "-",
+                                                      KUR: 1,
                                                       ANABIRIM: "H");
+
                                                   double miktar = double.parse(
                                                       aramaMiktarController[
                                                               index]
@@ -722,18 +741,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         TARIH: DateFormat("yyyy-MM-dd").format(DateTime.now()),
         UUID: fisEx.fis!.value.UUID!,
       );
-  setState(() {
-   Ctanim.genelToplamHesapla(fisEx);
-  });
-
-
-    
+      setState(() {
+        Ctanim.genelToplamHesapla(fisEx);
+      });
 
       // miktar = stokKart.guncelDegerler!.carpan!;
     }
   }
 }
-
-
-
-

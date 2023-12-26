@@ -106,9 +106,9 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
         TARIH: DateFormat("yyyy-MM-dd").format(DateTime.now()),
         UUID: fisEx.fis!.value.UUID!,
       );
-        setState(() {
-   Ctanim.genelToplamHesapla(fisEx);
-  });
+      setState(() {
+        Ctanim.genelToplamHesapla(fisEx);
+      });
 
       // miktar = stokKart.guncelDegerler!.carpan!;
     }
@@ -159,10 +159,16 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25)),
                     child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (double.parse(miktarController.text) > 0) {
+                            miktarController.text =
+                                (double.parse(miktarController.text) - 1)
+                                    .toString();
+                          }
+                        },
                         icon: Icon(
                           Icons.remove_circle,
-                          size: 40,
+                          size: MediaQuery.of(context).size.width * 0.1,
                           color: Colors.red,
                         )),
                   ),
@@ -194,10 +200,14 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25)),
                     child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          miktarController.text =
+                              (double.parse(miktarController.text) + 1)
+                                  .toString();
+                        },
                         icon: Icon(
                           Icons.add_circle,
-                          size: 40,
+                          size: MediaQuery.of(context).size.width * 0.1,
                           color: Colors.green,
                         )),
                   ),
@@ -449,7 +459,6 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                   print("turan" + miktar.toString());
                   sepeteEkle(widget.gelenStokKart, kur, miktar,
                       iskonto1: double.parse(isk1Controller.text) ?? 0,
-                     
                       iskonto2: double.parse(isk2Controller.text) ?? 0,
                       iskonto3: double.parse(isk3Controller.text) ?? 0,
                       malFazlasi: double.parse(malFazlasiController.text) ?? 0,

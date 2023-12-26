@@ -420,7 +420,7 @@ class StokKartController extends GetxController {
     }
   }
 */
-/*
+
   void searchC(String query, String cariKod, String fiyatTip,
       SatisTipiModel satisTipi, StokFiyatListesiModel stokFiyatListesiModel) {
     // QUERY BOŞSA
@@ -1218,7 +1218,7 @@ class StokKartController extends GetxController {
       }
     }
   }
-*/
+
 //servisten stokları günceller
   Future<String> servisStokGetir() async {
     if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
