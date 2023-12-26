@@ -400,7 +400,7 @@ class verilerGuncelle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.85,
+      width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.5,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -409,8 +409,8 @@ class verilerGuncelle extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: EdgeInsets.only(
-            left: MediaQuery.of(context).size.width * 0.07,
-            right: MediaQuery.of(context).size.width * 0.07,
+            left: MediaQuery.of(context).size.width * 0.03,
+            right: MediaQuery.of(context).size.width * 0.03,
             top: MediaQuery.of(context).size.height * 0.01,
           ),
           child: SingleChildScrollView(

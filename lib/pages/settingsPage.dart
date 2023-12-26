@@ -644,10 +644,6 @@ class _settings_pageState extends State<settings_page> {
                                                                 "Dış IP tanımlanmamış. Lütfen yetkli bayiniz ile iletişime geçiniz",
                                                               ));
                                                     }
-
-                                                    /*
-                                                  
-                                                    */
                                                   }
                                                 }
                                               },

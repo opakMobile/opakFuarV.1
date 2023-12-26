@@ -37,7 +37,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     // TODO: implement initState
     super.initState();
     for (int i = 0; i < stokKartEx.searchList.length; i++) {
-      aramaMiktarController.add(TextEditingController());
+      aramaMiktarController.add(TextEditingController(text: "1"));
     }
   }
 
@@ -114,13 +114,12 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
 
                     fisEx.fis!.value = Fis.empty();
-                
-                         Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SiparisTamamla(fiss:fiss)));
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SiparisTamamla(fiss: fiss)));
                   }
-                 
                 },
                 child: Text(
                   "Siparişi Tamamla",
@@ -417,7 +416,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                   aramaMiktarController[index],
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
-                                                hintText: "1",
+                                                /* label: Text( 
+                                                    aramaMiktarController[index]
+                                                        .text),*/
+
                                                 hintStyle: TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.grey),
@@ -600,14 +602,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     .height *
                                                 .07,
                                             child: Center(
-                                                child: IconButton(
-                                              icon: Icon(
-                                                Icons.add_circle,
-                                                size: 40,
-                                                color: Colors.green,
-                                              ),
-                                              onPressed: () {
+                                                child: GestureDetector(
+                                              onLongPress: () {
                                                 // ! Miktar Gir ve iskonto mal fazlası fiyat değiştir
+
                                                 double gelenMiktar =
                                                     double.parse(
                                                         aramaMiktarController[
@@ -626,6 +624,32 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       );
                                                     });
                                               },
+                                              child: IconButton(
+                                                icon: Icon(
+                                                  Icons.add_circle,
+                                                  size: 40,
+                                                  color: Colors.green,
+                                                ),
+                                                onPressed: () {
+                                                  KurModel kur = KurModel(
+                                                      ID: 1,
+                                                      ACIKLAMA: "USD",
+                                                      KUR: 30,
+                                                      ANABIRIM: "H");
+                                                  double miktar = double.parse(
+                                                      aramaMiktarController[
+                                                              index]
+                                                          .text);
+                                                  print("turan" +
+                                                      miktar.toString());
+                                                  sepeteEkle(
+                                                    stokModel,
+                                                    kur,
+                                                    miktar,
+                                                  );
+                                                  showSnackBar(context, miktar);
+                                                },
+                                              ),
                                             )),
                                           ),
                                         ],
@@ -648,6 +672,81 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         ),
       ),
     );
+  }
+
+  void showSnackBar(BuildContext context, double miktar) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Stok eklendi " + miktar.toString() + " adet ürün sepete eklendi ! ",
+          style: TextStyle(fontSize: 16, color: Colors.white),
+        ),
+        duration: Duration(milliseconds: 700),
+        backgroundColor: Colors.blue,
+      ),
+    );
+  }
+
+  void sepeteEkle(StokKart stokKart, KurModel stokKartKur, double miktar,
+      {double iskonto1 = 0,
+      double iskonto2 = 0,
+      double iskonto3 = 0,
+      double malFazlasi = 0,
+      double fiyat = 0}) {
+    int birimID = -1;
+
+    for (var element in listeler.listOlcuBirim) {
+      if (stokKart.OLCUBIRIM1 == element.ACIKLAMA) {
+        birimID = element.ID!;
+      }
+    }
+    double tempFiyat = 0;
+    double tempIskonto1 = 0;
+    if (fiyat != 0) {
+      tempFiyat = fiyat;
+    } else {
+      tempFiyat = stokKart.SFIYAT1!;
+    }
+    if (iskonto1 != 0) {
+      tempIskonto1 = iskonto1;
+    } else {
+      tempIskonto1 = stokKart.SATISISK!;
+    }
+
+    listeler.listKur.forEach((element) {
+      if (element.ANABIRIM == "E") {
+        if (stokKartKur.ACIKLAMA != element.ACIKLAMA) {
+          tempFiyat = tempFiyat * stokKartKur.KUR!;
+        }
+      }
+    });
+
+    double KDVTUtarTemp =
+        stokKart.guncelDegerler!.fiyat! * (1 + (stokKart.SATIS_KDV!));
+    {
+      fisEx.fiseStokEkle(
+        // belgeTipi: widget.belgeTipi,
+        urunListedenMiGeldin: false,
+        stokAdi: stokKart.ADI!,
+        KDVOrani: double.parse(stokKart.SATIS_KDV.toString()),
+        birim: stokKart.OLCUBIRIM1!,
+        birimID: birimID,
+        dovizAdi: stokKartKur.ACIKLAMA!,
+        dovizId: stokKartKur.ID!,
+        burutFiyat: tempFiyat,
+        iskonto: tempIskonto1,
+        iskonto2: 0.0,
+        miktar: (miktar).toInt(),
+        stokKodu: stokKart.KOD!,
+        Aciklama1: '',
+        KUR: stokKartKur.KUR!,
+        TARIH: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+        UUID: fisEx.fis!.value.UUID!,
+      );
+      // Ctanim.genelToplamHesapla(fisEx);
+
+      // miktar = stokKart.guncelDegerler!.carpan!;
+    }
   }
 }
 
@@ -753,6 +852,19 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
 
       // miktar = stokKart.guncelDegerler!.carpan!;
     }
+  }
+
+  void showSnackBar(BuildContext context, double miktar) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Stok eklendi " + miktar.toString() + " adet ürün sepete eklendi ! ",
+          style: TextStyle(fontSize: 16, color: Colors.white),
+        ),
+        duration: Duration(milliseconds: 700),
+        backgroundColor: Colors.blue,
+      ),
+    );
   }
 
   @override
@@ -874,6 +986,10 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: TextFormField(
+                                enabled:
+                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
+                                        ? true
+                                        : false,
                                 controller: isk1Controller,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -906,6 +1022,10 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: TextFormField(
+                                enabled:
+                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
+                                        ? true
+                                        : false,
                                 controller: isk2Controller,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -938,6 +1058,10 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: TextFormField(
+                                enabled:
+                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
+                                        ? true
+                                        : false,
                                 controller: isk3Controller,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -1028,6 +1152,9 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: TextFormField(
+                        enabled: Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E"
+                            ? true
+                            : false,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "1",
@@ -1068,6 +1195,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                       fiyat: double.parse(fiyatController.text));
 
                   Navigator.pop(context);
+                  showSnackBar(context, miktar);
                 },
                 child: Text("Uygula"),
               ),

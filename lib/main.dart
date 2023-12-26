@@ -23,8 +23,9 @@ class MyApp extends StatelessWidget {
   final fisEx = Get.put(FisController());
   @override
   Widget build(BuildContext context) {
-       SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    //! Ekranı yatay yapmaz
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(
