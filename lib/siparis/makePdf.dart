@@ -13,7 +13,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
  
 
   final image = pw.MemoryImage(imagePath);
-  //final fontData = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
+
 
   
   final pdf = pw.Document();

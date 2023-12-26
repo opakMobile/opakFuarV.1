@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
+import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/PdfOnizleme.dart';
+import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 
 class SiparisTamamla extends StatefulWidget {
   const SiparisTamamla({super.key, required this.fiss});
@@ -32,6 +34,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                     ),
                   ),
                   onPressed: () {
+                      fisEx.fis!.value = Fis.empty();
                         showDialog(
                         context: context,
                         builder: (context) {
@@ -82,7 +85,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Ömer Akkaya Dağıtım Matbaa Kırtasiye Gıda San. Tic. Ltd. Şti.',
+                     widget.fiss.cariKart.ADI!,
                       maxLines: 1,
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,
@@ -299,7 +302,8 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             ),
                             child: Center(
                                 child: Text(
-                              "1.456.568,45 TL",
+                             Ctanim.donusturMusteri(widget.fiss.ARA_TOPLAM
+                                            .toString(),),
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.blueAccent,
@@ -326,7 +330,8 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                       ),
                                       child: Center(
                                           child: Text(
-                                        "1.456.568,45 TL",
+                                      Ctanim.donusturMusteri( widget.fiss.INDIRIM_TOPLAMI
+                                            .toString(),),
                                         style: TextStyle(
                                             fontSize: 20,
                                             color: Colors.blueAccent,
@@ -350,7 +355,8 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                       ),
                                       child: Center(
                                           child: Text(
-                                        "1.456.568,45 TL",
+                                        Ctanim.donusturMusteri( widget.fiss.KDVTUTARI
+                                            .toString(),),
                                         style: TextStyle(
                                             fontSize: 20,
                                             color: Colors.blueAccent,
@@ -375,7 +381,8 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             ),
                             child: Center(
                                 child: Text(
-                              "1.456.568,45 TL",
+                             Ctanim.donusturMusteri( widget.fiss.GENELTOPLAM
+                                            .toString(),),
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.red,

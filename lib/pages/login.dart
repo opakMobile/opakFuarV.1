@@ -265,17 +265,7 @@ class _LoginPageState extends State<LoginPage> {
           }
           //GISK2 den sonrası alınmadı.
         */
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return LoadingSpinner(
-                color: Colors.black,
-                message:
-                    "Opak Mobil\'e Hoşgeldiniz Uygulama Sizin İçin Hazırlanıyor...",
-              );
-            },
-          );
+        
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -288,7 +278,6 @@ class _LoginPageState extends State<LoginPage> {
           );
           await SharedPrefsHelper.yetkiCek("yetkiler");
           await bs.tumVerileriGuncelle();
-          await bs.getirCariAltHesap(sirket: "AAGENELOPAK");
           Navigator.pop(context);
           Navigator.pushAndRemoveUntil(
               context,

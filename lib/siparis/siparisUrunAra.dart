@@ -12,6 +12,8 @@ import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/PdfOnizleme.dart';
+import 'package:opak_fuar/siparis/fisHareketDuzenle.dart';
+import 'package:opak_fuar/siparis/okumaModuTasarim.dart';
 import 'package:opak_fuar/siparis/siparisTamamla.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
@@ -32,6 +34,8 @@ class SiparisUrunAra extends StatefulWidget {
 }
 
 class _SiparisUrunAraState extends State<SiparisUrunAra> {
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -113,7 +117,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                     await Fis.empty()
                         .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
 
-                    fisEx.fis!.value = Fis.empty();
+                  
 
                     Navigator.push(
                         context,
@@ -160,40 +164,33 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         ),
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        child: Row(
-                          children: [
-                            Checkbox(
-                                value: okumaModu,
-                                onChanged: (value) {
-                                  setState(() {
-                                    okumaModu = value!;
-                                    if (value == true) {
-                                      aramaModu = false;
-                                    }
-                                  });
-                                }),
-                            Text("Okuma Modu"),
-                          ],
-                        ),
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: CheckboxListTile(
+                            title: Text("Okuma Modu",style: TextStyle(fontSize: 12),),
+                            
+                            value: okumaModu,
+                            onChanged: (value) {
+                              setState(() {
+                                okumaModu = value!;
+                                if (value == true) {
+                                  aramaModu = false;
+                                }
+                              });
+                            }),
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        child: Row(
-                          children: [
-                            Checkbox(
-                                value: aramaModu,
-                                onChanged: (value) {
-                                  setState(() {
-                                    aramaModu = value!;
-                                    if (value == true) {
-                                      okumaModu = false;
-                                    }
-                                  });
-                                }),
-                            Text(" Arama Modu"),
-                          ],
-                        ),
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: CheckboxListTile(
+                            title: Text("Arama Modu",style: TextStyle(fontSize: 12),),
+                            value: aramaModu,
+                            onChanged: (value) {
+                              setState(() {
+                                aramaModu = value!;
+                                if (value == true) {
+                                  okumaModu = false;
+                                }
+                              });
+                            }),
                       ),
                     ],
                   ),
@@ -209,16 +206,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         child: TextFormField(
                           controller: editingController,
                           onChanged: ((value) {
-                            /*
-                            SatisTipiModel m = SatisTipiModel(
-                                ID: -1,
-                                TIP: "",
-                                FIYATTIP: "",
-                                ISK1: "",
-                                ISK2: "");
-                            stokKartEx.searchC(value, "", "Fiyat1", m,
-                                Ctanim.seciliStokFiyatListesi);
-                            // setState(() {});*/
+                          
                           }),
                           decoration: InputDecoration(
                             suffixIcon: Icon(Icons.search),
@@ -242,20 +230,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   builder: (context) =>
                                       const SimpleBarcodeScannerPage(),
                                 ));
-                            /*   setState(() {
-                              if (res is String) {
-                                result = res;
-                                editingController.text = result;
-                              }
-                              SatisTipiModel m = SatisTipiModel(
-                                  ID: -1,
-                                  TIP: "",
-                                  FIYATTIP: "",
-                                  ISK1: "",
-                                  ISK2: "");
-                              stokKartEx.searchC(result, "", "Fiyat1", m,
-                                  Ctanim.seciliStokFiyatListesi);
-                            });*/
+                          
                           },
                           icon: Icon(
                             Icons.camera_alt,
@@ -299,7 +274,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         ),
                         child: Center(
                             child: Text(
-                          "1.456.568,45 TL",
+                          Ctanim.donusturMusteri(fisEx.fis!.value.GENELTOPLAM.toString()),
                           style: TextStyle(
                               fontSize: 20,
                               color: Colors.red,
@@ -622,6 +597,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                         gelenMiktar:
                                                             gelenMiktar,
                                                       );
+                                                    }).then((value) {
+                                                      setState(() {
+                                                        Ctanim.genelToplamHesapla(fisEx);
+                                                      });
                                                     });
                                               },
                                               child: IconButton(
@@ -743,721 +722,18 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         TARIH: DateFormat("yyyy-MM-dd").format(DateTime.now()),
         UUID: fisEx.fis!.value.UUID!,
       );
-      // Ctanim.genelToplamHesapla(fisEx);
+  setState(() {
+   Ctanim.genelToplamHesapla(fisEx);
+  });
+
+
+    
 
       // miktar = stokKart.guncelDegerler!.carpan!;
     }
   }
 }
 
-class fisHareketDuzenle extends StatefulWidget {
-  fisHareketDuzenle({
-    super.key,
-    required this.gelenStokKart,
-    required this.gelenMiktar,
-  });
-  final StokKart gelenStokKart;
-  final double gelenMiktar;
 
-  @override
-  State<fisHareketDuzenle> createState() => _fisHareketDuzenleState();
-}
 
-class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    miktarController.text = widget.gelenMiktar.toString();
-    fiyatController.text = widget.gelenStokKart.SFIYAT1.toString();
-    isk1Controller.text = widget.gelenStokKart.SATISISK.toString();
-    isk2Controller.text = "0";
-    isk3Controller.text = "0";
-    malFazlasiController.text = "0";
-    print("Miktar ${miktarController.text}");
-  }
 
-  final TextEditingController miktarController =
-      TextEditingController(text: "1");
-
-  final TextEditingController isk1Controller = TextEditingController(text: "0");
-
-  final TextEditingController isk2Controller = TextEditingController(text: "0");
-
-  final TextEditingController isk3Controller = TextEditingController(text: "0");
-
-  final TextEditingController malFazlasiController =
-      TextEditingController(text: "0");
-
-  final TextEditingController fiyatController =
-      TextEditingController(text: "0");
-
-  void sepeteEkle(StokKart stokKart, KurModel stokKartKur, double miktar,
-      {double iskonto1 = 0,
-      double iskonto2 = 0,
-      double iskonto3 = 0,
-      double malFazlasi = 0,
-      double fiyat = 0}) {
-    int birimID = -1;
-
-    for (var element in listeler.listOlcuBirim) {
-      if (stokKart.OLCUBIRIM1 == element.ACIKLAMA) {
-        birimID = element.ID!;
-      }
-    }
-    double tempFiyat = 0;
-    double tempIskonto1 = 0;
-    if (fiyat != 0) {
-      tempFiyat = fiyat;
-    } else {
-      tempFiyat = stokKart.SFIYAT1!;
-    }
-    if (iskonto1 != 0) {
-      tempIskonto1 = iskonto1;
-    } else {
-      tempIskonto1 = stokKart.SATISISK!;
-    }
-
-    listeler.listKur.forEach((element) {
-      if (element.ANABIRIM == "E") {
-        if (stokKartKur.ACIKLAMA != element.ACIKLAMA) {
-          tempFiyat = tempFiyat * stokKartKur.KUR!;
-        }
-      }
-    });
-
-    double KDVTUtarTemp =
-        stokKart.guncelDegerler!.fiyat! * (1 + (stokKart.SATIS_KDV!));
-    {
-      fisEx.fiseStokEkle(
-        // belgeTipi: widget.belgeTipi,
-        urunListedenMiGeldin: false,
-        stokAdi: stokKart.ADI!,
-        KDVOrani: double.parse(stokKart.SATIS_KDV.toString()),
-        birim: stokKart.OLCUBIRIM1!,
-        birimID: birimID,
-        dovizAdi: stokKartKur.ACIKLAMA!,
-        dovizId: stokKartKur.ID!,
-        burutFiyat: tempFiyat!,
-        iskonto: tempIskonto1,
-        iskonto2: 0.0,
-        miktar: (miktar).toInt(),
-        stokKodu: stokKart.KOD!,
-        Aciklama1: '',
-        KUR: stokKartKur.KUR!,
-        TARIH: DateFormat("yyyy-MM-dd").format(DateTime.now()),
-        UUID: fisEx.fis!.value.UUID!,
-      );
-      // Ctanim.genelToplamHesapla(fisEx);
-
-      // miktar = stokKart.guncelDegerler!.carpan!;
-    }
-  }
-
-  void showSnackBar(BuildContext context, double miktar) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "Stok eklendi " + miktar.toString() + " adet ürün sepete eklendi ! ",
-          style: TextStyle(fontSize: 16, color: Colors.white),
-        ),
-        duration: Duration(milliseconds: 700),
-        backgroundColor: Colors.blue,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.1,
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Text(
-                "Miktar",
-                style: TextStyle(fontSize: 22),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Material(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25)),
-                    child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.remove_circle,
-                          size: 40,
-                          color: Colors.red,
-                        )),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: MediaQuery.of(context).size.height * 0.05,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Material(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextFormField(
-                            controller: miktarController,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "1",
-                              hintStyle:
-                                  TextStyle(fontSize: 14, color: Colors.grey),
-                            ),
-                          )),
-                    ),
-                  ),
-                  Material(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25)),
-                    child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.add_circle,
-                          size: 40,
-                          color: Colors.green,
-                        )),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Divider(
-                endIndent: 20,
-                indent: 20,
-                thickness: 1,
-                color: Colors.black45,
-              ),
-              // !
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Text(
-                "İskonto",
-                style: TextStyle(fontSize: 22),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        "İskonto 1",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Material(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: TextFormField(
-                                enabled:
-                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
-                                        ? true
-                                        : false,
-                                controller: isk1Controller,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "1",
-                                  hintStyle: TextStyle(
-                                      fontSize: 14, color: Colors.grey),
-                                ),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        "İskonto 2",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Material(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: TextFormField(
-                                enabled:
-                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
-                                        ? true
-                                        : false,
-                                controller: isk2Controller,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "1",
-                                  hintStyle: TextStyle(
-                                      fontSize: 14, color: Colors.grey),
-                                ),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        "İskonto 3",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Material(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: TextFormField(
-                                enabled:
-                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
-                                        ? true
-                                        : false,
-                                controller: isk3Controller,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "1",
-                                  hintStyle: TextStyle(
-                                      fontSize: 14, color: Colors.grey),
-                                ),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Divider(
-                endIndent: 20,
-                indent: 20,
-                thickness: 1,
-                color: Colors.black45,
-              ),
-              // !
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Text(
-                "Mal Fazlası",
-                style: TextStyle(fontSize: 22),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.height * 0.05,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Material(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "1",
-                          hintStyle:
-                              TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                      )),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Divider(
-                endIndent: 20,
-                indent: 20,
-                thickness: 1,
-                color: Colors.black87,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Text(
-                "Fiyat",
-                style: TextStyle(fontSize: 22),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.height * 0.05,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Material(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextFormField(
-                        enabled: Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E"
-                            ? true
-                            : false,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "1",
-                          hintStyle:
-                              TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                      )),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Divider(
-                endIndent: 20,
-                indent: 20,
-                thickness: 1,
-                color: Colors.black45,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size(
-                      MediaQuery.of(context).size.width * 0.3,
-                      MediaQuery.of(context).size.height * 0.05)),
-                ),
-                onPressed: () {
-                  KurModel kur =
-                      KurModel(ID: 1, ACIKLAMA: "USD", KUR: 30, ANABIRIM: "H");
-                  double miktar = double.parse(miktarController.text);
-                  print("turan" + miktar.toString());
-                  sepeteEkle(widget.gelenStokKart, kur, miktar,
-                      iskonto1: double.parse(isk1Controller.text) ?? 0,
-                      iskonto2: double.parse(isk2Controller.text) ?? 0,
-                      iskonto3: double.parse(isk3Controller.text) ?? 0,
-                      malFazlasi: double.parse(malFazlasiController.text) ?? 0,
-                      fiyat: double.parse(fiyatController.text));
-
-                  Navigator.pop(context);
-                  showSnackBar(context, miktar);
-                },
-                child: Text("Uygula"),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class okumaModuList extends StatelessWidget {
-  const okumaModuList({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.5,
-
-        //!! Sepet Listesi Buraya Gelecek
-        child: ListView.builder(
-          itemCount: fisEx.fis!.value.fisStokListesi.length,
-          itemBuilder: (context, index) {
-            FisHareket stokModel = fisEx.fis!.value.fisStokListesi[index];
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.65,
-                            child: Text(
-                              stokModel.STOKADI!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            )),
-                        Text(stokModel.STOKKOD! +
-                            "  " +
-                            "KDV " +
-                            stokModel.KDVORANI.toString()),
-                      ],
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.19,
-                      child: Card(
-                        elevation: 10,
-                        child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Değiştir",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.blue,
-                              ),
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 3,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            "İskonto",
-                            style: TextStyle(fontSize: 13),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.04,
-                            width: MediaQuery.of(context).size.width * 0.13,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey),
-                            ),
-                            child: Center(
-                              child: Text(
-                                stokModel.ISK!.toStringAsFixed(2),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "Mal Fazlası",
-                            style: TextStyle(fontSize: 13),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.04,
-                            width: MediaQuery.of(context).size.width * 0.13,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey),
-                            ),
-                            child: Center(
-                              child: Text("MF"),
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "Miktar",
-                            style: TextStyle(fontSize: 13),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.04,
-                            width: MediaQuery.of(context).size.width * 0.13,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey),
-                            ),
-                            child: Center(
-                              child: Text(stokModel.MIKTAR!.toStringAsFixed(2)),
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("Birim", style: TextStyle(fontSize: 13)),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.04,
-                            width: MediaQuery.of(context).size.width * 0.13,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Adet",
-                                // stokModel.BIRIMID.toString()!,
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("Fiyat", style: TextStyle(fontSize: 13)),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.04,
-                            width: MediaQuery.of(context).size.width * 0.13,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey),
-                            ),
-                            child: Center(
-                              child: Text(
-                                stokModel.BRUTFIYAT!.toStringAsFixed(2),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.19,
-                        child: Card(
-                          elevation: 10,
-                          child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Sil",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.red,
-                                ),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                //! Toplam, İskonto, KDV, Genel Toplam
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Toplam: ",
-                          style: TextStyle(fontSize: 11, color: Colors.orange),
-                        ),
-                        Text(
-                          stokModel.NETTOPLAM!.toStringAsFixed(2),
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "İskonto: ",
-                          style: TextStyle(fontSize: 11, color: Colors.orange),
-                        ),
-                        Text(
-                          stokModel.ISKONTOTOPLAM!.toStringAsFixed(2),
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "KDV: ",
-                          style: TextStyle(fontSize: 11, color: Colors.orange),
-                        ),
-                        Text(
-                          stokModel.KDVTUTAR!.toStringAsFixed(2),
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Genel Toplam: ",
-                          style: TextStyle(fontSize: 11, color: Colors.orange),
-                        ),
-                        Text(
-                          stokModel.KDVDAHILNETTOPLAM!.toStringAsFixed(2),
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Divider(
-                  thickness: 1.5,
-                  color: Colors.black87,
-                )
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}

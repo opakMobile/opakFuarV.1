@@ -162,38 +162,7 @@ class _RaporBelgeSecimState extends State<RaporBelgeSecim> {
                               title: Text(
                                 cari.ADI.toString(),
                               ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
-                                      child: Text(
-                                        cari.IL!.toString(),
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Text(
-                                      "satır ",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                    Text(
-                                      cari.BAKIYE!.toString()+ " TL",
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              
                               trailing: Card(
                                 elevation: 5,
                                 shape: RoundedRectangleBorder(
@@ -219,6 +188,60 @@ class _RaporBelgeSecimState extends State<RaporBelgeSecim> {
                                 ),
                               ),
                               onTap: () {},
+                              subtitle:  Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.2,
+                                  child: Text(
+                                    cari.IL!.toString(),
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                            ),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width*.5,
+                                child: Row(
+                                  
+                                  children: [
+                                     Text(
+                                      "Satır ",
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.1,
+                                      child: Text(
+                                        "11",
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                   
+                                    Text(
+                                      "Bakiye ",
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
+                                        Ctanim.donusturMusteri(cari.BAKIYE!.toString())+ " TL",
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                             Divider(
                               thickness: 2,

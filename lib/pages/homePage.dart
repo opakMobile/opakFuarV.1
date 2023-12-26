@@ -76,7 +76,8 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Icon(
                                       Icons.shopping_cart,
-                                      size: 55,
+                                      size: MediaQuery.of(context).size.height *
+                                          0.09,
                                     ),
                                     Spacer(),
                                     Text('Sipariş Al',
@@ -140,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Icon(
                                       Icons.search,
-                                      size: 55,
+                                      size: MediaQuery.of(context).size.height *
+                                          0.09,
                                     ),
                                     Spacer(),
                                     Text('Cari İşlemleri',
@@ -206,7 +208,8 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Icon(
                                       Icons.shopping_basket,
-                                      size: 55,
+                                      size:MediaQuery.of(context).size.height *
+                                          0.09,
                                     ),
                                     Spacer(),
                                     Text(
@@ -273,7 +276,8 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Icon(
                                       Icons.receipt_long,
-                                      size: 55,
+                                      size: MediaQuery.of(context).size.height *
+                                          0.09,
                                     ),
                                     Spacer(),
                                     Text(
@@ -341,7 +345,8 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Icon(
                                       Icons.update,
-                                      size: 55,
+                                      size: MediaQuery.of(context).size.height *
+                                          0.09,
                                     ),
                                     Spacer(),
                                     Text(
@@ -430,7 +435,7 @@ class verilerGuncelle extends StatelessWidget {
                           child: Text(
                             "Verileri Güncelle",
                             style: GoogleFonts.lato(
-                                fontSize: 22,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.italic,
                                 color: Colors.black,
@@ -458,7 +463,7 @@ class verilerGuncelle extends StatelessWidget {
                 Align(
                     alignment: Alignment.topLeft,
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.7,
+                      width: MediaQuery.of(context).size.width * 0.75,
                       child: TextButton(
                         onPressed: () async {
                           showDialog(
@@ -478,21 +483,24 @@ class verilerGuncelle extends StatelessWidget {
                           Navigator.pop(context);
                         },
                         child: Row(
+                          
                           children: [
                             Icon(
                               Icons.update,
                               size: 30,
                               color: Colors.green,
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                            Text(
-                              "Tüm Verileri Güncelle",
-                              style: GoogleFonts.lato(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
+                            
+                           
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Tüm Verileri Güncelle",
+                                style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ],
@@ -502,7 +510,7 @@ class verilerGuncelle extends StatelessWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.85,
                     child: TextButton(
                         onPressed: () async {
                           showDialog(
@@ -521,28 +529,31 @@ class verilerGuncelle extends StatelessWidget {
                           Navigator.pop(context);
                         },
                         child: Row(
+                         
                           children: [
                             Icon(
                               Icons.file_upload_outlined,
                               size: 30,
                               color: Colors.pink,
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
+                     
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Sadece Cari Verileri Güncelle",
+                                  style: GoogleFonts.lato(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  )),
                             ),
-                            Text("Sadece Cari Verileri Güncelle",
-                                style: GoogleFonts.lato(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
-                                )),
                           ],
                         )),
                   ),
                 ),
                 Align(
                   alignment: Alignment.topLeft,
-                  child: Expanded(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.85,
                     child: TextButton(
                         onPressed: () async {
                           showDialog(
@@ -567,38 +578,12 @@ class verilerGuncelle extends StatelessWidget {
                               size: 30,
                               color: Colors.orange,
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                            Text("Sadece Stok Verileri Güncelle",
-                                style: GoogleFonts.lato(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
-                                )),
-                          ],
-                        )),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Expanded(
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.wifi_protected_setup_outlined,
-                              size: 30,
-                              color: Colors.blue,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                            Expanded(
-                              child: Text("Stok Miktarı ve Bakiye Güncelleme",
+                           
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Sadece Stok Verileri Güncelle",
                                   style: GoogleFonts.lato(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                     color: Colors.black,
                                   )),
@@ -610,7 +595,34 @@ class verilerGuncelle extends StatelessWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    child: TextButton(
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.wifi_protected_setup_outlined,
+                              size: 30,
+                              color: Colors.blue,
+                            ),
+                           
+                            Padding(
+                              padding:  EdgeInsets.only(left: 8),
+                              child: Text("Stok Miktarı ve Bakiye Güncelleme",
+                                  style: GoogleFonts.lato(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  )),
+                            ),
+                          ],
+                        )),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.75,
                     child: TextButton(
                         onPressed: () {},
                         child: Row(
@@ -620,22 +632,24 @@ class verilerGuncelle extends StatelessWidget {
                               size: 30,
                               color: Colors.amber,
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
+                            
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Sabit Parametreleri Güncelle",
+                                  style: GoogleFonts.lato(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  )),
                             ),
-                            Text("Sabit Parametreleri Güncelle",
-                                style: GoogleFonts.lato(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
-                                )),
                           ],
                         )),
                   ),
                 ),
                 Align(
                   alignment: Alignment.topLeft,
-                  child: Expanded(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.85,
                     child: TextButton(
                         onPressed: () {},
                         child: Row(
@@ -645,15 +659,16 @@ class verilerGuncelle extends StatelessWidget {
                               size: 30,
                               color: Colors.red,
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
+                           
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Kaydedilen Verileri Gönder",
+                                  style: GoogleFonts.lato(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  )),
                             ),
-                            Text("Kaydedilen Verileri Gönder",
-                                style: GoogleFonts.lato(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
-                                )),
                           ],
                         )),
                   ),

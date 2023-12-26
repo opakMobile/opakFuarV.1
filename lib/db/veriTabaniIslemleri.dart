@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:opak_fuar/model/KurModel.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
@@ -315,4 +316,29 @@ class VeriIslemleri {
       print(e);
     }
   }
+   Future<int?> kurEkle(KurModel kurModel) async {
+    try {
+      var result = await Ctanim.db?.insert("TBLKURSB", kurModel.toJson());
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> kurTemizle() async {
+    if (Ctanim.db != null) {
+      await Ctanim.db!.delete('TBLKURSB');
+    }
+  }
+
+  Future<void> kurGetir() async {
+    //   var result = await Ctanim.db?.query("TBLCARISB");
+    listeler.listKur.clear();
+    List<Map<String, dynamic>> maps = await Ctanim.db?.query("TBLKURSB");
+    listeler.listKur =
+        List.generate(maps.length, (i) => KurModel.fromJson(maps[i]));
+    print(listeler.listKur);
+  }
+
+
 }

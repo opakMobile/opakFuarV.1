@@ -70,17 +70,22 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                   children: [
                                     Icon(
                                       Icons.receipt_long,
-                                      size: 55,
+                                         size: MediaQuery.of(context).size.height *
+                                          0.09,
                                       color: Colors.blue,
                                     ),
-                                    Spacer(),
-                                    Text('Plasiyer Satış Raporu',
-                                        maxLines: 2,
-                                        textAlign: TextAlign.right,
-                                        style: GoogleFonts.doppioOne(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                        )),
+                                
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.55,
+                                      child: Text('Plasiyer Satış Raporu',
+                                          maxLines: 2,
+                                          textAlign: TextAlign.right,
+                                          style: GoogleFonts.doppioOne(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(
@@ -143,17 +148,22 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                   children: [
                                     Icon(
                                       Icons.receipt_long,
-                                      size: 55,
+                                       size: MediaQuery.of(context).size.height *
+                                          0.09,
                                       color: Colors.green,
                                     ),
-                                    Spacer(),
-                                    Text(
-                                      'Bayi Satış Raporu',
-                                      maxLines: 2,
-                                      textAlign: TextAlign.right,
-                                      style: GoogleFonts.doppioOne(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
+                      
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.55,
+                                      child: Text(
+                                        'Bayi Satış Raporu',
+                                        maxLines: 2,
+                                        textAlign: TextAlign.right,
+                                        style: GoogleFonts.doppioOne(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -218,17 +228,22 @@ class _RaporlarPageState extends State<RaporlarPage> {
                                   children: [
                                     Icon(
                                       Icons.receipt_long,
-                                      size: 55,
+                                     size : MediaQuery.of(context).size.height *
+                                          0.09,
                                       color: Colors.orange,
                                     ),
-                                    Spacer(),
-                                    Text(
-                                      'Alıcı Satış Raporu',
-                                      maxLines: 2,
-                                      textAlign: TextAlign.right,
-                                      style: GoogleFonts.doppioOne(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
+                           
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.55,
+                                      child: Text(
+                                        'Alıcı Satış Raporu',
+                                        maxLines: 2,
+                                        textAlign: TextAlign.right,
+                                        style: GoogleFonts.doppioOne(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -289,19 +304,21 @@ class _RaporlarPageState extends State<RaporlarPage> {
                             child: Column(
                               children: [
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Icon(
                                       Icons.receipt_long,
-                                      size: 55,
+                                      size: MediaQuery.of(context).size.height *
+                                          0.09,
                                       color: Colors.pink,
                                     ),
-                                    Spacer(),
+                                 
                                     Text(
                                       'Stok Satış Raporu',
                                       maxLines: 2,
                                       textAlign: TextAlign.right,
                                       style: GoogleFonts.doppioOne(
-                                        fontSize: 22,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),

@@ -1,4 +1,7 @@
 import 'package:money_formatter/money_formatter.dart';
+import 'package:opak_fuar/controller/fisController.dart';
+import 'package:opak_fuar/model/fisHareket.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
 
 import '../model/kullaniciModel.dart';
 import '../model/satisTipiModel.dart';
@@ -56,6 +59,106 @@ class Ctanim {
 
 
   //fonksiyonalar
+    static double genelToplamHesapla(FisController fisEx, {bool KDVtipDegisti = false}) {
+    double KDVTutari = 0.0;
+    double urunToplami = 0.0;
+    double genelUrunToplami = 0.0;
+    double genelKalemIndirimToplami = 0.0;
+    double araToplam = 0.0;
+    double araToplam1 = 0.0;
+    double kalemindirimToplami = 0.0;
+    double genelToplam = 0.0;
+    int anaBirimID = 0;
+
+    for (var kur in listeler.listKur) {
+      if (kur.ANABIRIM == "E") {
+        anaBirimID = kur.ID!;
+      }
+    }
+    for (FisHareket element in fisEx.fis!.value.fisStokListesi) {
+      urunToplami = 0;
+      kalemindirimToplami = 0;
+
+      double brut = element.BRUTFIYAT!.toDouble();
+
+      double kdvOrani = element.KDVORANI! / 100;
+      int miktar = element.MIKTAR!;
+
+      if (fisEx.fis!.value.DOVIZID != anaBirimID) {
+        brut = brut / fisEx.fis!.value.KUR!;
+      }
+      /*
+      if (fisEx.fis!.value.DOVIZID != element.DOVIZID) {
+        if (anaBirimID != element.DOVIZID) {
+          brut = brut * element.KUR!;
+          brut = brut / fisEx.fis!.value.KUR!;
+        } else {
+          brut = brut / fisEx.fis!.value.KUR!;
+        }
+      }*/
+/*
+      if (Ctanim.KDVDahilMiDinamik == false) {
+        fisEx.fis!.value.KDVDAHIL = "H";
+        urunToplami += (brut * miktar);
+      } 
+      */
+     // else {
+        fisEx.fis!.value.KDVDAHIL = "E";
+        //urunToplami += brut * (1 - kdvOrani) * miktar;
+        urunToplami += brut / (1 + kdvOrani) * miktar;
+   //   }
+
+      double tt =
+          double.parse(((element.ISK! / 100) * urunToplami).toStringAsFixed(2));
+      double tt2 = double.parse(
+          ((element.ISK2! / 100) * (urunToplami - tt)).toStringAsFixed(2));
+      // (urunToplami - (((element.ISK! / 100) * urunToplami)));
+      kalemindirimToplami = tt + tt2;
+      if (KDVtipDegisti == true) {
+        KDVTutari = KDVTutari + ((urunToplami - kalemindirimToplami) * kdvOrani);
+      } else {
+        KDVTutari =
+            KDVTutari + ((urunToplami - kalemindirimToplami) * kdvOrani);
+      }
+
+      genelUrunToplami += urunToplami;
+      genelKalemIndirimToplami += kalemindirimToplami;
+    }
+
+    double? controllerDeger =
+        double.tryParse((fisEx.fis!.value.ISK1.toString())) ?? 0;
+    double? controllerDeger2 =
+        double.tryParse(fisEx.fis!.value.ISK2.toString()) ?? 0;
+    double nettoplam = (urunToplami - kalemindirimToplami);
+
+    double altIndirimToplami =
+        double.parse(((nettoplam * controllerDeger / 100)).toStringAsFixed(2));
+    araToplam1 =
+        genelUrunToplami - genelKalemIndirimToplami - altIndirimToplami;
+    if (controllerDeger2 != 0.0 && controllerDeger != 0.0) {
+      altIndirimToplami += double.parse(
+          (araToplam1 * controllerDeger2 / 100).toStringAsFixed(2));
+    }
+
+//
+    //indirimToplami = indirimToplami + altIndirimToplami;
+
+    araToplam = genelUrunToplami - genelKalemIndirimToplami - altIndirimToplami;
+
+    KDVTutari = KDVTutari -
+        double.parse(((controllerDeger / 100) * KDVTutari).toStringAsFixed(2));
+    KDVTutari = KDVTutari -
+        double.parse(((controllerDeger2 / 100) * KDVTutari).toStringAsFixed(2));
+    genelToplam += araToplam + KDVTutari;
+    fisEx.fis!.value.TOPLAM = Ctanim.noktadanSonraAlinacak(genelUrunToplami);
+    fisEx.fis!.value.INDIRIM_TOPLAMI = Ctanim.noktadanSonraAlinacak(
+        genelKalemIndirimToplami + altIndirimToplami);
+    fisEx.fis!.value.ARA_TOPLAM = Ctanim.noktadanSonraAlinacak(araToplam);
+    fisEx.fis!.value.KDVTUTARI = Ctanim.noktadanSonraAlinacak(KDVTutari);
+    fisEx.fis!.value.GENELTOPLAM = Ctanim.noktadanSonraAlinacak(genelToplam);
+    return fisEx.fis!.value.GENELTOPLAM??0;
+  }
+
   static String donusturMusteri(String inText) {
     MoneyFormatter fmf = MoneyFormatter(amount: double.parse(inText));
     MoneyFormatterOutput fo = fmf.output;

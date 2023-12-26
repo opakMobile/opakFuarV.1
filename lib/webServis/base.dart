@@ -6,6 +6,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:opak_fuar/db/veriTabaniIslemleri.dart';
+import 'package:opak_fuar/model/KurModel.dart';
 import 'package:opak_fuar/model/ShataModel.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
@@ -23,6 +24,7 @@ class BaseService {
     await getirStoklar(sirket: "AAGENELOPAK", kullaniciKodu: "1");
     await getirCariler(sirket: "AAGENELOPAK", kullaniciKodu: "1");
     await getirCariAltHesap(sirket: "AAGENELOPAK");
+    await getirKur(sirket: "AAGENELOPAK");
   }
 
   Future<void> cariVerileriGuncelle() async {
@@ -191,6 +193,63 @@ class BaseService {
           e.toString();
     }
   }
+    Future<String> getirKur({required sirket}) async {
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirKur'
+    };
+
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetirKur xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+    </GetirKur>
+  </soap:Body>
+</soap:Envelope>
+''';
+
+    try {
+      http.Response response =
+          await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+        Map<String, dynamic> jsonData =
+            jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          listeler.listKur.clear();
+          await VeriIslemleri().kurTemizle();
+
+          String modelNode = gelenHata.HataMesaj!;
+          Iterable l = json.decode(modelNode);
+
+          listeler.listKur =
+              List<KurModel>.from(l.map((model) => KurModel.fromJson(model)));
+
+          for (var element in listeler.listKur) {
+            await VeriIslemleri().kurEkle(element);
+          }
+          return "";
+        }
+      } else {
+        Exception('Kur verisi alınamadı. StatusCode: ${response.statusCode}');
+        return " Kurlar Getirilirken İstek Oluşturulamadı. " +
+            response.statusCode.toString();
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return "Kurlar için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
+    }
+  }
+
 
   Future<String> getKullanicilar(
       {required String kullaniciKodu,

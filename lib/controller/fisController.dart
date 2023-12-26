@@ -138,103 +138,16 @@ class FisController extends GetxController {
     fis!.value.fisStokListesi.add(yeniFisHareket);
   }
 
-  void fiseFiyatsizStokEkle({
-    required String TARIH,
-    required String Aciklama1,
-    required String UUID,
-    required String stokAdi,
-    required String stokKodu,
-    required double KDVOrani,
-    required int miktar,
-    required String birim,
-    required int birimID,
-  }) {
-    bool stokVarMi = false;
-    int? fisId = fis!.value.ID;
-
-    for (FisHareket fisHareket in fis!.value.fisStokListesi) {
-      if (fisHareket.STOKKOD == stokKodu) {
-        stokVarMi = true;
-        fisHareket.MIKTAR = fisHareket.MIKTAR! + miktar;
-        fisHareket.BRUTFIYAT = 0;
-        fisHareket.ISKONTO = 0;
-        fisHareket.KDVDAHILNETFIYAT = 0;
-        fisHareket.KDVTUTAR = 0;
-        fisHareket.NETFIYAT = 0;
-        fisHareket.NETTOPLAM = 0;
-        fisHareket.BRUTTOPLAMFIYAT = 0;
-        fisHareket.ISKONTOTOPLAM = 0;
-        fisHareket.KDVDAHILNETTOPLAM = 0;
-        fisHareket.KDVTOPLAM = 0;
-        //fisHareket.BURUTFIYAT = burutFiyat;
-        //fisHareket.ISK = iskonto;
-
-        // fisHareket.NETFIYAT = burutFiyat * (1 - iskonto / 100);
-        //fisHareket.KDVDAHILNETFIYAT =
-        //  (burutFiyat * (1 - iskonto / 100)) * miktar;
-
-        return;
-      }
-    }
-    FisHareket yeniFisHareket = FisHareket(
-      UUID: UUID,
-      TARIH: TARIH,
-      KUR: 0,
-      ACIKLAMA1: Aciklama1,
-      ID: 0,
-      FIS_ID: fisId,
-      STOKKOD: stokKodu,
-      STOKADI: stokAdi,
-      KDVORANI: KDVOrani,
-      MIKTAR: miktar,
-      BRUTFIYAT: 0,
-      ISK: 0,
-      ISK2: 0,
-      ISKONTO: 0,
-      KDVDAHILNETFIYAT: 0,
-      KDVTUTAR: 0,
-      NETFIYAT: 0,
-      BRUTTOPLAMFIYAT: 0,
-      BIRIM: birim,
-      BIRIMID: birimID,
-      DOVIZADI: "",
-      DOVIZID: 0,
-      ISKONTOTOPLAM: 0,
-      KDVDAHILNETTOPLAM: 0,
-      KDVTOPLAM: 0,
-      NETTOPLAM: 0,
-    );
-
-    fis!.value.fisStokListesi.add(yeniFisHareket);
-  }
-
-  Future<void> listFisGetir({required String belgeTip}) async {
-    List<Fis> tt = [];
-    getfis(belgeTip).then((value) {
-      tt = value;
-      tt.forEach((element) {
-        getFisHar(element.ID!).then((value) => element.fisStokListesi = value);
-        //await fisHareketGetir(fisId: element.ID!,belgeTip: belgeTip ).then((value) {element.fisStokListesi = value;});
-//cari kod
-        if (belgeTip != "Depo_Transfer") {
-          element.cariKart =
-              cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
-        }
-      });
-      list_fis.assignAll(tt);
-    }); //List.generate(result.length, (i) => Fis.fromJson(result[i]));
-  }
 
 
-  Future<List<Fis>> getfis(String belgeTip) async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'DURUM = ? AND TIP = ?',
-        whereArgs: [false, Ctanim().MapFisTip[belgeTip]]);
-    List<Fis> tt1 =
-        List.generate(result.length, (i) => Fis.fromJson(result[i]));
+
+  Future<List<FisHareket>> getFisHar(int fisId) async {
+    List<Map<String, dynamic>> result = await Ctanim.db
+        ?.query("TBLFISHAR", where: 'FIS_ID = ? ', whereArgs: [fisId]);
+    List<FisHareket> tt1 =
+        List.generate(result.length, (i) => FisHareket.fromJson(result[i]));
     return tt1;
   }
-// Gİdecek Fişleri Çekmek için yazıldı
 
   Future<void> listGidecekFisGetir({required String belgeTip}) async {
     List<Fis> tt = await getGidecekfis(belgeTip);
@@ -249,6 +162,24 @@ class FisController extends GetxController {
     }
     list_fis_gidecek.addAll(tt);
   }
+    Future<List<Fis>> getGidecekfis(String belgeTip) async {
+    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
+        where: 'DURUM = ? AND AKTARILDIMI = ?',
+        whereArgs: [true,false]);
+    return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 
   Future<void> listGidecekTekFisGetir(
       {required String belgeTip, required int fisID}) async {
@@ -275,12 +206,6 @@ class FisController extends GetxController {
     return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
   }
 
-  Future<List<Fis>> getGidecekfis(String belgeTip) async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'DURUM = ? AND TIP = ? AND AKTARILDIMI = ?',
-        whereArgs: [true, Ctanim().MapFisTip[belgeTip], false]);
-    return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
-  }
 
   Future<RxList<Fis>> listSonFisleriGetir() async {
     List<Fis> tt = await getSonFis();
@@ -444,51 +369,7 @@ class FisController extends GetxController {
     return result.length;
   }
 
-/* bu fonksiyona gerek yok galiba
 
-  Future<List<FisHareket>> fisHareketGetir({
-    required int fisId,
-    required String belgeTip,
-  }) async {
-    //  List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISHAR",where: 'FIS_ID = ? ', whereArgs:[fisId, ]);
-    List<FisHareket> tt1 = [];
-    getFisHar(fisId).then((value) {
-      tt1 = value;
-    });
-    return tt1;
-//     List<FisHareket> tt1 =  List.generate(result.length, (i) => FisHareket.fromJson(result[i]));
-  }
-//// buraya kadar 
-*/
-  Future<List<FisHareket>> getFisHar(int fisId) async {
-    List<Map<String, dynamic>> result = await Ctanim.db
-        ?.query("TBLFISHAR", where: 'FIS_ID = ? ', whereArgs: [fisId]);
-    List<FisHareket> tt1 =
-        List.generate(result.length, (i) => FisHareket.fromJson(result[i]));
-    return tt1;
-  }
-
-//
-  /*  Future<void> listFisStokHareketGetir(String Kod) async
- { 
-  gecmisFisHareket.clear();
-  sonListem.clear();
-  
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISHAR",where: 'STOKKOD = ?', whereArgs: [Kod]); 
-    List<FisHareket> yy=   List.generate(result.length, (i) => FisHareket.fromJson(result[i]));
-    yy.forEach((element) async{    
-     List<Map<String, dynamic>> donus = await Ctanim.db?.query("TBLFISSB",where: 'ID = ?', whereArgs: [element.FIS_ID]); 
-    Fis fis=   List.generate(donus.length, (i) => Fis.fromJson(donus[i])).first;
-    if(element.STOKKOD == Kod){
-      gecmisFisHareket.add(element);
-
-    }
-    
-//    fis.fisStokListesi=gecmisFisHareket;
-    sonListem.add(Fis.fromFis(fis, gecmisFisHareket)); 
-   });
-//    list_fis.assignAll(yy); 
- } */
   Widget gecmisSatisYok() {
     return Center(child: Text("Geçmiş Satış Bilgisi Bulunamadı."));
   }
@@ -524,22 +405,5 @@ class FisController extends GetxController {
       sonListem.add(Fis.fromFis(fis, fisHareketleri));
     }
   }
-/*
- Future<void> FisGetir(int id) async
- { 
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",where: 'ID = ?', whereArgs: [id]); 
-    List<Fis> tt=   List.generate(result.length, (i) => Fis.fromJson(result[i]));
 
-    tt.forEach((element) async{  
-    element.fisStokListesi=await fisHareketGetir(element.ID!, );
-
-    for(int i=0; i<element.fisStokListesi.length; i++){
-      element.fisStokListesi[i].STOKKOD = stokKartEx.searchList.where((c) => c.KOD==element.fisStokListesi[i].STOKKOD).toString();
-    }
-    //element.fisStokListesi = cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD); 
-   });
-  
-    list_fis.assignAll(tt); 
- } 
-*/
 }
