@@ -34,8 +34,8 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                     ),
                   ),
                   onPressed: () {
-                      fisEx.fis!.value = Fis.empty();
-                        showDialog(
+                    fisEx.fis!.value = Fis.empty();
+                    showDialog(
                         context: context,
                         builder: (context) {
                           return CustomAlertDialog(
@@ -50,16 +50,14 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             message:
                                 'Fatura Kaydedildi. PDF Dosyasını Görüntülemek İster misiniz?',
                             onPres: () async {
-                              
-                        Navigator.pop(context);
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => PdfOnizleme(
-                                    m: widget.fiss,
-                                    fastReporttanMiGelsin: false,
-                                  )),
-                        );
-                        
+                              Navigator.pop(context);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => PdfOnizleme(
+                                          m: widget.fiss,
+                                          fastReporttanMiGelsin: false,
+                                        )),
+                              );
                             },
                             buttonText: 'Pdf\'i\ Gör',
                           );
@@ -85,195 +83,210 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                     widget.fiss.cariKart.ADI!,
+                      widget.fiss.cariKart.ADI!,
                       maxLines: 1,
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,
-                          fontSize: 16,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        elevation: 5,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Peşin",
-                                style: TextStyle(
-                                  color: Colors.red,
+                          elevation: 5,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Peşin",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.red,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 5.0, right: 5.0, top: 10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
-                                      height: 3,
-                                      color: Colors.red,
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
-                                      height: 3,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        elevation: 5,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "K.Kartı",
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 5.0, right: 5.0, top: 10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
-                                      height: 3,
-                                      color: Colors.blue,
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
-                                      height: 3,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 5.0, right: 5.0, top: 10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.08,
+                                        height: 3,
+                                        color: Colors.red,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.08,
+                                        height: 3,
+                                        color: Colors.grey,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        elevation: 5,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Ara Ödeme",
-                                style: TextStyle(
-                                  color: Colors.green,
+                          elevation: 5,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "K.Kartı",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.blue,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 5.0, right: 5.0, top: 10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
-                                      height: 3,
-                                      color: Colors.green,
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
-                                      height: 3,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        elevation: 5,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Sezon",
-                                style: TextStyle(
-                                  color: Colors.orange,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 5.0, right: 5.0, top: 10),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
-                                      height: 3,
-                                      color: Colors.orange,
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
-                                      height: 3,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 5.0, right: 5.0, top: 10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.08,
+                                        height: 3,
+                                        color: Colors.blue,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.08,
+                                        height: 3,
+                                        color: Colors.grey,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          elevation: 5,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Ara Ödeme",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 5.0, right: 5.0, top: 10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.08,
+                                        height: 3,
+                                        color: Colors.green,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.08,
+                                        height: 3,
+                                        color: Colors.grey,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          elevation: 5,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Sezon",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 5.0, right: 5.0, top: 10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.08,
+                                        height: 3,
+                                        color: Colors.orange,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.08,
+                                        height: 3,
+                                        color: Colors.grey,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   //! Cart
                   Card(
@@ -302,8 +315,9 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             ),
                             child: Center(
                                 child: Text(
-                             Ctanim.donusturMusteri(widget.fiss.ARA_TOPLAM
-                                            .toString(),),
+                              Ctanim.donusturMusteri(
+                                widget.fiss.ARA_TOPLAM.toString(),
+                              ),
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.blueAccent,
@@ -330,8 +344,10 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                       ),
                                       child: Center(
                                           child: Text(
-                                      Ctanim.donusturMusteri( widget.fiss.INDIRIM_TOPLAMI
-                                            .toString(),),
+                                        Ctanim.donusturMusteri(
+                                          widget.fiss.INDIRIM_TOPLAMI
+                                              .toString(),
+                                        ),
                                         style: TextStyle(
                                             fontSize: 20,
                                             color: Colors.blueAccent,
@@ -355,8 +371,9 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                       ),
                                       child: Center(
                                           child: Text(
-                                        Ctanim.donusturMusteri( widget.fiss.KDVTUTARI
-                                            .toString(),),
+                                        Ctanim.donusturMusteri(
+                                          widget.fiss.KDVTUTARI.toString(),
+                                        ),
                                         style: TextStyle(
                                             fontSize: 20,
                                             color: Colors.blueAccent,
@@ -381,8 +398,9 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             ),
                             child: Center(
                                 child: Text(
-                             Ctanim.donusturMusteri( widget.fiss.GENELTOPLAM
-                                            .toString(),),
+                              Ctanim.donusturMusteri(
+                                widget.fiss.GENELTOPLAM.toString(),
+                              ),
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.red,
