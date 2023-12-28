@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 
@@ -77,7 +78,44 @@ class _CariDetayPageState extends State<CariDetayPage> {
     return SafeArea(
       child: Scaffold(
         appBar: appBarDizayn(context),
-        bottomNavigationBar: bottombarDizayn(context),
+        bottomNavigationBar: bottombarDizayn(
+          context,
+          button: Container(
+            height: MediaQuery.of(context).size.height * 0.06,
+            width: MediaQuery.of(context).size.width * 0.5,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SiparisUrunAra(
+                              cari: widget.cari,
+                            )));
+              },
+              icon: Icon(
+                Icons.shopping_cart_checkout,
+                size: 30,
+              ),
+              label: Text(
+                "Sipariş Al",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+                onPrimary: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+            ),
+          ),
+          buttonVarMi: true,
+        ),
         resizeToAvoidBottomInset: false,
         body: Container(
           height: MediaQuery.of(context).size.height,
@@ -114,13 +152,13 @@ class _CariDetayPageState extends State<CariDetayPage> {
                   ),
                 ),
               ),
-              
+
               Padding(
                 padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.05,
-                    right: MediaQuery.of(context).size.width * 0.05,
-                    top: MediaQuery.of(context).size.height * 0.01,
-                    ),
+                  left: MediaQuery.of(context).size.width * 0.05,
+                  right: MediaQuery.of(context).size.width * 0.05,
+                  top: MediaQuery.of(context).size.height * 0.01,
+                ),
                 child: Column(
                   children: [
                     // ! Sipariş Toplamı
@@ -166,13 +204,13 @@ class _CariDetayPageState extends State<CariDetayPage> {
                         ),
                       ),
                     ),
-                   
+
                     SingleChildScrollView(
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height*.28,
+                        height: MediaQuery.of(context).size.height * .32,
                         child: ListView.builder(
-                          itemCount: aaa.length,
+                          itemCount: fisEx.list_fis_cari_ozel.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -267,50 +305,6 @@ class _CariDetayPageState extends State<CariDetayPage> {
                         ),
                       ),
                     ),
-                    // ! Sipariş al butonu7
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SiparisUrunAra(
-                                          cari: widget.cari,
-                                        )));
-                          },
-                          icon: Icon(
-                            Icons.shopping_cart_checkout,
-                            size: 30,
-                          ),
-                          label: Text(
-                            "Sipariş Al",
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.green,
-                            onPrimary: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
