@@ -92,6 +92,7 @@ class listeler {
   static List<StokFiyatListesiHarModel> listStokFiyatListesiHar = [];
   static List<DahaFazlaBarkod> listDahaFazlaBarkod = [];
   static List<KurModel> listKur = [];
+  
 
   static List<Cari> listCari = [];
   static List<OlcuBirimModel> listOlcuBirim = [];

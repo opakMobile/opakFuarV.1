@@ -4,6 +4,7 @@ import '../sabitler/Ctanim.dart';
 
 class FisHareket {
   int? ID = 0;
+  String? ALTHESAP;
   int? FIS_ID = 0;
   String? UUID = "";
   int? MIKTAR = 0;
@@ -32,6 +33,7 @@ class FisHareket {
 
   FisHareket({
     required this.ID,
+    required this.ALTHESAP,
     required this.FIS_ID,
     required this.STOKKOD,
     required this.STOKADI,
@@ -62,6 +64,7 @@ class FisHareket {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['ID'] = ID;
+    data['ALTHESAP'] = ALTHESAP;
     data['FIS_ID'] = FIS_ID;
     data['STOKKOD'] = STOKKOD;
     data['STOKADI'] = STOKADI;
@@ -93,6 +96,7 @@ class FisHareket {
   FisHareket.empty()
       : this(
           ID: 0,
+          ALTHESAP: "",
           FIS_ID: 0,
           STOKKOD: "",
           STOKADI: "",
@@ -121,6 +125,7 @@ class FisHareket {
         );
   FisHareket.fromJson(Map<String, dynamic> json) {
     ID = int.parse(json['ID'].toString());
+    ALTHESAP = json['ALTHESAP'];
     FIS_ID = int.parse(json['FIS_ID'].toString());
     STOKKOD = json['STOKKOD'];
     STOKADI = json['STOKADI'];

@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/controller/fisController.dart';
 import 'package:opak_fuar/model/KurModel.dart';
+import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
@@ -34,6 +35,25 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    for (var element in listeler.listCariAltHesap){
+      if(element.KOD == fisEx.fis!.value.cariKart.KOD){
+        altHesaplar.add(element);
+      }
+      /*
+      if(element.VARSAYILAN == "E"){
+        seciliAltHesap = element;
+      }
+      */
+    }
+    if(altHesaplar.isEmpty){
+      CariAltHesap ss = CariAltHesap(KOD: "-1", ALTHESAP: "YOK", DOVIZID: -1, VARSAYILAN: "H");
+      altHesaplar.add(ss);
+      seciliAltHesap = ss;
+    }else{
+      seciliAltHesap = altHesaplar.first;
+    }
+
     for (int i = 0; i < stokKartEx.searchList.length; i++) {
       aramaMiktarController.add(TextEditingController(text: "1"));
     }
@@ -114,13 +134,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   List<TextEditingController> aramaMiktarController = [];
   final StokKartController stokKartEx = Get.find();
 
-  String seciliAltHesap = "Peşin";
-  List<String> altHesaplar = [
-    "Peşin",
-    "Nakit",
-    "Kredi Kartı",
-    "Sezon",
-    "Ara Ödeme"
+  CariAltHesap? seciliAltHesap;
+  List<CariAltHesap> altHesaplar = [
+   
   ];
 
 /*  @override
@@ -387,20 +403,23 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         child: Padding(
                           padding: EdgeInsets.only(top: 15.0),
                           child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
+                            child: DropdownButton<CariAltHesap>(
                               value: seciliAltHesap,
-                              items: altHesaplar.map((String banka) {
-                                return DropdownMenuItem<String>(
+                              items: altHesaplar.map((CariAltHesap banka) {
+                                return DropdownMenuItem<CariAltHesap>(
                                   value: banka,
                                   child: Text(
-                                    banka,
+                                    banka.ALTHESAP!,
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 );
                               }).toList(),
-                              onChanged: (String? selected) {
+                              onChanged: (CariAltHesap? selected) {
                                 setState(() {
                                   seciliAltHesap = selected!;
+                                  fisEx.fis!.value.ALTHESAP = selected.ALTHESAP;
+                                  //fisEx.fis!.value.ALTHESAPID = selected.KOD;
+
                                 });
                               },
                             ),
@@ -681,6 +700,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     context: context,
                                                     builder: (context) {
                                                       return fisHareketDuzenle(
+                                                        altHesap: seciliAltHesap!.ALTHESAP!,
                                                         gelenStokKart:
                                                             stokModel,
                                                         gelenMiktar:
@@ -796,6 +816,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     {
       fisEx.fiseStokEkle(
         // belgeTipi: widget.belgeTipi,
+        ALTHESAP: seciliAltHesap!.ALTHESAP!,
         urunListedenMiGeldin: false,
         stokAdi: stokKart.ADI!,
         KDVOrani: double.parse(stokKart.SATIS_KDV.toString()),

@@ -26,6 +26,7 @@ class FisController extends GetxController {
   void fiseStokEkle(
       {required bool urunListedenMiGeldin,
       required double KUR,
+      required String ALTHESAP,
       required String TARIH,
       required String Aciklama1,
       required String UUID,
@@ -55,9 +56,9 @@ class FisController extends GetxController {
     double HkdvTutarToplam = 0.0;
 
     for (FisHareket fisHareket in fis!.value.fisStokListesi) {
-      if (fisHareket.STOKKOD == stokKodu) {
+      if (fisHareket.STOKKOD == stokKodu && fisHareket.ALTHESAP == ALTHESAP) {
         stokVarMi = true;
-        if (urunListedenMiGeldin == false) {
+        if (urunListedenMiGeldin == false) { // sepet listesi düzenle true gelecek
           fisHareket.MIKTAR =
               int.parse((fisHareket.MIKTAR! + miktar).toString());
           HbrutToplamFiyat = HbrutFiyat * fisHareket.MIKTAR!;
@@ -107,6 +108,7 @@ class FisController extends GetxController {
     HkdvDahilNetFiyatToplam = HkdvDahilNetFiyat * miktar;
     HkdvTutarToplam = HkdvTutar * miktar;
     FisHareket yeniFisHareket = FisHareket(
+      ALTHESAP: ALTHESAP,
       UUID: UUID,
       TARIH: TARIH,
       KUR: KUR,

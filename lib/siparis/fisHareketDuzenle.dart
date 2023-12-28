@@ -12,10 +12,25 @@ class fisHareketDuzenle extends StatefulWidget {
   fisHareketDuzenle({
     super.key,
     required this.gelenStokKart,
-    required this.gelenMiktar,
+    required this.gelenMiktar, required this.altHesap,
+    
+    this.isk1 = -1,
+    this.isk2 = -1,
+    this.isk3 = -1,
+    this.malFazlasi = -1,
+    this.fiyat = -1,
+    
+
   });
   final StokKart gelenStokKart;
   final double gelenMiktar;
+  final String altHesap;
+
+   double isk1;
+   double isk2;
+   double isk3;
+   double malFazlasi;
+   double fiyat;
 
   @override
   State<fisHareketDuzenle> createState() => _fisHareketDuzenleState();
@@ -27,8 +42,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     // TODO: implement initState
     super.initState();
     miktarController.text = widget.gelenMiktar.toString();
-    fiyatController.text = widget.gelenStokKart.SFIYAT1.toString();
-    isk1Controller.text = widget.gelenStokKart.SATISISK.toString();
+    fiyatController.text = widget.fiyat != -1 ? widget.fiyat.toString(): widget.gelenStokKart.SFIYAT1.toString();
+    isk1Controller.text = widget.isk1 != -1 ? widget.isk1.toString(): widget.gelenStokKart.SATISISK.toString();
     isk2Controller.text = "0";
     isk3Controller.text = "0";
     malFazlasiController.text = "0";
@@ -89,6 +104,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     {
       fisEx.fiseStokEkle(
         // belgeTipi: widget.belgeTipi,
+        ALTHESAP: widget.altHesap,
         urunListedenMiGeldin: false,
         stokAdi: stokKart.ADI!,
         KDVOrani: double.parse(stokKart.SATIS_KDV.toString()),
@@ -433,6 +449,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: TextFormField(
+                          controller: fiyatController,
                           enabled: Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E"
                               ? true
                               : false,

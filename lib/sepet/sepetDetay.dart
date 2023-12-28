@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/fisHareket.dart';
+import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
+import 'package:opak_fuar/siparis/fisHareketDuzenle.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../model/cariModel.dart';
@@ -19,6 +21,13 @@ class SepetDetay extends StatefulWidget {
 }
 
 class _SepetDetayState extends State<SepetDetay> {
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Fis.empty().fisEkle(fis: fisEx.fis!.value!, belgeTipi: "YOK");
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -158,7 +167,8 @@ class _SepetDetayState extends State<SepetDetay> {
                       child: ListView.builder(
                         itemCount: fisEx.fis!.value!.fisStokListesi.length,
                         itemBuilder: (context, index) {
-                          FisHareket stokModel = fisEx.fis!.value!.fisStokListesi[index];
+                          FisHareket stokModel =
+                              fisEx.fis!.value!.fisStokListesi[index];
                           return Column(
                             children: [
                               Row(
@@ -191,7 +201,34 @@ class _SepetDetayState extends State<SepetDetay> {
                                     child: Card(
                                       elevation: 10,
                                       child: TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            //alt hesap
+                                            double gelenMiktar = double.parse(
+                                                stokModel.MIKTAR.toString());
+                                            List<StokKart> stok = listeler
+                                                .listStok
+                                                .where((stok) =>
+                                                    stok.KOD! ==
+                                                    stokModel.STOKKOD)
+                                                .toList();
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return fisHareketDuzenle(
+                                                    altHesap:
+                                                        stokModel.ALTHESAP!,
+                                                    gelenStokKart: stok.first,
+                                                    gelenMiktar: gelenMiktar,
+                                                    fiyat: stokModel.NETFIYAT!,
+                                                    isk1: stokModel.ISK!,
+                                                  );
+                                                }).then((value) {
+                                              setState(() {
+                                                Ctanim.genelToplamHesapla(
+                                                    fisEx);
+                                              });
+                                            });
+                                          },
                                           child: Text(
                                             "Değiştir",
                                             style: TextStyle(
@@ -234,8 +271,7 @@ class _SepetDetayState extends State<SepetDetay> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              stokModel.ISK!
-                                                  .toStringAsFixed(2),
+                                              stokModel.ISK!.toStringAsFixed(2),
                                             ),
                                           ),
                                         )
@@ -290,10 +326,10 @@ class _SepetDetayState extends State<SepetDetay> {
                                                 Border.all(color: Colors.grey),
                                           ),
                                           child: Center(
-                                            child: Text(
-                                              stokModel.MIKTAR!
-                                                  .toStringAsFixed(2),)
-                                          ),
+                                              child: Text(
+                                            stokModel.MIKTAR!
+                                                .toStringAsFixed(2),
+                                          )),
                                         )
                                       ],
                                     ),
@@ -359,7 +395,28 @@ class _SepetDetayState extends State<SepetDetay> {
                                       child: Card(
                                         elevation: 10,
                                         child: TextButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              fisEx.fis?.value.altHesapToplamlar
+                                                  .removeWhere((item) {
+                                                String a = "";
+                                                for (var element
+                                                    in item.STOKKODLIST!) {
+                                                  if (element ==
+                                                      stokModel.STOKKOD) {
+                                                    a = element;
+                                                  }
+                                                }
+
+                                                return a == stokModel.STOKKOD!;
+                                              });
+                                              fisEx.fis?.value.fisStokListesi
+                                                  .removeWhere((item) =>
+                                                      item.STOKKOD ==
+                                                      stokModel.STOKKOD!);
+                                                      setState(() {
+                                                        
+                                                      });
+                                            },
                                             child: Text(
                                               "Sil",
                                               style: TextStyle(
@@ -384,10 +441,12 @@ class _SepetDetayState extends State<SepetDetay> {
                                         Text(
                                           "Toplam: ",
                                           style: TextStyle(
-                                              fontSize: 11, color: Colors.orange),
+                                              fontSize: 11,
+                                              color: Colors.orange),
                                         ),
                                         Text(
-                                          stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),
+                                          stokModel.BRUTTOPLAMFIYAT!
+                                              .toStringAsFixed(2),
                                           style: TextStyle(
                                             fontSize: 12,
                                           ),
@@ -399,10 +458,12 @@ class _SepetDetayState extends State<SepetDetay> {
                                         Text(
                                           "İskonto: ",
                                           style: TextStyle(
-                                              fontSize: 11, color: Colors.orange),
+                                              fontSize: 11,
+                                              color: Colors.orange),
                                         ),
                                         Text(
-                                          stokModel.ISKONTOTOPLAM!.toStringAsFixed(2),
+                                          stokModel.ISKONTOTOPLAM!
+                                              .toStringAsFixed(2),
                                           style: TextStyle(
                                             fontSize: 12,
                                           ),
@@ -414,10 +475,12 @@ class _SepetDetayState extends State<SepetDetay> {
                                         Text(
                                           "KDV: ",
                                           style: TextStyle(
-                                              fontSize: 11, color: Colors.orange),
+                                              fontSize: 11,
+                                              color: Colors.orange),
                                         ),
                                         Text(
-                                          stokModel.KDVTOPLAM!.toStringAsFixed(2),
+                                          stokModel.KDVTOPLAM!
+                                              .toStringAsFixed(2),
                                           style: TextStyle(
                                             fontSize: 12,
                                           ),
@@ -429,10 +492,12 @@ class _SepetDetayState extends State<SepetDetay> {
                                         Text(
                                           "Genel Toplam: ",
                                           style: TextStyle(
-                                              fontSize: 11, color: Colors.orange),
+                                              fontSize: 11,
+                                              color: Colors.orange),
                                         ),
                                         Text(
-                                          stokModel.KDVDAHILNETTOPLAM!.toStringAsFixed(2),
+                                          stokModel.KDVDAHILNETTOPLAM!
+                                              .toStringAsFixed(2),
                                           style: TextStyle(
                                             fontSize: 12,
                                           ),

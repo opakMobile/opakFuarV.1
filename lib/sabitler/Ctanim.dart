@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:money_formatter/money_formatter.dart';
 import 'package:opak_fuar/controller/fisController.dart';
+import 'package:opak_fuar/model/altHesapToplamModel.dart';
 import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 
@@ -122,6 +125,27 @@ class Ctanim {
       }
 
       genelUrunToplami += urunToplami;
+
+      //  alt hesap için
+      
+      List<AltHesapToplamModel> altHesapVarMi = fisEx.fis!.value!.altHesapToplamlar.where((altHesap) => altHesap.ALTHESAPADI! == element.ALTHESAP).toList();
+      if(altHesapVarMi.isEmpty){
+        AltHesapToplamModel aa = AltHesapToplamModel.empty();
+        aa.ALTHESAPADI = element.ALTHESAP!;
+        aa.TOPLAM = urunToplami;
+        aa.STOKKODLIST!.add(element.STOKKOD!);
+        fisEx.fis!.value.altHesapToplamlar.add(aa);
+      }else{
+        AltHesapToplamModel aa = altHesapVarMi.first;
+        fisEx.fis!.value.altHesapToplamlar.removeWhere((element) => element.ALTHESAPADI == aa.ALTHESAPADI);
+        if(!aa.STOKKODLIST!.contains(element.STOKKOD)){
+          aa.TOPLAM = aa.TOPLAM! + urunToplami;
+          aa.STOKKODLIST!.add(element.STOKKOD!);
+        }
+        fisEx.fis!.value!.altHesapToplamlar.add(aa);
+      }
+      // alt hesap için bitti
+
       genelKalemIndirimToplami += kalemindirimToplami;
     }
 

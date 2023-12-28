@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:opak_fuar/model/altHesapToplamModel.dart';
 
 import '../sabitler/Ctanim.dart';
 import 'cariModel.dart';
@@ -45,6 +46,7 @@ class Fis {
   bool? AKTARILDIMI = false;
   bool? isExpanded = false;
   List<FisHareket> fisStokListesi = [];
+  List<AltHesapToplamModel> altHesapToplamlar = [];
   Cari cariKart = Cari();
   String? UUID = "";
   String? ISLEMTIPI = "";
@@ -189,6 +191,7 @@ class Fis {
     this.DOVIZID = fis.DOVIZID;
     this.ONAY = fis.ONAY;
     this.fisStokListesi = fisHareket;
+    this.altHesapToplamlar = altHesapToplamlar;
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -286,6 +289,7 @@ class Fis {
     data['DOVIZID'] = DOVIZID.toString();
     data['ONAY'] = ONAY.toString();
     data['STOKLISTESI'] = fisStokListesi.map((fis1) => fis1.toJson()).toList();
+   // data['altHesapToplamlar'] = altHesapToplamlar.map((fis1) => fis1.toJson()).toList();
 
     return data;
   }

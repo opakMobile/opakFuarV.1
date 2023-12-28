@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 1;
+  static final _databaseVersion = 2;
 
   static Database? _database;
 
@@ -50,8 +50,8 @@ class DatabaseHelper {
     if (oldVersion < newVersion) {
       //    db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN  INTEGER;");
 
-      if (newVersion == 7) {}
-      // db.execute("ALTER TABLE tabEmployee ADD COLUMN newCol TEXT;");
+      if (newVersion == 2) {}
+       db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ALTHESAP TEXT;");
     }
   }
 
@@ -274,6 +274,7 @@ class DatabaseHelper {
       String Sorgu = """
     CREATE TABLE TBLFISHAR (
     ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    ALTHESAP TEXT,
     FIS_ID INTEGER,
     UUID TEXT,
     MIKTAR INTEGER,
