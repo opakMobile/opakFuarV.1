@@ -403,6 +403,8 @@ class VeriIslemleri {
   }
 
   Future<int> veriGetir() async {
+    await cariAltHesapGetir();
+
     //  await fisEkParamGetir();
     // await ondalikGetir();
     //   await islemTipiGetir();
@@ -417,10 +419,11 @@ class VeriIslemleri {
 //    await stokKosulGetir();
     //   await cariStokKosulGetir();
     await dahaFazlaBarkodGetir();
-    List<StokKart>? temp1 = await stokGetir();
-    List<Cari>? temp2 = await cariGetir();
+    await stokGetir();
+
+    await cariGetir();
     // List<SubeDepoModel>? temp3 = await subeDepoGetir();
-    if (temp1!.length > 0 || temp2!.length > 0 /* || temp3!.length > 0*/) {
+    if (listeler.listStok.length > 0 || listeler.listCari.length > 0 /* || temp3!.length > 0*/) {
       return 1;
     } else {
       return 0;

@@ -389,11 +389,13 @@ class _settings_pageState extends State<settings_page> {
                                                       });
                                                     },
                                                   ),
-                                                  Expanded(
-                                                      child: Text(
-                                                    "Dışarda Kullan",
-                                                    maxLines: 3,
-                                                  )),
+                                                  Align(
+                                      
+                                                    child: Text(
+                                                                                                      "Dışarda Kullan",
+                                                                                                      maxLines: 3,
+                                                                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),

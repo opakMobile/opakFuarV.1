@@ -112,7 +112,7 @@ class Ctanim {
       // else {
       fisEx.fis!.value.KDVDAHIL = "E";
       //urunToplami += brut * (1 - kdvOrani) * miktar;
-      urunToplami += brut / (1 + kdvOrani) * miktar;
+      urunToplami += brut / (1 + kdvOrani) * miktar;  
       //   }
 
       double tt =

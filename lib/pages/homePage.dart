@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:opak_fuar/cari/cariIslemlerPage.dart';
+import 'package:opak_fuar/model/ShataModel.dart';
+import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/raporlar/raporlar.dart';
+import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/sepet/sepetCariList.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/webServis/base.dart';
 
 import '../controller/fisController.dart';
+import '../model/fis.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -402,12 +406,13 @@ class _HomePageState extends State<HomePage> {
 }
 
 class verilerGuncelle extends StatelessWidget {
-  const verilerGuncelle({
+   verilerGuncelle({
     super.key,
     required this.bs,
   });
 
   final BaseService bs;
+  final FisController fisEx = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -650,7 +655,102 @@ class verilerGuncelle extends StatelessWidget {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.85,
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () async{
+                
+        String hataTopla = "";
+        
+        await fisEx.listGidecekFisGetir();
+
+   
+        if (fisEx.list_fis_gidecek.length > 0) {
+      
+          for (int j = 0; j < fisEx.list_fis_gidecek.length; j++) {
+
+     
+           Map<String, dynamic> jsonListesi =
+            fisEx.list_fis_gidecek[j].toJson2();
+            fisEx.list_fis_gidecek[j].AKTARILDIMI = true;
+            Fis.empty().fisEkle(
+                belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
+
+            SHataModel gelenHata = await bs.ekleFatura(
+                jsonDataList: jsonListesi, sirket: Ctanim.sirket!);
+            if (gelenHata.Hata == "true") {
+              fisEx.list_fis_gidecek[j].AKTARILDIMI = false;
+              Fis.empty().fisEkle(
+                  belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
+              hataTopla = hataTopla +
+                  "\n" +
+                   fisEx.list_fis_gidecek[j].CARIADI!+
+                  " ait " +
+                  fisEx.list_fis_gidecek[j].FATURANO.toString() +
+                  " fatura numaralı belge gönderilemedi.\n Hata Mesajı :" +
+                  gelenHata.HataMesaj!;
+/*
+              LogModel logModel = LogModel(
+                TABLOADI: "TBLFISSB",
+                FISID: fisEx.list_fis_gidecek[0].ID,
+                HATAACIKLAMA: gelenHata.HataMesaj,
+                UUID: fisEx.list_fis_gidecek[0].UUID,
+                CARIADI: fisEx.list_fis_gidecek[0].CARIADI,
+              );
+              await VeriIslemleri().logKayitEkle(logModel);
+              */
+            }
+
+        
+
+          }
+          if (hataTopla != "") {
+            await showDialog(
+                context: context,
+                builder: (context) {
+                  return CustomAlertDialog(
+                    align: TextAlign.left,
+                    title: 'Hata',
+                    message:
+                        'Web Servise Veri Gönderilirken Bazı Hatalar İle Karşılaşıldı:\n' +
+                            hataTopla,
+                    onPres: () async {
+                      Navigator.pop(context);
+                    },
+                    buttonText: 'Tamam',
+                  );
+                });
+          } else {
+            const snackBar1 = SnackBar(
+              content: Text(
+                'Veriler Başarılı Bir Şekilde Gönderildi',
+                style: TextStyle(fontSize: 16),
+              ),
+              showCloseIcon: true,
+              backgroundColor: Colors.blue,
+              closeIconColor: Colors.white,
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar1);
+          }
+
+          fisEx.list_fis_gidecek.clear();
+
+          print(
+              "Liste Temizlendi : " + fisEx.list_fis_gidecek.length.toString());
+        } else {
+          await showDialog(
+              context: context,
+              builder: (context) {
+                return CustomAlertDialog(
+                  align: TextAlign.left,
+                  title: 'Boş Liste',
+                  message: 'Gönderilecek Veri Yok',
+                  onPres: () async {
+                    Navigator.pop(context);
+                  },
+                  buttonText: 'Tamam',
+                );
+              });
+        }
+
+                        },
                         child: Row(
                           children: [
                             Icon(

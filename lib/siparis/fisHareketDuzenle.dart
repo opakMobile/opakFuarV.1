@@ -82,16 +82,14 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     }
     double tempFiyat = 0;
     double tempIskonto1 = 0;
-    if (fiyat != 0) {
-      tempFiyat = fiyat;
-    } else {
+    if (fiyat == 0) {
       tempFiyat = stokKart.SFIYAT1!;
+    } else {  
+      tempFiyat = fiyat;
     }
-    if (iskonto1 != 0) {
+
       tempIskonto1 = iskonto1;
-    } else {
-      tempIskonto1 = stokKart.SATISISK!;
-    }
+   
 
     listeler.listKur.forEach((element) {
       if (element.ANABIRIM == "E") {
@@ -500,8 +498,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                     double miktar = double.parse(miktarController.text);
                     print("turan" + miktar.toString());
                     sepeteEkle(widget.gelenStokKart, gidecekKur, miktar,
-                        iskonto1: double.parse(isk1Controller.text) ?? 0,
-                        iskonto2: double.parse(isk2Controller.text) ?? 0,
+                        iskonto1: double.parse(isk1Controller.text==""?"0":isk1Controller.text) ?? 0,
+                        iskonto2: double.parse(isk2Controller.text==""?"0":isk2Controller.text) ?? 0,
                         iskonto3: double.parse(isk3Controller.text) ?? 0,
                         malFazlasi:
                             double.parse(malFazlasiController.text) ?? 0,

@@ -101,8 +101,6 @@ class _LoginPageState extends State<LoginPage> {
   bool paremetreHatasiVarMi = false;
   Future<void> click() async {
     _formKey.currentState!.save();
-    _formKey.currentState!.save();
-
     if (Ctanim.kullanici != null) {
       await SharedPrefsHelper.sirketGetir();
       if (Ctanim.sirket == null || Ctanim.sirket == "") {
@@ -152,23 +150,22 @@ class _LoginPageState extends State<LoginPage> {
           if (Ctanim.kullanici!.GISK2 == "E") {
             Ctanim.genelIskontoListesi.add("GISK2");
           }
-          showDialog(
+           showDialog(
             context: context,
             barrierDismissible: false,
             builder: (BuildContext context) {
               return LoadingSpinner(
                 color: Colors.black,
-                message: "Tüm Veriler Güncelleniyor. Lütfen Bekleyiniz...",
+                message:
+                    "Opak Mobil\'e Hoşgeldiniz Uygulama Sizin İçin Hazırlanıyor...",
               );
             },
           );
+         
           await SharedPrefsHelper.yetkiCek("yetkiler");
-          await bs.tumVerileriGuncelle();
-          Navigator.pop(context);
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-              (r) => false);
+     
+
+      
 
           veriislemi.veriGetir().then((value) async {
             if (value == 0) {
@@ -273,7 +270,7 @@ class _LoginPageState extends State<LoginPage> {
                     hataGoster(
                         mesajVarMi: true,
                         mesaj:
-                            "Web Servisten Veri Alınırken Bazı Hatalar İle Karşılaşıldı:\n" +
+                              "Parametre hatası...:\n" +
                                 genelHata);
                   }
                 } else {

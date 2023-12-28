@@ -225,7 +225,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             child: Center(
                                 child: Text(
                               Ctanim.donusturMusteri(
-                                widget.fiss.ARA_TOPLAM.toString(),
+                                widget.fiss.GENELTOPLAM.toString(),
                               ),
                               style: TextStyle(
                                   fontSize: 20,
@@ -308,7 +308,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             child: Center(
                                 child: Text(
                               Ctanim.donusturMusteri(
-                                widget.fiss.GENELTOPLAM.toString(),
+                                widget.fiss.TOPLAM.toString(),
                               ),
                               style: TextStyle(
                                   fontSize: 20,
