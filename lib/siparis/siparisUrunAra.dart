@@ -36,8 +36,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     // TODO: implement initState
     super.initState();
 
-    for (var element in listeler.listCariAltHesap){
-      if(element.KOD == fisEx.fis!.value.cariKart.KOD){
+    for (var element in listeler.listCariAltHesap) {
+      if (element.KOD == fisEx.fis!.value.cariKart.KOD) {
         altHesaplar.add(element);
       }
       /*
@@ -46,19 +46,21 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
       }
       */
     }
-    if(altHesaplar.isEmpty){
-      CariAltHesap ss = CariAltHesap(KOD: "-1", ALTHESAP: "YOK", DOVIZID: -1, VARSAYILAN: "H");
+    if (altHesaplar.isEmpty) {
+      CariAltHesap ss = CariAltHesap(
+          KOD: "-1", ALTHESAP: "YOK", DOVIZID: -1, VARSAYILAN: "H");
       altHesaplar.add(ss);
       seciliAltHesap = ss;
-    }else{
+    } else {
       seciliAltHesap = altHesaplar.first;
     }
 
     for (int i = 0; i < stokKartEx.searchList.length; i++) {
       aramaMiktarController.add(TextEditingController(text: "1"));
     }
-        stokKartEx.tempList.clear();
-        SatisTipiModel satisTipiModel  = SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
+    stokKartEx.tempList.clear();
+    SatisTipiModel satisTipiModel =
+        SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
     if (stokKartEx.searchList.length > 100) {
       for (int i = 0; i < 100; i++) {
         print(Ctanim.seciliStokFiyatListesi.ADI);
@@ -124,7 +126,6 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         stokKartEx.tempList.add(stokKartEx.searchList[i]);
       }
     }
-   
   }
 
   String result = '';
@@ -135,9 +136,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   final StokKartController stokKartEx = Get.find();
 
   CariAltHesap? seciliAltHesap;
-  List<CariAltHesap> altHesaplar = [
-   
-  ];
+  List<CariAltHesap> altHesaplar = [];
 
 /*  @override
   void initState() {
@@ -386,10 +385,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                   // ! Alt Hesap
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              
                     children: [
                       Padding(
-                        padding:  EdgeInsets.only(top: 20),
+                        padding: EdgeInsets.only(top: 20),
                         child: Text(
                           "Alt Hesap:",
                           style: TextStyle(
@@ -419,7 +417,6 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   seciliAltHesap = selected!;
                                   fisEx.fis!.value.ALTHESAP = selected.ALTHESAP;
                                   //fisEx.fis!.value.ALTHESAPID = selected.KOD;
-
                                 });
                               },
                             ),
@@ -700,7 +697,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     context: context,
                                                     builder: (context) {
                                                       return fisHareketDuzenle(
-                                                        altHesap: seciliAltHesap!.ALTHESAP!,
+                                                        altHesap:
+                                                            seciliAltHesap!
+                                                                .ALTHESAP!,
                                                         gelenStokKart:
                                                             stokModel,
                                                         gelenMiktar:
@@ -720,12 +719,15 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                   color: Colors.green,
                                                 ),
                                                 onPressed: () {
-                                                  KurModel kur = KurModel(
-                                                      ID: -1,
-                                                      ACIKLAMA: "-",
-                                                      KUR: 1,
-                                                      ANABIRIM: "H");
-
+                                                  KurModel gidecekKur =
+                                                      listeler.listKur.first;
+                                                  for (var element
+                                                      in listeler.listKur) {
+                                                    if (stokModel.SATDOVIZ ==
+                                                        element.ACIKLAMA) {
+                                                      gidecekKur = element;
+                                                    }
+                                                  }
                                                   double miktar = double.parse(
                                                       aramaMiktarController[
                                                               index]
@@ -734,7 +736,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       miktar.toString());
                                                   sepeteEkle(
                                                     stokModel,
-                                                    kur,
+                                                    gidecekKur,
                                                     miktar,
                                                   );
                                                   showSnackBar(context, miktar);

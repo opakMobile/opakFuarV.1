@@ -9,6 +9,9 @@ import 'package:opak_fuar/sabitler/listeler.dart';
 
 import '../controller/cariController.dart';
 import '../controller/stokKartController.dart';
+import '../model/dahaFazlaBarkodModel.dart';
+import '../model/stokFiyatListesiHarModel.dart';
+import '../model/stokFiyatListesiModel.dart';
 
 CariController cariEx = Get.find();
 final StokKartController stokKartEx = Get.find();
@@ -316,7 +319,8 @@ class VeriIslemleri {
       print(e);
     }
   }
-   Future<int?> kurEkle(KurModel kurModel) async {
+
+  Future<int?> kurEkle(KurModel kurModel) async {
     try {
       var result = await Ctanim.db?.insert("TBLKURSB", kurModel.toJson());
       return result;
@@ -340,5 +344,103 @@ class VeriIslemleri {
     print(listeler.listKur);
   }
 
+  Future<List<DahaFazlaBarkod>?> dahaFazlaBarkodGetir() async {
+    //   var result = await Ctanim.db?.query("TBLCARISB");
+    List<Map<String, dynamic>> maps =
+        await Ctanim.db?.query("TBLDAHAFAZLABARKODSB");
+    listeler.listDahaFazlaBarkod =
+        List.generate(maps.length, (i) => DahaFazlaBarkod.fromJson(maps[i]));
 
+    return listeler.listDahaFazlaBarkod;
+  }
+
+  Future<void> stokFiyatListesiGetir() async {
+    //   var result = await Ctanim.db?.query("TBLCARISB");
+    listeler.listStokFiyatListesi.clear();
+    List<Map<String, dynamic>> maps =
+        await Ctanim.db?.query("TBLSTOKFIYATLISTESISB");
+    listeler.listStokFiyatListesi = List.generate(
+        maps.length, (i) => StokFiyatListesiModel.fromJson(maps[i]));
+    print(listeler.listStokFiyatListesi);
+  }
+
+  Future<void> stokFiyatListesiTemizle() async {
+    if (Ctanim.db != null) {
+      await Ctanim.db!.delete('TBLSTOKFIYATLISTESISB');
+    }
+  }
+
+  Future<int?> stokFiyatListesiEkle(
+      StokFiyatListesiModel stokFiyatListesiModel) async {
+    try {
+      var result = await Ctanim.db
+          ?.insert("TBLSTOKFIYATLISTESISB", stokFiyatListesiModel.toJson());
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<int?> stokFiyatListesiHarEkle(
+      StokFiyatListesiHarModel stokFiyatListesiHarModel) async {
+    try {
+      var result = await Ctanim.db?.insert(
+          "TBLSTOKFIYATLISTESIHARSB", stokFiyatListesiHarModel.toJson());
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> stokFiyatListesiHarGetir() async {
+    //   var result = await Ctanim.db?.query("TBLCARISB");
+    listeler.listStokFiyatListesiHar.clear();
+    List<Map<String, dynamic>> maps =
+        await Ctanim.db?.query("TBLSTOKFIYATLISTESIHARSB");
+    listeler.listStokFiyatListesiHar = List.generate(
+        maps.length, (i) => StokFiyatListesiHarModel.fromJson(maps[i]));
+    print(listeler.listStokFiyatListesiHar);
+  }
+
+  Future<int> veriGetir() async {
+    //  await fisEkParamGetir();
+    // await ondalikGetir();
+    //   await islemTipiGetir();
+    //   await plasiyerBankaGetir();
+//    await plasiyerBankaSozlesmeGetir();
+    await stokFiyatListesiGetir();
+    await stokFiyatListesiHarGetir();
+    //   await rafGetir();
+    //   await olcuBirimGetir();
+    await kurGetir();
+//    await cariKosulGetir();
+//    await stokKosulGetir();
+    //   await cariStokKosulGetir();
+    await dahaFazlaBarkodGetir();
+    List<StokKart>? temp1 = await stokGetir();
+    List<Cari>? temp2 = await cariGetir();
+    // List<SubeDepoModel>? temp3 = await subeDepoGetir();
+    if (temp1!.length > 0 || temp2!.length > 0 /* || temp3!.length > 0*/) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  Future<int?> dahaFazlaBarkodGuncelle(DahaFazlaBarkod dahaFazlaBarkod) async {
+    var result = await Ctanim.db?.update(
+        "TBLDAHAFAZLABARKODSB", dahaFazlaBarkod.toJson(),
+        where: 'BARKOD = ?', whereArgs: [dahaFazlaBarkod.BARKOD]);
+    return result;
+  }
+
+  Future<int?> dahaFazlaBarkodEkle(DahaFazlaBarkod dahaFazlaBarkod) async {
+    try {
+      var result = await Ctanim.db
+          ?.insert("TBLDAHAFAZLABARKODSB", dahaFazlaBarkod.toJson());
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
 }

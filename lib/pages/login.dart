@@ -8,6 +8,7 @@ import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/pages/homePage.dart';
 import 'package:opak_fuar/pages/settingsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../db/veriTabaniIslemleri.dart';
 import '../sabitler/listeler.dart';
 import '../model/kullaniciModel.dart';
 import '../sabitler/Ctanim.dart';
@@ -36,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
-
+  VeriIslemleri veriislemi = VeriIslemleri();
   bool _beniHatirla = false;
   bool dis_kullanim = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -112,29 +113,9 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         await SharedPrefsHelper.IpGetir();
 
-        //     String bankaHata = "";
-        ///     String bankaSozlesmeHata = "";
-
-        //  String islemTipiHata = "";
         if (_passwordController.text == Ctanim.kullanici?.SIFRE &&
             _userNameController.text == Ctanim.kullanici!.KOD) {
-          /*   
-        //!!!!!!!!!!!!!!!!
-          int value = await SharedPrefsHelper.faturaNumarasiGetir();
-          if (value != -1) {
-            Ctanim.faturaNumarasi = value;
-          } else {
-            if (Ctanim.kullanici!.FATNO == "0" &&
-                Ctanim.kullanici!.FATURASERISERINO != "") {
-              paremetreHatasiVarMi = true;
-              print("fatNO");
-            } else {
-              Ctanim.faturaNumarasi =
-                  int.parse(Ctanim.kullanici!.FATNO.toString());
-              SharedPrefsHelper.faturaNumarasiKaydet(
-                  int.parse(Ctanim.kullanici!.FATNO.toString()));
-            }
-          }
+          /*
           int value1 = await SharedPrefsHelper.siparisNumarasiGetir();
           if (value1 != -1) {
             Ctanim.siparisNumarasi = value1;
@@ -142,105 +123,13 @@ class _LoginPageState extends State<LoginPage> {
             Ctanim.siparisNumarasi = 1;
             SharedPrefsHelper.siparisNumarasiKaydet(Ctanim.siparisNumarasi);
           }
-          int value2 = await SharedPrefsHelper.irsaliyeNumarasiGetir();
-          if (value2 != -1) {
-            Ctanim.irsaliyeNumarasi = value2;
-          } else {
-            if (Ctanim.kullanici!.IRSNO == "0" &&
-                Ctanim.kullanici!.IRSALIYESERISERINO != "") {
-              paremetreHatasiVarMi = true;
-              print("ırsNO");
-            } else {
-              Ctanim.irsaliyeNumarasi =
-                  int.parse(Ctanim.kullanici!.IRSNO.toString());
-              SharedPrefsHelper.irsaliyeNumarasiKaydet(
-                  int.parse(Ctanim.kullanici!.IRSNO.toString()));
-            }
-          }
-          int value3 = await SharedPrefsHelper.eirsaliyeNumarasiGetir();
-          if (value3 != -1) {
-            Ctanim.eirsaliyeNumarasi = value3;
-          } else {
-            if (Ctanim.kullanici!.EIRSNO == "0" &&
-                Ctanim.kullanici!.EIRSALIYESERINO != "" &&
-                Ctanim.kullanici!.EIRSALIYE == "E") {
-              paremetreHatasiVarMi = true;
-              print("EirsNO");
-            } else {
-              Ctanim.eirsaliyeNumarasi =
-                  int.parse(Ctanim.kullanici!.EIRSNO.toString());
-              SharedPrefsHelper.eirsaliyeNumarasiKaydet(
-                  int.parse(Ctanim.kullanici!.EIRSNO.toString()));
-            }
-          }
-          int value4 = await SharedPrefsHelper.perakendeSatisNumGetir();
-          if (value4 != -1) {
-            Ctanim.perakendeSatisNumarasi = value4;
-          } else {
-            Ctanim.perakendeSatisNumarasi = 1;
-            SharedPrefsHelper.perakendeSatisNumKaydet(
-                Ctanim.perakendeSatisNumarasi);
-          }
-          int value5 = await SharedPrefsHelper.depoTransferNumGetir();
-          if (value5 != -1) {
-            Ctanim.depolarArasiTransfer = value5;
-          } else {
-            Ctanim.depolarArasiTransfer = 1;
-            SharedPrefsHelper.depoTransferNumKaydet(
-                Ctanim.depolarArasiTransfer);
-          }
-          int value6 = await SharedPrefsHelper.efaturaNumarasiGetir();
-          if (value6 != -1) {
-            Ctanim.eFaturaNumarasi = value6;
-          } else {
-            if (Ctanim.kullanici!.EFATNO == "0" &&
-                Ctanim.kullanici!.EFATURASERINO != "" &&
-                Ctanim.kullanici!.EFATURA == "E") {
-              paremetreHatasiVarMi = true;
-              print("EfatNO");
-            } else {
-              Ctanim.eFaturaNumarasi =
-                  int.parse(Ctanim.kullanici!.EFATNO.toString());
-              SharedPrefsHelper.efaturaNumarasiKaydet(
-                  int.parse(Ctanim.kullanici!.EFATNO.toString()));
-            }
-          }
-          int value7 = await SharedPrefsHelper.eArsivNumarasiGetir();
-          if (value7 != -1) {
-            Ctanim.eArsivNumarasi = value7;
-          } else {
-            if (Ctanim.kullanici!.EARSIVNO == "0" &&
-                Ctanim.kullanici!.EARSIVSERINO != "" &&
-                Ctanim.kullanici!.EARSIV == "E") {
-              paremetreHatasiVarMi = true;
-              print("EarsivNO");
-            } else {
-              Ctanim.eArsivNumarasi =
-                  int.parse(Ctanim.kullanici!.EARSIVNO.toString());
-              SharedPrefsHelper.eArsivNumarasiKaydet(
-                  int.parse(Ctanim.kullanici!.EARSIVNO.toString()));
-            }
-          }
-          int value8 = await SharedPrefsHelper.acikFaturaNumarasiGetir();
-          if (value8 != -1) {
-            Ctanim.acikFaturaNumrasi = value8;
-          } else {
-            if (Ctanim.kullanici!.FATACIKNO == "0" &&
-                Ctanim.kullanici!.FATURAACIKSERI_SERINO != "") {
-              paremetreHatasiVarMi = true;
-              print("acikFatura");
-            } else {
-              Ctanim.acikFaturaNumrasi =
-                  int.parse(Ctanim.kullanici!.FATACIKNO.toString());
-              SharedPrefsHelper.acikFaturaNumarasiKaydet(
-                  int.parse(Ctanim.kullanici!.FATACIKNO.toString()));
-            }
-          }
+
           */
           if (_beniHatirla == true) {
             _savePassword();
           }
-          /*      Ctanim.satisFiyatListesi.clear();
+
+          Ctanim.satisFiyatListesi.clear();
           if (Ctanim.kullanici!.SFIYAT1 == "E") {
             Ctanim.satisFiyatListesi.add("Fiyat1");
           }
@@ -263,9 +152,6 @@ class _LoginPageState extends State<LoginPage> {
           if (Ctanim.kullanici!.GISK2 == "E") {
             Ctanim.genelIskontoListesi.add("GISK2");
           }
-          //GISK2 den sonrası alınmadı.
-        */
-        
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -284,26 +170,6 @@ class _LoginPageState extends State<LoginPage> {
               MaterialPageRoute(builder: (context) => HomePage()),
               (r) => false);
 
-          /*  List<bool> retrievedList = [];
-          await SharedPrefsHelper.getList().then((value) {
-            retrievedList = value;
-
-            if (retrievedList.length == 0) {
-              listeler.sayfaDurum.clear();
-              for (var element in listeler.plasiyerYetkileri) {
-                listeler.sayfaDurum.add(element);
-              }
-            } else {
-              for (int i = 0; i < retrievedList.length; i++) {
-                if (listeler.plasiyerYetkileri[i] == false &&
-                    retrievedList[i] == true) {
-                  retrievedList[i] == false;
-                }
-              }
-              listeler.sayfaDurum = retrievedList;
-            }
-          });*/
-          /*   await SharedPrefsHelper.saveList(listeler.sayfaDurum);
           veriislemi.veriGetir().then((value) async {
             if (value == 0) {
               print("Veri Tabanı yok.");
@@ -335,29 +201,28 @@ class _LoginPageState extends State<LoginPage> {
               } else {
                 String genelHata = "";
                 List<String?> hatalar = [];
-                hatalar.add(await bs.getirFisEkParam(sirket: Ctanim.sirket!));
-                hatalar.add(await bs.getirOndalikParam(
+                //      hatalar.add(await bs.getirFisEkParam(sirket: Ctanim.sirket!));
+                /*    hatalar.add(await bs.getirOndalikParam(
                     subeId: int.parse(Ctanim.kullanici!.YERELSUBEID!),
-                    sirket: Ctanim.sirket!));
+                    sirket: Ctanim.sirket!));*/
                 //hatalar.add(await bs.getirPlasiyerYetki(sirket: Ctanim.sirket!, kullaniciKodu:  Ctanim.kullanici!.KOD!,IP: Ctanim.IP));
-                hatalar.add(await bs.getirPlasiyerBanka(
+                /*  hatalar.add(await bs.getirPlasiyerBanka(
                     sirket: Ctanim.sirket!,
-                    kullaniciKodu: Ctanim.kullanici!.KOD!));
-                hatalar.add(await bs.getirPlasiyerBankaSozlesme(
+                    kullaniciKodu: Ctanim.kullanici!.KOD!));*/
+                /* hatalar.add(await bs.getirPlasiyerBankaSozlesme(
                     sirket: Ctanim.sirket!,
-                    kullaniciKodu: Ctanim.kullanici!.KOD!));
-                hatalar.add(await bs.getirIslemTip(
+                    kullaniciKodu: Ctanim.kullanici!.KOD!));*/
+                /*hatalar.add(await bs.getirIslemTip(
                     sirket: Ctanim.sirket!,
-                    kullaniciKodu: Ctanim.kullanici!.KOD!));
-                hatalar.add(await bs.getirRaf(sirket: Ctanim.sirket!));
-                hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
+                    kullaniciKodu: Ctanim.kullanici!.KOD!));*/
+                //  hatalar.add(await bs.getirRaf(sirket: Ctanim.sirket!));
+                //     hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
                 hatalar.add(await stokKartEx.servisStokGetir());
                 hatalar.add(await cariEx.servisCariGetir());
-                hatalar.add(await bs.getirSubeDepo(sirket: Ctanim.sirket!));
-                hatalar.add(await bs.getirStokKosul(sirket: Ctanim.sirket!));
-                hatalar.add(await bs.getirCariKosul(sirket: Ctanim.sirket!));
-                hatalar
-                    .add(await bs.getirCariStokKosul(sirket: Ctanim.sirket!));
+                //  hatalar.add(await bs.getirSubeDepo(sirket: Ctanim.sirket!));
+                //   hatalar.add(await bs.getirStokKosul(sirket: Ctanim.sirket!));
+                //   hatalar.add(await bs.getirCariKosul(sirket: Ctanim.sirket!));
+                //   hatalar.add(await bs.getirCariStokKosul(sirket: Ctanim.sirket!));
                 hatalar.add(await bs.getirKur(sirket: Ctanim.sirket!));
                 hatalar.add(
                     await bs.getirStokFiyatListesi(sirket: Ctanim.sirket!));
@@ -366,9 +231,9 @@ class _LoginPageState extends State<LoginPage> {
                 hatalar.add(await bs.getirDahaFazlaBarkod(
                     sirket: Ctanim.sirket!,
                     kullaniciKodu: Ctanim.kullanici!.KOD!));
-                hatalar.add(await bs.getirStokDepo(
+                /*  hatalar.add(await bs.getirStokDepo(
                     sirket: Ctanim.sirket!,
-                    plasiyerKod: Ctanim.kullanici!.KOD!));
+                    plasiyerKod: Ctanim.kullanici!.KOD!));*/
                 if (hatalar.length > 0) {
                   for (var element in hatalar) {
                     if (element != "") {
@@ -378,17 +243,12 @@ class _LoginPageState extends State<LoginPage> {
                 }
                 if (genelHata != "") {
                   if (paremetreHatasiVarMi == false) {
-                    LogModel log = LogModel(
-                      TABLOADI: "LOGİN İLK GİRİŞ",
-                      HATAACIKLAMA: genelHata,
-                    );
-                    await VeriIslemleri().logKayitEkle(log);
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => MainPage()),
+                      MaterialPageRoute(builder: (context) => HomePage()),
                       (route) => false,
                     );
-                    /*
+
                     showDialog(
                         context: context,
                         builder: (context) {
@@ -402,14 +262,13 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MainPage()),
+                                    builder: (context) => HomePage()),
                                 (route) => false,
                               );
                             },
                             buttonText: 'Devam Et',
                           );
                         });
-                        */
                   } else {
                     hataGoster(
                         mesajVarMi: true,
@@ -420,27 +279,11 @@ class _LoginPageState extends State<LoginPage> {
                 } else {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => MainPage()),
+                    MaterialPageRoute(builder: (context) => HomePage()),
                     (route) => false,
                   );
                 }
               }
-
-              // BaseService bs = BaseService();
-              //bool hasInternet = await checkInternetConnectivity();
-              //if (!hasInternet) {
-
-              // } else {
-              ///////print("GİRİŞ İNTERNET VAR LİSTE DURUMU: " +
-              // listeler.listKur.length.toString());
-              //listeler.listKur.clear();
-              //await bs.getirKur();
-              //print("GİRİŞ İNTERNET VAR LİSTE TEMİZLENİP GÜNCELLENDİ: " +
-              //  listeler.listKur.length.toString());
-              //}
-
-              //  Get.to(() => MainPage());
-              //Navigator.pop(context);
             } else {
               if (Ctanim.kullanici!.ONLINE == "H") {
                 if (paremetreHatasiVarMi == true) {
@@ -448,7 +291,7 @@ class _LoginPageState extends State<LoginPage> {
                 } else {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => MainPage()),
+                    MaterialPageRoute(builder: (context) => HomePage()),
                     (route) => false,
                   );
                 }
@@ -458,7 +301,7 @@ class _LoginPageState extends State<LoginPage> {
               }
             }
           });
-*/
+
           // Şifre doğru, giriş yapılıyor
         } else {
           showDialog(

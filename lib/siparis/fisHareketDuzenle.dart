@@ -12,25 +12,23 @@ class fisHareketDuzenle extends StatefulWidget {
   fisHareketDuzenle({
     super.key,
     required this.gelenStokKart,
-    required this.gelenMiktar, required this.altHesap,
-    
+    required this.gelenMiktar,
+    required this.altHesap,
     this.isk1 = -1,
     this.isk2 = -1,
     this.isk3 = -1,
     this.malFazlasi = -1,
     this.fiyat = -1,
-    
-
   });
   final StokKart gelenStokKart;
   final double gelenMiktar;
   final String altHesap;
 
-   double isk1;
-   double isk2;
-   double isk3;
-   double malFazlasi;
-   double fiyat;
+  double isk1;
+  double isk2;
+  double isk3;
+  double malFazlasi;
+  double fiyat;
 
   @override
   State<fisHareketDuzenle> createState() => _fisHareketDuzenleState();
@@ -42,8 +40,12 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     // TODO: implement initState
     super.initState();
     miktarController.text = widget.gelenMiktar.toString();
-    fiyatController.text = widget.fiyat != -1 ? widget.fiyat.toString(): widget.gelenStokKart.SFIYAT1.toString();
-    isk1Controller.text = widget.isk1 != -1 ? widget.isk1.toString(): widget.gelenStokKart.SATISISK.toString();
+    fiyatController.text = widget.fiyat != -1
+        ? widget.fiyat.toString()
+        : widget.gelenStokKart.SFIYAT1.toString();
+    isk1Controller.text = widget.isk1 != -1
+        ? widget.isk1.toString()
+        : widget.gelenStokKart.SATISISK.toString();
     isk2Controller.text = "0";
     isk3Controller.text = "0";
     malFazlasiController.text = "0";
@@ -165,10 +167,14 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 Material(
                   child: Row(
                     children: [
-                      IconButton(onPressed: (){
-                        Navigator.pop(context);
-                      }, icon: Icon(Icons.close,color: Colors.red,)),
-                    
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.red,
+                          )),
                     ],
                   ),
                 ),
@@ -284,7 +290,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                 ),
                                 child: TextFormField(
                                   enabled:
-                                      Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
+                                      Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
+                                              "E"
                                           ? true
                                           : false,
                                   controller: isk1Controller,
@@ -320,7 +327,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                 ),
                                 child: TextFormField(
                                   enabled:
-                                      Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
+                                      Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
+                                              "E"
                                           ? true
                                           : false,
                                   controller: isk2Controller,
@@ -356,7 +364,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                 ),
                                 child: TextFormField(
                                   enabled:
-                                      Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
+                                      Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
+                                              "E"
                                           ? true
                                           : false,
                                   controller: isk3Controller,
@@ -382,7 +391,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                   thickness: 1,
                   color: Colors.black45,
                 ),
-                // !
+                
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
@@ -481,17 +490,23 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                         MediaQuery.of(context).size.height * 0.05)),
                   ),
                   onPressed: () {
-                    KurModel kur =
-                        KurModel(ID: 1, ACIKLAMA: "USD", KUR: 30, ANABIRIM: "H");
+                    KurModel gidecekKur = listeler.listKur.first;
+                    for (var element in listeler.listKur) {
+                      if (widget.gelenStokKart.SATDOVIZ == element.ACIKLAMA) {
+                        gidecekKur = element;
+                      }
+                    }
+
                     double miktar = double.parse(miktarController.text);
                     print("turan" + miktar.toString());
-                    sepeteEkle(widget.gelenStokKart, kur, miktar,
+                    sepeteEkle(widget.gelenStokKart, gidecekKur, miktar,
                         iskonto1: double.parse(isk1Controller.text) ?? 0,
                         iskonto2: double.parse(isk2Controller.text) ?? 0,
                         iskonto3: double.parse(isk3Controller.text) ?? 0,
-                        malFazlasi: double.parse(malFazlasiController.text) ?? 0,
+                        malFazlasi:
+                            double.parse(malFazlasiController.text) ?? 0,
                         fiyat: double.parse(fiyatController.text));
-    
+
                     Navigator.pop(context);
                     showSnackBar(context, miktar);
                   },

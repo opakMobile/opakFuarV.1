@@ -169,6 +169,7 @@ class _SepetDetayState extends State<SepetDetay> {
                         itemBuilder: (context, index) {
                           FisHareket stokModel =
                               fisEx.fis!.value!.fisStokListesi[index];
+                              
                           return Column(
                             children: [
                               Row(

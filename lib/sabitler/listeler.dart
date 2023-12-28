@@ -10,6 +10,7 @@ import '../model/cariStokKosulModel.dart';
 import '../model/dahaFazlaBarkodModel.dart';
 import '../model/kullanıcıYetki.dart';
 import '../model/stokFiyatListesiHarModel.dart';
+import '../model/stokFiyatListesiModel.dart';
 import '../model/stokKosulModel.dart';
 
 class listeler {
@@ -90,9 +91,10 @@ class listeler {
   static List<CariKosulModel> listCariKosul = [];
   static List<CariStokKosulModel> listCariStokKosul = [];
   static List<StokFiyatListesiHarModel> listStokFiyatListesiHar = [];
+  static List<StokFiyatListesiModel> listStokFiyatListesi = [];
+
   static List<DahaFazlaBarkod> listDahaFazlaBarkod = [];
   static List<KurModel> listKur = [];
-  
 
   static List<Cari> listCari = [];
   static List<OlcuBirimModel> listOlcuBirim = [];

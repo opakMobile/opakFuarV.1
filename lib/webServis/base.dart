@@ -14,8 +14,11 @@ import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:xml/xml.dart' as xml;
 
+import '../model/dahaFazlaBarkodModel.dart';
 import '../model/kullaniciModel.dart';
 import '../model/kullanıcıYetki.dart';
+import '../model/stokFiyatListesiHarModel.dart';
+import '../model/stokFiyatListesiModel.dart';
 import '../sabitler/Ctanim.dart';
 import '../sabitler/sharedPreferences.dart';
 
@@ -193,7 +196,8 @@ class BaseService {
           e.toString();
     }
   }
-    Future<String> getirKur({required sirket}) async {
+
+  Future<String> getirKur({required sirket}) async {
     var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
@@ -249,7 +253,6 @@ class BaseService {
           e.toString();
     }
   }
-
 
   Future<String> getKullanicilar(
       {required String kullaniciKodu,
@@ -558,4 +561,224 @@ class BaseService {
           e.toString();
     }
   }
+
+  Future<String> getirStokFiyatListesi({
+    required String sirket,
+  }) async {
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirStokFiyatListesi'
+    };
+
+    String body = '''
+    <?xml version="1.0" encoding="utf-8"?>
+    <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+      <soap:Body>
+        <GetirStokFiyatListesi xmlns="http://tempuri.org/">
+          <Sirket>$sirket</Sirket>
+        </GetirStokFiyatListesi>
+      </soap:Body>
+    </soap:Envelope>
+
+    ''';
+
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+
+        Map<String, dynamic> jsonData =
+            jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          listeler.listStokFiyatListesi.clear();
+
+          List<dynamic> jsonData =
+              jsonDecode(temizleKontrolKarakterleri(gelenHata.HataMesaj!));
+          final List<Map<String, dynamic>> data =
+              List<Map<String, dynamic>>.from(
+                  json.decode(gelenHata.HataMesaj!));
+          print(data);
+          for (var element in jsonData) {
+            StokFiyatListesiModel a = StokFiyatListesiModel.fromJson(element);
+            listeler.listStokFiyatListesi.add(a);
+          }
+          listeler.listStokFiyatListesi.insert(
+              0, StokFiyatListesiModel(ID: -1, ADI: "Kullanmadan Devam Et"));
+          await VeriIslemleri().stokFiyatListesiTemizle();
+
+          for (var element in listeler.listStokFiyatListesi) {
+            await VeriIslemleri().stokFiyatListesiEkle(element);
+          }
+
+          return "";
+        }
+      } else {
+        Exception(
+            'Stok Fiyat Listesi (Koşul) Bilgisi Alınamadı. StatusCode: ${response.statusCode}');
+
+        return "Stok Fiyat Listesi (Koşul) Alınamadı";
+      }
+    } catch (e) {
+      print("aa" + e.toString());
+      Exception('Hata: $e');
+
+      return "Tanımlı Stok Fiyat Listesi (Koşul)  Bulunamadı";
+    }
+  }
+
+  Future<String> getirStokFiyatHarListesi({
+    required String sirket,
+  }) async {
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirStokFiyatListesiHar'
+    };
+
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetirStokFiyatListesiHar xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+    </GetirStokFiyatListesiHar>
+  </soap:Body>
+</soap:Envelope>
+
+''';
+
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+
+        Map<String, dynamic> jsonData =
+            jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          listeler.listStokFiyatListesiHar.clear();
+          List<dynamic> jsonData = jsonDecode(temizleKontrolKarakterleri(gelenHata
+              .HataMesaj!)); // burayı kaldır aga gereksiz bi daha bekletiyo decodelere
+          /*
+          final List<Map<String, dynamic>> data =
+              List<Map<String, dynamic>>.from(
+                  json.decode(gelenHata.HataMesaj!)); //bak
+          await VeriIslemleri().stokFiyatListesiHarTemizle();
+          */
+
+          for (var element in jsonData) {
+            StokFiyatListesiHarModel a =
+                StokFiyatListesiHarModel.fromJson(element);
+            listeler.listStokFiyatListesiHar.add(a);
+          }
+
+          for (var element in listeler.listStokFiyatListesiHar) {
+            await VeriIslemleri().stokFiyatListesiHarEkle(element);
+          }
+
+          return "";
+        }
+      } else {
+        Exception(
+            'Stok Fiyat Listesi Hareketleri (Koşul) Bilgisi Alınamadı. StatusCode: ${response.statusCode}');
+
+        return "Stok Fiyat Listesi Hareketleri (Koşul) Alınamadı";
+      }
+    } catch (e) {
+      print("aa" + e.toString());
+      Exception('Hata: $e');
+
+      return "Tanımlı Stok Fiyat Listesi Hareketleri (Koşul)  Bulunamadı";
+    }
+  }
+
+  Future<String> getirDahaFazlaBarkod(
+      {required String sirket, required String kullaniciKodu}) async {
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirStokBarkod'
+    };
+
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetirStokBarkod xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+      <PlasiyerKod>$kullaniciKodu</PlasiyerKod>
+    </GetirStokBarkod>
+  </soap:Body>
+</soap:Envelope>
+''';
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+
+        Map<String, dynamic> jsonData =
+            jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          List<dynamic> jsonData = jsonDecode(gelenHata.HataMesaj!);
+
+          List<DahaFazlaBarkod> tempList = List<DahaFazlaBarkod>.from(
+              jsonData.map((model) => DahaFazlaBarkod.fromJson(model)));
+
+
+          tempList.forEach((barkodlar) async {
+            int Index = listeler.listDahaFazlaBarkod
+                .indexWhere((element) => element.BARKOD == barkodlar.BARKOD);
+            if (Index > -1) {
+              DahaFazlaBarkod localstok =
+                  listeler.listDahaFazlaBarkod.firstWhere(
+                (element) => element.BARKOD == barkodlar.BARKOD,
+              );
+              barkodlar.BARKOD = localstok.BARKOD;
+              await VeriIslemleri().dahaFazlaBarkodGuncelle(barkodlar);
+            } else {
+              await VeriIslemleri().dahaFazlaBarkodEkle(barkodlar);
+            }
+          });
+          await VeriIslemleri().dahaFazlaBarkodGetir();
+          return "";
+        }
+      } else {
+        Exception(
+            'Daha Fazla Barkod verisi alınamadı. StatusCode: ${response.statusCode}');
+        return 'Daha Fazla Barkod Alınamadı. StatusCode: ${response.statusCode}';
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return "Daha Fazla Barkod için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
+    }
+  }
+
 }

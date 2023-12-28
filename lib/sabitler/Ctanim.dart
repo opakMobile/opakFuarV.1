@@ -18,6 +18,10 @@ class Ctanim {
   static KullaniciModel? kullanici;
   static List<String> secililiMarkalarFiltre = [];
   static List<String> fiyatListesiKosul = [];
+  static List<String> satisFiyatListesi = [];
+  static List<String> satisIskontoListesi = [];
+  static List<String> genelIskontoListesi = [];
+
   static SatisTipiModel seciliIslemTip =
       SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
   static StokFiyatListesiModel seciliStokFiyatListesi =
@@ -60,9 +64,9 @@ class Ctanim {
     16: "Musteri_Siparis",
   };
 
-
   //fonksiyonalar
-    static double genelToplamHesapla(FisController fisEx, {bool KDVtipDegisti = false}) {
+  static double genelToplamHesapla(FisController fisEx,
+      {bool KDVtipDegisti = false}) {
     double KDVTutari = 0.0;
     double urunToplami = 0.0;
     double genelUrunToplami = 0.0;
@@ -105,11 +109,11 @@ class Ctanim {
         urunToplami += (brut * miktar);
       } 
       */
-     // else {
-        fisEx.fis!.value.KDVDAHIL = "E";
-        //urunToplami += brut * (1 - kdvOrani) * miktar;
-        urunToplami += brut / (1 + kdvOrani) * miktar;
-   //   }
+      // else {
+      fisEx.fis!.value.KDVDAHIL = "E";
+      //urunToplami += brut * (1 - kdvOrani) * miktar;
+      urunToplami += brut / (1 + kdvOrani) * miktar;
+      //   }
 
       double tt =
           double.parse(((element.ISK! / 100) * urunToplami).toStringAsFixed(2));
@@ -118,7 +122,8 @@ class Ctanim {
       // (urunToplami - (((element.ISK! / 100) * urunToplami)));
       kalemindirimToplami = tt + tt2;
       if (KDVtipDegisti == true) {
-        KDVTutari = KDVTutari + ((urunToplami - kalemindirimToplami) * kdvOrani);
+        KDVTutari =
+            KDVTutari + ((urunToplami - kalemindirimToplami) * kdvOrani);
       } else {
         KDVTutari =
             KDVTutari + ((urunToplami - kalemindirimToplami) * kdvOrani);
@@ -127,18 +132,22 @@ class Ctanim {
       genelUrunToplami += urunToplami;
 
       //  alt hesap için
-      
-      List<AltHesapToplamModel> altHesapVarMi = fisEx.fis!.value!.altHesapToplamlar.where((altHesap) => altHesap.ALTHESAPADI! == element.ALTHESAP).toList();
-      if(altHesapVarMi.isEmpty){
+
+      List<AltHesapToplamModel> altHesapVarMi = fisEx
+          .fis!.value!.altHesapToplamlar
+          .where((altHesap) => altHesap.ALTHESAPADI! == element.ALTHESAP)
+          .toList();
+      if (altHesapVarMi.isEmpty) {
         AltHesapToplamModel aa = AltHesapToplamModel.empty();
         aa.ALTHESAPADI = element.ALTHESAP!;
         aa.TOPLAM = urunToplami;
         aa.STOKKODLIST!.add(element.STOKKOD!);
         fisEx.fis!.value.altHesapToplamlar.add(aa);
-      }else{
+      } else {
         AltHesapToplamModel aa = altHesapVarMi.first;
-        fisEx.fis!.value.altHesapToplamlar.removeWhere((element) => element.ALTHESAPADI == aa.ALTHESAPADI);
-        if(!aa.STOKKODLIST!.contains(element.STOKKOD)){
+        fisEx.fis!.value.altHesapToplamlar
+            .removeWhere((element) => element.ALTHESAPADI == aa.ALTHESAPADI);
+        if (!aa.STOKKODLIST!.contains(element.STOKKOD)) {
           aa.TOPLAM = aa.TOPLAM! + urunToplami;
           aa.STOKKODLIST!.add(element.STOKKOD!);
         }
@@ -180,7 +189,7 @@ class Ctanim {
     fisEx.fis!.value.ARA_TOPLAM = Ctanim.noktadanSonraAlinacak(araToplam);
     fisEx.fis!.value.KDVTUTARI = Ctanim.noktadanSonraAlinacak(KDVTutari);
     fisEx.fis!.value.GENELTOPLAM = Ctanim.noktadanSonraAlinacak(genelToplam);
-    return fisEx.fis!.value.GENELTOPLAM??0;
+    return fisEx.fis!.value.GENELTOPLAM ?? 0;
   }
 
   static String donusturMusteri(String inText) {
@@ -207,7 +216,6 @@ class Ctanim {
       return sonYazilacak;
     }
   }
-
 
   static List cariIlkIkiDon(String text) {
     String trim = text.trim();
