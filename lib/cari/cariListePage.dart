@@ -9,6 +9,7 @@ import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import '../db/veriTabaniIslemleri.dart';
+import '../siparis/siparisUrunAra.dart';
 
 class CariListePage extends StatefulWidget {
   CariListePage({required this.islem});
@@ -116,9 +117,12 @@ class _CariListePageState extends State<CariListePage> {
                                     padding: const EdgeInsets.only(top: 10),
                                     child: Text(cari.IL!.toString()),
                                   ),
-                                  onTap: () {
+                                  onTap: () async {
                                     if (widget.islem) {
                                       // cariye gidecek bilgisine
+                                      fisEx.list_fis_cari_ozel.clear();
+                                      await fisEx.listCariFisGetir(
+                                          cariEx.searchCariList[index].ADI!);
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
