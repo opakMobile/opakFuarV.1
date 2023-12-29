@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:opak_fuar/model/fis.dart';
@@ -527,3 +528,4 @@ class _SepetDetayState extends State<SepetDetay> {
     );
   }
 }
+*/

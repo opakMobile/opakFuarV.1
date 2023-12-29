@@ -150,7 +150,8 @@ class _SepetCariListState extends State<SepetCariList> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => SepetDetay(
+                                            builder: (context) =>
+                                                SiparisUrunAra(
                                                   cari: cari,
                                                 )));
                                   } else {

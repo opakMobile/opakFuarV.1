@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/fisHareket.dart';
+import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/sabitler/Ctanim.dart';
+import 'package:opak_fuar/siparis/fisHareketDuzenle.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
 
-class okumaModuList extends StatelessWidget {
+class okumaModuList extends StatefulWidget {
   const okumaModuList({
     super.key,
   });
 
+  @override
+  State<okumaModuList> createState() => _okumaModuListState();
+}
+
+class _okumaModuListState extends State<okumaModuList> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -16,7 +27,7 @@ class okumaModuList extends StatelessWidget {
 
         //!! Sepet Listesi Buraya Gelecek
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 120),
+          padding: const EdgeInsets.only(bottom: 100),
           child: ListView.builder(
             itemCount: fisEx.fis!.value.fisStokListesi.length,
             itemBuilder: (context, index) {
@@ -47,7 +58,30 @@ class okumaModuList extends StatelessWidget {
                         child: Card(
                           elevation: 10,
                           child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                //alt hesap
+                                double gelenMiktar =
+                                    double.parse(stokModel.MIKTAR.toString());
+                                List<StokKart> stok = listeler.listStok
+                                    .where((stok) =>
+                                        stok.KOD! == stokModel.STOKKOD)
+                                    .toList();
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return fisHareketDuzenle(
+                                        altHesap: stokModel.ALTHESAP!,
+                                        gelenStokKart: stok.first,
+                                        gelenMiktar: gelenMiktar,
+                                        fiyat: stokModel.NETFIYAT!,
+                                        isk1: stokModel.ISK!,
+                                      );
+                                    }).then((value) {
+                                  setState(() {
+                                    Ctanim.genelToplamHesapla(fisEx);
+                                  });
+                                });
+                              },
                               child: Text(
                                 "Değiştir",
                                 style: TextStyle(
@@ -120,7 +154,8 @@ class okumaModuList extends StatelessWidget {
                                 border: Border.all(color: Colors.grey),
                               ),
                               child: Center(
-                                child: Text(stokModel.MIKTAR!.toStringAsFixed(2)),
+                                child:
+                                    Text(stokModel.MIKTAR!.toStringAsFixed(2)),
                               ),
                             )
                           ],
@@ -168,7 +203,25 @@ class okumaModuList extends StatelessWidget {
                           child: Card(
                             elevation: 10,
                             child: TextButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  fisEx.fis?.value.altHesapToplamlar
+                                      .removeWhere((item) {
+                                    String a = "";
+                                    for (var element in item.STOKKODLIST!) {
+                                      if (element == stokModel.STOKKOD) {
+                                        a = element;
+                                      }
+                                    }
+
+                                    return a == stokModel.STOKKOD!;
+                                  });
+                                  fisEx.fis?.value.fisStokListesi.removeWhere(
+                                      (item) =>
+                                          item.STOKKOD == stokModel.STOKKOD!);
+                                  setState(() {});
+                                  await Fis.empty()
+                                      .fisHareketSil(fisEx.fis!.value.ID!,stokModel.STOKKOD!);
+                                },
                                 child: Text(
                                   "Sil",
                                   style: TextStyle(
@@ -191,7 +244,8 @@ class okumaModuList extends StatelessWidget {
                           children: [
                             Text(
                               "Toplam: ",
-                              style: TextStyle(fontSize: 11, color: Colors.orange),
+                              style:
+                                  TextStyle(fontSize: 11, color: Colors.orange),
                             ),
                             Text(
                               stokModel.NETTOPLAM!.toStringAsFixed(2),
@@ -205,7 +259,8 @@ class okumaModuList extends StatelessWidget {
                           children: [
                             Text(
                               "İskonto: ",
-                              style: TextStyle(fontSize: 11, color: Colors.orange),
+                              style:
+                                  TextStyle(fontSize: 11, color: Colors.orange),
                             ),
                             Text(
                               stokModel.ISKONTOTOPLAM!.toStringAsFixed(2),
@@ -219,7 +274,8 @@ class okumaModuList extends StatelessWidget {
                           children: [
                             Text(
                               "KDV: ",
-                              style: TextStyle(fontSize: 11, color: Colors.orange),
+                              style:
+                                  TextStyle(fontSize: 11, color: Colors.orange),
                             ),
                             Text(
                               stokModel.KDVTUTAR!.toStringAsFixed(2),
@@ -233,10 +289,11 @@ class okumaModuList extends StatelessWidget {
                           children: [
                             Text(
                               "Genel Toplam: ",
-                              style: TextStyle(fontSize: 11, color: Colors.orange),
+                              style:
+                                  TextStyle(fontSize: 11, color: Colors.orange),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width ,
+                              width: MediaQuery.of(context).size.width,
                               child: Text(
                                 stokModel.KDVDAHILNETTOPLAM!.toStringAsFixed(2),
                                 overflow: TextOverflow.ellipsis,

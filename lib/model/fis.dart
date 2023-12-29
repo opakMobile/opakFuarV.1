@@ -439,4 +439,11 @@ class Fis {
     //fisleri sil
     await Ctanim.db?.delete("TBLFISSB", where: "ID = ?", whereArgs: [fisId]);
   }
+    Future<void> fisHareketSil(int fisId,String stokKodu) async {
+    //FisHareket idsi fiş id te eşitleri sil
+
+    await Ctanim.db
+        ?.delete("TBLFISHAR", where: "FIS_ID = ? AND STOKKOD = ? ", whereArgs: [fisId,stokKodu]);
+    
+  }
 }

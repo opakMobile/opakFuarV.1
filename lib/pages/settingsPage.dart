@@ -390,11 +390,10 @@ class _settings_pageState extends State<settings_page> {
                                                     },
                                                   ),
                                                   Align(
-                                      
                                                     child: Text(
-                                                                                                      "Dışarda Kullan",
-                                                                                                      maxLines: 3,
-                                                                                                    ),
+                                                      "Dışarda Kullan",
+                                                      maxLines: 3,
+                                                    ),
                                                   ),
                                                 ],
                                               ),

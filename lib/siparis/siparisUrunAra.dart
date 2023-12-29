@@ -127,6 +127,17 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
       }
     }
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Ctanim.secililiMarkalarFiltre.clear();
+    Fis.empty().fisEkle(fis: fisEx.fis!.value!, belgeTipi: "YOK");
+    //Ctanim.seciliMarkalarFiltreMap.clear();
+    /* stokKartEx.searchC(
+        "", "", "", Ctanim.seciliIslemTip, Ctanim.seciliStokFiyatListesi);*/
+  }
+
 
   String result = '';
   bool aramaModu = true;
@@ -152,15 +163,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     }
   }*/
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    Ctanim.secililiMarkalarFiltre.clear();
-    //Ctanim.seciliMarkalarFiltreMap.clear();
-    /* stokKartEx.searchC(
-        "", "", "", Ctanim.seciliIslemTip, Ctanim.seciliStokFiyatListesi);*/
-  }
+
 
   @override
   Widget build(BuildContext context) {

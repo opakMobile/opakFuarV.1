@@ -134,12 +134,14 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                 ),
                                 onTap: () {
                                   if (widget.islem) {
+                                    /*
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => SepetDetay(
                                                   cari: cari,
                                                 )));
+                                                */
                                   } else {
                                   Fis fis = Fis.empty();
                                   fisEx.fis!.value = fis;
