@@ -289,7 +289,7 @@ class Fis {
     data['DOVIZID'] = DOVIZID.toString();
     data['ONAY'] = ONAY.toString();
     data['STOKLISTESI'] = fisStokListesi.map((fis1) => fis1.toJson()).toList();
-   // data['altHesapToplamlar'] = altHesapToplamlar.map((fis1) => fis1.toJson()).toList();
+    // data['altHesapToplamlar'] = altHesapToplamlar.map((fis1) => fis1.toJson()).toList();
 
     return data;
   }
@@ -384,8 +384,8 @@ class Fis {
   //database fiş ekle
   Future<int?> fisEkle({required Fis fis, required String belgeTipi}) async {
     var result;
-    /*  fis.TIP = Ctanim().MapFisTip[belgeTipi];
-*/
+    fis.TIP = Ctanim().MapFisTip["Musteri_Siparis"];
+
     if (fis.ID != 0) {
       try {
         await Ctanim.db?.update("TBLFISSB", fis.toJson(),
@@ -439,11 +439,11 @@ class Fis {
     //fisleri sil
     await Ctanim.db?.delete("TBLFISSB", where: "ID = ?", whereArgs: [fisId]);
   }
-    Future<void> fisHareketSil(int fisId,String stokKodu) async {
+
+  Future<void> fisHareketSil(int fisId, String stokKodu) async {
     //FisHareket idsi fiş id te eşitleri sil
 
-    await Ctanim.db
-        ?.delete("TBLFISHAR", where: "FIS_ID = ? AND STOKKOD = ? ", whereArgs: [fisId,stokKodu]);
-    
+    await Ctanim.db?.delete("TBLFISHAR",
+        where: "FIS_ID = ? AND STOKKOD = ? ", whereArgs: [fisId, stokKodu]);
   }
 }

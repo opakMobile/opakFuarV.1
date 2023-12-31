@@ -1,5 +1,3 @@
-
-
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 
 class Cari {
@@ -24,6 +22,7 @@ class Cari {
   double? ISKONTO = 0.0;
   String? EFATURAMI = "H";
   String? VADEGUNU = "";
+  String? ACIKLAMA1 = "";
   double? BAKIYE = 0.0;
   List<CariAltHesap> cariAltHesaplar = [];
 
@@ -49,6 +48,7 @@ class Cari {
       this.ISKONTO,
       this.EFATURAMI,
       this.VADEGUNU,
+      this.ACIKLAMA1,
       this.BAKIYE});
 
   Cari.fromJson(Map<String, dynamic> json) {
@@ -73,6 +73,7 @@ class Cari {
     ISKONTO = double.parse(json['ISKONTO'].toString());
     EFATURAMI = json['EFATURAMI'];
     VADEGUNU = json['VADEGUNU'];
+    ACIKLAMA1 = json['ACIKLAMA1'];
     BAKIYE = double.parse(json['BAKIYE'].toString());
   }
 
@@ -98,6 +99,7 @@ class Cari {
     data['ISKONTO'] = ISKONTO;
     data['EFATURAMI'] = EFATURAMI;
     data['VADEGUNU'] = VADEGUNU;
+    data['ACIKLAMA1'] = ACIKLAMA1;
     data['BAKIYE'] = BAKIYE;
     return data;
   }

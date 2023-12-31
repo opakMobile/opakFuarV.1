@@ -2,14 +2,12 @@ import 'dart:ui';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/pages/homePage.dart';
 import 'package:opak_fuar/pages/settingsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../db/veriTabaniIslemleri.dart';
-import '../sabitler/listeler.dart';
 import '../model/kullaniciModel.dart';
 import '../sabitler/Ctanim.dart';
 import '../sabitler/sharedPreferences.dart';
@@ -113,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
 
         if (_passwordController.text == Ctanim.kullanici?.SIFRE &&
             _userNameController.text == Ctanim.kullanici!.KOD) {
-          /*
+          
           int value1 = await SharedPrefsHelper.siparisNumarasiGetir();
           if (value1 != -1) {
             Ctanim.siparisNumarasi = value1;
@@ -121,8 +119,6 @@ class _LoginPageState extends State<LoginPage> {
             Ctanim.siparisNumarasi = 1;
             SharedPrefsHelper.siparisNumarasiKaydet(Ctanim.siparisNumarasi);
           }
-
-          */
           if (_beniHatirla == true) {
             _savePassword();
           }
@@ -142,6 +138,9 @@ class _LoginPageState extends State<LoginPage> {
           }
           if (Ctanim.kullanici!.SFIYAT5 == "E") {
             Ctanim.satisFiyatListesi.add("Fiyat5");
+          }
+          if(Ctanim.kullanici!.LISTEFIYAT == "E"){
+            Ctanim.satisFiyatListesi.add("ListeFiyat");
           }
 
           if (Ctanim.kullanici!.GISK1 == "E") {
@@ -213,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                     sirket: Ctanim.sirket!,
                     kullaniciKodu: Ctanim.kullanici!.KOD!));*/
                 //  hatalar.add(await bs.getirRaf(sirket: Ctanim.sirket!));
-                //     hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
+               hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
                 hatalar.add(await stokKartEx.servisStokGetir());
                 hatalar.add(await cariEx.servisCariGetir());
                 //  hatalar.add(await bs.getirSubeDepo(sirket: Ctanim.sirket!));

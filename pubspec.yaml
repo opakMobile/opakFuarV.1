@@ -30,6 +30,7 @@ dependencies:
   google_fonts: ^6.1.0
   printing: ^5.11.1
   money_formatter: ^0.0.3
+  uuid: ^3.0.7
 
 
 dev_dependencies:

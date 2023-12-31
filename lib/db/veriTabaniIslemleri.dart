@@ -10,6 +10,7 @@ import 'package:opak_fuar/sabitler/listeler.dart';
 import '../controller/cariController.dart';
 import '../controller/stokKartController.dart';
 import '../model/dahaFazlaBarkodModel.dart';
+import '../model/olcuBirimModel.dart';
 import '../model/stokFiyatListesiHarModel.dart';
 import '../model/stokFiyatListesiModel.dart';
 
@@ -250,6 +251,7 @@ class VeriIslemleri {
       ISKONTO DECIMAL ,
       EFATURAMI TEXT ,
       VADEGUNU TEXT ,
+      ACIKLAMA1 TEXT ,
       BAKIYE DECIMAL 
       )""");
 
@@ -402,32 +404,13 @@ class VeriIslemleri {
     print(listeler.listStokFiyatListesiHar);
   }
 
-  Future<int> veriGetir() async {
-    await cariAltHesapGetir();
+  Future<List<OlcuBirimModel>?> olcuBirimGetir() async {
+    //   var result = await Ctanim.db?.query("TBLCARISB");
+    List<Map<String, dynamic>> maps = await Ctanim.db?.query("TBLOLCUBIRIMSB");
+    listeler.listOlcuBirim =
+        List.generate(maps.length, (i) => OlcuBirimModel.fromJson(maps[i]));
 
-    //  await fisEkParamGetir();
-    // await ondalikGetir();
-    //   await islemTipiGetir();
-    //   await plasiyerBankaGetir();
-//    await plasiyerBankaSozlesmeGetir();
-    await stokFiyatListesiGetir();
-    await stokFiyatListesiHarGetir();
-    //   await rafGetir();
-    //   await olcuBirimGetir();
-    await kurGetir();
-//    await cariKosulGetir();
-//    await stokKosulGetir();
-    //   await cariStokKosulGetir();
-    await dahaFazlaBarkodGetir();
-    await stokGetir();
-
-    await cariGetir();
-    // List<SubeDepoModel>? temp3 = await subeDepoGetir();
-    if (listeler.listStok.length > 0 || listeler.listCari.length > 0 /* || temp3!.length > 0*/) {
-      return 1;
-    } else {
-      return 0;
-    }
+    return listeler.listOlcuBirim;
   }
 
   Future<int?> dahaFazlaBarkodGuncelle(DahaFazlaBarkod dahaFazlaBarkod) async {
@@ -444,6 +427,66 @@ class VeriIslemleri {
       return result;
     } on PlatformException catch (e) {
       print(e);
+    }
+  }
+
+  Future<int?> olcuBirimEkle(OlcuBirimModel olcuBirimModel) async {
+    try {
+      var result =
+          await Ctanim.db?.insert("TBLOLCUBIRIMSB", olcuBirimModel.toJson());
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> olcuBirimTemizle() async {
+    try {
+      // Veritabanında "TBLCARISTOKKOSULSB" tablosunu temizle.
+      await Ctanim.db?.delete("TBLOLCUBIRIMSB");
+      print("TBLOLCUBIRIMSB tablosu temizlendi.");
+
+      // "TBLCARISTOKKOSULSB" tablosunu sil.
+      await Ctanim.db?.execute("DROP TABLE IF EXISTS TBLOLCUBIRIMSB");
+
+      // "TBLCARISTOKKOSULSB" tablosunu yeniden oluştur.
+      await Ctanim.db?.execute("""CREATE TABLE TBLOLCUBIRIMSB (
+     ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      ACIKLAMA TEXT
+      )""");
+
+      print("TBLOLCUBIRIMSB tablosu temizlendi ve yeniden oluşturuldu.");
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
+  Future<int> veriGetir() async {
+    await cariAltHesapGetir();
+
+    //  await fisEkParamGetir();
+    // await ondalikGetir();
+    //   await islemTipiGetir();
+    //   await plasiyerBankaGetir();
+//    await plasiyerBankaSozlesmeGetir();
+    await stokFiyatListesiGetir();
+    await stokFiyatListesiHarGetir();
+    //   await rafGetir();
+    await olcuBirimGetir();
+    await kurGetir();
+//    await cariKosulGetir();
+//    await stokKosulGetir();
+    //   await cariStokKosulGetir();
+    await dahaFazlaBarkodGetir();
+    await stokGetir();
+
+    await cariGetir();
+    // List<SubeDepoModel>? temp3 = await subeDepoGetir();
+    if (listeler.listStok.length > 0 ||
+        listeler.listCari.length > 0 /* || temp3!.length > 0*/) {
+      return 1;
+    } else {
+      return 0;
     }
   }
 }

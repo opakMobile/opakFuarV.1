@@ -73,7 +73,7 @@ class _okumaModuListState extends State<okumaModuList> {
                                         altHesap: stokModel.ALTHESAP!,
                                         gelenStokKart: stok.first,
                                         gelenMiktar: gelenMiktar,
-                                        fiyat: stokModel.NETFIYAT!,
+                                        fiyat: stokModel.BRUTFIYAT!,
                                         isk1: stokModel.ISK!,
                                       );
                                     }).then((value) {
@@ -219,8 +219,8 @@ class _okumaModuListState extends State<okumaModuList> {
                                       (item) =>
                                           item.STOKKOD == stokModel.STOKKOD!);
                                   setState(() {});
-                                  await Fis.empty()
-                                      .fisHareketSil(fisEx.fis!.value.ID!,stokModel.STOKKOD!);
+                                  await Fis.empty().fisHareketSil(
+                                      fisEx.fis!.value.ID!, stokModel.STOKKOD!);
                                 },
                                 child: Text(
                                   "Sil",
@@ -248,7 +248,7 @@ class _okumaModuListState extends State<okumaModuList> {
                                   TextStyle(fontSize: 11, color: Colors.orange),
                             ),
                             Text(
-                              stokModel.NETTOPLAM!.toStringAsFixed(2),
+                              stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),
                               style: TextStyle(
                                 fontSize: 12,
                               ),
@@ -278,7 +278,7 @@ class _okumaModuListState extends State<okumaModuList> {
                                   TextStyle(fontSize: 11, color: Colors.orange),
                             ),
                             Text(
-                              stokModel.KDVTUTAR!.toStringAsFixed(2),
+                              stokModel.KDVTOPLAM!.toStringAsFixed(2),
                               style: TextStyle(
                                 fontSize: 12,
                               ),

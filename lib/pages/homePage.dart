@@ -674,7 +674,7 @@ class verilerGuncelle extends StatelessWidget {
                 belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
 
             SHataModel gelenHata = await bs.ekleFatura(
-                jsonDataList: jsonListesi, sirket: Ctanim.sirket!);
+            jsonDataList: jsonListesi, sirket: Ctanim.sirket!);
             if (gelenHata.Hata == "true") {
               fisEx.list_fis_gidecek[j].AKTARILDIMI = false;
               Fis.empty().fisEkle(

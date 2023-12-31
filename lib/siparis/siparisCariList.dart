@@ -8,9 +8,11 @@ import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/sepet/sepetDetay.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
+import 'package:uuid/uuid.dart';
 import '../db/veriTabaniIslemleri.dart';
 import '../model/cariModel.dart';
 import '../sabitler/Ctanim.dart';
+import '../sabitler/sharedPreferences.dart';
 
 class SiparisCariList extends StatefulWidget {
   SiparisCariList({required this.islem});
@@ -22,6 +24,7 @@ class SiparisCariList extends StatefulWidget {
 
 class _SiparisCariListState extends State<SiparisCariList> {
   FisController fisEx = Get.find();
+  var uuid = Uuid();
   Color randomColor() {
     Random random = Random();
     int red = random.nextInt(128); // 0-127 arasında rastgele bir değer
@@ -132,7 +135,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                     ],
                                   ),
                                 ),
-                                onTap: () {
+                                onTap: () async {
                                   if (widget.islem) {
                                     /*
                                     Navigator.push(
@@ -143,13 +146,32 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                                 )));
                                                 */
                                   } else {
-                                  Fis fis = Fis.empty();
-                                  fisEx.fis!.value = fis;
-                                  fisEx.fis!.value.cariKart = cari;
-                                  fisEx.fis!.value.CARIKOD = cari.KOD;
-                                  fisEx.fis!.value.CARIADI = cari.ADI;
-                                  fisEx.fis!.value.BELGENO = "SONRA BAĞLANACAK";
-                                  fisEx.fis!.value.TARIH = DateFormat("yyyy-MM-dd").format(DateTime.now());
+                                    Fis fis = Fis.empty();
+                                    fisEx.fis!.value = fis;
+                                    fisEx.fis!.value.cariKart = cari;
+                                    fisEx.fis!.value.CARIKOD = cari.KOD;
+                                    fisEx.fis!.value.CARIADI = cari.ADI;
+                                    fisEx.fis!.value.SUBEID = int.parse(
+                                        Ctanim.kullanici!.YERELSUBEID!);
+                                    fisEx.fis!.value.PLASIYERKOD =
+                                        Ctanim.kullanici!.KOD;
+                                    fisEx.fis!.value.DEPOID = int.parse(Ctanim
+                                        .kullanici!.YERELDEPOID!); //TODO
+                                    fisEx.fis!.value.ISLEMTIPI = "0";
+                                    fisEx.fis!.value.ALTHESAP = cari.cariAltHesaplar.first.ALTHESAP;
+
+                                    fisEx.fis!.value.UUID = uuid.v1();
+                                    fisEx.fis!.value.VADEGUNU = cari.VADEGUNU;
+                                    fisEx.fis!.value.BELGENO =
+                                        Ctanim.siparisNumarasi.toString();
+                                    Ctanim.siparisNumarasi =
+                                        Ctanim.siparisNumarasi + 1;
+                                    await SharedPrefsHelper
+                                        .siparisNumarasiKaydet(
+                                            Ctanim.siparisNumarasi);
+                                    fisEx.fis!.value.TARIH =
+                                        DateFormat("yyyy-MM-dd")
+                                            .format(DateTime.now());
 
                                     Navigator.push(
                                         context,

@@ -17,6 +17,7 @@ import 'package:xml/xml.dart' as xml;
 import '../model/dahaFazlaBarkodModel.dart';
 import '../model/kullaniciModel.dart';
 import '../model/kullanıcıYetki.dart';
+import '../model/olcuBirimModel.dart';
 import '../model/stokFiyatListesiHarModel.dart';
 import '../model/stokFiyatListesiModel.dart';
 import '../sabitler/Ctanim.dart';
@@ -42,6 +43,11 @@ class BaseService {
   String temizleKontrolKarakterleri(String metin) {
     final kontrolKarakterleri = RegExp(r'[\x00-\x1F\x7F]');
     return metin.replaceAll(kontrolKarakterleri, '');
+  }
+
+  void printWrapped(String text) {
+    final pattern = RegExp('.{1,1000}');
+    pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
   List<String> parseSoapResponse(String soapResponse) {
@@ -751,7 +757,6 @@ class BaseService {
           List<DahaFazlaBarkod> tempList = List<DahaFazlaBarkod>.from(
               jsonData.map((model) => DahaFazlaBarkod.fromJson(model)));
 
-
           tempList.forEach((barkodlar) async {
             int Index = listeler.listDahaFazlaBarkod
                 .indexWhere((element) => element.BARKOD == barkodlar.BARKOD);
@@ -779,9 +784,9 @@ class BaseService {
       return "Daha Fazla Barkod için Webservisten veri çekilemedi. Hata Mesajı : " +
           e.toString();
     }
-    
   }
-    Future<SHataModel> ekleFatura(
+
+  Future<SHataModel> ekleFatura(
       {required String sirket,
       required Map<String, dynamic> jsonDataList}) async {
     SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
@@ -806,8 +811,7 @@ class BaseService {
   </soap:Body>
 </soap:Envelope>
 ''';
-
-
+    printWrapped(jsonString);
     try {
       http.Response response = await http.post(
         url,
@@ -833,5 +837,114 @@ class BaseService {
     }
   }
 
+  Future<String> getirOlcuBirim({required String sirket}) async {
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirOlcuBirim'
+    };
 
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetirOlcuBirim xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+    </GetirOlcuBirim>
+  </soap:Body>
+</soap:Envelope>
+''';
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+
+        Map<String, dynamic> jsonData =
+            jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          await VeriIslemleri().olcuBirimTemizle();
+          listeler.listOlcuBirim.clear();
+
+          List<dynamic> jsonData =
+              jsonDecode(temizleKontrolKarakterleri(gelenHata.HataMesaj!));
+
+          listeler.listOlcuBirim = List<OlcuBirimModel>.from(
+              jsonData.map((model) => OlcuBirimModel.fromJson(model)));
+
+          listeler.listOlcuBirim.forEach((webservisCariStokKosul) async {
+            await VeriIslemleri().olcuBirimEkle(webservisCariStokKosul);
+          });
+          return "";
+        }
+      } else {
+        Exception(
+            'Ölçü Birim verisi alınamadı. StatusCode: ${response.statusCode}');
+        return 'Ölçü Birim Verisi Alınamadı. StatusCode: ${response.statusCode}';
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return "Ölçü Birim için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
+    }
+  }
+
+  Future<SHataModel> cariGuncelle(
+      {required String sirket,
+      required Map<String, dynamic> jsonDataList}) async {
+    SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
+
+    var jsonString;
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+
+    jsonString = jsonEncode(jsonDataList);
+
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/EkleFatura',
+    };
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <CariGuncelle xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+      <Cari>$jsonString</Cari>
+    </CariGuncelle>
+  </soap:Body>
+</soap:Envelope>
+''';
+    printWrapped(jsonString);
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+
+        Map<String, dynamic> jsonData = jsonDecode(parsedXml.innerText);
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        return gelenHata;
+      } else {
+        Exception(
+            'Fatura Verisi Gönderilemedi. StatusCode: ${response.statusCode}');
+        return hata;
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return hata;
+    }
+  }
 }

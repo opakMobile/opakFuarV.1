@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/webServis/base.dart';
 
+import '../model/ShataModel.dart';
 import '../model/cariModel.dart';
+import '../sabitler/Ctanim.dart';
 
 class CariFormPage extends StatefulWidget {
   CariFormPage({required this.yeniKayit, Cari? cari = null}) {
@@ -17,6 +20,7 @@ class CariFormPage extends StatefulWidget {
 }
 
 class _CariFormPageState extends State<CariFormPage> {
+  BaseService bs = BaseService();
   bool AliciMusteri = false;
   bool AliciBayi = false;
   TextEditingController _SirketIsmi = TextEditingController();
@@ -34,10 +38,6 @@ class _CariFormPageState extends State<CariFormPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     if (widget.yeniKayit == false) {
       _SirketIsmi.text = widget.cari.ADI!;
       _AdresBilgileri.text = widget.cari.ADRES!;
@@ -48,8 +48,12 @@ class _CariFormPageState extends State<CariFormPage> {
       _VergiNumarasi.text = widget.cari.VERGINO!;
       _CepTelefonu.text = widget.cari.TELEFON!;
       _MailAdresi.text = widget.cari.EMAIL!;
-      _Aciklama.text = widget.cari.WEB!;
+      _Aciklama.text = widget.cari.ACIKLAMA1!;
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
@@ -368,7 +372,10 @@ class _CariFormPageState extends State<CariFormPage> {
                                           ElevatedButton.icon(
                                             onPressed: () {},
                                             icon: Icon(Icons.delete),
-                                            label: Text("Sil",style: TextStyle(fontSize: 11),),
+                                            label: Text(
+                                              "Sil",
+                                              style: TextStyle(fontSize: 11),
+                                            ),
                                             style: ElevatedButton.styleFrom(
                                               primary: Colors.red,
                                               onPrimary: Colors.white,
@@ -385,9 +392,60 @@ class _CariFormPageState extends State<CariFormPage> {
                                                 0.01,
                                           ),
                                           ElevatedButton.icon(
-                                            onPressed: () {},
+                                            onPressed: () async {
+                                              Cari cari = Cari();
+                                              cari.PLASIYERID = int.parse(
+                                                  Ctanim.kullanici!.KOD!);
+                                              cari.KOD = widget.cari.KOD;
+                                              cari.ADI = _SirketIsmi.text;
+                                              cari.ADRES = _AdresBilgileri.text;
+                                              cari.IL = _SehirSeciniz.text;
+                                              cari.ILCE = _IlceSeciniz.text;
+                                              cari.VERGIDAIRESI =
+                                                  _VergiDairesi.text;
+                                              cari.VERGINO =
+                                                  _VergiNumarasi.text;
+                                              cari.TELEFON = _CepTelefonu.text;
+                                              cari.EMAIL = _MailAdresi.text;
+                                              cari.ACIKLAMA1 = _Aciklama.text;
+                                              cari.TIPI = AliciMusteri == true
+                                                  ? "Alıcı Müşteri"
+                                                  : "Alıcı Bayi";
+
+                                              Map<String, dynamic> jsonListesi =
+                                                  cari.toJson();
+                                              /*
+            Fis.empty().fisEkle(
+                belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
+    */
+                                              SHataModel gelenHata =
+                                                  await bs.cariGuncelle(
+                                                      jsonDataList: jsonListesi,
+                                                      sirket: Ctanim.sirket!);
+                                              if (gelenHata.Hata == "true") {
+                                                /*
+              Fis.empty().fisEkle(
+                  belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
+                  */
+
+                                                gelenHata.HataMesaj!;
+/*
+              LogModel logModel = LogModel(
+                TABLOADI: "TBLFISSB",
+                FISID: fisEx.list_fis_gidecek[0].ID,
+                HATAACIKLAMA: gelenHata.HataMesaj,
+                UUID: fisEx.list_fis_gidecek[0].UUID,
+                CARIADI: fisEx.list_fis_gidecek[0].CARIADI,
+              );
+              await VeriIslemleri().logKayitEkle(logModel);
+              */
+                                              }
+                                            },
                                             icon: Icon(Icons.edit),
-                                            label: Text("Değiştir",style: TextStyle(fontSize: 11),),
+                                            label: Text(
+                                              "Değiştir",
+                                              style: TextStyle(fontSize: 11),
+                                            ),
                                             style: ElevatedButton.styleFrom(
                                               primary: Colors.blue,
                                               onPrimary: Colors.white,
@@ -411,13 +469,17 @@ class _CariFormPageState extends State<CariFormPage> {
                                             child: ElevatedButton.icon(
                                               onPressed: () {},
                                               icon: Icon(Icons.save),
-                                              label: Text("Kaydet",style: TextStyle(fontSize: 11),),
+                                              label: Text(
+                                                "Kaydet",
+                                                style: TextStyle(fontSize: 11),
+                                              ),
                                               style: ElevatedButton.styleFrom(
                                                 primary: Colors.green,
                                                 onPrimary: Colors.white,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(12.0),
+                                                      BorderRadius.circular(
+                                                          12.0),
                                                 ),
                                               ),
                                             ),

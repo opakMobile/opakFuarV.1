@@ -8,6 +8,7 @@ import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/sepet/sepetDetay.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
+import 'package:uuid/uuid.dart';
 import '../db/veriTabaniIslemleri.dart';
 import '../model/cariModel.dart';
 import '../sabitler/Ctanim.dart';
@@ -22,6 +23,7 @@ class SepetCariList extends StatefulWidget {
 
 class _SepetCariListState extends State<SepetCariList> {
   FisController fisEx = Get.find();
+
   Color randomColor() {
     Random random = Random();
     int red = random.nextInt(128); // 0-127 arasında rastgele bir değer
@@ -29,15 +31,15 @@ class _SepetCariListState extends State<SepetCariList> {
     int blue = random.nextInt(128);
     return Color.fromARGB(255, red, green, blue);
   }
+
   List<Cari> listenecekCariler = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    for(var element in fisEx.list_fis_gidecek) {
+    for (var element in fisEx.list_fis_gidecek) {
       listenecekCariler.add(element.cariKart);
     }
-
   }
 
   @override
@@ -107,10 +109,9 @@ class _SepetCariListState extends State<SepetCariList> {
                 // ! Cari Listesi
                 SingleChildScrollView(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: 
-                    ListView.builder(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: ListView.builder(
                         itemCount: listenecekCariler.length,
                         itemBuilder: (context, index) {
                           Cari cari = listenecekCariler[index];
@@ -143,8 +144,9 @@ class _SepetCariListState extends State<SepetCariList> {
                                   ),
                                 ),
                                 onTap: () {
-                                  if (widget.islem) {
-                                    fisEx.fis!.value = fisEx.list_fis_gidecek[index];
+                                 
+                                    fisEx.fis!.value =
+                                        fisEx.list_fis_gidecek[index];
                                     //Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
 
                                     Navigator.push(
@@ -154,23 +156,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                                 SiparisUrunAra(
                                                   cari: cari,
                                                 )));
-                                  } else {
-                                  Fis fis = Fis.empty();
-                                  fisEx.fis!.value = fis;
-                                  fisEx.fis!.value.cariKart = cari;
-                                  fisEx.fis!.value.CARIKOD = cari.KOD;
-                                  fisEx.fis!.value.CARIADI = cari.ADI;
-                                  fisEx.fis!.value.BELGENO = "SONRA BAĞLANACAK";
-                                  fisEx.fis!.value.TARIH = DateFormat("yyyy-MM-dd").format(DateTime.now());
-
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SiparisUrunAra(
-                                                  cari: cari,
-                                                )));
-                                  }
+                                  
                                 },
                               ),
                               Divider(
@@ -180,9 +166,7 @@ class _SepetCariListState extends State<SepetCariList> {
                             ],
                           );
                         },
-                      )
-                  
-                  ),
+                      )),
                 ),
               ]),
             ),

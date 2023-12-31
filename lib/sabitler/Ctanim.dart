@@ -15,6 +15,7 @@ class Ctanim {
   static var db;
   static String? sirket;
   static String IP = "";
+  static int siparisNumarasi = 0;
   static KullaniciModel? kullanici;
   static List<String> secililiMarkalarFiltre = [];
   static List<String> fiyatListesiKosul = [];
@@ -90,36 +91,19 @@ class Ctanim {
 
       double kdvOrani = element.KDVORANI! / 100;
       int miktar = element.MIKTAR!;
-
+//listefiyatınını kurun gelmedi????
       if (fisEx.fis!.value.DOVIZID != anaBirimID) {
         brut = brut / fisEx.fis!.value.KUR!;
       }
       /*
-      if (fisEx.fis!.value.DOVIZID != element.DOVIZID) {
-        if (anaBirimID != element.DOVIZID) {
-          brut = brut * element.KUR!;
-          brut = brut / fisEx.fis!.value.KUR!;
-        } else {
-          brut = brut / fisEx.fis!.value.KUR!;
-        }
-      }*/
-/*
-      if (Ctanim.KDVDahilMiDinamik == false) {
-        fisEx.fis!.value.KDVDAHIL = "H";
-        urunToplami += (brut * miktar);
-      } 
-      */
-      // else {
-      fisEx.fis!.value.KDVDAHIL = "E";
-      //urunToplami += brut * (1 - kdvOrani) * miktar;
-      urunToplami += brut / (1 + kdvOrani) * miktar;  
-      //   }
-
+      fisEx.fis!.value.KDVDAHIL = "E"; 
+      urunToplami += brut / (1 + kdvOrani) * miktar;   */
+      urunToplami += (brut * miktar);
+      fisEx.fis!.value.KDVDAHIL = "H";
       double tt =
           double.parse(((element.ISK! / 100) * urunToplami).toStringAsFixed(2));
       double tt2 = double.parse(
           ((element.ISK2! / 100) * (urunToplami - tt)).toStringAsFixed(2));
-      // (urunToplami - (((element.ISK! / 100) * urunToplami)));
       kalemindirimToplami = tt + tt2;
       if (KDVtipDegisti == true) {
         KDVTutari =

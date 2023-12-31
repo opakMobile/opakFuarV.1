@@ -43,6 +43,26 @@ class SharedPrefsHelper {
     }
   }
 
+  static Future<void> siparisNumarasiKaydet(int number) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('siparisNo', number.toString());
+  }
+
+  static Future<int> siparisNumarasiGetir() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedNumber = prefs.getString('siparisNo');
+    if (storedNumber != null) {
+      return int.parse(storedNumber);
+    } else {
+      return -1;
+    }
+  }
+
+  static Future<void> siparisNumarasiSil() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('siparisNo');
+  }
+
   static Future<void> IpSil() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('ip');

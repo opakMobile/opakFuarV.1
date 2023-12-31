@@ -39,13 +39,15 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    miktarController.text = widget.gelenMiktar.toString();
+    miktarController.text = widget.gelenMiktar != -1
+        ? widget.gelenMiktar.toStringAsFixed(2).toString()
+        : widget.gelenStokKart.guncelDegerler!.carpan!.toString();
     fiyatController.text = widget.fiyat != -1
         ? widget.fiyat.toString()
-        : widget.gelenStokKart.SFIYAT1.toString();
+        : widget.gelenStokKart.guncelDegerler!.fiyat!.toString();
     isk1Controller.text = widget.isk1 != -1
         ? widget.isk1.toString()
-        : widget.gelenStokKart.SATISISK.toString();
+        : widget.gelenStokKart.guncelDegerler!.iskonto!.toString();
     isk2Controller.text = "0";
     isk3Controller.text = "0";
     malFazlasiController.text = "0";
@@ -53,7 +55,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
   }
 
   final TextEditingController miktarController =
-      TextEditingController(text: "1");
+      TextEditingController(text: "0");
 
   final TextEditingController isk1Controller = TextEditingController(text: "0");
 
@@ -83,13 +85,12 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     double tempFiyat = 0;
     double tempIskonto1 = 0;
     if (fiyat == 0) {
-      tempFiyat = stokKart.SFIYAT1!;
-    } else {  
+      tempFiyat = stokKart.guncelDegerler!.fiyat!;
+    } else {
       tempFiyat = fiyat;
     }
 
-      tempIskonto1 = iskonto1;
-   
+    tempIskonto1 = iskonto1;
 
     listeler.listKur.forEach((element) {
       if (element.ANABIRIM == "E") {
@@ -104,8 +105,10 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     {
       fisEx.fiseStokEkle(
         // belgeTipi: widget.belgeTipi,
+
         ALTHESAP: widget.altHesap,
-        urunListedenMiGeldin: false,
+        urunListedenMiGeldin:
+            false, // kullanıcı sepetten mi ekledi yoksa düzneleden mi
         stokAdi: stokKart.ADI!,
         KDVOrani: double.parse(stokKart.SATIS_KDV.toString()),
         birim: stokKart.OLCUBIRIM1!,
@@ -116,7 +119,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
         iskonto: tempIskonto1,
         iskonto2: 0.0,
         miktar: (miktar).toInt(),
-        stokKodu: stokKart.KOD!,
+        stokKodu: stokKart.guncelDegerler!.guncelBarkod!,
         Aciklama1: '',
         KUR: stokKartKur.KUR!,
         TARIH: DateFormat("yyyy-MM-dd").format(DateTime.now()),
@@ -193,7 +196,9 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                           onPressed: () {
                             if (double.parse(miktarController.text) > 0) {
                               miktarController.text =
-                                  (double.parse(miktarController.text) - 1)
+                                  (double.parse(miktarController.text) -
+                                          widget.gelenStokKart.guncelDegerler!
+                                              .carpan!)
                                       .toString();
                             }
                           },
@@ -233,7 +238,9 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                       child: IconButton(
                           onPressed: () {
                             miktarController.text =
-                                (double.parse(miktarController.text) + 1)
+                                (double.parse(miktarController.text) +
+                                        widget.gelenStokKart.guncelDegerler!
+                                            .carpan!)
                                     .toString();
                           },
                           icon: Icon(
@@ -389,7 +396,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                   thickness: 1,
                   color: Colors.black45,
                 ),
-                
+
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
@@ -489,17 +496,32 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                   ),
                   onPressed: () {
                     KurModel gidecekKur = listeler.listKur.first;
-                    for (var element in listeler.listKur) {
-                      if (widget.gelenStokKart.SATDOVIZ == element.ACIKLAMA) {
-                        gidecekKur = element;
+                    if (Ctanim.kullanici!.LISTEFIYAT! == "E") {
+                      for (var element in listeler.listKur) {
+                        if (widget.gelenStokKart.LISTEDOVIZ ==
+                            element.ACIKLAMA) {
+                          gidecekKur = element;
+                        }
+                      }
+                    } else {
+                      for (var element in listeler.listKur) {
+                        if (widget.gelenStokKart.SATDOVIZ == element.ACIKLAMA) {
+                          gidecekKur = element;
+                        }
                       }
                     }
 
                     double miktar = double.parse(miktarController.text);
                     print("turan" + miktar.toString());
                     sepeteEkle(widget.gelenStokKart, gidecekKur, miktar,
-                        iskonto1: double.parse(isk1Controller.text==""?"0":isk1Controller.text) ?? 0,
-                        iskonto2: double.parse(isk2Controller.text==""?"0":isk2Controller.text) ?? 0,
+                        iskonto1: double.parse(isk1Controller.text == ""
+                                ? "0"
+                                : isk1Controller.text) ??
+                            0,
+                        iskonto2: double.parse(isk2Controller.text == ""
+                                ? "0"
+                                : isk2Controller.text) ??
+                            0,
                         iskonto3: double.parse(isk3Controller.text) ?? 0,
                         malFazlasi:
                             double.parse(malFazlasiController.text) ?? 0,

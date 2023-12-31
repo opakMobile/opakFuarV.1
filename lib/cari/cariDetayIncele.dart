@@ -36,7 +36,6 @@ class _CariDetayInceleState extends State<CariDetayIncele> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
-
               // ! Firma Adı
               Container(
                 width: MediaQuery.of(context).size.width,

@@ -162,8 +162,7 @@ class FisController extends GetxController {
     }
     list_fis_gidecek.addAll(tt);
   }
-
-  Future<List<Fis>> getGidecekfis() async {
+   Future<List<Fis>> getGidecekfis() async {
     List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
         where: 'DURUM = ? AND AKTARILDIMI = ?', whereArgs: [true, false]);
     return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());

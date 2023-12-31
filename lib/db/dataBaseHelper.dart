@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 2;
+  static final _databaseVersion = 3;
 
   static Database? _database;
 
@@ -46,12 +46,16 @@ class DatabaseHelper {
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     print(oldVersion);
     print(newVersion);
-    for (int i = oldVersion; i <= newVersion; i++) {}
+    for (int i = 0; i <= newVersion; i++) {}
     if (oldVersion < newVersion) {
-      //    db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN  INTEGER;");
+      //   db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN  INTEGER;");
+      if (newVersion == 3) {
+        db.execute("ALTER TABLE TBLCARISB ADD COLUMN ACIKLAMA1 TEXT;");
+      }
 
-      if (newVersion == 2) {}
-       db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ALTHESAP TEXT;");
+      if (newVersion == 2) {
+        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ALTHESAP TEXT;");
+      }
     }
   }
 
@@ -212,6 +216,7 @@ class DatabaseHelper {
       ISKONTO DECIMAL ,
       EFATURAMI TEXT ,
       VADEGUNU TEXT ,
+      ACIKLAMA1 TEXT ,
       BAKIYE DECIMAL 
       )""";
       await db.execute(Sorgu);

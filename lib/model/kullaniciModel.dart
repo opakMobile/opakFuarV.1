@@ -21,6 +21,8 @@ class KullaniciModel {
   String? SFIYAT3;
   String? SFIYAT4;
   String? SFIYAT5;
+
+  String? LISTEFIYAT;
   String? SONFIYAT;
   String? FIYATDEGISTIRILSIN;
   String? SISK1;
@@ -88,6 +90,7 @@ class KullaniciModel {
       this.SFIYAT3,
       this.SFIYAT4,
       this.SFIYAT5,
+      this.LISTEFIYAT,
       this.SONFIYAT,
       this.FIYATDEGISTIRILSIN,
       this.SISK1,
@@ -155,6 +158,7 @@ class KullaniciModel {
     SFIYAT3 = json['SFIYAT3'];
     SFIYAT4 = json['SFIYAT4'];
     SFIYAT5 = json['SFIYAT5'];
+    LISTEFIYAT = json['LISTEFIYAT'];
     SONFIYAT = json['SONFIYAT'];
     FIYATDEGISTIRILSIN = json['FIYATDEGISTIRILSIN'];
     SISK1 = json['SISK1'];
@@ -231,6 +235,7 @@ class KullaniciModel {
     data['SFIYAT3'] = SFIYAT3; //
     data['SFIYAT4'] = SFIYAT4; //
     data['SFIYAT5'] = SFIYAT5; //
+    data['LISTEFIYAT'] = LISTEFIYAT;
     data['SONFIYAT'] = SONFIYAT;
 
     ///?????????
