@@ -12,6 +12,7 @@ import 'package:uuid/uuid.dart';
 import '../db/veriTabaniIslemleri.dart';
 import '../model/cariModel.dart';
 import '../sabitler/Ctanim.dart';
+enum SampleItem { itemOne, itemTwo,itemTheree}
 
 class SepetCariList extends StatefulWidget {
   SepetCariList({required this.islem});
@@ -23,6 +24,7 @@ class SepetCariList extends StatefulWidget {
 
 class _SepetCariListState extends State<SepetCariList> {
   FisController fisEx = Get.find();
+    SampleItem? selectedMenu;
 
   Color randomColor() {
     Random random = Random();
@@ -30,17 +32,29 @@ class _SepetCariListState extends State<SepetCariList> {
     int green = random.nextInt(128);
     int blue = random.nextInt(128);
     return Color.fromARGB(255, red, green, blue);
+
   }
+  List<Fis> bekleyenler = [];
+  List<Fis> aktarilanlar = [];
+  List<Fis> tumu = [];
 
   List<Cari> listenecekCariler = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    for (var element in fisEx.list_fis_gidecek) {
+    for (var element in fisEx.list_tum_fis) {
+    //  tumu.add(element);
       listenecekCariler.add(element.cariKart);
+      /*
+      if(element.AKTARILDIMI == false){
+        bekleyenler.add(element);
+    }else{
+        aktarilanlar.add(element);
     }
+    */
   }
+}
 
   @override
   void dispose() {
@@ -80,28 +94,79 @@ class _SepetCariListState extends State<SepetCariList> {
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 // ! Search Bar
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.95,
-                  height: MediaQuery.of(context).size.height * 0.07,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.search),
-                      hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade400,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14.0,
-                      ),
-                      border: OutlineInputBorder(
+                Row(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.search),
+                          hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade400,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        onChanged: ((value) => cariEx.searchCari(value)),
+                      ),
                     ),
-                    onChanged: ((value) => cariEx.searchCari(value)),
-                  ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.02,
+                      child:   PopupMenuButton<SampleItem>(
+                  icon: Icon(Icons.filter_list),
+                  onOpened: () {},
+                  initialValue: selectedMenu,
+                  // Callback that sets the selected popup menu item.
+                  onSelected: (SampleItem item) {
+                    setState(() {
+                      selectedMenu = item;
+                    });
+                  },
+
+                  itemBuilder: (context) => <PopupMenuEntry<SampleItem>>[
+                    PopupMenuItem<SampleItem>(
+                      value: SampleItem.itemOne,
+                      onTap: () {
+                        stokKartEx.tempList
+                            .removeWhere((cari) => cari.BAKIYE! >= 0);
+             
+                        setState(() {});
+                      },
+                      child: Text('Sadece Aktarılanlar'),
+                    ),
+                    PopupMenuItem<SampleItem>(
+                      value: SampleItem.itemTwo,
+                      child: Text('Sadece Bekleyenler'),
+                      onTap: () {
+                       
+                          setState(() {
+                            
+                          });
+                       
+                      },
+                    ),
+                     PopupMenuItem<SampleItem>(
+                      value: SampleItem.itemTheree,
+                      child: Text('Hepsini Göster'),
+                      onTap: () {
+                          setState(() {
+                            
+                          });
+                       
+                      },
+                    ),
+                  ],
+                ),)
+                  ],
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
@@ -127,8 +192,21 @@ class _SepetCariListState extends State<SepetCariList> {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
-                                title: Text(
-                                  cari.ADI.toString(),
+                                title: Row(
+                                  children: [
+                                 
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: Text(
+                                        cari.ADI.toString(),
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    fisEx.list_tum_fis[index].AKTARILDIMI == false ? SizedBox(width: MediaQuery.of(context).size.width*.15,child: Text("Beklemede",style: TextStyle(color: Colors.amber,fontSize: 11),)) : SizedBox(width: MediaQuery.of(context).size.width*.15,child: Text("Aktarıldı",style: TextStyle(color: Colors.green,fontSize: 11),))
+                                    
+                                  ],
                                 ),
                                 subtitle: Padding(
                                   padding: const EdgeInsets.only(top: 10),
@@ -146,7 +224,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                 onTap: () {
                                  
                                     fisEx.fis!.value =
-                                        fisEx.list_fis_gidecek[index];
+                                        fisEx.list_tum_fis[index];
                                     //Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
 
                                     Navigator.push(

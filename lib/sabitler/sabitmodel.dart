@@ -99,6 +99,7 @@ bottombarDizayn(context, {Widget? button, bool buttonVarMi = false}) {
   );
 }
 
+
 /*
 Widget UcCizgi() {
   return Align(

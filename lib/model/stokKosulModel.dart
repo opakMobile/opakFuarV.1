@@ -10,8 +10,9 @@ class StokKosulModel {
     double? ISK5;
     double? ISK6;
     double? SABITFIYAT;
+    int? ALTHESAPID;
 
-    StokKosulModel({this.ID, this.KOSULID, this.GRUPKODU, this.FIYAT, this.ISK1, this.ISK2, this.ISK3, this.ISK4, this.ISK5, this.ISK6, this.SABITFIYAT}); 
+    StokKosulModel({this.ID, this.KOSULID, this.GRUPKODU, this.FIYAT, this.ISK1, this.ISK2, this.ISK3, this.ISK4, this.ISK5, this.ISK6, this.SABITFIYAT,this.ALTHESAPID}); 
 
     StokKosulModel.fromJson(Map<String, dynamic> json) {
         ID = int.parse(json['ID'].toString());
@@ -25,6 +26,7 @@ class StokKosulModel {
         ISK5 = double.parse(json['ISK5'].toString());
         ISK6 = double.parse(json['ISK6'].toString());
         SABITFIYAT = double.parse(json['SABITFIYAT'].toString());
+        ALTHESAPID = int.parse(json['ALTHESAPID'].toString());
     }
 
     Map<String, dynamic> toJson() {
@@ -40,6 +42,7 @@ class StokKosulModel {
         data['ISK5'] = ISK5;
         data['ISK6'] = ISK6;
         data['SABITFIYAT'] = SABITFIYAT;
+        data['ALTHESAPID'] = ALTHESAPID;
         return data;
     }
 }

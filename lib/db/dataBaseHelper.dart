@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 3;
+  static final _databaseVersion = 7;
 
   static Database? _database;
 
@@ -46,16 +46,27 @@ class DatabaseHelper {
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     print(oldVersion);
     print(newVersion);
-    for (int i = 0; i <= newVersion; i++) {}
-    if (oldVersion < newVersion) {
-      //   db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN  INTEGER;");
-      if (newVersion == 3) {
+    for (int i = oldVersion; i <= newVersion; i++) {
+      if (i == 7) {
+        db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN ALTHESAPID INTEGER;");
+      }
+      if (i == 6) {
+        db.execute("ALTER TABLE TBLSTOKKOSULSB ADD COLUMN ALTHESAPID INTEGER;");
+      }
+        if (i == 3) {
         db.execute("ALTER TABLE TBLCARISB ADD COLUMN ACIKLAMA1 TEXT;");
       }
 
-      if (newVersion == 2) {
+      if (i == 2) {
         db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ALTHESAP TEXT;");
       }
+
+
+
+    }
+    if (oldVersion < newVersion) {
+      //   db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN  INTEGER;");
+  
     }
   }
 
@@ -316,7 +327,8 @@ class DatabaseHelper {
       KOD TEXT ,
       ALTHESAP TEXT,
       DOVIZID INTEGER,
-      VARSAYILAN TEXT
+      VARSAYILAN TEXT,
+      ALTHESAPID INTEGER
     )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {
@@ -348,7 +360,8 @@ class DatabaseHelper {
       ISK4 DECIMAL,
       ISK5 DECIMAL,
       ISK6 DECIMAL,
-      SABITFIYAT DECIMAL
+      SABITFIYAT DECIMAL,
+      ALTHESAPID INTEGER
       )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {

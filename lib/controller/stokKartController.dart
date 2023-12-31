@@ -33,7 +33,7 @@ class StokKartController extends GetxController {
   }*/
 
   List<dynamic> fiyatgetir(StokKart Stok, String CariKod, String _FiyatTip,
-      SatisTipiModel satisTipi, StokFiyatListesiModel stokFiyatListesi) {
+      SatisTipiModel satisTipi, StokFiyatListesiModel stokFiyatListesi,int seciliAltHesapID) {
     bool fiyatDegistirsinMi = false;
     if (Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E") {
       fiyatDegistirsinMi = true;
@@ -170,7 +170,10 @@ class StokKartController extends GetxController {
           // opak kosul
           for (var element in listeler.listStokKosul) {
             if (element.KOSULID == seciliCari.KOSULID &&
-                element.GRUPKODU == Stok.KOSULGRUP_KODU) {
+                element.GRUPKODU == Stok.KOSULGRUP_KODU 
+                && element.ALTHESAPID == seciliAltHesapID) 
+             
+                 {
               // stok kosul var
               if (element.ISK1 != 0) {
                 iskontoDegeri = element.ISK1!;
@@ -429,7 +432,7 @@ class StokKartController extends GetxController {
 */
 
   void searchC(String query, String cariKod, String fiyatTip,
-      SatisTipiModel satisTipi, StokFiyatListesiModel stokFiyatListesiModel) {
+      SatisTipiModel satisTipi, StokFiyatListesiModel stokFiyatListesiModel,int seciliAltHesapID) {
     // QUERY BOŞSA
     if (query.isEmpty) {
       tempList.clear();
@@ -444,7 +447,7 @@ class StokKartController extends GetxController {
                   cariKod,
                   fiyatTip,
                   satisTipi,
-                  stokFiyatListesiModel);
+                  stokFiyatListesiModel,seciliAltHesapID);
               listeler.listStok[i].guncelDegerler!.carpan = 1.0;
               listeler.listStok[i].guncelDegerler!.guncelBarkod =
                   listeler.listStok[i].KOD!;
@@ -486,7 +489,7 @@ class StokKartController extends GetxController {
             if (results.length > 100) {
               for (int i = 0; i < 100; i++) {
                 List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
                 results[i].guncelDegerler!.carpan = 1.0;
                 results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
                 results[i].guncelDegerler!.fiyat =
@@ -511,7 +514,7 @@ class StokKartController extends GetxController {
             } else {
               for (int i = 0; i < results.length; i++) {
                 List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
                 results[i].guncelDegerler!.carpan = 1.0;
                 results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
                 results[i].guncelDegerler!.fiyat =
@@ -547,7 +550,7 @@ class StokKartController extends GetxController {
                   cariKod,
                   fiyatTip,
                   satisTipi,
-                  stokFiyatListesiModel);
+                  stokFiyatListesiModel,seciliAltHesapID);
               listeler.listStok[i].guncelDegerler!.carpan = 1.0;
               listeler.listStok[i].guncelDegerler!.guncelBarkod =
                   listeler.listStok[i].KOD!;
@@ -588,7 +591,7 @@ class StokKartController extends GetxController {
 
             for (int i = 0; i < results.length; i++) {
               List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
               results[i].guncelDegerler!.carpan = 1.0;
               results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
               results[i].guncelDegerler!.fiyat =
@@ -708,7 +711,7 @@ class StokKartController extends GetxController {
               }
             } else {
               List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
               results[0].guncelDegerler!.fiyat =
                   double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -768,7 +771,7 @@ class StokKartController extends GetxController {
                 }
               } else {
                 List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -828,7 +831,7 @@ class StokKartController extends GetxController {
                 }
               } else {
                 List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -889,7 +892,7 @@ class StokKartController extends GetxController {
                 }
               } else {
                 List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -950,7 +953,7 @@ class StokKartController extends GetxController {
                 }
               } else {
                 List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -1011,7 +1014,7 @@ class StokKartController extends GetxController {
                 }
               } else {
                 List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -1056,7 +1059,7 @@ class StokKartController extends GetxController {
                 sonBulunan[0].guncelDegerler!.guncelBarkod = bul[0].KOD;
 
                 List<dynamic> gelenFiyatVeIskonto = fiyatgetir(sonBulunan[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
                 sonBulunan[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
                 sonBulunan[0].guncelDegerler!.iskonto =
@@ -1092,7 +1095,7 @@ class StokKartController extends GetxController {
           if (Ctanim.secililiMarkalarFiltre.isEmpty) {
             for (int i = 0; i < 100; i++) {
               List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
               results[i].guncelDegerler!.carpan = 1.0;
               results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
               results[i].guncelDegerler!.fiyat =
@@ -1129,7 +1132,7 @@ class StokKartController extends GetxController {
 
             for (int i = 0; i < results2.length; i++) {
               List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results2[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
               results2[i].guncelDegerler!.carpan = 1.0;
               results2[i].guncelDegerler!.guncelBarkod = results2[i].KOD!;
               results2[i].guncelDegerler!.fiyat =
@@ -1166,7 +1169,7 @@ class StokKartController extends GetxController {
           if (Ctanim.secililiMarkalarFiltre.isEmpty) {
             for (int i = 0; i < results.length; i++) {
               List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
               results[i].guncelDegerler!.carpan = 1.0;
               results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
               results[i].guncelDegerler!.fiyat =
@@ -1198,7 +1201,7 @@ class StokKartController extends GetxController {
             }
             for (int i = 0; i < result2.length; i++) {
               List<dynamic> gelenFiyatVeIskonto = fiyatgetir(result2[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel);
+                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
               result2[i].guncelDegerler!.carpan = 1.0;
               result2[i].guncelDegerler!.guncelBarkod = result2[i].KOD!;
               result2[i].guncelDegerler!.fiyat =

@@ -238,6 +238,8 @@ class Fis {
     data['DOVIZID'] = DOVIZID;
     data['ONAY'] = ONAY;
 
+
+
     return data;
   }
 
@@ -289,6 +291,7 @@ class Fis {
     data['DOVIZID'] = DOVIZID.toString();
     data['ONAY'] = ONAY.toString();
     data['STOKLISTESI'] = fisStokListesi.map((fis1) => fis1.toJson()).toList();
+   data['CARIKART'] = cariKart.toJson();
     // data['altHesapToplamlar'] = altHesapToplamlar.map((fis1) => fis1.toJson()).toList();
 
     return data;

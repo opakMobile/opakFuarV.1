@@ -216,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                 hatalar.add(await stokKartEx.servisStokGetir());
                 hatalar.add(await cariEx.servisCariGetir());
                 //  hatalar.add(await bs.getirSubeDepo(sirket: Ctanim.sirket!));
-                //   hatalar.add(await bs.getirStokKosul(sirket: Ctanim.sirket!));
+                 hatalar.add(await bs.getirStokKosul(sirket: Ctanim.sirket!));
                 //   hatalar.add(await bs.getirCariKosul(sirket: Ctanim.sirket!));
                 //   hatalar.add(await bs.getirCariStokKosul(sirket: Ctanim.sirket!));
                 hatalar.add(await bs.getirKur(sirket: Ctanim.sirket!));

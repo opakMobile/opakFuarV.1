@@ -1,11 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/PdfOnizleme.dart';
+import 'package:opak_fuar/siparis/bayiSec.dart';
+import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 
 class SiparisTamamla extends StatefulWidget {
@@ -130,16 +135,28 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {
-                    fisEx.fis!.value = Fis.empty();
-                    showDialog(
+                  onPressed: () async {
+                    if (Ctanim.kullanici!.ISLEMAKTARILSIN == "E") {
+                     if(fisEx.fis!.value!.ACIKLAMA4 != "" && fisEx.fis!.value!.ACIKLAMA5 != "" ){
+                            fisEx.fis!.value.DURUM = true;
+                    final now = DateTime.now();
+                    final formatter = DateFormat('HH:mm');
+                    String saat = formatter.format(now);
+                    fisEx.fis!.value.SAAT = saat;
+                    Fis fiss = fisEx.fis!.value;
+
+                    await Fis.empty()
+                        .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+                        fisEx.fis!.value = Fis.empty(); 
+                        showDialog(
                         context: context,
                         builder: (context) {
                           return CustomAlertDialog(
                             secondButtonText: "Tamam",
                             onSecondPress: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                             },
                             pdfSimgesi: true,
                             align: TextAlign.center,
@@ -159,6 +176,14 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             buttonText: 'Pdf\'i\ Gör',
                           );
                         });
+                    }
+                      
+
+
+                     } 
+              
+                    
+                  
                   },
                   child: Text(
                     "Siparişi Yazdır",
@@ -361,22 +386,38 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      child: TextFormField(
-                        maxLines: 8,
-                        decoration: InputDecoration(
-                          /* contentPadding: EdgeInsets.symmetric(
-                              vertical: MediaQuery.of(context).size.height * 0.05,
-                            ),*/
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width*.8,
 
-                          hintText: 'Bayi Seçimi',
-                          hintStyle: TextStyle(
-                            color: Colors.grey.shade400,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14.0,
+                
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
+                          onPressed: (){
+                            List<Cari> bayiler = [];
+                            for(var element in  listeler.listCari){
+                              if(element.TIPI == "Bayi"){
+                                bayiler.add(element);
+                      
+                              }
+                      
+                            }
+                            Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                          builder: (context) => BayiSec(
+                                bayiList: bayiler,
+                                          
+                              )));
+                      
+                      
+                      
+                          },
+                          child: Text("Bayi Seç"),
                         ),
                       ),
                     ),

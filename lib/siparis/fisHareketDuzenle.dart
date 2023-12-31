@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/model/KurModel.dart';
@@ -148,397 +149,397 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
+    return AlertDialog(
+      title: SizedBox(
+          width: MediaQuery.of(context).size.width * .8,
+          
+          child: Row(
+            children: [
+              const Text("Stok Düzenleme"),
+              Spacer(),
+              IconButton(
+                onPressed: () {
+                 Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.cancel,
+                  color: Colors.red,
+                ),
+                iconSize: MediaQuery.of(context).size.width * .1,
+                alignment: Alignment.center,
+              )
+            ],
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Material(
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            color: Colors.red,
-                          )),
-                    ],
-                  ),
-                ),
-                Text(
-                  "Miktar",
-                  style: TextStyle(fontSize: 22),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Material(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25)),
-                      child: IconButton(
-                          onPressed: () {
-                            if (double.parse(miktarController.text) > 0) {
-                              miktarController.text =
-                                  (double.parse(miktarController.text) -
-                                          widget.gelenStokKart.guncelDegerler!
-                                              .carpan!)
-                                      .toString();
-                            }
-                          },
-                          icon: Icon(
-                            Icons.remove_circle,
-                            size: MediaQuery.of(context).size.width * 0.1,
-                            color: Colors.red,
-                          )),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Material(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: TextFormField(
-                              controller: miktarController,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "1",
-                                hintStyle:
-                                    TextStyle(fontSize: 14, color: Colors.grey),
-                              ),
-                            )),
-                      ),
-                    ),
-                    Material(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25)),
-                      child: IconButton(
-                          onPressed: () {
+        ),
+      content: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              
+              Text(
+                "Miktar",
+                style: TextStyle(fontSize: 22),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Material(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25)),
+                    child: IconButton(
+                        onPressed: () {
+                          if (double.parse(miktarController.text) > 0) {
                             miktarController.text =
-                                (double.parse(miktarController.text) +
+                                (double.parse(miktarController.text) -
                                         widget.gelenStokKart.guncelDegerler!
                                             .carpan!)
                                     .toString();
-                          },
-                          icon: Icon(
-                            Icons.add_circle,
-                            size: MediaQuery.of(context).size.width * 0.1,
-                            color: Colors.green,
+                          }
+                        },
+                        icon: Icon(
+                          Icons.remove_circle,
+                          size: MediaQuery.of(context).size.width * 0.1,
+                          color: Colors.red,
+                        )),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Material(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            controller: miktarController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "1",
+                              hintStyle:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
+                            ),
                           )),
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Divider(
-                  endIndent: 20,
-                  indent: 20,
-                  thickness: 1,
-                  color: Colors.black45,
-                ),
-                // !
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Text(
-                  "İskonto",
-                  style: TextStyle(fontSize: 22),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          "İskonto 1",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          height: MediaQuery.of(context).size.height * 0.07,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Material(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: TextFormField(
-                                  enabled:
-                                      Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
-                                              "E"
-                                          ? true
-                                          : false,
-                                  controller: isk1Controller,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "1",
-                                    hintStyle: TextStyle(
-                                        fontSize: 14, color: Colors.grey),
-                                  ),
-                                )),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          "İskonto 2",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          height: MediaQuery.of(context).size.height * 0.07,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Material(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: TextFormField(
-                                  enabled:
-                                      Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
-                                              "E"
-                                          ? true
-                                          : false,
-                                  controller: isk2Controller,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "1",
-                                    hintStyle: TextStyle(
-                                        fontSize: 14, color: Colors.grey),
-                                  ),
-                                )),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          "İskonto 3",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          height: MediaQuery.of(context).size.height * 0.07,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Material(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: TextFormField(
-                                  enabled:
-                                      Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
-                                              "E"
-                                          ? true
-                                          : false,
-                                  controller: isk3Controller,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "1",
-                                    hintStyle: TextStyle(
-                                        fontSize: 14, color: Colors.grey),
-                                  ),
-                                )),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Divider(
-                  endIndent: 20,
-                  indent: 20,
-                  thickness: 1,
-                  color: Colors.black45,
-                ),
-
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Text(
-                  "Mal Fazlası",
-                  style: TextStyle(fontSize: 22),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.07,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Material(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "1",
-                            hintStyle:
-                                TextStyle(fontSize: 14, color: Colors.grey),
-                          ),
+                  Material(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25)),
+                    child: IconButton(
+                        onPressed: () {
+                          miktarController.text =
+                              (double.parse(miktarController.text) +
+                                      widget.gelenStokKart.guncelDegerler!
+                                          .carpan!)
+                                  .toString();
+                        },
+                        icon: Icon(
+                          Icons.add_circle,
+                          size: MediaQuery.of(context).size.width * 0.1,
+                          color: Colors.green,
                         )),
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Divider(
-                  endIndent: 20,
-                  indent: 20,
-                  thickness: 1,
-                  color: Colors.black87,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Text(
-                  "Fiyat",
-                  style: TextStyle(fontSize: 22),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.07,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Material(
-                        shape: RoundedRectangleBorder(
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Divider(
+                endIndent: 20,
+                indent: 20,
+                thickness: 1,
+                color: Colors.black45,
+              ),
+              // !
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Text(
+                "İskonto",
+                style: TextStyle(fontSize: 22),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        "İskonto 1",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.07,
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
                         ),
-                        child: TextFormField(
-                          controller: fiyatController,
-                          enabled: Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E"
-                              ? true
-                              : false,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "1",
-                            hintStyle:
-                                TextStyle(fontSize: 14, color: Colors.grey),
-                          ),
-                        )),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Material(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextFormField(
+                                enabled:
+                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
+                                            "E"
+                                        ? true
+                                        : false,
+                                controller: isk1Controller,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "1",
+                                  hintStyle: TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Divider(
-                  endIndent: 20,
-                  indent: 20,
-                  thickness: 1,
-                  color: Colors.black45,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    minimumSize: MaterialStateProperty.all(Size(
-                        MediaQuery.of(context).size.width * 0.3,
-                        MediaQuery.of(context).size.height * 0.05)),
+                  Column(
+                    children: [
+                      Text(
+                        "İskonto 2",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.07,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Material(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextFormField(
+                                enabled:
+                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
+                                            "E"
+                                        ? true
+                                        : false,
+                                controller: isk2Controller,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "1",
+                                  hintStyle: TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    KurModel gidecekKur = listeler.listKur.first;
-                    if (Ctanim.kullanici!.LISTEFIYAT! == "E") {
-                      for (var element in listeler.listKur) {
-                        if (widget.gelenStokKart.LISTEDOVIZ ==
-                            element.ACIKLAMA) {
-                          gidecekKur = element;
-                        }
-                      }
-                    } else {
-                      for (var element in listeler.listKur) {
-                        if (widget.gelenStokKart.SATDOVIZ == element.ACIKLAMA) {
-                          gidecekKur = element;
-                        }
+                  Column(
+                    children: [
+                      Text(
+                        "İskonto 3",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.07,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Material(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextFormField(
+                                enabled:
+                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
+                                            "E"
+                                        ? true
+                                        : false,
+                                controller: isk3Controller,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "1",
+                                  hintStyle: TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Divider(
+                endIndent: 20,
+                indent: 20,
+                thickness: 1,
+                color: Colors.black45,
+              ),
+          
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Text(
+                "Mal Fazlası",
+                style: TextStyle(fontSize: 22),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.height * 0.07,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Material(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "1",
+                          hintStyle:
+                              TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      )),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Divider(
+                endIndent: 20,
+                indent: 20,
+                thickness: 1,
+                color: Colors.black87,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Text(
+                "Fiyat",
+                style: TextStyle(fontSize: 22),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.height * 0.07,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Material(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextFormField(
+                        controller: fiyatController,
+                        enabled: Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E"
+                            ? true
+                            : false,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "1",
+                          hintStyle:
+                              TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      )),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Divider(
+                endIndent: 20,
+                indent: 20,
+                thickness: 1,
+                color: Colors.black45,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all(Size(
+                      MediaQuery.of(context).size.width * 0.3,
+                      MediaQuery.of(context).size.height * 0.05)),
+                ),
+                onPressed: () {
+                  KurModel gidecekKur = listeler.listKur.first;
+                  if (Ctanim.kullanici!.LISTEFIYAT! == "E") {
+                    for (var element in listeler.listKur) {
+                      if (widget.gelenStokKart.LISTEDOVIZ ==
+                          element.ACIKLAMA) {
+                        gidecekKur = element;
                       }
                     }
-
-                    double miktar = double.parse(miktarController.text);
-                    print("turan" + miktar.toString());
-                    sepeteEkle(widget.gelenStokKart, gidecekKur, miktar,
-                        iskonto1: double.parse(isk1Controller.text == ""
-                                ? "0"
-                                : isk1Controller.text) ??
-                            0,
-                        iskonto2: double.parse(isk2Controller.text == ""
-                                ? "0"
-                                : isk2Controller.text) ??
-                            0,
-                        iskonto3: double.parse(isk3Controller.text) ?? 0,
-                        malFazlasi:
-                            double.parse(malFazlasiController.text) ?? 0,
-                        fiyat: double.parse(fiyatController.text));
-
-                    Navigator.pop(context);
-                    showSnackBar(context, miktar);
-                  },
-                  child: Text("Uygula"),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-              ],
-            ),
+                  } else {
+                    for (var element in listeler.listKur) {
+                      if (widget.gelenStokKart.SATDOVIZ == element.ACIKLAMA) {
+                        gidecekKur = element;
+                      }
+                    }
+                  }
+          
+                  double miktar = double.parse(miktarController.text);
+                  print("turan" + miktar.toString());
+                  sepeteEkle(widget.gelenStokKart, gidecekKur, miktar,
+                      iskonto1: double.parse(isk1Controller.text == ""
+                              ? "0"
+                              : isk1Controller.text) ??
+                          0,
+                      iskonto2: double.parse(isk2Controller.text == ""
+                              ? "0"
+                              : isk2Controller.text) ??
+                          0,
+                      iskonto3: double.parse(isk3Controller.text) ?? 0,
+                      malFazlasi:
+                          double.parse(malFazlasiController.text) ?? 0,
+                      fiyat: double.parse(fiyatController.text));
+          
+                  Navigator.pop(context);
+                  showSnackBar(context, miktar);
+                },
+                child: Text("Uygula"),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

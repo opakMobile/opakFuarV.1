@@ -13,6 +13,7 @@ class FisController extends GetxController {
   RxList<Fis> sonListem = <Fis>[].obs;
   Rx<Fis>? fis = Fis.empty().obs;
   RxList<Fis> list_fis = <Fis>[].obs;
+  RxList<Fis> list_tum_fis = <Fis>[].obs;
   RxList<Fis> list_fis_son10 = <Fis>[].obs;
   RxList<Fis> list_fis_gidecek = <Fis>[].obs;
   RxList<Fis> list_fis_giden = <Fis>[].obs;
@@ -148,6 +149,23 @@ class FisController extends GetxController {
     List<FisHareket> tt1 =
         List.generate(result.length, (i) => FisHareket.fromJson(result[i]));
     return tt1;
+  }
+    Future<void> listTumFisleriGetir() async {
+    List<Fis> tt = await getTumfis();
+    for (var i = 0; i < tt.length; i++) {
+      var element = tt[i];
+      List<FisHareket> fisHar = await getFisHar(element.ID!);
+      element.fisStokListesi = fisHar;
+
+      element.cariKart =
+          cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
+    }
+    list_tum_fis.addAll(tt);
+  }
+   Future<List<Fis>> getTumfis() async {
+    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
+        );
+    return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
   }
 
   Future<void> listGidecekFisGetir() async {

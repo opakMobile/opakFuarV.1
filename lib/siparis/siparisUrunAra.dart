@@ -48,17 +48,20 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     }
     if (altHesaplar.isEmpty) {
       CariAltHesap ss = CariAltHesap(
-          KOD: "-1", ALTHESAP: "YOK", DOVIZID: -1, VARSAYILAN: "H");
+          KOD: "-1",
+          ALTHESAP: "YOK",
+          DOVIZID: -1,
+          VARSAYILAN: "H",
+          ALTHESAPID: -1);
       altHesaplar.add(ss);
       seciliAltHesap = ss;
     } else {
       seciliAltHesap = altHesaplar.first;
     }
 
-    /* for (int i = 0; i < stokKartEx.searchList.length; i++) {
-      aramaMiktarController.add(TextEditingController(
-          text:stokKartEx.s /* stokKartEx.searchList[i].guncelDegerler!.carpan.toString()*/));
-    }*/
+    for (int i = 0; i < stokKartEx.searchList.length; i++) {
+      aramaMiktarController.add(TextEditingController(text: "1"));
+    }
     stokKartEx.tempList.clear();
     SatisTipiModel satisTipiModel =
         SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
@@ -69,9 +72,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         List<dynamic> gelenFiyatVeIskonto = stokKartEx.fiyatgetir(
             stokKartEx.searchList[i],
             widget.cari.KOD!,
-            Ctanim.satisFiyatListesi.first,
+            "Fiyat1",
             satisTipiModel,
-            Ctanim.seciliStokFiyatListesi);
+            Ctanim.seciliStokFiyatListesi,
+            widget.cari.cariAltHesaplar.first.ALTHESAPID);
 
         stokKartEx.searchList[i].guncelDegerler!.fiyat =
             double.parse(gelenFiyatVeIskonto[0].toString());
@@ -100,9 +104,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         List<dynamic> gelenFiyatVeIskonto = stokKartEx.fiyatgetir(
             stokKartEx.searchList[i],
             widget.cari.KOD!,
-            Ctanim.satisFiyatListesi.first,
+            "Fiyat1",
             satisTipiModel,
-            Ctanim.seciliStokFiyatListesi);
+            Ctanim.seciliStokFiyatListesi,
+            widget.cari.cariAltHesaplar.first.ALTHESAPID);
         stokKartEx.searchList[i].guncelDegerler!.guncelBarkod =
             stokKartEx.searchList[i].KOD;
         stokKartEx.searchList[i].guncelDegerler!.carpan = 1.0;
@@ -144,7 +149,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   bool aramaModu = true;
   bool okumaModu = false;
   TextEditingController editingController = TextEditingController();
-//List<TextEditingController> aramaMiktarController = [];
+  List<TextEditingController> aramaMiktarController = [];
   final StokKartController stokKartEx = Get.find();
 
   CariAltHesap? seciliAltHesap;
@@ -166,6 +171,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
 
   @override
   Widget build(BuildContext context) {
+    double ekranYuksekligi = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         appBar: appBarDizayn(context),
@@ -185,22 +191,13 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                   ),
                 ),
                 onPressed: () async {
-                  if (Ctanim.kullanici!.ISLEMAKTARILSIN == "E") {
-                    fisEx.fis!.value.DURUM = true;
-                    final now = DateTime.now();
-                    final formatter = DateFormat('HH:mm');
-                    String saat = formatter.format(now);
-                    fisEx.fis!.value.SAAT = saat;
-                    Fis fiss = fisEx.fis!.value;
-
-                    await Fis.empty()
-                        .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+                
 
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SiparisTamamla(fiss: fiss)));
-                  }
+                            builder: (context) => SiparisTamamla(fiss: fisEx.fis!.value!)));
+                  
                 },
                 child: Text(
                   "Siparişi Tamamla",
@@ -296,15 +293,16 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 ISK2: "");
                             stokKartEx.searchC(
                                 value,
-                                widget.cari.KOD!,
-                                Ctanim.satisFiyatListesi.first,
+                                "",
+                                "Fiyat1",
                                 m,
-                                Ctanim.seciliStokFiyatListesi);
+                                Ctanim.seciliStokFiyatListesi,
+                                seciliAltHesap!.ALTHESAPID!);
                             setState(() {});
                           }),
                           decoration: InputDecoration(
                             suffixIcon: Icon(Icons.search),
-                            hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
+                            hintText: 'Aranacak Kelime( Kod/ Ad / Barkod)',
                             hintStyle: TextStyle(
                               color: Colors.grey.shade400,
                               fontWeight: FontWeight.w400,
@@ -336,10 +334,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             }
                             stokKartEx.searchC(
                                 result,
-                                widget.cari.KOD!,
-                                Ctanim.satisFiyatListesi.first,
+                                "",
+                                "Fiyat1",
                                 m,
-                                Ctanim.seciliStokFiyatListesi);
+                                Ctanim.seciliStokFiyatListesi,
+                                seciliAltHesap!.ALTHESAPID);
                             setState(() {});
                           },
                           icon: Icon(
@@ -364,34 +363,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                   ),
 
                   // ! Satış Toplamı
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Satış Toplamı:",
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        height: MediaQuery.of(context).size.height * 0.04,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: Center(
-                            child: Text(
-                          Ctanim.donusturMusteri(
-                              fisEx.fis!.value.GENELTOPLAM.toString()),
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold),
-                        )),
-                      ),
-                    ],
-                  ),
+
                   // ! Alt Hesap
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -426,8 +398,120 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 setState(() {
                                   seciliAltHesap = selected!;
                                   fisEx.fis!.value.ALTHESAP = selected.ALTHESAP;
-                                  //fisEx.fis!.value.ALTHESAPID = selected.KOD;
+                                  
                                 });
+                                  stokKartEx.tempList.clear();
+                                  SatisTipiModel satisTipiModel =
+                                      SatisTipiModel(
+                                          ID: -1,
+                                          TIP: "a",
+                                          FIYATTIP: "",
+                                          ISK1: "",
+                                          ISK2: "");
+                                  if (stokKartEx.searchList.length > 100) {
+                                    for (int i = 0; i < 100; i++) {
+                                      print(Ctanim.seciliStokFiyatListesi.ADI);
+                                      List<dynamic> gelenFiyatVeIskonto =
+                                          stokKartEx.fiyatgetir(
+                                              stokKartEx.searchList[i],
+                                              widget.cari.KOD!,
+                                              "Fiyat1",
+                                              satisTipiModel,
+                                              Ctanim.seciliStokFiyatListesi,
+                                              seciliAltHesap!.ALTHESAPID);
+
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .fiyat =
+                                          double.parse(gelenFiyatVeIskonto[0]
+                                              .toString());
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .iskonto =
+                                          double.parse(gelenFiyatVeIskonto[1]
+                                              .toString());
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .guncelBarkod =
+                                          stokKartEx.searchList[i].KOD;
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .seciliFiyati =
+                                          gelenFiyatVeIskonto[2].toString();
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .fiyatDegistirMi =
+                                          gelenFiyatVeIskonto[3];
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                          .carpan = 1.0;
+
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .netfiyat =
+                                          stokKartEx
+                                              .searchList[i].guncelDegerler!
+                                              .hesaplaNetFiyat();
+                                      //fiyat listesi koşul arama fonksiyonua gönderiliyor orda ekleme yapsanda buraya eklemez giyatListesiKosulu cTanima ekle !
+                                      if (!Ctanim.fiyatListesiKosul.contains(
+                                          stokKartEx.searchList[i]
+                                              .guncelDegerler!.seciliFiyati)) {
+                                        Ctanim.fiyatListesiKosul.add(stokKartEx
+                                            .searchList[i]
+                                            .guncelDegerler!
+                                            .seciliFiyati!);
+                                      }
+                                      stokKartEx.tempList
+                                          .add(stokKartEx.searchList[i]);
+                                    }
+                                  } else {
+                                    for (int i = 0;
+                                        i < stokKartEx.searchList.length;
+                                        i++) {
+                                      List<dynamic> gelenFiyatVeIskonto =
+                                          stokKartEx.fiyatgetir(
+                                              stokKartEx.searchList[i],
+                                              widget.cari.KOD!,
+                                              "Fiyat1",
+                                              satisTipiModel,
+                                              Ctanim.seciliStokFiyatListesi,
+                                              seciliAltHesap!.ALTHESAPID);
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .guncelBarkod =
+                                          stokKartEx.searchList[i].KOD;
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                          .carpan = 1.0;
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .fiyat =
+                                          double.parse(gelenFiyatVeIskonto[0]
+                                              .toString());
+
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .iskonto =
+                                          double.parse(gelenFiyatVeIskonto[1]
+                                              .toString());
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .seciliFiyati =
+                                          gelenFiyatVeIskonto[2].toString();
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .fiyatDegistirMi =
+                                          gelenFiyatVeIskonto[3];
+
+                                      stokKartEx.searchList[i].guncelDegerler!
+                                              .netfiyat =
+                                          stokKartEx
+                                              .searchList[i].guncelDegerler!
+                                              .hesaplaNetFiyat();
+                                      //fiyat listesi koşul arama fonksiyonua gönderiliyor orda ekleme yapsanda buraya eklemez giyatListesiKosulu cTanima ekle !
+                                      if (!Ctanim.fiyatListesiKosul.contains(
+                                          stokKartEx.searchList[i]
+                                              .guncelDegerler!.seciliFiyati)) {
+                                        Ctanim.fiyatListesiKosul.add(stokKartEx
+                                            .searchList[i]
+                                            .guncelDegerler!
+                                            .seciliFiyati!);
+                                      }
+                                      stokKartEx.tempList
+                                          .add(stokKartEx.searchList[i]);
+                                    }
+                                  }
+                                  setState(() {
+                                    
+                                  });
+                                
                               },
                             ),
                           ),
@@ -439,26 +523,22 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                     thickness: 1.5,
                     color: Colors.black87,
                   ),
-                  okumaModu == true
-                      ? okumaModuList()
-                      : SingleChildScrollView(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.5,
-                            child: Obx(() {
-                              return ListView.builder(
+                  Container(
+                    height: ekranYuksekligi < 550
+                        ? ekranYuksekligi * .25
+                        : ekranYuksekligi * 0.42,
+                    child: okumaModu == true
+                        ? okumaModuList()
+                        : SingleChildScrollView(
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              child: ListView.builder(
                                 itemCount: stokKartEx.tempList
                                     .length, // stokKartEx.searchList.length,
                                 itemBuilder: (context, index) {
                                   StokKart stokModel =
                                       stokKartEx.tempList[index];
-                                  RxDouble miktar = stokKartEx.tempList[index]
-                                      .guncelDegerler!.carpan!.obs;
-
-                                  TextEditingController t1 =
-                                      TextEditingController();
-                                  t1.text = miktar.toString();
-
                                   //    stokKartEx.searchList[index];
                                   return Padding(
                                     padding: const EdgeInsets.only(
@@ -518,12 +598,14 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                 ),
                                                 child: TextFormField(
                                                   autocorrect: true,
-                                                  controller: t1,
+                                                  controller:
+                                                      aramaMiktarController[
+                                                          index],
                                                   textAlign: TextAlign.center,
                                                   decoration: InputDecoration(
                                                     /* label: Text( 
-                                                                                  aramaMiktarController[index]
-                                                                                      .text),*/
+                                                      aramaMiktarController[index]
+                                                          .text),*/
 
                                                     hintStyle: TextStyle(
                                                         fontSize: 14,
@@ -578,9 +660,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     ),
                                                     child: Center(
                                                       child: Text(
-                                                        stokModel
-                                                            .guncelDegerler!
-                                                            .iskonto!
+                                                        stokModel.guncelDegerler!.iskonto!
                                                             .toStringAsFixed(2),
                                                       ),
                                                     ),
@@ -710,9 +790,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     ),
                                                     child: Center(
                                                       child: Text(
-                                                        stokModel
-                                                            .guncelDegerler!
-                                                            .fiyat!
+                                                        stokModel.guncelDegerler!.fiyat!
                                                             .toStringAsFixed(2),
                                                       ),
                                                     ),
@@ -734,7 +812,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     // ! Miktar Gir ve iskonto mal fazlası fiyat değiştir
 
                                                     double gelenMiktar =
-                                                        double.parse(t1.text);
+                                                        double.parse(
+                                                            aramaMiktarController[
+                                                                    index]
+                                                                .text);
                                                     print(
                                                         "gelen miktar $gelenMiktar");
                                                     showDialog(
@@ -767,37 +848,18 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       KurModel gidecekKur =
                                                           listeler
                                                               .listKur.first;
-
-                                                      if (Ctanim.kullanici!
-                                                              .LISTEFIYAT! ==
-                                                          "E") {
-                                                        for (var element
-                                                            in listeler
-                                                                .listKur) {
-                                                          if (stokModel
-                                                                  .LISTEDOVIZ ==
-                                                              element
-                                                                  .ACIKLAMA) {
-                                                            gidecekKur =
-                                                                element;
-                                                          }
-                                                        }
-                                                      } else {
-                                                        for (var element
-                                                            in listeler
-                                                                .listKur) {
-                                                          if (stokModel
-                                                                  .SATDOVIZ ==
-                                                              element
-                                                                  .ACIKLAMA) {
-                                                            gidecekKur =
-                                                                element;
-                                                          }
+                                                      for (var element
+                                                          in listeler.listKur) {
+                                                        if (stokModel
+                                                                .SATDOVIZ ==
+                                                            element.ACIKLAMA) {
+                                                          gidecekKur = element;
                                                         }
                                                       }
-
-                                                      double miktar =
-                                                          double.parse(t1.text);
+                                                      double miktar = double.parse(
+                                                          aramaMiktarController[
+                                                                  index]
+                                                              .text);
                                                       print("turan" +
                                                           miktar.toString());
                                                       sepeteEkle(
@@ -822,10 +884,38 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                     ),
                                   );
                                 },
-                              );
-                            }),
+                              ),
+                            ),
                           ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Satış Toplamı:",
+                        style: TextStyle(
+                          fontSize: 15,
                         ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Center(
+                            child: Text(
+                          Ctanim.donusturMusteri(
+                              fisEx.fis!.value.GENELTOPLAM.toString()),
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -861,7 +951,19 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         birimID = element.ID!;
       }
     }
-    double tempFiyat = stokKart.guncelDegerler!.fiyat!;
+    double tempFiyat = 0;
+    double tempIskonto1 = 0;
+    if (fiyat != 0) {
+      tempFiyat = fiyat;
+    } else {
+      tempFiyat = stokKart.guncelDegerler!.fiyat!;
+    }
+    if (iskonto1 != 0) {
+      tempIskonto1 = iskonto1;
+    } else {
+      tempIskonto1 = stokKart.guncelDegerler!.iskonto!;
+    }
+
     listeler.listKur.forEach((element) {
       if (element.ANABIRIM == "E") {
         if (stokKartKur.ACIKLAMA != element.ACIKLAMA) {
@@ -871,7 +973,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     });
 
     double KDVTUtarTemp =
-        stokKart.guncelDegerler!.fiyat! * (1 - (stokKart.SATIS_KDV! / 100.00));
+        stokKart.guncelDegerler!.fiyat! * (1 + (stokKart.SATIS_KDV!));
     {
       fisEx.fiseStokEkle(
         // belgeTipi: widget.belgeTipi,
@@ -884,10 +986,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         dovizAdi: stokKartKur.ACIKLAMA!,
         dovizId: stokKartKur.ID!,
         burutFiyat: tempFiyat,
-        iskonto: stokKart.guncelDegerler!.iskonto!,
+        iskonto: tempIskonto1,
         iskonto2: 0.0,
         miktar: (miktar).toInt(),
-        stokKodu: stokKart.guncelDegerler!.guncelBarkod!,
+        stokKodu: stokKart.KOD!,
         Aciklama1: '',
         KUR: stokKartKur.KUR!,
         TARIH: DateFormat("yyyy-MM-dd").format(DateTime.now()),

@@ -185,8 +185,8 @@ class _HomePageState extends State<HomePage> {
                   // ! Sepet İşlemleri
                   GestureDetector(
                     onTap: () async {
-                      fisEx.list_fis_gidecek.clear();
-                      await fisEx.listGidecekFisGetir();
+                      fisEx.list_tum_fis.clear();
+                      await fisEx.listTumFisleriGetir();
                       Navigator.push(
                           context,
                           MaterialPageRoute(

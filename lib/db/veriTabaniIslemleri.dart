@@ -4,6 +4,7 @@ import 'package:opak_fuar/model/KurModel.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/model/stokKosulModel.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 
@@ -275,7 +276,8 @@ class VeriIslemleri {
       KOD TEXT ,
       ALTHESAP TEXT,
       DOVIZID INTEGER,
-      VARSAYILAN TEXT
+      VARSAYILAN TEXT,
+      ALTHESAPID INTEGER
     )""");
 
       print("TBLCARIALTHESAPSB tablosu temizlendi ve yeniden oluşturuldu.");
@@ -460,6 +462,57 @@ class VeriIslemleri {
       print("Hata: $e");
     }
   }
+    Future<List<StokKosulModel>?> stokKosulGetir() async {
+    //   var result = await Ctanim.db?.query("TBLCARISB");
+    List<Map<String, dynamic>> maps = await Ctanim.db?.query("TBLSTOKKOSULSB");
+    listeler.listStokKosul =
+        List.generate(maps.length, (i) => StokKosulModel.fromJson(maps[i]));
+
+    return listeler.listStokKosul;
+  }
+
+  //database cari ekle
+  Future<int?> stokKosulEkle(StokKosulModel stokKosul) async {
+    try {
+      stokKosul.ID = null;
+      var result =
+          await Ctanim.db?.insert("TBLSTOKKOSULSB", stokKosul.toJson());
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> StokKosulTemizle() async {
+    try {
+      // Veritabanında "TBLCARISTOKKOSULSB" tablosunu temizle.
+      await Ctanim.db?.delete("TBLSTOKKOSULSB");
+      print("TBLSTOKKOSULSB tablosu temizlendi.");
+
+      // "TBLCARISTOKKOSULSB" tablosunu sil.
+      await Ctanim.db?.execute("DROP TABLE IF EXISTS TBLSTOKKOSULSB");
+
+      // "TBLCARISTOKKOSULSB" tablosunu yeniden oluştur.
+      await Ctanim.db?.execute("""CREATE TABLE TBLSTOKKOSULSB (
+     ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      KOSULID INTEGER,
+      GRUPKODU TEXT,
+      FIYAT DECIMAL,
+      ISK1 DECIMAL,
+      ISK2 DECIMAL,
+      ISK3 DECIMAL,
+      ISK4 DECIMAL,
+      ISK5 DECIMAL,
+      ISK6 DECIMAL,
+      SABITFIYAT DECIMAL,
+      ALTHESAPID INTEGER
+      )""");
+
+      print("TBLSTOKKOSULSB tablosu temizlendi ve yeniden oluşturuldu.");
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
 
   Future<int> veriGetir() async {
     await cariAltHesapGetir();
@@ -475,7 +528,7 @@ class VeriIslemleri {
     await olcuBirimGetir();
     await kurGetir();
 //    await cariKosulGetir();
-//    await stokKosulGetir();
+   await stokKosulGetir();
     //   await cariStokKosulGetir();
     await dahaFazlaBarkodGetir();
     await stokGetir();

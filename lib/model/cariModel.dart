@@ -51,6 +51,35 @@ class Cari {
       this.ACIKLAMA1,
       this.BAKIYE});
 
+  Cari.empty()
+      : this(
+          ID: 0,
+          KOSULID: 0,
+          KOD: "",
+          ADI: "",
+          ILCE: "",
+          IL: "",
+          ADRES: "",
+          VERGIDAIRESI: "",
+          VERGINO: "",
+          KIMLIKNO: "",
+          TIPI: "",
+          TELEFON: "",
+          FAX: "",
+          FIYAT: 0,
+          ULKEID: 0,
+          EMAIL: "",
+          WEB: "",
+          PLASIYERID: 0,
+          ISKONTO: 0.0,
+          EFATURAMI: "H",
+          VADEGUNU: "",
+          ACIKLAMA1: "",
+          BAKIYE: 0.0,
+
+
+        );
+
   Cari.fromJson(Map<String, dynamic> json) {
     ID = int.parse(json['ID'].toString());
     KOSULID = int.parse(json['KOSULID'].toString());

@@ -11,6 +11,7 @@ import 'package:opak_fuar/model/ShataModel.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/model/stokKosulModel.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:xml/xml.dart' as xml;
 
@@ -29,6 +30,7 @@ class BaseService {
     await getirCariler(sirket: "AAGENELOPAK", kullaniciKodu: "1");
     await getirCariAltHesap(sirket: "AAGENELOPAK");
     await getirKur(sirket: "AAGENELOPAK");
+    await getirStokKosul(sirket: "AAGENELOPAK");
   }
 
   Future<void> cariVerileriGuncelle() async {
@@ -362,14 +364,17 @@ class BaseService {
             String ALTHESAP = element['ALTHESAP'];
             int DOVIZID = int.parse(element["DOVIZID"].toString());
             String VARSAYILAN = element['VARSAYILAN'];
+            int ALTHESAPID = int.parse(element["ALTHESAPID"].toString());
 
             await VeriIslemleri().cariAltHesapEkle(CariAltHesap(
+                ALTHESAPID: ALTHESAPID,
                 KOD: KOD,
                 ALTHESAP: ALTHESAP,
                 DOVIZID: DOVIZID,
                 VARSAYILAN: VARSAYILAN));
 
             listeler.listCariAltHesap.add(CariAltHesap(
+                ALTHESAPID: ALTHESAPID,
                 KOD: KOD,
                 ALTHESAP: ALTHESAP,
                 DOVIZID: DOVIZID,
@@ -947,4 +952,65 @@ class BaseService {
       return hata;
     }
   }
+    Future<String> getirStokKosul({required String sirket}) async {
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirStokKosul'
+    };
+
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetirStokKosul xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+    </GetirStokKosul>
+  </soap:Body>
+</soap:Envelope>
+''';
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+        Map<String, dynamic> jsonData =
+            jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          await VeriIslemleri().StokKosulTemizle();
+
+          List<dynamic> jsonData =
+              jsonDecode(temizleKontrolKarakterleri(gelenHata.HataMesaj!));
+          List<StokKosulModel> tempList = [];
+          tempList = List<StokKosulModel>.from(
+              jsonData.map((model) => StokKosulModel.fromJson(model)));
+
+          tempList.forEach((webservisStokKosul) async {
+            await VeriIslemleri().stokKosulEkle(webservisStokKosul);
+          });
+
+          await VeriIslemleri().stokKosulGetir();
+          return "";
+        }
+      } else {
+        Exception(
+            'Stok Kosul verisi alınamadı. StatusCode: ${response.statusCode}');
+        return " Stok Kosul Getirilirken İstek Oluşturulamadı. " +
+            response.statusCode.toString();
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return "Stok Kosul için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
+    }
+  }
+
 }

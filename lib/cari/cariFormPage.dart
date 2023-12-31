@@ -363,72 +363,46 @@ class _CariFormPageState extends State<CariFormPage> {
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.05,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          ElevatedButton.icon(
-                                            onPressed: () {},
-                                            icon: Icon(Icons.delete),
-                                            label: Text(
-                                              "Sil",
-                                              style: TextStyle(fontSize: 11),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.red,
-                                              onPrimary: Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.01,
-                                          ),
-                                          ElevatedButton.icon(
-                                            onPressed: () async {
-                                              Cari cari = Cari();
-                                              cari.PLASIYERID = int.parse(
-                                                  Ctanim.kullanici!.KOD!);
-                                              cari.KOD = widget.cari.KOD;
-                                              cari.ADI = _SirketIsmi.text;
-                                              cari.ADRES = _AdresBilgileri.text;
-                                              cari.IL = _SehirSeciniz.text;
-                                              cari.ILCE = _IlceSeciniz.text;
-                                              cari.VERGIDAIRESI =
-                                                  _VergiDairesi.text;
-                                              cari.VERGINO =
-                                                  _VergiNumarasi.text;
-                                              cari.TELEFON = _CepTelefonu.text;
-                                              cari.EMAIL = _MailAdresi.text;
-                                              cari.ACIKLAMA1 = _Aciklama.text;
-                                              cari.TIPI = AliciMusteri == true
-                                                  ? "Alıcı Müşteri"
-                                                  : "Alıcı Bayi";
+                                      child: ElevatedButton.icon(
+                                        onPressed: () async {
+                                          Cari cari = Cari.empty();
 
-                                              Map<String, dynamic> jsonListesi =
-                                                  cari.toJson();
-                                              /*
+                                          cari.PLASIYERID = int.parse(
+                                              Ctanim.kullanici!.KOD!);
+                                          cari.KOD = widget.cari.KOD;
+                                          cari.ADI = _SirketIsmi.text;
+                                          cari.ADRES = _AdresBilgileri.text;
+                                          cari.IL = _SehirSeciniz.text;
+                                          cari.ILCE = _IlceSeciniz.text;
+                                          cari.VERGIDAIRESI =
+                                              _VergiDairesi.text;
+                                          cari.VERGINO =
+                                              _VergiNumarasi.text;
+                                          cari.TELEFON = _CepTelefonu.text;
+                                          cari.EMAIL = _MailAdresi.text;
+                                          cari.ACIKLAMA1 = _Aciklama.text;
+                                          cari.TIPI = AliciMusteri == true
+                                              ? "Alıcı Müşteri"
+                                              : "Alıcı Bayi";
+
+// zeko reis 
+                                          Map<String, dynamic> jsonListesi =
+                                              cari.toJson();
+                                          /*
             Fis.empty().fisEkle(
                 belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
     */
-                                              SHataModel gelenHata =
-                                                  await bs.cariGuncelle(
-                                                      jsonDataList: jsonListesi,
-                                                      sirket: Ctanim.sirket!);
-                                              if (gelenHata.Hata == "true") {
-                                                /*
+                                          SHataModel gelenHata =
+                                              await bs.cariGuncelle(
+                                                  jsonDataList: jsonListesi,
+                                                  sirket: Ctanim.sirket!);
+                                          if (gelenHata.Hata == "true") {
+                                            /*
               Fis.empty().fisEkle(
                   belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
                   */
 
-                                                gelenHata.HataMesaj!;
+                                            gelenHata.HataMesaj!;
 /*
               LogModel logModel = LogModel(
                 TABLOADI: "TBLFISSB",
@@ -439,52 +413,21 @@ class _CariFormPageState extends State<CariFormPage> {
               );
               await VeriIslemleri().logKayitEkle(logModel);
               */
-                                              }
-                                            },
-                                            icon: Icon(Icons.edit),
-                                            label: Text(
-                                              "Değiştir",
-                                              style: TextStyle(fontSize: 11),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.blue,
-                                              onPrimary: Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                            ),
+                                          }
+                                        },
+                                        icon: Icon(Icons.edit),
+                                        label: Text(
+                                          "Değiştir",
+                                          style: TextStyle(fontSize: 11),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.blue,
+                                          onPrimary: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
                                           ),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.01,
-                                          ),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.3,
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {},
-                                              icon: Icon(Icons.save),
-                                              label: Text(
-                                                "Kaydet",
-                                                style: TextStyle(fontSize: 11),
-                                              ),
-                                              style: ElevatedButton.styleFrom(
-                                                primary: Colors.green,
-                                                onPrimary: Colors.white,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          12.0),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     )
                                   : Container(
