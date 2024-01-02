@@ -70,6 +70,7 @@ class _okumaModuListState extends State<okumaModuList> {
                                     context: context,
                                     builder: (context) {
                                       return fisHareketDuzenle(
+                                        okutulanCarpan: 1,
                                         altHesap: stokModel.ALTHESAP!,
                                         gelenStokKart: stok.first,
                                         gelenMiktar: gelenMiktar,

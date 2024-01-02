@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/model/KurModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
@@ -25,11 +26,12 @@ class fisHareketDuzenle extends StatefulWidget {
 
 
     this.malFazlasi = -1,
-    this.fiyat = -1,
+    this.fiyat = -1, required this.okutulanCarpan,
   });
   final StokKart gelenStokKart;
   final double gelenMiktar;
   final String altHesap;
+  final int okutulanCarpan;
   
 
   double isk1;
@@ -54,6 +56,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     miktarController.text = widget.gelenMiktar != -1
         ? widget.gelenMiktar.toStringAsFixed(2).toString()
         : widget.gelenStokKart.guncelDegerler!.carpan!.toString();
+
+        
     fiyatController.text = widget.fiyat != -1
         ? widget.fiyat.toString()
         : widget.gelenStokKart.guncelDegerler!.fiyat!.toString();
@@ -191,10 +195,14 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
       ),
     );
   }
-
+ int i = 0;
   @override
   Widget build(BuildContext context) {
-  FocusScope.of(context).requestFocus(focusNode);
+    if(i==0){
+       FocusScope.of(context).requestFocus(focusNode);
+  miktarController.selection = TextSelection(baseOffset: 0, extentOffset: miktarController.value.text.length);
+  i++;
+    }
     return AlertDialog(
       title: SizedBox(
           width: MediaQuery.of(context).size.width * .8,
@@ -226,6 +234,20 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+               ElevatedButton(
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all(Size(
+                      MediaQuery.of(context).size.width * 0.3,
+                      MediaQuery.of(context).size.height * 0.05)),
+                ),
+                onPressed: () {
+                  fisHareketUygula(context);
+                },
+                child: Text("Uygula"),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
               
               Text(
                 "Miktar",
@@ -270,6 +292,19 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextFormField(
+                            onEditingComplete: () {
+                             fisHareketUygula(context);
+                            },
+                            onSaved: (newValue) {
+                              
+                              print("anan");
+                            },
+                                      keyboardType: TextInputType.number,
+                             inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'^\d+\.?\d{0,2}')),
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
                             controller: miktarController,
                             focusNode: focusNode,
                             onTap: () => miktarController.selection = TextSelection(baseOffset: 0, extentOffset: miktarController.value.text.length),
@@ -670,60 +705,51 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size(
-                      MediaQuery.of(context).size.width * 0.3,
-                      MediaQuery.of(context).size.height * 0.05)),
-                ),
-                onPressed: () {
-                  KurModel gidecekKur = listeler.listKur.first;
-                  if (Ctanim.kullanici!.LISTEFIYAT! == "E") {
-                    for (var element in listeler.listKur) {
-                      if (widget.gelenStokKart.LISTEDOVIZ ==
-                          element.ACIKLAMA) {
-                        gidecekKur = element;
-                      }
-                    }
-                  } else {
-                    for (var element in listeler.listKur) {
-                      if (widget.gelenStokKart.SATDOVIZ == element.ACIKLAMA) {
-                        gidecekKur = element;
-                      }
-                    }
-                  }
-          
-                  double miktar = double.parse(miktarController.text);
-                  print("turan" + miktar.toString());
-                  sepeteEkle(widget.gelenStokKart, gidecekKur, miktar,
-                      iskonto1: double.parse(isk1Controller.text == ""
-                              ? "0"
-                              : isk1Controller.text) ??
-                          0,
-                      iskonto2: double.parse(isk2Controller.text == ""
-                              ? "0"
-                              : isk2Controller.text) ??
-                          0,
-                      iskonto3: double.parse(isk3Controller.text) ?? 0,
-                      iskonto4: double.parse(isk4Controller.text) ?? 0,
-                      iskonto5: double.parse(isk5Controller.text) ?? 0,
-                      iskonto6: double.parse(isk6Controller.text) ?? 0,
-                      malFazlasi:
-                          int.parse(malFazlasiController.text) ?? 0,
-                      fiyat: double.parse(fiyatController.text));
-          
-                  Navigator.pop(context);
-                  showSnackBar(context, miktar);
-                },
-                child: Text("Uygula"),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
+             
             ],
           ),
         ),
       ),
     );
+  }
+
+  void fisHareketUygula(BuildContext context) {
+    KurModel gidecekKur = listeler.listKur.first;
+    if (Ctanim.kullanici!.LISTEFIYAT! == "E") {
+      for (var element in listeler.listKur) {
+        if (widget.gelenStokKart.LISTEDOVIZ ==
+            element.ACIKLAMA) {
+          gidecekKur = element;
+        }
+      }
+    } else {
+      for (var element in listeler.listKur) {
+        if (widget.gelenStokKart.SATDOVIZ == element.ACIKLAMA) {
+          gidecekKur = element;
+        }
+      }
+    }
+              
+    double miktar = double.parse(miktarController.text);
+    print("turan" + miktar.toString());
+    sepeteEkle(widget.gelenStokKart, gidecekKur, miktar,
+        iskonto1: double.parse(isk1Controller.text == ""
+                ? "0"
+                : isk1Controller.text) ??
+            0,
+        iskonto2: double.parse(isk2Controller.text == ""
+                ? "0"
+                : isk2Controller.text) ??
+            0,
+        iskonto3: double.parse(isk3Controller.text) ?? 0,
+        iskonto4: double.parse(isk4Controller.text) ?? 0,
+        iskonto5: double.parse(isk5Controller.text) ?? 0,
+        iskonto6: double.parse(isk6Controller.text) ?? 0,
+        malFazlasi:
+            int.parse(malFazlasiController.text) ?? 0,
+        fiyat: double.parse(fiyatController.text));
+              
+    Navigator.pop(context);
+    showSnackBar(context, miktar);
   }
 }
