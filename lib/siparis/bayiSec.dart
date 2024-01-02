@@ -21,6 +21,15 @@ class BayiSec extends StatefulWidget {
 }
 
 class _BayiSecState extends State<BayiSec> {
+  List<Cari> tempBayiList = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    tempBayiList.clear();
+    tempBayiList.addAll(widget.bayiList);
+  }
+
   Color randomColor() {
     Random random = Random();
     int red = random.nextInt(128); // 0-127 arasında rastgele bir değer
@@ -29,11 +38,18 @@ class _BayiSecState extends State<BayiSec> {
     return Color.fromARGB(255, red, green, blue);
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    cariEx.searchCari("");
+  void bayiAra(String query) {
+    if (query.isEmpty) {
+      tempBayiList.assignAll(widget.bayiList);
+    } else {
+      var results = widget.bayiList
+          .where((value) =>
+              value.ADI!.toLowerCase().contains(query.toLowerCase()) ||
+              value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
+              value.IL!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      tempBayiList.assignAll(results);
+    }
   }
 
   @override
@@ -87,7 +103,11 @@ class _BayiSecState extends State<BayiSec> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-                    onChanged: ((value) => cariEx.searchCari(value)),
+                    onChanged: ((value) {
+                      setState(() {
+                        bayiAra(value);
+                      });
+                    }),
                   ),
                 ),
                 // ! Cari Listesi
@@ -96,42 +116,42 @@ class _BayiSecState extends State<BayiSec> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.55,
                     child: ListView.builder(
-                          itemCount: widget.bayiList.length,
-                          itemBuilder: (context, index) {
-                            Cari cari = widget.bayiList[index];
-                            String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                            String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                            return Column(
-                              children: [
-                                ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: randomColor(),
-                                    child: Text(
-                                      harf1 + harf2,
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  title: Text(
-                                    cari.ADI.toString(),
-                                  ),
-                                  subtitle: Padding(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: Text(cari.IL!.toString()),
-                                  ),
-                                  onTap: () async {
-                                   fisEx.fis!.value.ACIKLAMA4 = cari.KOD;
-                                    fisEx.fis!.value.ACIKLAMA5 = cari.ADI;  
-                                    Navigator.pop(context);                                  
-                                  },
+                      itemCount: tempBayiList.length,
+                      itemBuilder: (context, index) {
+                        Cari cari = tempBayiList[index];
+                        String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                        String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                        return Column(
+                          children: [
+                            ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: randomColor(),
+                                child: Text(
+                                  harf1 + harf2,
+                                  style: TextStyle(color: Colors.white),
                                 ),
-                                Divider(
-                                  thickness: 2,
-                                  color: Colors.black87,
-                                )
-                              ],
-                            );
-                          },
-                        ),
+                              ),
+                              title: Text(
+                                cari.ADI.toString(),
+                              ),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text(cari.IL!.toString()),
+                              ),
+                              onTap: () async {
+                                fisEx.fis!.value.ACIKLAMA4 = cari.KOD;
+                                fisEx.fis!.value.ACIKLAMA5 = cari.ADI;
+                                Navigator.pop(context);
+                              },
+                            ),
+                            Divider(
+                              thickness: 2,
+                              color: Colors.black87,
+                            )
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ]),

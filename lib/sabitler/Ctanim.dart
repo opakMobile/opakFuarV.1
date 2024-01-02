@@ -22,6 +22,7 @@ class Ctanim {
   static List<String> satisFiyatListesi = [];
   static List<String> satisIskontoListesi = [];
   static List<String> genelIskontoListesi = [];
+  static int cariKod = 1;
 
   static SatisTipiModel seciliIslemTip =
       SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
@@ -104,7 +105,19 @@ class Ctanim {
           double.parse(((element.ISK! / 100) * urunToplami).toStringAsFixed(2));
       double tt2 = double.parse(
           ((element.ISK2! / 100) * (urunToplami - tt)).toStringAsFixed(2));
-      kalemindirimToplami = tt + tt2;
+      double tt3 = double.parse(
+          ((element.ISK3! / 100) * (urunToplami - (tt+tt2))).toStringAsFixed(2));
+
+             double tt4 = double.parse(
+          ((element.ISK4! / 100) * (urunToplami - (tt+tt2+tt3))).toStringAsFixed(2));
+
+             double tt5 = double.parse(
+          ((element.ISK5! / 100) * (urunToplami - (tt+tt2+tt3+tt4))).toStringAsFixed(2));
+
+             double tt6 = double.parse(
+          ((element.ISK6! / 100) * (urunToplami - (tt+tt2+tt3+tt4+tt5))).toStringAsFixed(2));
+
+      kalemindirimToplami = tt + tt2 + tt3+tt4+tt5+tt6;
       if (KDVtipDegisti == true) {
         KDVTutari =
             KDVTutari + ((urunToplami - kalemindirimToplami) * kdvOrani);

@@ -6,7 +6,13 @@ var myRootNode = Root.fromJson(map);
 
 class guncelDeger {
   double? fiyat = 0.0;
-  double? iskonto = 0.0;
+  double? iskonto1 = 0.0;
+  double? iskonto2 = 0.0;
+  double? iskonto3 = 0.0;
+  double? iskonto4 = 0.0;
+  double? iskonto5 = 0.0;
+  double? iskonto6 = 0.0;
+
   double? netfiyat = 0.0;
   String? seciliFiyati = "";
   String? guncelBarkod = "";
@@ -15,15 +21,43 @@ class guncelDeger {
 
   guncelDeger(
       [this.fiyat = 0.0,
-      this.iskonto = 0.0,
+      this.iskonto1 = 0.0,
+      this.iskonto2 = 0.0,
+      this.iskonto3 = 0.0,
+      this.iskonto4 = 0.0,
+      this.iskonto5 = 0.0,
+      this.iskonto6 = 0.0,
       this.netfiyat = 0.0,
       this.seciliFiyati = "",
       this.guncelBarkod = "",
       this.fiyatDegistirMi = false,
       this.carpan = 0.0]);
 double hesaplaNetFiyat() {
-    double _iskonto =  double.parse((fiyat! * (iskonto! / 100)).toStringAsFixed(2));
-    return netfiyat =double.parse((fiyat! -_iskonto).toStringAsFixed(2));
+    double _iskonto =  double.parse((fiyat! * (iskonto1! / 100)).toStringAsFixed(2));
+    double _iskonto2Tutar = 0;
+    double _iskonto3Tutar = 0;
+    double _iskonto4Tutar = 0;
+    double _iskonto5Tutar = 0;
+    double _iskonto6Tutar = 0;
+
+    if(iskonto2!>0){
+      _iskonto2Tutar = double.parse(((fiyat! - _iskonto) * (iskonto2! / 100)).toStringAsFixed(2));
+    }
+    if(iskonto3!>0){
+      _iskonto3Tutar = double.parse(((fiyat! - _iskonto - _iskonto2Tutar) * (iskonto3! / 100)).toStringAsFixed(2));
+    }
+    if(iskonto4!>0){
+      _iskonto4Tutar = double.parse(((fiyat! - _iskonto - _iskonto2Tutar - _iskonto3Tutar) * (iskonto4! / 100)).toStringAsFixed(2));
+    }
+    if(iskonto5!>0){
+      _iskonto5Tutar = double.parse(((fiyat! - _iskonto - _iskonto2Tutar - _iskonto3Tutar - _iskonto4Tutar) * (iskonto5! / 100)).toStringAsFixed(2));
+    }
+    if(iskonto6!>0){
+      _iskonto6Tutar = double.parse(((fiyat! - _iskonto - _iskonto2Tutar - _iskonto3Tutar - _iskonto4Tutar - _iskonto5Tutar) * (iskonto6! / 100)).toStringAsFixed(2));
+    }
+
+
+    return netfiyat =double.parse((fiyat! -_iskonto - _iskonto2Tutar - _iskonto3Tutar - _iskonto4Tutar - _iskonto5Tutar - _iskonto6Tutar).toStringAsFixed(2));
         //double.parse((fiyat! * ((1 - (iskonto! / 100)))).toStringAsFixed(2));
   }
 }

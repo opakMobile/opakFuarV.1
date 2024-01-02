@@ -14,6 +14,7 @@ appBarDizayn(context) {
       color: Colors.white,
       child: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: EdgeInsets.only(
@@ -23,7 +24,7 @@ appBarDizayn(context) {
             Text(
               'fair sales',
               style: GoogleFonts.varelaRound(
-                  fontSize: 30,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
                   color: Colors.black),

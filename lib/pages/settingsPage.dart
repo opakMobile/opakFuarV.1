@@ -365,44 +365,33 @@ class _settings_pageState extends State<settings_page> {
                                       ),
                                     )
                                   : Container(),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  enable == true
-                                      ? SizedBox(
-                                          width: ekranGenisligi * .4,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              child: Row(
-                                                children: [
-                                                  Checkbox(
-                                                    activeColor: Color.fromRGBO(
-                                                        81, 82, 83, 1),
-                                                    side: BorderSide(
-                                                        color: Colors.black),
-                                                    value: disardaKullan,
-                                                    onChanged:
-                                                        (bool? value) async {
-                                                      setState(() {
-                                                        disardaKullan = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  Align(
-                                                    child: Text(
-                                                      "Dışarda Kullan",
-                                                      maxLines: 3,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : Container()
-                                ],
-                              ),
+                              enable == true
+                                  ? Container(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                     
+                                      children: [
+                                        Checkbox(
+                                          activeColor: Color.fromRGBO(
+                                              81, 82, 83, 1),
+                                          side: BorderSide(
+                                              color: Colors.black),
+                                          value: disardaKullan,
+                                          onChanged:
+                                              (bool? value) async {
+                                            setState(() {
+                                              disardaKullan = value!;
+                                            });
+                                          },
+                                        ),
+                                        Text(
+                                          "Dışarda Kullan",
+                                          maxLines: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                  : Container(),
                               Spacer(),
                               enable == true
                                   ? Row(

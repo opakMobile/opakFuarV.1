@@ -121,8 +121,13 @@ class _CariListePageState extends State<CariListePage> {
                                     if (widget.islem) {
                                       // cariye gidecek bilgisine
                                       fisEx.list_fis_cari_ozel.clear();
+                                      /*
                                       await fisEx.listCariFisGetir(
                                           cariEx.searchCariList[index].ADI!);
+                                          */
+                                       double genelToplam = await fisEx.cariToplamGetir( cariEx
+                                                        .searchCariList[index].KOD!);  
+                                                        
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -130,6 +135,7 @@ class _CariListePageState extends State<CariListePage> {
                                                   CariDetayPage(
                                                     cari: cariEx
                                                         .searchCariList[index],
+                                                    genelToplam: genelToplam,
                                                   )));
                                     } else {
                                       // cari listesine gidecek

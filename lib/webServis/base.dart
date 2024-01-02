@@ -26,20 +26,20 @@ import '../sabitler/sharedPreferences.dart';
 
 class BaseService {
   Future<void> tumVerileriGuncelle() async {
-    await getirStoklar(sirket: "AAGENELOPAK", kullaniciKodu: "1");
-    await getirCariler(sirket: "AAGENELOPAK", kullaniciKodu: "1");
-    await getirCariAltHesap(sirket: "AAGENELOPAK");
-    await getirKur(sirket: "AAGENELOPAK");
-    await getirStokKosul(sirket: "AAGENELOPAK");
+    await getirStoklar(sirket: Ctanim.sirket, kullaniciKodu: "1");
+    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: "1");
+    await getirCariAltHesap(sirket: Ctanim.sirket!);
+    await getirKur(sirket: Ctanim.sirket);
+    await getirStokKosul(sirket: Ctanim.sirket!);
   }
 
   Future<void> cariVerileriGuncelle() async {
-    await getirCariler(sirket: "AAGENELOPAK", kullaniciKodu: "1");
-    await getirCariAltHesap(sirket: "AAGENELOPAK");
+    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: "1");
+    await getirCariAltHesap(sirket: Ctanim.sirket!);
   }
 
   Future<void> stokVerileriGuncelle() async {
-    await getirStoklar(sirket: "AAGENELOPAK", kullaniciKodu: "1");
+    await getirStoklar(sirket: Ctanim.sirket, kullaniciKodu: "1");
   }
 
   String temizleKontrolKarakterleri(String metin) {
@@ -64,7 +64,7 @@ class BaseService {
 
   Future<String> getirStoklar({required sirket, required kullaniciKodu}) async {
     var url = Uri.parse(
-        "https://apkwebservis.nativeb4b.com/MobilService.asmx"); // dış ve iç denecek;
+        Ctanim.IP); // dış ve iç denecek;
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
       'SOAPAction': 'http://tempuri.org/GetirStok'
@@ -133,7 +133,7 @@ class BaseService {
   }
 
   Future<String> getirCariler({required sirket, required kullaniciKodu}) async {
-    var url = Uri.parse("https://apkwebservis.nativeb4b.com/MobilService.asmx");
+    var url = Uri.parse(Ctanim.IP);
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
       'SOAPAction': 'http://tempuri.org/GetirCari'
@@ -185,6 +185,7 @@ class BaseService {
           await VeriIslemleri().cariTabloTemizle();
 
           listcariTemp.forEach((webservisCari) async {
+            webservisCari.AKTARILDIMI = "E";
             await VeriIslemleri().cariEkle(webservisCari);
           });
 
@@ -321,7 +322,7 @@ class BaseService {
 
   Future<String> getirCariAltHesap({required String sirket}) async {
     var url = Uri.parse(
-        "https://apkwebservis.nativeb4b.com/MobilService.asmx"); // dış ve iç denecek;
+        Ctanim.IP); // dış ve iç denecek;
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
       'SOAPAction': 'http://tempuri.org/GetirCariAltHesap'
@@ -365,20 +366,27 @@ class BaseService {
             int DOVIZID = int.parse(element["DOVIZID"].toString());
             String VARSAYILAN = element['VARSAYILAN'];
             int ALTHESAPID = int.parse(element["ALTHESAPID"].toString());
+            String ZORUNLU = element['ZORUNLU'];
 
             await VeriIslemleri().cariAltHesapEkle(CariAltHesap(
                 ALTHESAPID: ALTHESAPID,
                 KOD: KOD,
                 ALTHESAP: ALTHESAP,
                 DOVIZID: DOVIZID,
-                VARSAYILAN: VARSAYILAN));
+                VARSAYILAN: VARSAYILAN,
+                ZORUNLU: ZORUNLU
+
+                ));
 
             listeler.listCariAltHesap.add(CariAltHesap(
                 ALTHESAPID: ALTHESAPID,
                 KOD: KOD,
                 ALTHESAP: ALTHESAP,
                 DOVIZID: DOVIZID,
-                VARSAYILAN: VARSAYILAN));
+                VARSAYILAN: VARSAYILAN,
+               ZORUNLU: ZORUNLU
+                
+                ));
           }
 
           return "";
@@ -841,6 +849,56 @@ class BaseService {
       return hata;
     }
   }
+    Future<SHataModel> ekleSiparisFuar(
+      {required String sirket,
+      required Map<String, dynamic> jsonDataList}) async {
+    SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
+
+    var jsonString;
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+
+    jsonString = jsonEncode(jsonDataList);
+
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/EkleSiparisFuar',
+    };
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <EkleSiparisFuar xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+      <Fis>$jsonString</Fis>
+    </EkleSiparisFuar>
+  </soap:Body>
+</soap:Envelope>
+''';
+    printWrapped(jsonString);
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+
+        Map<String, dynamic> jsonData = jsonDecode(parsedXml.innerText);
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        return gelenHata;
+      } else {
+        Exception(
+            'Fatura Verisi Gönderilemedi. StatusCode: ${response.statusCode}');
+        return hata;
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return hata;
+    }
+  }
 
   Future<String> getirOlcuBirim({required String sirket}) async {
     var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
@@ -914,7 +972,7 @@ class BaseService {
 
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
-      'SOAPAction': 'http://tempuri.org/EkleFatura',
+      'SOAPAction': 'http://tempuri.org/CariGuncelle',
     };
     String body = '''
 <?xml version="1.0" encoding="utf-8"?>

@@ -15,7 +15,11 @@ class FisHareket {
   double? KDVTUTAR = 0.0; // NETFİYAT*(KDVORANI/100)
   double? ISK = 0.0;
   double? ISK2 = 0.0;
-  double? NETFIYAT = 0.0; // brut * (1-(ISK1/100))*(1-(ISK2/100))
+  double? ISK3 = 0.0;
+  double? ISK4 = 0.0;
+  double? ISK5 = 0.0;
+  double? ISK6 = 0.0;
+  double? NETFIYAT = 0.0; // brut * (1-(ISK1/100))*(1-(ISK2/100))3
   double? BRUTTOPLAMFIYAT = 0.0; //burut*miktar
   double? NETTOPLAM = 0.0;
   double? ISKONTOTOPLAM = 0.0;
@@ -30,6 +34,7 @@ class FisHareket {
   String? TARIH = DateFormat("yyyy-MM-dd").format(DateTime.now());
   double? KUR = 0.0;
   String? ACIKLAMA1 = "";
+  int MALFAZLASI = 0;
 
   FisHareket({
     required this.ID,
@@ -43,6 +48,10 @@ class FisHareket {
     required this.ISKONTO,
     required this.ISK,
     required this.ISK2,
+    required this.ISK3,
+    required this.ISK4,
+    required this.ISK5,
+    required this.ISK6,
     required this.NETFIYAT,
     required this.KDVDAHILNETFIYAT,
     required this.BRUTTOPLAMFIYAT,
@@ -59,6 +68,7 @@ class FisHareket {
     required this.KUR,
     required this.ACIKLAMA1,
     required this.UUID,
+    required this.MALFAZLASI
   });
 
   Map<String, dynamic> toJson() {
@@ -74,6 +84,10 @@ class FisHareket {
     data['ISKONTO'] = ISKONTO;
     data['ISK'] = ISK;
     data['ISK2'] = ISK2;
+    data['ISK3'] = ISK3;
+    data['ISK4'] = ISK4;
+    data['ISK5'] = ISK5;
+    data['ISK6'] = ISK6;
     data['NETFIYAT'] = NETFIYAT;
     data['KDVDAHILNETFIYAT'] = KDVDAHILNETFIYAT;
     data['BRUTTOPLAMFIYAT'] = BRUTTOPLAMFIYAT;
@@ -90,6 +104,7 @@ class FisHareket {
     data['KUR'] = KUR;
     data['ACIKLAMA1'] = ACIKLAMA1;
     data['UUID'] = UUID;
+    data['MALFAZLASI'] = MALFAZLASI;
     return data;
   }
 
@@ -106,6 +121,10 @@ class FisHareket {
           BRUTFIYAT: 0.0,
           ISK: 0.0,
           ISK2: 0.0,
+          ISK3: 0.0,
+          ISK4: 0.0,
+          ISK5: 0.0,
+          ISK6: 0.0,
           BRUTTOPLAMFIYAT: 0.0,
           NETFIYAT: 0.0,
           KDVDAHILNETFIYAT: 0.0,
@@ -122,6 +141,7 @@ class FisHareket {
           KDVDAHILNETTOPLAM: 0.0,
           KDVTOPLAM: 0.0,
           NETTOPLAM: 0.0,
+          MALFAZLASI: 0
         );
   FisHareket.fromJson(Map<String, dynamic> json) {
     ID = int.parse(json['ID'].toString());
@@ -135,6 +155,10 @@ class FisHareket {
     ISKONTO = double.parse(json['ISKONTO'].toString());
     ISK = double.parse(json['ISK'].toString());
     ISK2 = double.parse(json['ISK2'].toString());
+    ISK3 = double.parse(json['ISK3'].toString());
+    ISK4 = double.parse(json['ISK4'].toString());
+    ISK5 = double.parse(json['ISK5'].toString());
+    ISK6 = double.parse(json['ISK6'].toString());
     NETFIYAT = double.parse(json['NETFIYAT'].toString());
     KDVDAHILNETFIYAT = double.parse(json['KDVDAHILNETFIYAT'].toString());
     BRUTTOPLAMFIYAT = double.parse(json['BRUTTOPLAMFIYAT'].toString());
@@ -151,6 +175,7 @@ class FisHareket {
     KUR = double.parse(json['KUR'].toString());
     ACIKLAMA1 = json['ACIKLAMA1'];
     UUID = json['UUID'];
+    MALFAZLASI = int.parse(json['MALFAZLASI'].toString());
   }
 
   Future<int?> fisHareketEkle(FisHareket fisHareket) async {

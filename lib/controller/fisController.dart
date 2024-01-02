@@ -28,6 +28,7 @@ class FisController extends GetxController {
   void fiseStokEkle(
       {required bool urunListedenMiGeldin,
       required double KUR,
+      int malFazlasi = 0,
       required String ALTHESAP,
       required String TARIH,
       required String Aciklama1,
@@ -39,15 +40,24 @@ class FisController extends GetxController {
       required double burutFiyat,
       required double iskonto,
       required double iskonto2,
+      required double iskonto3,
+      required double iskonto4,
+      required double iskonto5,
+      required double iskonto6,
       required String birim,
       required int birimID,
       required int dovizId,
       required String dovizAdi}) {
+
+        if(malFazlasi == null || malFazlasi == 0){
+          malFazlasi = 0;
+        }
     bool stokVarMi = false;
     int? fisId = fis!.value.ID;
 
     double HbrutFiyat = burutFiyat;
-    double HnetFiyat = HbrutFiyat * (1 - iskonto / 100) * (1 - iskonto2 / 100);
+    double HnetFiyat = HbrutFiyat * (1 - iskonto / 100) * (1 - iskonto2 / 100)*(1 - iskonto3 / 100)
+    * (1 - iskonto4 / 100) * (1 - iskonto5 / 100)*(1 - iskonto6 / 100);
     double Hiskonto = HbrutFiyat - HnetFiyat;
     double HkdvDahilNetFiyat = (HnetFiyat * (1 + KDVOrani / 100));
     double HkdvTutar = HnetFiyat * (KDVOrani / 100);
@@ -62,6 +72,7 @@ class FisController extends GetxController {
         stokVarMi = true;
         if (urunListedenMiGeldin == false) {
           // sepet listesi düzenle true gelecek
+          fisHareket.MALFAZLASI = malFazlasi;
           fisHareket.MIKTAR =
               int.parse((fisHareket.MIKTAR! + miktar).toString());
           HbrutToplamFiyat = HbrutFiyat * fisHareket.MIKTAR!;
@@ -95,6 +106,10 @@ class FisController extends GetxController {
         fisHareket.KDVTOPLAM = Ctanim.noktadanSonraAlinacak(HkdvTutarToplam);
         fisHareket.ISK = Ctanim.noktadanSonraAlinacak(iskonto);
         fisHareket.ISK2 = Ctanim.noktadanSonraAlinacak(iskonto2);
+        fisHareket.ISK3 = Ctanim.noktadanSonraAlinacak(iskonto3);
+        fisHareket.ISK4 = Ctanim.noktadanSonraAlinacak(iskonto4);
+        fisHareket.ISK5 = Ctanim.noktadanSonraAlinacak(iskonto5);
+        fisHareket.ISK6 = Ctanim.noktadanSonraAlinacak(iskonto6);
         //fisHareket.BURUTFIYAT = burutFiyat;
         //fisHareket.ISK = iskonto;
 
@@ -111,6 +126,7 @@ class FisController extends GetxController {
     HkdvDahilNetFiyatToplam = HkdvDahilNetFiyat * miktar;
     HkdvTutarToplam = HkdvTutar * miktar;
     FisHareket yeniFisHareket = FisHareket(
+      MALFAZLASI: malFazlasi ?? 0,
       ALTHESAP: ALTHESAP,
       UUID: UUID,
       TARIH: TARIH,
@@ -125,6 +141,10 @@ class FisController extends GetxController {
       BRUTFIYAT: Ctanim.noktadanSonraAlinacak(HbrutFiyat),
       ISK: iskonto,
       ISK2: iskonto2,
+      ISK3: iskonto3,
+      ISK4: iskonto4,
+      ISK5: iskonto5,
+      ISK6: iskonto6,
       ISKONTO: Ctanim.noktadanSonraAlinacak(Hiskonto),
       KDVDAHILNETFIYAT: Ctanim.noktadanSonraAlinacak(HkdvDahilNetFiyat),
       KDVTUTAR: Ctanim.noktadanSonraAlinacak(HkdvTutar),
@@ -150,6 +170,30 @@ class FisController extends GetxController {
         List.generate(result.length, (i) => FisHareket.fromJson(result[i]));
     return tt1;
   }
+    Future<double> cariToplamGetir(String cariKod) async {
+    List<Fis> tt = await getCariToplam(cariKod);
+    double genelToplam = 0;
+    if(tt.length == 0){
+      return genelToplam;
+
+    }else{
+         for (var i = 0; i < tt.length; i++) {
+      var element = tt[i];
+      genelToplam += element.GENELTOPLAM!;
+    }
+
+    }
+ 
+    return genelToplam;
+  }
+   Future<List<Fis>> getCariToplam(String cariKod) async {
+     List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
+        where: 'CARIKOD = ? AND AKTARILDIMI = ?', whereArgs: [cariKod,true]);
+    return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
+  }
+
+
+
     Future<void> listTumFisleriGetir() async {
     List<Fis> tt = await getTumfis();
     for (var i = 0; i < tt.length; i++) {

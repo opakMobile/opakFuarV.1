@@ -14,8 +14,8 @@ import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 
 class SiparisTamamla extends StatefulWidget {
-  const SiparisTamamla({super.key, required this.fiss});
-  final Fis fiss;
+  const SiparisTamamla({super.key, });
+
 
   @override
   State<SiparisTamamla> createState() => _SiparisTamamlaState();
@@ -107,17 +107,20 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
   }
 
   List<Widget> altHesaplar = [];
+  TextEditingController aciklamaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     altHesaplar.clear();
 
-         List<Color> colors = generateRandomColors(widget.fiss.altHesapToplamlar.length);
-    for (int i = 0 ; i < widget.fiss.altHesapToplamlar.length; i++) {
+    List<Color> colors =
+        generateRandomColors(fisEx.fis!.value.altHesapToplamlar.length);
+    for (int i = 0; i < fisEx.fis!.value.altHesapToplamlar.length; i++) {
       altHesaplar.add(altHesapWidgetOlustur(
-          widget.fiss.altHesapToplamlar[i].ALTHESAPADI!,  widget.fiss.altHesapToplamlar[i].TOPLAM!, colors[i]));
+          fisEx.fis!.value.altHesapToplamlar[i].ALTHESAPADI!,
+          fisEx.fis!.value.altHesapToplamlar[i].TOPLAM!,
+          colors[i]));
     }
-
 
     return SafeArea(
       child: Scaffold(
@@ -136,27 +139,27 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                     ),
                   ),
                   onPressed: () async {
-                    if (Ctanim.kullanici!.ISLEMAKTARILSIN == "E") {
-                     if(fisEx.fis!.value!.ACIKLAMA4 != "" && fisEx.fis!.value!.ACIKLAMA5 != "" ){
-                            fisEx.fis!.value.DURUM = true;
+                   
+                    fisEx.fis!.value.DURUM = true;
                     final now = DateTime.now();
                     final formatter = DateFormat('HH:mm');
                     String saat = formatter.format(now);
                     fisEx.fis!.value.SAAT = saat;
-                    Fis fiss = fisEx.fis!.value;
 
-                    await Fis.empty()
-                        .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
-                        fisEx.fis!.value = Fis.empty(); 
-                        showDialog(
+                    showDialog(
                         context: context,
                         builder: (context) {
                           return CustomAlertDialog(
                             secondButtonText: "Tamam",
-                            onSecondPress: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                            onSecondPress: () async {
+                    await Fis.empty()
+                        .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+                    fisEx.fis!.value = Fis.empty();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                       Navigator.pop(context);
+                              
+                          
                             },
                             pdfSimgesi: true,
                             align: TextAlign.center,
@@ -164,26 +167,27 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             message:
                                 'Fatura Kaydedildi. PDF Dosyasını Görüntülemek İster misiniz?',
                             onPres: () async {
+                              Fis fiss = fisEx.fis!.value;
+                               await Fis.empty()
+                        .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+                    fisEx.fis!.value = Fis.empty();
+                    Navigator.pop(context);Navigator.pop(context);
+
                               Navigator.pop(context);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                     builder: (context) => PdfOnizleme(
-                                          m: widget.fiss,
+                                          m: fiss,
                                           fastReporttanMiGelsin: false,
                                         )),
                               );
+
+                   
+                 
                             },
                             buttonText: 'Pdf\'i\ Gör',
                           );
                         });
-                    }
-                      
-
-
-                     } 
-              
-                    
-                  
                   },
                   child: Text(
                     "Siparişi Yazdır",
@@ -214,7 +218,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      widget.fiss.cariKart.ADI!,
+                      fisEx.fis!.value.cariKart.ADI!,
                       maxLines: 1,
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,
@@ -250,7 +254,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             child: Center(
                                 child: Text(
                               Ctanim.donusturMusteri(
-                                widget.fiss.GENELTOPLAM.toString(),
+                                fisEx.fis!.value.GENELTOPLAM.toString(),
                               ),
                               style: TextStyle(
                                   fontSize: 20,
@@ -279,7 +283,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                       child: Center(
                                           child: Text(
                                         Ctanim.donusturMusteri(
-                                          widget.fiss.INDIRIM_TOPLAMI
+                                          fisEx.fis!.value.INDIRIM_TOPLAMI
                                               .toString(),
                                         ),
                                         style: TextStyle(
@@ -306,7 +310,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                       child: Center(
                                           child: Text(
                                         Ctanim.donusturMusteri(
-                                          widget.fiss.KDVTUTARI.toString(),
+                                          fisEx.fis!.value.KDVTUTARI.toString(),
                                         ),
                                         style: TextStyle(
                                             fontSize: 20,
@@ -333,7 +337,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             child: Center(
                                 child: Text(
                               Ctanim.donusturMusteri(
-                                widget.fiss.TOPLAM.toString(),
+                                fisEx.fis!.value.TOPLAM.toString(),
                               ),
                               style: TextStyle(
                                   fontSize: 20,
@@ -357,6 +361,11 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: TextFormField(
+                        controller: aciklamaController,
+                        onChanged: (value) {
+                          fisEx.fis!.value.ACIKLAMA1 = value;
+                       
+                        },
                         maxLines: 8,
                         decoration: InputDecoration(
                           /* contentPadding: EdgeInsets.symmetric(
@@ -387,9 +396,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width*.8,
-
-                
+                        width: MediaQuery.of(context).size.width * .8,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: Colors.green,
@@ -397,27 +404,36 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          onPressed: (){
+                          onPressed: () async {
                             List<Cari> bayiler = [];
-                            for(var element in  listeler.listCari){
-                              if(element.TIPI == "Bayi"){
+                            for (var element in listeler.listCari) {
+                              if (element.TIPI == "Bayi") {
                                 bayiler.add(element);
-                      
                               }
-                      
                             }
+                            final value = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BayiSec(
+                                        bayiList: bayiler,
+                                      )),
+                            );
+                            setState(() {});
+                            /*
                             Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                          builder: (context) => BayiSec(
-                                bayiList: bayiler,
-                                          
-                              )));
-                      
-                      
-                      
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BayiSec(
+                                          bayiList: bayiler,
+                                        )));*/
                           },
-                          child: Text("Bayi Seç"),
+                          child: Text(fisEx.fis!.value.ACIKLAMA4 != "" &&
+                                  fisEx.fis!.value.ACIKLAMA5 != ""
+                              ? "Bayi : " +
+                                  fisEx.fis!.value!.ACIKLAMA4! +
+                                  " - " +
+                                  fisEx.fis!.value!.ACIKLAMA5!
+                              : "Bayi Seç"),
                         ),
                       ),
                     ),

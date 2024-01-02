@@ -15,19 +15,29 @@ class fisHareketDuzenle extends StatefulWidget {
     required this.gelenStokKart,
     required this.gelenMiktar,
     required this.altHesap,
+
     this.isk1 = -1,
     this.isk2 = -1,
     this.isk3 = -1,
+    this.isk4 = -1,
+    this.isk5 = -1,
+    this.isk6 = -1,
+
+
     this.malFazlasi = -1,
     this.fiyat = -1,
   });
   final StokKart gelenStokKart;
   final double gelenMiktar;
   final String altHesap;
+  
 
   double isk1;
   double isk2;
   double isk3;
+  double isk4;
+  double isk5;
+  double isk6;
   double malFazlasi;
   double fiyat;
 
@@ -36,6 +46,7 @@ class fisHareketDuzenle extends StatefulWidget {
 }
 
 class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
+  FocusNode focusNode = FocusNode();
   @override
   void initState() {
     // TODO: implement initState
@@ -46,11 +57,31 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     fiyatController.text = widget.fiyat != -1
         ? widget.fiyat.toString()
         : widget.gelenStokKart.guncelDegerler!.fiyat!.toString();
+
     isk1Controller.text = widget.isk1 != -1
         ? widget.isk1.toString()
-        : widget.gelenStokKart.guncelDegerler!.iskonto!.toString();
-    isk2Controller.text = "0";
-    isk3Controller.text = "0";
+        : widget.gelenStokKart.guncelDegerler!.iskonto1!.toString();
+
+            isk2Controller.text = widget.isk2 != -1
+        ? widget.isk2.toString()
+        : widget.gelenStokKart.guncelDegerler!.iskonto2!.toString();
+
+            isk3Controller.text = widget.isk3 != -1
+        ? widget.isk3.toString()
+        : widget.gelenStokKart.guncelDegerler!.iskonto3!.toString();
+
+            isk4Controller.text = widget.isk4 != -1
+        ? widget.isk4.toString()
+        : widget.gelenStokKart.guncelDegerler!.iskonto4!.toString();
+
+            isk5Controller.text = widget.isk5 != -1
+        ? widget.isk5.toString()
+        : widget.gelenStokKart.guncelDegerler!.iskonto5!.toString();
+
+        isk6Controller.text = widget.isk6 != -1
+        ? widget.isk6.toString()
+        : widget.gelenStokKart.guncelDegerler!.iskonto6!.toString();
+   
     malFazlasiController.text = "0";
     print("Miktar ${miktarController.text}");
   }
@@ -64,6 +95,12 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
 
   final TextEditingController isk3Controller = TextEditingController(text: "0");
 
+    final TextEditingController isk4Controller = TextEditingController(text: "0");
+
+  final TextEditingController isk5Controller = TextEditingController(text: "0");
+
+  final TextEditingController isk6Controller = TextEditingController(text: "0");
+
   final TextEditingController malFazlasiController =
       TextEditingController(text: "0");
 
@@ -74,7 +111,10 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
       {double iskonto1 = 0,
       double iskonto2 = 0,
       double iskonto3 = 0,
-      double malFazlasi = 0,
+      double iskonto4 = 0,
+      double iskonto5 = 0,
+      double iskonto6 = 0,
+      int malFazlasi = 0,
       double fiyat = 0}) {
     int birimID = -1;
 
@@ -84,14 +124,14 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
       }
     }
     double tempFiyat = 0;
-    double tempIskonto1 = 0;
+ 
     if (fiyat == 0) {
       tempFiyat = stokKart.guncelDegerler!.fiyat!;
     } else {
       tempFiyat = fiyat;
     }
 
-    tempIskonto1 = iskonto1;
+   
 
     listeler.listKur.forEach((element) {
       if (element.ANABIRIM == "E") {
@@ -106,6 +146,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     {
       fisEx.fiseStokEkle(
         // belgeTipi: widget.belgeTipi,
+        malFazlasi: malFazlasi,
 
         ALTHESAP: widget.altHesap,
         urunListedenMiGeldin:
@@ -117,8 +158,12 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
         dovizAdi: stokKartKur.ACIKLAMA!,
         dovizId: stokKartKur.ID!,
         burutFiyat: tempFiyat!,
-        iskonto: tempIskonto1,
-        iskonto2: 0.0,
+        iskonto: iskonto1,
+        iskonto2: iskonto2,
+        iskonto3: iskonto3,
+        iskonto4: iskonto4,
+        iskonto5: iskonto5,
+        iskonto6: iskonto6,
         miktar: (miktar).toInt(),
         stokKodu: stokKart.guncelDegerler!.guncelBarkod!,
         Aciklama1: '',
@@ -149,6 +194,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
 
   @override
   Widget build(BuildContext context) {
+  FocusScope.of(context).requestFocus(focusNode);
     return AlertDialog(
       title: SizedBox(
           width: MediaQuery.of(context).size.width * .8,
@@ -211,8 +257,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                         )),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: MediaQuery.of(context).size.height * 0.07,
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    height: MediaQuery.of(context).size.height * 0.06,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey),
@@ -225,6 +271,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                           ),
                           child: TextFormField(
                             controller: miktarController,
+                            focusNode: focusNode,
+                            onTap: () => miktarController.selection = TextSelection(baseOffset: 0, extentOffset: miktarController.value.text.length),
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "1",
@@ -302,6 +350,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                         ? true
                                         : false,
                                 controller: isk1Controller,
+                     onTap: () => isk1Controller.selection = TextSelection(baseOffset: 0, extentOffset: isk1Controller.value.text.length),
+
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "1",
@@ -339,6 +389,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                         ? true
                                         : false,
                                 controller: isk2Controller,
+                     onTap: () => isk2Controller.selection = TextSelection(baseOffset: 0, extentOffset: isk2Controller.value.text.length),
+
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "1",
@@ -376,6 +428,131 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                         ? true
                                         : false,
                                 controller: isk3Controller,
+                          onTap: () => isk3Controller.selection = TextSelection(baseOffset: 0, extentOffset: isk3Controller.value.text.length),
+
+                                
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "1",
+                                  hintStyle: TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        "İskonto 4",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.07,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Material(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextFormField(
+                                enabled:
+                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
+                                            "E"
+                                        ? true
+                                        : false,
+                                controller: isk4Controller,
+                      onTap: () => isk4Controller.selection = TextSelection(baseOffset: 0, extentOffset: isk4Controller.value.text.length),
+
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "1",
+                                  hintStyle: TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        "İskonto 5",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.07,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Material(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextFormField(
+                                enabled:
+                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
+                                            "E"
+                                        ? true
+                                        : false,
+                                controller: isk5Controller,
+                                 onTap: () => isk5Controller.selection = TextSelection(baseOffset: 0, extentOffset: isk5Controller.value.text.length),
+
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "1",
+                                  hintStyle: TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        "İskonto 6",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.07,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Material(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextFormField(
+                                enabled:
+                                    Ctanim.kullanici!.GISKDEGISTIRILSIN1 ==
+                                            "E"
+                                        ? true
+                                        : false,
+                                controller: isk6Controller,
+                                onTap: () => isk6Controller.selection = TextSelection(baseOffset: 0, extentOffset: isk6Controller.value.text.length),
+
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "1",
@@ -423,6 +600,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: TextFormField(
+                        controller: malFazlasiController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "1",
@@ -466,6 +644,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                       ),
                       child: TextFormField(
                         controller: fiyatController,
+                     onTap: () => fiyatController.selection = TextSelection(baseOffset: 0, extentOffset: fiyatController.value.text.length),
+
                         enabled: Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E"
                             ? true
                             : false,
@@ -525,8 +705,11 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                               : isk2Controller.text) ??
                           0,
                       iskonto3: double.parse(isk3Controller.text) ?? 0,
+                      iskonto4: double.parse(isk4Controller.text) ?? 0,
+                      iskonto5: double.parse(isk5Controller.text) ?? 0,
+                      iskonto6: double.parse(isk6Controller.text) ?? 0,
                       malFazlasi:
-                          double.parse(malFazlasiController.text) ?? 0,
+                          int.parse(malFazlasiController.text) ?? 0,
                       fiyat: double.parse(fiyatController.text));
           
                   Navigator.pop(context);

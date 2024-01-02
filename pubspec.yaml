@@ -32,7 +32,7 @@ dependencies:
   money_formatter: ^0.0.3
   uuid: ^3.0.7
   dropdown_search: ^5.0.6
-
+  image_picker: ^0.8.7+1
 
 dev_dependencies:
   flutter_test:
@@ -48,4 +48,9 @@ flutter:
 
   assets:
     - assets/
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Bold.ttf    
 

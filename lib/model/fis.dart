@@ -57,6 +57,9 @@ class Fis {
   String? SAAT = "";
   int? DOVIZID = 0;
   String? ONAY = "H";
+  String? USTUUID = "";
+  int? SIPARISSAYISI = 0;
+  int? KALEMSAYISI = 0;
 
   Fis(
       this.ID,
@@ -101,6 +104,9 @@ class Fis {
       this.SAAT,
       this.DOVIZID,
       this.ONAY,
+      this.USTUUID,
+      this.SIPARISSAYISI,
+      this.KALEMSAYISI,
       {this.isExpanded = false});
   Fis.empty()
       : this(
@@ -145,7 +151,10 @@ class Fis {
             DateFormat("yyyy-MM-dd").format(DateTime.now()),
             "",
             0,
-            "H");
+            "H",
+            "",
+            0,
+            0);
 
   Fis.fromFis(Fis fis, List<FisHareket> fisHareket) {
     this.ID = fis.ID;
@@ -190,6 +199,10 @@ class Fis {
     this.SAAT = fis.SAAT;
     this.DOVIZID = fis.DOVIZID;
     this.ONAY = fis.ONAY;
+    this.USTUUID = fis.USTUUID;
+    this.SIPARISSAYISI = SIPARISSAYISI;
+    this.KALEMSAYISI = KALEMSAYISI;
+
     this.fisStokListesi = fisHareket;
     this.altHesapToplamlar = altHesapToplamlar;
   }
@@ -237,6 +250,9 @@ class Fis {
     data['SAAT'] = SAAT;
     data['DOVIZID'] = DOVIZID;
     data['ONAY'] = ONAY;
+    data['USTUUID'] = USTUUID;
+    data['SIPARISSAYISI']= SIPARISSAYISI;
+    data['KALEMSAYISI']= KALEMSAYISI;
 
 
 
@@ -290,13 +306,17 @@ class Fis {
     data['SAAT'] = SAAT.toString();
     data['DOVIZID'] = DOVIZID.toString();
     data['ONAY'] = ONAY.toString();
+    data['USTUUID'] = USTUUID.toString();
+    data['SIPARISSAYISI'] = SIPARISSAYISI.toString();
+    data['KALEMSAYISI'] = KALEMSAYISI.toString();
+
     data['STOKLISTESI'] = fisStokListesi.map((fis1) => fis1.toJson()).toList();
-   data['CARIKART'] = cariKart.toJson();
-    // data['altHesapToplamlar'] = altHesapToplamlar.map((fis1) => fis1.toJson()).toList();
+
+    //data['CARIKART'] = cariKart.toJson();
+   // data['altHesapToplamlar'] = altHesapToplamlar.map((fis1) => fis1.toJson()).toList();
 
     return data;
   }
-
   Fis.fromJson(Map<String, dynamic> json) {
     ID = int.parse(json['ID'].toString());
     TIP = int.parse(json['TIP'].toString());
@@ -337,6 +357,10 @@ class Fis {
     FATURANO = json['FATURANO'];
     TESLIMTARIHI = json['TESLIMTARIHI'];
     SAAT = json['SAAT'];
+    USTUUID = json['USTUUID'];
+    SIPARISSAYISI =int.parse(json['SIPARISSAYISI'].toString());
+    KALEMSAYISI =int.parse(json['KALEMSAYISI'].toString());
+    
     ALTHESAPID = int.parse(json['ALTHESAPID'].toString());
     DOVIZID = int.parse(json['DOVIZID'].toString());
     ONAY = json['ONAY'];
@@ -382,6 +406,9 @@ class Fis {
     SAAT = json['SAAT'];
     ALTHESAPID = int.parse(json['ALTHESAPID'].toString());
     DOVIZID = int.parse(json['DOVIZID'].toString());
+    USTUUID = json['USTUUID'];
+    SIPARISSAYISI =int.parse(json['SIPARISSAYISI'].toString());
+    KALEMSAYISI =int.parse(json['KALEMSAYISI'].toString());
     ONAY = json['ONAY'];
   }
   //database fiş ekle
@@ -404,6 +431,7 @@ class Fis {
             Ctanim.db?.insert("TBLFISHAR", element.toJson());
           }
         }
+        // alt hesap toplamları gezebiliriz
 
         return result;
       } on PlatformException catch (e) {

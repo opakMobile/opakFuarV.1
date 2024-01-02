@@ -1,6 +1,7 @@
 import 'package:flutter/rendering.dart';
 
 class AltHesapToplamModel{
+  int? FISID = 0;
   String? ALTHESAPADI="";
   List<String>? STOKKODLIST = [];
   double? TOPLAM=0;

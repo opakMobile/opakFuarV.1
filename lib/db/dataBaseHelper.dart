@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 7;
+  static final _databaseVersion = 9;
 
   static Database? _database;
 
@@ -47,6 +47,25 @@ class DatabaseHelper {
     print(oldVersion);
     print(newVersion);
     for (int i = oldVersion; i <= newVersion; i++) {
+      if (i == 9) {
+        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ISK3 DECIMAL;");
+        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ISK4 DECIMAL;");
+        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ISK5 DECIMAL;");
+        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ISK6 DECIMAL;");
+        db.execute("ALTER TABLE TBLFISSB ADD COLUMN USTUUID TEXT;");
+        db.execute("ALTER TABLE TBLFISSB ADD COLUMN SIPARISSAYISI INTEGER;");
+        db.execute("ALTER TABLE TBLFISSB ADD COLUMN KALEMSAYISI INTEGER;");
+        db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN ZORUNLU TEXT;");
+        db.execute("ALTER TABLE TBLCARISB ADD COLUMN ACIKLAMA4 TEXT;");
+        //fishar mf
+        //VERGI DAİRESİ
+        //SIPARISSAYISI
+
+      }
+        if (i == 8) {
+        db.execute("ALTER TABLE TBLCARISB ADD COLUMN AKTARILDIMI TEXT;");
+        
+      }
       if (i == 7) {
         db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN ALTHESAPID INTEGER;");
       }
@@ -213,7 +232,7 @@ class DatabaseHelper {
       ILCE TEXT,
       IL TEXT ,
       ADRES TEXT ,
-      VERGIDAIRESI TEXT,
+      VERGI_DAIRESI TEXT,
       VERGINO TEXT ,
       KIMLIKNO TEXT ,
       TIPI TEXT ,
@@ -228,7 +247,10 @@ class DatabaseHelper {
       EFATURAMI TEXT ,
       VADEGUNU TEXT ,
       ACIKLAMA1 TEXT ,
-      BAKIYE DECIMAL 
+      BAKIYE DECIMAL,
+      AKTARILDIMI TEXT ,
+      ACIKLAMA4 TEXT
+     
       )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {
@@ -279,7 +301,10 @@ class DatabaseHelper {
     GENELTOPLAM DECIMAL,
 	  ONAY TEXT,
     DURUM BOOLEAN,
-    AKTARILDIMI BOOLEAN
+    AKTARILDIMI BOOLEAN,
+    USTUUID TEXT,
+    SIPARISSAYISI INTEGER,
+    KALEMSAYISI INTEGER
     )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {
@@ -301,6 +326,10 @@ class DatabaseHelper {
 	  KDVTUTAR DECIMAL,     
     ISK DECIMAL,
 	  ISK2 DECIMAL,
+    ISK3 DECIMAL,
+    ISK4 DECIMAL,
+    ISK5 DECIMAL,
+    ISK6 DECIMAL,
     NETFIYAT DECIMAL ,
     BRUTTOPLAMFIYAT DECIMAL,
     NETTOPLAM DECIMAL,
@@ -315,7 +344,8 @@ class DatabaseHelper {
 	  DOVIZID INTEGER,
 	  KUR DECIMAL, 
 	  ACIKLAMA1 TEXT,
-	  TARIH DATETIME
+	  TARIH DATETIME,
+    MALFAZLASI TEXT
           )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {
@@ -328,7 +358,8 @@ class DatabaseHelper {
       ALTHESAP TEXT,
       DOVIZID INTEGER,
       VARSAYILAN TEXT,
-      ALTHESAPID INTEGER
+      ALTHESAPID INTEGER,
+      ZORUNLU TEXT
     )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {
@@ -529,6 +560,17 @@ class DatabaseHelper {
       BAKIYE DECIMAL
     )""";
       await db.execute(sorgu);
+    } on PlatformException catch (e) {
+      print(e);
+    }
+       try {
+      String Sorgu = """
+    CREATE TABLE images (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        image_path TEXT NOT NULL
+      
+    )""";
+      await db.execute(Sorgu);
     } on PlatformException catch (e) {
       print(e);
     }

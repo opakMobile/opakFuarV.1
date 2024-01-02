@@ -8,7 +8,7 @@ class Cari {
   String? ILCE = "";
   String? IL = "";
   String? ADRES = "";
-  String? VERGIDAIRESI = "";
+  String? VERGI_DAIRESI = "";
   String? VERGINO = "";
   String? KIMLIKNO = "";
   String? TIPI = "";
@@ -24,6 +24,8 @@ class Cari {
   String? VADEGUNU = "";
   String? ACIKLAMA1 = "";
   double? BAKIYE = 0.0;
+  String? AKTARILDIMI = "H";
+  String? ACIKLAMA4 = "";
   List<CariAltHesap> cariAltHesaplar = [];
 
   Cari(
@@ -34,7 +36,7 @@ class Cari {
       this.ILCE,
       this.IL,
       this.ADRES,
-      this.VERGIDAIRESI,
+      this.VERGI_DAIRESI,
       this.VERGINO,
       this.KIMLIKNO,
       this.TIPI,
@@ -49,6 +51,8 @@ class Cari {
       this.EFATURAMI,
       this.VADEGUNU,
       this.ACIKLAMA1,
+      this.AKTARILDIMI,
+      this.ACIKLAMA4,
       this.BAKIYE});
 
   Cari.empty()
@@ -60,7 +64,7 @@ class Cari {
           ILCE: "",
           IL: "",
           ADRES: "",
-          VERGIDAIRESI: "",
+          VERGI_DAIRESI: "",
           VERGINO: "",
           KIMLIKNO: "",
           TIPI: "",
@@ -76,6 +80,8 @@ class Cari {
           VADEGUNU: "",
           ACIKLAMA1: "",
           BAKIYE: 0.0,
+          AKTARILDIMI: "H",
+          ACIKLAMA4: "",
 
 
         );
@@ -88,7 +94,7 @@ class Cari {
     ILCE = json['ILCE'];
     IL = json['IL'];
     ADRES = json['ADRES'];
-    VERGIDAIRESI = json['VERGI_DAIRESI'];
+    VERGI_DAIRESI = json['VERGI_DAIRESI'];
     VERGINO = json['VERGINO'].toString();
     KIMLIKNO = json['KIMLIKNO'].toString();
     TIPI = json['TIPI'];
@@ -103,7 +109,9 @@ class Cari {
     EFATURAMI = json['EFATURAMI'];
     VADEGUNU = json['VADEGUNU'];
     ACIKLAMA1 = json['ACIKLAMA1'];
+    AKTARILDIMI = json['AKTARILDIMI'];
     BAKIYE = double.parse(json['BAKIYE'].toString());
+    ACIKLAMA4 = json['ACIKLAMA4'];
   }
 
   Map<String, dynamic> toJson() {
@@ -114,7 +122,7 @@ class Cari {
     data['ILCE'] = ILCE;
     data['IL'] = IL;
     data['ADRES'] = ADRES;
-    data['VERGIDAIRESI'] = VERGIDAIRESI;
+    data['VERGI_DAIRESI'] = VERGI_DAIRESI;
     data['VERGINO'] = VERGINO;
     data['KIMLIKNO'] = KIMLIKNO;
     data['TIPI'] = TIPI;
@@ -130,6 +138,8 @@ class Cari {
     data['VADEGUNU'] = VADEGUNU;
     data['ACIKLAMA1'] = ACIKLAMA1;
     data['BAKIYE'] = BAKIYE;
+    data['AKTARILDIMI'] = AKTARILDIMI;
+    data['ACIKLAMA4'] = ACIKLAMA4;
     return data;
   }
 }

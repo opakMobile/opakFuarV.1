@@ -28,6 +28,12 @@ class CustomAlertDialog extends StatelessWidget {
     required this.align,
   });
 
+  /*
+  isim
+  yekili
+  
+  */
+
   @override
   Widget build(BuildContext context) {
    
@@ -39,7 +45,7 @@ class CustomAlertDialog extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: 3.0),
             child:
-                Text(message, textAlign: align, style: TextStyle(fontSize: 16)),
+                SingleChildScrollView(child: Container(child: Text(message, textAlign: align, style: TextStyle(fontSize: 16)))),
           ),
           pdfSimgesi == true
               ? GestureDetector(

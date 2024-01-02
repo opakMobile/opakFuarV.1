@@ -135,7 +135,7 @@ class _okumaModuListState extends State<okumaModuList> {
                                 border: Border.all(color: Colors.grey),
                               ),
                               child: Center(
-                                child: Text("MF"),
+                                child: Text(stokModel.MALFAZLASI.toString()),
                               ),
                             )
                           ],

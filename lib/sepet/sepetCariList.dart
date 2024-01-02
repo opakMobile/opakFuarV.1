@@ -204,7 +204,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    fisEx.list_tum_fis[index].AKTARILDIMI == false ? SizedBox(width: MediaQuery.of(context).size.width*.15,child: Text("Beklemede",style: TextStyle(color: Colors.amber,fontSize: 11),)) : SizedBox(width: MediaQuery.of(context).size.width*.15,child: Text("Aktarıldı",style: TextStyle(color: Colors.green,fontSize: 11),))
+                                    fisEx.list_tum_fis[index].AKTARILDIMI == false ? SizedBox(width: MediaQuery.of(context).size.width*.15,child: Text("Beklemede",style: TextStyle(color: Colors.amber,fontSize: 9),)) : SizedBox(width: MediaQuery.of(context).size.width*.15,child: Text("Aktarıldı",style: TextStyle(color: Colors.green,fontSize: 11),))
                                     
                                   ],
                                 ),
@@ -222,11 +222,9 @@ class _SepetCariListState extends State<SepetCariList> {
                                   ),
                                 ),
                                 onTap: () {
-                                 
+                                  if(fisEx.list_tum_fis[index].AKTARILDIMI! == false){
                                     fisEx.fis!.value =
                                         fisEx.list_tum_fis[index];
-                                    //Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
-
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -234,6 +232,8 @@ class _SepetCariListState extends State<SepetCariList> {
                                                 SiparisUrunAra(
                                                   cari: cari,
                                                 )));
+                                  }
+                                
                                   
                                 },
                               ),

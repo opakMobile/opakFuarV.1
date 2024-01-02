@@ -116,4 +116,19 @@ class SharedPrefsHelper {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('setKulKod', kod);
   }
+  
+    static Future<void> cariKoduKaydet(int number) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('cariKod', number.toString());
+  }
+
+  static Future<int> cariKoduGetir() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedNumber = prefs.getString('cariKod');
+    if (storedNumber != null) {
+      return int.parse(storedNumber);
+    } else {
+      return -1;
+    }
+  }
 }

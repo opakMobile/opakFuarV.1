@@ -111,6 +111,15 @@ class _LoginPageState extends State<LoginPage> {
 
         if (_passwordController.text == Ctanim.kullanici?.SIFRE &&
             _userNameController.text == Ctanim.kullanici!.KOD) {
+
+           int cariKod = await SharedPrefsHelper.cariKoduGetir();  
+           if(cariKod != -1){
+            Ctanim.cariKod = cariKod;
+           }
+            
+
+           
+
           
           int value1 = await SharedPrefsHelper.siparisNumarasiGetir();
           if (value1 != -1) {
@@ -351,7 +360,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       await bs.tumVerileriGuncelle();
-      await bs.getirCariAltHesap(sirket: "AAGENELOPAK");
+      await bs.getirCariAltHesap(sirket: Ctanim.sirket);
       Navigator.pop(context);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) => HomePage()), (r) => false);

@@ -1,16 +1,22 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:opak_fuar/cari/cariIslemlerPage.dart';
+import 'package:opak_fuar/db/veriTabaniIslemleri.dart';
 import 'package:opak_fuar/model/ShataModel.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/raporlar/raporlar.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/sepet/sepetCariList.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/webServis/base.dart';
+import 'package:uuid/uuid.dart';
 
 import '../controller/fisController.dart';
 import '../model/fis.dart';
@@ -23,6 +29,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   BaseService bs = BaseService();
   FisController fisEx = Get.find();
 
@@ -255,6 +262,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   // ! Raporlar
+                  /*
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -322,6 +330,7 @@ class _HomePageState extends State<HomePage> {
                           )),
                     ),
                   ),
+                  */
                   // ! Verileri Güncelle
                   GestureDetector(
                     onTap: () async {
@@ -405,14 +414,55 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class verilerGuncelle extends StatelessWidget {
-   verilerGuncelle({
+class verilerGuncelle extends StatefulWidget {
+  verilerGuncelle({
     super.key,
     required this.bs,
   });
 
   final BaseService bs;
+
+  @override
+  State<verilerGuncelle> createState() => _verilerGuncelleState();
+}
+
+class _verilerGuncelleState extends State<verilerGuncelle> {
   final FisController fisEx = Get.find();
+
+      XFile? _selectedImage;
+
+  Future<void> _pickImage() async {
+    var pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      _selectedImage = pickedImage;
+    });
+
+    if (_selectedImage != null) {
+      // Resmi veritabanına kaydet
+      final imagePath = _selectedImage!.path;
+      await VeriIslemleri().insertImage(imagePath);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              pdfSimgesi: false,
+              align: TextAlign.center,
+              title: 'Başarılı',
+              message: 'Logo Değiştirildi',
+              onPres: () async {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              buttonText: 'Tamam',
+            );
+          });
+
+      setState(() {});
+    } else {
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -472,6 +522,36 @@ class verilerGuncelle extends StatelessWidget {
                     ],
                   ),
                 ),
+                 Align(
+                    alignment: Alignment.topLeft,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.75,
+                      child: TextButton(
+                        onPressed: () async {
+                           _pickImage();
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.image,
+                              size: 30,
+                              color: Colors.grey,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Logomu Degistir ",
+                                style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )),
                 Align(
                     alignment: Alignment.topLeft,
                     child: SizedBox(
@@ -490,7 +570,7 @@ class verilerGuncelle extends StatelessWidget {
                             },
                           );
 
-                          await bs.tumVerileriGuncelle();
+                          await widget.bs.tumVerileriGuncelle();
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },
@@ -533,7 +613,7 @@ class verilerGuncelle extends StatelessWidget {
                               );
                             },
                           );
-                          await bs.cariVerileriGuncelle();
+                          await widget.bs.cariVerileriGuncelle();
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },
@@ -574,7 +654,7 @@ class verilerGuncelle extends StatelessWidget {
                               );
                             },
                           );
-                          await bs.stokVerileriGuncelle();
+                          await widget.bs.stokVerileriGuncelle();
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },
@@ -655,37 +735,131 @@ class verilerGuncelle extends StatelessWidget {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.85,
                     child: TextButton(
-                        onPressed: () async{
+                        onPressed: () async {
+                          String hataTopla = "";
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return LoadingSpinner(
+                                color: Colors.black,
+                                message:
+                                    "Tüm Veriler Gönderiliyor. Lütfen Bekleyiniz...",
+                              );
+                            },
+                          );
+                          for (var element in listeler.listCari) {
+                            if (element.AKTARILDIMI == "H") {
+                              Map<String, dynamic> jsonListesi =
+                                  element.toJson();
+                                  
+                              SHataModel gelenHata = await widget.bs.cariGuncelle(
+                                  jsonDataList: jsonListesi,
+                                  sirket: Ctanim.sirket!);
+                              if(gelenHata.Hata == "true"){
+                                    hataTopla = hataTopla +
+                                      "\n" +
+                                      element.ADI! +
+                                      " Carisi Gönderilemedi. Hata mesajı:" + gelenHata.HataMesaj!;
+                              }else{
+                                element.AKTARILDIMI = "E";
+                                await VeriIslemleri().cariEkle(element,guncellemeMi: true);
+                                await VeriIslemleri().cariGetir();
+                               
+                              }    
+                            }
+                          }
+                    
+                         
                 
-        String hataTopla = "";
-        
-        await fisEx.listGidecekFisGetir();
+                          await fisEx.listGidecekFisGetir();
+                          if (fisEx.list_fis_gidecek.length > 0) {
+                            for (int j = 0;
+                                j < fisEx.list_fis_gidecek.length;
+                                j++) {
+                              if (fisEx.list_fis_gidecek[j].ACIKLAMA4 != "" &&
+                                  fisEx.list_fis_gidecek[j].ACIKLAMA5 != "") {
 
-   
-        if (fisEx.list_fis_gidecek.length > 0) {
-      
-          for (int j = 0; j < fisEx.list_fis_gidecek.length; j++) {
+                                   if(fisEx.list_fis_gidecek[j].fisStokListesi.length>0){
+                                     List<String> althesaplar = [];
+                                for (int i = 0;
+                                    i <
+                                        fisEx.list_fis_gidecek[j].fisStokListesi
+                                            .length;
+                                    i++) {
+                                  if (!althesaplar.contains(fisEx
+                                      .list_fis_gidecek[j]
+                                      .fisStokListesi[i]
+                                      .ALTHESAP)) {
+                                    althesaplar.add(fisEx.list_fis_gidecek[j]
+                                        .fisStokListesi[i].ALTHESAP!);
+                                  }
+                                }
+                                List<Fis> parcaliFisler = [];
 
-     
-           Map<String, dynamic> jsonListesi =
-            fisEx.list_fis_gidecek[j].toJson2();
-            fisEx.list_fis_gidecek[j].AKTARILDIMI = true;
-            Fis.empty().fisEkle(
-                belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
+                                for (var element in althesaplar) {
+                                  var uuidx = Uuid();
+                                  String neu = uuidx.v1();
 
-            SHataModel gelenHata = await bs.ekleFatura(
-            jsonDataList: jsonListesi, sirket: Ctanim.sirket!);
-            if (gelenHata.Hata == "true") {
-              fisEx.list_fis_gidecek[j].AKTARILDIMI = false;
-              Fis.empty().fisEkle(
-                  belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
-              hataTopla = hataTopla +
-                  "\n" +
-                   fisEx.list_fis_gidecek[j].CARIADI!+
-                  " ait " +
-                  fisEx.list_fis_gidecek[j].FATURANO.toString() +
-                  " fatura numaralı belge gönderilemedi.\n Hata Mesajı :" +
-                  gelenHata.HataMesaj!;
+                                  Fis fis = Fis.empty();
+                                  fis = Fis.fromFis(
+                                      fisEx.list_fis_gidecek[j], []);
+                                  fis.USTUUID = fis.UUID;
+                                  fis.UUID = neu;
+                                  fis.SIPARISSAYISI = althesaplar.length;
+                                  fis.KALEMSAYISI = 0;
+                                  fis.ALTHESAP = element;
+                                  
+
+                                  for (int k = 0;
+                                      k <
+                                          fisEx.list_fis_gidecek[j]
+                                              .fisStokListesi.length;
+                                      k++) {
+                                    if (fisEx.list_fis_gidecek[j]
+                                            .fisStokListesi[k].ALTHESAP ==
+                                        element) {
+                                      fisEx.list_fis_gidecek[j]
+                                          .fisStokListesi[k].UUID = fis.UUID;
+
+                                      fis.fisStokListesi.add(fisEx
+                                          .list_fis_gidecek[j]
+                                          .fisStokListesi[k]);
+                                      fis.KALEMSAYISI = fis.KALEMSAYISI! + 1;
+                                    }
+                                  }
+
+                                  parcaliFisler.add(fis);
+                                }
+                                fisEx.list_fis_gidecek[j].AKTARILDIMI = true;
+                                Fis.empty().fisEkle(
+                                    belgeTipi: "YOK",
+                                    fis: fisEx.list_fis_gidecek[j]);
+                                String genelHata = "";
+                                for (var element in parcaliFisler) {
+                                  Map<String, dynamic> jsonListesi =
+                                      element.toJson2();
+                                  SHataModel gelenHata =
+                                      await widget.bs.ekleSiparisFuar(
+                                          jsonDataList: jsonListesi,
+                                          sirket: Ctanim.sirket!);
+                                  if (gelenHata.Hata == "true") {
+                                    genelHata += gelenHata.HataMesaj!;
+                                  }
+                                }
+                                if (genelHata != "") {
+                                  fisEx.list_fis_gidecek[j].AKTARILDIMI = false;
+                                  Fis.empty().fisEkle(
+                                      belgeTipi: "YOK",
+                                      fis: fisEx.list_fis_gidecek[j]);
+                                  hataTopla = hataTopla +
+                                      "\n" +
+                                      fisEx.list_fis_gidecek[j].CARIADI! +
+                                      " ait " +
+                                      fisEx.list_fis_gidecek[j].FATURANO
+                                          .toString() +
+                                      " fatura numaralı belge gönderilemedi.\n Hata Mesajı :" +
+                                      genelHata+"\n";
 /*
               LogModel logModel = LogModel(
                 TABLOADI: "TBLFISSB",
@@ -696,60 +870,88 @@ class verilerGuncelle extends StatelessWidget {
               );
               await VeriIslemleri().logKayitEkle(logModel);
               */
-            }
+                                }
 
-        
+                                   }else{
+                                    hataTopla = hataTopla +
+                                    "\n" +
+                                    fisEx.list_fis_gidecek[j].CARIADI! +
+                                    " ait " +
+                                    
+                                    "belge gönderilemedi.\nHata Mesajı :" +
+                                    "Fis Stok Listesi Boş\n";
 
-          }
-          if (hataTopla != "") {
-            await showDialog(
-                context: context,
-                builder: (context) {
-                  return CustomAlertDialog(
-                    align: TextAlign.left,
-                    title: 'Hata',
-                    message:
-                        'Web Servise Veri Gönderilirken Bazı Hatalar İle Karşılaşıldı:\n' +
-                            hataTopla,
-                    onPres: () async {
-                      Navigator.pop(context);
-                    },
-                    buttonText: 'Tamam',
-                  );
-                });
-          } else {
-            const snackBar1 = SnackBar(
-              content: Text(
-                'Veriler Başarılı Bir Şekilde Gönderildi',
-                style: TextStyle(fontSize: 16),
-              ),
-              showCloseIcon: true,
-              backgroundColor: Colors.blue,
-              closeIconColor: Colors.white,
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar1);
-          }
+                                   }   
 
-          fisEx.list_fis_gidecek.clear();
 
-          print(
-              "Liste Temizlendi : " + fisEx.list_fis_gidecek.length.toString());
-        } else {
-          await showDialog(
-              context: context,
-              builder: (context) {
-                return CustomAlertDialog(
-                  align: TextAlign.left,
-                  title: 'Boş Liste',
-                  message: 'Gönderilecek Veri Yok',
-                  onPres: () async {
-                    Navigator.pop(context);
-                  },
-                  buttonText: 'Tamam',
-                );
-              });
-        }
+                               
+                              } else {
+                                hataTopla = hataTopla +
+                                    "\n" +
+                                    fisEx.list_fis_gidecek[j].CARIADI! +
+                                    " ait " +
+                                    
+                                    "sipariş gönderilemedi. " +
+                                    "Bayi seçimi yapılmamış\n";
+                              }
+                            }
+                         
+                            if (hataTopla != "") {
+                              Navigator.pop(context);
+                              widget.bs.printWrapped(hataTopla);
+                              await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return CustomAlertDialog(
+                                      align: TextAlign.left,
+                                      title: 'Hata',
+                                      message:
+                                          'Web Servise Veri Gönderilirken Bazı Hatalar İle Karşılaşıldı:\n' +
+                                              hataTopla,
+                                      onPres: () async {
+                                        Navigator.pop(context);
+                                      },
+                                      buttonText: 'Tamam',
+                                    );
+                                  });
+                            } else {
+                              
+                            await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CustomAlertDialog(
+                                    align: TextAlign.left,
+                                    title: 'İşlem Başarılı',
+                                    message: 'Veriler başarıyla gönderildi.',
+                                    onPres: () async {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    buttonText: 'Tamam',
+                                  );
+                                });
+                            }
 
+                            fisEx.list_fis_gidecek.clear();
+
+                            print("Liste Temizlendi : " +
+                                fisEx.list_fis_gidecek.length.toString());
+                          } else {
+                           Navigator.pop(context);
+                            await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CustomAlertDialog(
+                                    align: TextAlign.left,
+                                    title: 'Boş Liste',
+                                    message: 'Gönderilecek Sipariş Yok',
+                                    onPres: () async {
+                                      Navigator.pop(context);
+                                    },
+                                    buttonText: 'Tamam',
+                                  );
+                                });
+                          }
                         },
                         child: Row(
                           children: [

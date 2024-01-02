@@ -1,9 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:opak_fuar/db/veriTabaniIslemleri.dart';
+import 'package:opak_fuar/model/cariAltHesapModel.dart';
+import 'package:opak_fuar/pages/LoadingSpinner.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/sabitler/sharedPreferences.dart';
 import 'package:opak_fuar/webServis/base.dart';
 
 import '../model/ShataModel.dart';
 import '../model/cariModel.dart';
+import '../pages/CustomAlertDialog.dart';
 import '../sabitler/Ctanim.dart';
 
 class CariFormPage extends StatefulWidget {
@@ -44,7 +52,7 @@ class _CariFormPageState extends State<CariFormPage> {
       _YetkiliKisi.text = widget.cari.PLASIYERID!.toString();
       _SehirSeciniz.text = widget.cari.IL!;
       _IlceSeciniz.text = widget.cari.ILCE!;
-      _VergiDairesi.text = widget.cari.VERGIDAIRESI ?? "";
+      _VergiDairesi.text = widget.cari.VERGI_DAIRESI ?? "";
       _VergiNumarasi.text = widget.cari.VERGINO!;
       _CepTelefonu.text = widget.cari.TELEFON!;
       _MailAdresi.text = widget.cari.EMAIL!;
@@ -278,6 +286,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.05,
                                 child: TextFormField(
+                                  controller: _Aciklama,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -316,7 +325,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                                     }
                                                   });
                                                 }),
-                                            Text("Alıcı Müşteri"),
+                                            Text("Alt Bayi"),
                                           ],
                                         ),
                                       ),
@@ -365,55 +374,56 @@ class _CariFormPageState extends State<CariFormPage> {
                                               0.05,
                                       child: ElevatedButton.icon(
                                         onPressed: () async {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (BuildContext context) {
+                                                return LoadingSpinner(
+                                                  color: Colors.black,
+                                                  message:
+                                                      "Cari güncelleme yapılıyor. Lütfen Bekleyiniz...",
+                                                );
+                                              },
+                                            );
+                                          // bekleme
                                           Cari cari = Cari.empty();
 
-                                          cari.PLASIYERID = int.parse(
-                                              Ctanim.kullanici!.KOD!);
+                                          cari.PLASIYERID =
+                                              int.parse(Ctanim.kullanici!.KOD!);
                                           cari.KOD = widget.cari.KOD;
                                           cari.ADI = _SirketIsmi.text;
                                           cari.ADRES = _AdresBilgileri.text;
                                           cari.IL = _SehirSeciniz.text;
                                           cari.ILCE = _IlceSeciniz.text;
-                                          cari.VERGIDAIRESI =
+                                          cari.VERGI_DAIRESI =
                                               _VergiDairesi.text;
-                                          cari.VERGINO =
-                                              _VergiNumarasi.text;
+                                          cari.VERGINO = _VergiNumarasi.text;
                                           cari.TELEFON = _CepTelefonu.text;
                                           cari.EMAIL = _MailAdresi.text;
                                           cari.ACIKLAMA1 = _Aciklama.text;
+                                          cari.ACIKLAMA4 = _YetkiliKisi.text;
+                                          cari.AKTARILDIMI = "H";
                                           cari.TIPI = AliciMusteri == true
                                               ? "Alıcı Müşteri"
                                               : "Alıcı Bayi";
-
-// zeko reis 
-                                          Map<String, dynamic> jsonListesi =
-                                              cari.toJson();
-                                          /*
-            Fis.empty().fisEkle(
-                belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
-    */
-                                          SHataModel gelenHata =
-                                              await bs.cariGuncelle(
-                                                  jsonDataList: jsonListesi,
-                                                  sirket: Ctanim.sirket!);
-                                          if (gelenHata.Hata == "true") {
-                                            /*
-              Fis.empty().fisEkle(
-                  belgeTipi: "YOK", fis: fisEx.list_fis_gidecek[j]);
-                  */
-
-                                            gelenHata.HataMesaj!;
-/*
-              LogModel logModel = LogModel(
-                TABLOADI: "TBLFISSB",
-                FISID: fisEx.list_fis_gidecek[0].ID,
-                HATAACIKLAMA: gelenHata.HataMesaj,
-                UUID: fisEx.list_fis_gidecek[0].UUID,
-                CARIADI: fisEx.list_fis_gidecek[0].CARIADI,
-              );
-              await VeriIslemleri().logKayitEkle(logModel);
-              */
-                                          }
+                                          await VeriIslemleri().cariEkle(cari,
+                                              guncellemeMi: true);
+                                          await VeriIslemleri().cariGetir();
+                                          Navigator.pop(context);
+                                           showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return CustomAlertDialog(
+                                                    align: TextAlign.left,
+                                                    title: 'Başarılı',
+                                                    message:
+                                                        'Cari güncelleme tamamlandı.',
+                                                    onPres: () async {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    buttonText: 'Tamam',
+                                                  );
+                                                });
                                         },
                                         icon: Icon(Icons.edit),
                                         label: Text(
@@ -436,7 +446,92 @@ class _CariFormPageState extends State<CariFormPage> {
                                               0.05,
                                       child: Center(
                                         child: ElevatedButton.icon(
-                                          onPressed: () {},
+                                          onPressed: () async {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (BuildContext context) {
+                                                return LoadingSpinner(
+                                                  color: Colors.black,
+                                                  message:
+                                                      "Cari kaydı yapılıyor. Lütfen Bekleyiniz...",
+                                                );
+                                              },
+                                            );
+                                            Cari cari = Cari.empty();
+
+                                            String paddedString = Ctanim.cariKod
+                                                .toString()
+                                                .padLeft(5, "0");
+                                            cari.KOD = Ctanim.kullanici!.KOD! +
+                                                "-" +
+                                                paddedString;
+                                            cari.PLASIYERID = int.parse(
+                                                Ctanim.kullanici!.KOD!);
+                                            cari.ADI = _SirketIsmi.text;
+                                            cari.ADRES = _AdresBilgileri.text;
+                                            cari.IL = _SehirSeciniz.text;
+                                            cari.ILCE = _IlceSeciniz.text;
+                                            cari.VERGI_DAIRESI =
+                                                _VergiDairesi.text;
+                                            cari.VERGINO = _VergiNumarasi.text;
+                                            cari.TELEFON = _CepTelefonu.text;
+                                            cari.EMAIL = _MailAdresi.text;
+                                            cari.ACIKLAMA1 = _Aciklama.text;
+                                            cari.ACIKLAMA4 = _YetkiliKisi.text;
+                                            cari.AKTARILDIMI = "H";
+                                            cari.TIPI = AliciMusteri == true
+                                                ? "Alıcı Müşteri"
+                                                : "Alıcı Bayi";
+                                            await VeriIslemleri()
+                                                .cariEkle(cari);
+                                            await VeriIslemleri().cariGetir();
+
+                                            for (var element
+                                                in listeler.listCariAltHesap) {
+                                              if (element.VARSAYILAN == "E" &&
+                                                  element.ZORUNLU == "E") {
+                                                CariAltHesap yeniAltHesap =
+                                                    CariAltHesap(
+                                                        KOD: cari.KOD,
+                                                        ALTHESAP:
+                                                            element.ALTHESAP,
+                                                        DOVIZID:
+                                                            element.DOVIZID,
+                                                        VARSAYILAN: "E",
+                                                        ALTHESAPID:
+                                                            element.ALTHESAPID,
+                                                        ZORUNLU: "E");
+                                                await VeriIslemleri()
+                                                    .cariAltHesapEkle(
+                                                        yeniAltHesap);
+                                                break;
+                                              }
+                                            }
+
+                                            Ctanim.cariKod =
+                                                Ctanim.cariKod! + 1;
+                                            await SharedPrefsHelper
+                                                .cariKoduKaydet(
+                                                    Ctanim.cariKod!);
+                                            await VeriIslemleri()
+                                                .cariAltHesapGetir();
+                                                Navigator.pop(context);
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return CustomAlertDialog(
+                                                    align: TextAlign.left,
+                                                    title: 'Başarılı',
+                                                    message:
+                                                        'Cari kaydı yapıldı.',
+                                                    onPres: () async {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    buttonText: 'Tamam',
+                                                  );
+                                                });
+                                          },
                                           icon: Icon(Icons.save),
                                           label: Text("Kaydet"),
                                           style: ElevatedButton.styleFrom(

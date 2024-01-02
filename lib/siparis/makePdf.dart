@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -9,15 +8,18 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 
 
-Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
+Future<Uint8List> makePdf(Fis m, Uint8List imagePath
+) async {
  
 
   final image = pw.MemoryImage(imagePath);
+  final fontData = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
+  final ttfFont = pw.Font.ttf(fontData);
 
+  final boldfontData = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
+  final boldttfFont = pw.Font.ttf(boldfontData);
 
-  
   final pdf = pw.Document();
-
 
   int ilkSayfa = 0;
   bool ikinciGozuksun = false;
@@ -52,38 +54,37 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                 height: 20,
                                 child: Text("İşlem Tarihi:",
                                     style: pw.TextStyle(
-                                       
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                             SizedBox(
                                 height: 20,
                                 child: Text("Cari Kodu:",
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                             SizedBox(
                                 height: 60,
                                 child: Text("Cari Adı:",
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                             SizedBox(
                                 height: 20,
                                 child: Text("Belge Tipi:",
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                             SizedBox(
                                 height: 20,
                                 child: Text("Cari Bakiye:",
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                                         SizedBox(
                                 height: 20,
                                 width: 400,
@@ -91,7 +92,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                           ],
                           crossAxisAlignment: pw.CrossAxisAlignment.start,
                         ),
@@ -105,14 +106,14 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                             SizedBox(
                                 height: 20,
                                 child: Text(m.CARIKOD.toString(),
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                             SizedBox(
                               height: 60,
                               child: SizedBox(
@@ -121,17 +122,17 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        )),
+                                        font: boldttfFont)),
                               ),
                             ),
                             SizedBox(
                                 height: 20,
                                 child: Text(
-                                   "Sipariş",
+                                    "Müşteri Sipariş",
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                             SizedBox(
                                 height: 20,
                                 child: Text(
@@ -140,7 +141,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                                          SizedBox(
                                 height: 20,
                                 child: Text(
@@ -149,7 +150,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                     style: pw.TextStyle(
                                         fontSize: 15,
                                         fontWeight: pw.FontWeight.bold,
-                                        ))),
+                                        font: boldttfFont))),
                           ]),
                       Spacer(),
                       pw.Image(image, width: 150, height: 100),
@@ -176,11 +177,11 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                   5: pw.Alignment.centerRight,
                 },
                 cellStyle: pw.TextStyle(
-          
+                  font: ttfFont,
                   fontSize: 10,
                 ),
                 headerStyle: pw.TextStyle(
-                  
+                  font: boldttfFont,
                   fontWeight: pw.FontWeight.bold,
                   fontSize: 10,
                 ),
@@ -232,7 +233,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
         i == m.fisStokListesi.length - 1
             ? Padding(
                 padding: EdgeInsets.only(top: 40),
-                child: buildAdditionalInfo(m))
+                child: buildAdditionalInfo(m, boldttfFont))
             : Container(),
       ],
     ));
@@ -244,7 +245,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
   pdf.addPage(
     pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
-      theme: pw.ThemeData(defaultTextStyle: pw.TextStyle()),
+      theme: pw.ThemeData(defaultTextStyle: pw.TextStyle(font: ttfFont)),
       build: (context) {
         return glen;
       },
@@ -286,7 +287,7 @@ List<List<String>> buildTableRowsUst(Fis m, {int start = 0, int end = 0}) {
   return rows;
 }
 
-pw.Widget buildAdditionalInfo(Fis m,) {
+pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
   return pw.Row(
     mainAxisAlignment: pw.MainAxisAlignment.end,
     crossAxisAlignment: pw.CrossAxisAlignment.end,
@@ -302,7 +303,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                 style: pw.TextStyle(
                   fontSize: 15,
                   fontWeight: pw.FontWeight.bold,
-                  
+                  font: boldttfFont,
                 ),
               ),
               pw.Text(
@@ -310,7 +311,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                 style: pw.TextStyle(
                   fontSize: 15,
                   fontWeight: pw.FontWeight.bold,
-                  
+                  font: boldttfFont,
                 ),
               ),
               pw.Text(
@@ -318,7 +319,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                 style: pw.TextStyle(
                   fontSize: 15,
                   fontWeight: pw.FontWeight.bold,
-                  
+                  font: boldttfFont,
                 ),
               ),
               pw.Text(
@@ -326,7 +327,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                 style: pw.TextStyle(
                   fontSize: 15,
                   fontWeight: pw.FontWeight.bold,
-                  
+                  font: boldttfFont,
                 ),
               ),
               pw.Text(
@@ -334,7 +335,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                 style: pw.TextStyle(
                   fontSize: 15,
                   fontWeight: pw.FontWeight.bold,
-                  
+                  font: boldttfFont,
                 ),
               ),
             ]),
@@ -348,7 +349,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
-                    
+                    font: boldttfFont,
                   ),
                 ),
                 pw.Text(
@@ -356,7 +357,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
-                    
+                    font: boldttfFont,
                   ),
                 ),
                 pw.Text(
@@ -364,7 +365,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
-                    
+                    font: boldttfFont,
                   ),
                 ),
                 pw.Text(
@@ -372,7 +373,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
-                    
+                    font: boldttfFont,
                   ),
                 ),
                 pw.Text(
@@ -380,7 +381,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
-                    
+                    font: boldttfFont,
                   ),
                 ),
               ])
@@ -395,7 +396,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
             style: pw.TextStyle(
               fontSize: 15,
               fontWeight: pw.FontWeight.bold,
-              
+              font: boldttfFont,
             ),
           ),
           pw.Text(
@@ -403,7 +404,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
             style: pw.TextStyle(
               fontSize: 15,
               fontWeight: pw.FontWeight.bold,
-              
+              font: boldttfFont,
             ),
           ),
           pw.Text(
@@ -411,7 +412,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
             style: pw.TextStyle(
               fontSize: 15,
               fontWeight: pw.FontWeight.bold,
-              
+              font: boldttfFont,
             ),
           ),
           pw.Text(
@@ -419,7 +420,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
             style: pw.TextStyle(
               fontSize: 15,
               fontWeight: pw.FontWeight.bold,
-              
+              font: boldttfFont,
             ),
           ),
           pw.Text(
@@ -427,7 +428,7 @@ pw.Widget buildAdditionalInfo(Fis m,) {
             style: pw.TextStyle(
               fontSize: 15,
               fontWeight: pw.FontWeight.bold,
-              
+              font: boldttfFont,
             ),
           ),
 */

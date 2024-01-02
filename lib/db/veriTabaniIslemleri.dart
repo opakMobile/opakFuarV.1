@@ -58,7 +58,7 @@ class VeriIslemleri {
       await Ctanim.db?.execute("DROP TABLE IF EXISTS TBLSTOKSB");
 
       await Ctanim.db?.execute("""CREATE TABLE TBLSTOKSB (
-         ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       KOD TEXT NOT NULL,
       ADI TEXT NOT NULL,
       SATDOVIZ TEXT,
@@ -210,7 +210,18 @@ class VeriIslemleri {
   }
 
   //database cari ekle
-  Future<int?> cariEkle(Cari cariKart) async {
+  Future<int?> cariEkle(Cari cariKart,{bool guncellemeMi = false}) async {
+    if(guncellemeMi == true){
+      try {
+      cariKart.ID = null;
+      var result = await Ctanim.db?.update("TBLCARISB", cariKart.toJson(),
+        where: 'KOD = ?', whereArgs: [cariKart.KOD]);
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+      
+    }
     try {
       cariKart.ID = null;
       var result = await Ctanim.db?.insert("TBLCARISB", cariKart.toJson());
@@ -238,7 +249,7 @@ class VeriIslemleri {
       ILCE TEXT,
       IL TEXT ,
       ADRES TEXT ,
-      VERGIDAIRESI TEXT,
+      VERGI_DAIRESI TEXT,
       VERGINO TEXT ,
       KIMLIKNO TEXT ,
       TIPI TEXT ,
@@ -253,7 +264,9 @@ class VeriIslemleri {
       EFATURAMI TEXT ,
       VADEGUNU TEXT ,
       ACIKLAMA1 TEXT ,
-      BAKIYE DECIMAL 
+      BAKIYE DECIMAL,
+      AKTARILDIMI TEXT,
+      ACIKLAMA4 TEXT
       )""");
 
       print("TBLCARISB tablosu temizlendi ve yeniden oluşturuldu.");
@@ -277,7 +290,8 @@ class VeriIslemleri {
       ALTHESAP TEXT,
       DOVIZID INTEGER,
       VARSAYILAN TEXT,
-      ALTHESAPID INTEGER
+      ALTHESAPID INTEGER,
+      ZORUNLU TEXT
     )""");
 
       print("TBLCARIALTHESAPSB tablosu temizlendi ve yeniden oluşturuldu.");
@@ -511,6 +525,27 @@ class VeriIslemleri {
       print("TBLSTOKKOSULSB tablosu temizlendi ve yeniden oluşturuldu.");
     } catch (e) {
       print("Hata: $e");
+    }
+  }
+    Future<void> deleteAllImages() async {
+    final db = await Ctanim?.db;
+    await db?.execute('DELETE FROM images');
+  }
+    Future<int> insertImage(String imagePath) async {
+    await deleteAllImages();
+    return await Ctanim?.db.insert(
+      'images',
+      {'image_path': imagePath},
+    );
+  }
+
+  Future<String?> getFirstImage() async {
+    final List<Map<String, dynamic>> maps =
+        await Ctanim.db.query('images', limit: 1);
+    if (maps.isNotEmpty) {
+      return maps.first['image_path'] as String;
+    } else {
+      return "";
     }
   }
 

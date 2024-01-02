@@ -1,78 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/sabitler/sharedPreferences.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/cariModel.dart';
+import '../model/fis.dart';
 import 'cariDetayIncele.dart';
 
 class CariDetayPage extends StatefulWidget {
-  CariDetayPage({required this.cari});
+  CariDetayPage({required this.cari, required this.genelToplam});
 
   late Cari cari;
+  final double genelToplam;
 
   @override
   State<CariDetayPage> createState() => _CariDetayPageState();
 }
 
+
 class _CariDetayPageState extends State<CariDetayPage> {
-  List<Map> aaa = [
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-      "tarih": "12.12.2021",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-      "tarih": "12.12.2021",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-      "tarih": "12.12.2021",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-      "tarih": "12.12.2021",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-      "tarih": "12.12.2021",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-      "tarih": "12.12.2021",
-    },
-    {
-      "id": "1",
-      "name": "Mustafa",
-      "surname": "Yüce",
-      "bakiye": "1000",
-    },
-    {
-      "id": "2",
-      "name": "Turan",
-      "surname": "Kaya",
-      "bakiye": "2000",
-      "tarih": "12.12.2021",
-    },
-  ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+var uuid = Uuid();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -87,13 +44,42 @@ class _CariDetayPageState extends State<CariDetayPage> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SiparisUrunAra(
-                              cari: widget.cari,
-                            )));
+              onPressed: () async {
+
+                  Fis fis = Fis.empty();
+                                    fisEx.fis!.value = fis;
+                                    fisEx.fis!.value.cariKart = widget.cari;
+                                    fisEx.fis!.value.CARIKOD = widget.cari.KOD;
+                                    fisEx.fis!.value.CARIADI = widget.cari.ADI;
+                                    fisEx.fis!.value.SUBEID = int.parse(
+                                        Ctanim.kullanici!.YERELSUBEID!);
+                                    fisEx.fis!.value.PLASIYERKOD =
+                                        Ctanim.kullanici!.KOD;
+                                    fisEx.fis!.value.DEPOID = int.parse(Ctanim
+                                        .kullanici!.YERELDEPOID!); //TODO
+                                    fisEx.fis!.value.ISLEMTIPI = "0";
+                                    fisEx.fis!.value.ALTHESAP = widget.cari.cariAltHesaplar.first.ALTHESAP;
+
+                                    fisEx.fis!.value.UUID = uuid.v1();
+                                    fisEx.fis!.value.VADEGUNU = widget.cari.VADEGUNU;
+                                    fisEx.fis!.value.BELGENO =
+                                        Ctanim.siparisNumarasi.toString();
+                                    Ctanim.siparisNumarasi =
+                                        Ctanim.siparisNumarasi + 1;
+                                    await SharedPrefsHelper
+                                        .siparisNumarasiKaydet(
+                                            Ctanim.siparisNumarasi);
+                                    fisEx.fis!.value.TARIH =
+                                        DateFormat("yyyy-MM-dd")
+                                            .format(DateTime.now());
+
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SiparisUrunAra(
+                                                  cari: widget.cari,
+                                                )));
               },
               icon: Icon(
                 Icons.shopping_cart_checkout,
@@ -193,7 +179,7 @@ class _CariDetayPageState extends State<CariDetayPage> {
                               ),
                               child: Center(
                                   child: Text(
-                                "1.566.47,00 TL",
+                               Ctanim.donusturMusteri(widget.genelToplam.toString()),
                                 style: TextStyle(
                                     fontSize: 20,
                                     color: Colors.red,
@@ -204,7 +190,7 @@ class _CariDetayPageState extends State<CariDetayPage> {
                         ),
                       ),
                     ),
-
+/*
                     SingleChildScrollView(
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -305,6 +291,7 @@ class _CariDetayPageState extends State<CariDetayPage> {
                         ),
                       ),
                     ),
+                    */
                   ],
                 ),
               ),
