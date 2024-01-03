@@ -62,14 +62,27 @@ class _okumaModuListState extends State<okumaModuList> {
                                 //alt hesap
                                 double gelenMiktar =
                                     double.parse(stokModel.MIKTAR.toString());
+
                                 List<StokKart> stok = listeler.listStok
                                     .where((stok) =>
-                                        stok.KOD! == stokModel.STOKKOD)
+                                        stok.KOD! == stokModel.STOKKOD ||
+                                        stok.BARKOD1 == stokModel.STOKKOD ||
+                                        stok.BARKOD2 == stokModel.STOKKOD ||
+                                        stok.BARKOD3 == stokModel.STOKKOD ||
+                                        stok.BARKOD4 == stokModel.STOKKOD ||
+                                        stok.BARKOD5 == stokModel.STOKKOD ||
+                                        stok.BARKOD6 == stokModel.STOKKOD)
                                     .toList();
+                          if(stok.isEmpty){
+                          listeler.listDahaFazlaBarkod.where((element) => element.KOD == 
+                              stokModel.STOKKOD);
+                         } 
                                 showDialog(
                                     context: context,
                                     builder: (context) {
                                       return fisHareketDuzenle(
+                                        urunDuzenlemeyeGeldim: true,
+                                      
                                         okutulanCarpan: 1,
                                         altHesap: stokModel.ALTHESAP!,
                                         gelenStokKart: stok.first,

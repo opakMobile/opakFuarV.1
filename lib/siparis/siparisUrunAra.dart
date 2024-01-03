@@ -210,7 +210,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     double ekranYuksekligi = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-        appBar: appBarDizayn(context),
+       // appBar: appBarDizayn(context),
         bottomNavigationBar: bottombarDizayn(
           context,
           buttonVarMi: true,
@@ -247,6 +247,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
           color: Colors.white,
           child: Padding(
             padding: EdgeInsets.only(
+              top: ekranYuksekligi*0.01,
               left: MediaQuery.of(context).size.width * 0.05,
               right: MediaQuery.of(context).size.width * 0.05,
             ),
@@ -383,6 +384,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                     context: context,
                                     builder: (context) {
                                       return fisHareketDuzenle(
+                                        urunDuzenlemeyeGeldim: false,
                                         okutulanCarpan: okutulanCarpan,
                                         altHesap: seciliAltHesap!.ALTHESAP!,
                                         gelenStokKart: stokKartEx.tempList[0],
@@ -447,6 +449,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                     context: context,
                                     builder: (context) {
                                       return fisHareketDuzenle(
+                                        urunDuzenlemeyeGeldim: false,
                                         okutulanCarpan: 1,
                                         altHesap: seciliAltHesap!.ALTHESAP!,
                                         gelenStokKart: stokKartEx.tempList[0],
@@ -979,6 +982,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                         context: context,
                                                         builder: (context) {
                                                           return fisHareketDuzenle(
+                                                            urunDuzenlemeyeGeldim: false,
                                                             okutulanCarpan: 1,
                                                             altHesap:
                                                                 seciliAltHesap!

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/model/KurModel.dart';
+import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
@@ -23,15 +24,18 @@ class fisHareketDuzenle extends StatefulWidget {
     this.isk4 = -1,
     this.isk5 = -1,
     this.isk6 = -1,
+    this.fisHareketMiktar = 0,
+
 
 
     this.malFazlasi = -1,
-    this.fiyat = -1, required this.okutulanCarpan,
+    this.fiyat = -1, required this.okutulanCarpan, required this.urunDuzenlemeyeGeldim,
   });
   final StokKart gelenStokKart;
   final double gelenMiktar;
   final String altHesap;
   final int okutulanCarpan;
+  final bool urunDuzenlemeyeGeldim;
   
 
   double isk1;
@@ -42,6 +46,7 @@ class fisHareketDuzenle extends StatefulWidget {
   double isk6;
   double malFazlasi;
   double fiyat;
+  double fisHareketMiktar;
 
   @override
   State<fisHareketDuzenle> createState() => _fisHareketDuzenleState();
@@ -254,6 +259,10 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 "Miktar",
                 style: TextStyle(fontSize: 22),
               ),
+             widget.urunDuzenlemeyeGeldim == true ? Text(
+                "Sepetteki miktar: ${widget.gelenMiktar.toStringAsFixed(2)}",
+                style: TextStyle(fontSize: 11),
+              ):Container(),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
