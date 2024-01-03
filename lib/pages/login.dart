@@ -259,7 +259,7 @@ class _LoginPageState extends State<LoginPage> {
                         builder: (context) {
                           return CustomAlertDialog(
                             align: TextAlign.left,
-                            title: 'Hata',
+                            title: 'Uyarı',
                             message:
                                 'Web Servisten Veri Alınırken Bazı Hatalar İle Karşılaşıldı:\n' +
                                     genelHata,

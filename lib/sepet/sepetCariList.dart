@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:intl/intl.dart';
@@ -298,12 +299,18 @@ class _SepetCariListState extends State<SepetCariList> {
                                     children: [
                                       Text(cari.IL!.toString()),
                                       widget.islem == true
-                                          ? Text(cari.BAKIYE.toString()
+                                          ? Text(Ctanim.donusturMusteri(fisEx.list_tum_fis[index].GENELTOPLAM!.toString())
                                           )
                                           : Container(),
                                     ],
                                   ),
                                 ),
+                                onLongPress: () async {
+                               //  await showAlertDialog(context,index);
+                                  
+
+                                  
+                                },
                                 onTap: () {
                                   if(fisEx.list_tum_fis[index].AKTARILDIMI! == false){
                                     fisEx.fis!.value =
@@ -334,6 +341,60 @@ class _SepetCariListState extends State<SepetCariList> {
           ),
         ),
       ),
+    );
+  }
+   showAlertDialog(BuildContext context, int index) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("İptal"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Devam"),
+      onPressed: () {
+        try {
+          fisEx.fis?.value = fisEx.list_fis[index];
+          print(fisEx.fis?.value.ID);
+          Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
+          fisEx.list_fis.removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
+          const snackBar = SnackBar(
+            duration: Duration(microseconds: 500),
+            content: Text(
+              'Sipariş silindi..',
+              style: TextStyle(fontSize: 16),
+            ),
+            showCloseIcon: true,
+            backgroundColor: Colors.blue,
+            closeIconColor: Colors.white,
+          );
+          ScaffoldMessenger.of(context as BuildContext).showSnackBar(snackBar);
+        } on PlatformException catch (e) {
+          print(e);
+        }
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("İşlem Onayı"),
+      content: Text(
+          "Belge Silindiğinde Geri Döndürürelemez. Devam Etmek İstiyor musunuz?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

@@ -17,7 +17,7 @@ class guncelDeger {
   String? seciliFiyati = "";
   String? guncelBarkod = "";
   bool? fiyatDegistirMi = true;
-  double? carpan = 1.0;
+  double? carpan = 1;
 
   guncelDeger(
       [this.fiyat = 0.0,
@@ -31,7 +31,7 @@ class guncelDeger {
       this.seciliFiyati = "",
       this.guncelBarkod = "",
       this.fiyatDegistirMi = false,
-      this.carpan = 0.0]);
+      this.carpan = 0]);
 double hesaplaNetFiyat() {
     double _iskonto =  double.parse((fiyat! * (iskonto1! / 100)).toStringAsFixed(2));
     double _iskonto2Tutar = 0;
@@ -86,6 +86,13 @@ class StokKart {
   String? OLCUBIRIM2;
   String? BIRIMADET1;
   String? OLCUBIRIM3;
+  String? OLCUBIRIM4;
+  String? OLCUBIRIM5;
+  String? OLCUBIRIM6;
+  String? BIRIMADET3;
+  String? BIRIMADET4;
+  String? BIRIMADET5;
+
   String? BIRIMADET2;
   String? RAPORKOD1;
   String? RAPORKOD1ADI;
@@ -316,6 +323,13 @@ class StokKart {
     this.BARKODISK5 = 0.0,
     this.BARKODISK6 = 0.0,
     this.BAKIYE = 0.0,
+    this.OLCUBIRIM4 = "",
+    this.OLCUBIRIM5 = "",
+    this.OLCUBIRIM6 = "",
+    this.BIRIMADET3 = "",
+    this.BIRIMADET4 = "",
+    this.BIRIMADET5 = "",
+
     this.guncelDegerler,
   });
 
@@ -445,6 +459,16 @@ class StokKart {
     BARKODISK4 = double.parse(json['BARKODISK4'].toString());
     BARKODISK5 = double.parse(json['BARKODISK5'].toString());
     BARKODISK6 = double.parse(json['BARKODISK6'].toString());
+
+  
+    OLCUBIRIM4 = json['OLCUBIRIM4'];
+    OLCUBIRIM5 = json['OLCUBIRIM5'];
+    OLCUBIRIM6 = json['OLCUBIRIM6'];
+    BIRIMADET3 = json['BIRIMADET3'];
+    BIRIMADET4 = json['BIRIMADET4'];
+    BIRIMADET5 = json['BIRIMADET5'];
+
+
     
 BAKIYE = double.parse(json['BAKIYE'].toString());
     guncelDegerler = guncelDeger();
@@ -473,7 +497,7 @@ BAKIYE = double.parse(json['BAKIYE'].toString());
     data['OLCUBIRIM1'] = OLCUBIRIM1;
     data['OLCUBIRIM2'] = OLCUBIRIM2;
     data['BIRIMADET1'] = BIRIMADET1;
-    data['OLCUBIRIM3'] = OLCUBIRIM3;
+    
     data['BIRIMADET2'] = BIRIMADET2;
     data['RAPORKOD1'] = RAPORKOD1;
     data['RAPORKOD1ADI'] = RAPORKOD1ADI;
@@ -578,6 +602,14 @@ BAKIYE = double.parse(json['BAKIYE'].toString());
     data['BARKODISK5'] = BARKODISK5;
     data['BARKODISK6'] = BARKODISK6;
     data['BAKIYE'] = BAKIYE;
+    data['OLCUBIRIM3'] = OLCUBIRIM3;
+    data['OLCUBIRIM4'] = OLCUBIRIM4;
+    data['OLCUBIRIM5'] = OLCUBIRIM5;
+    data['OLCUBIRIM6'] = OLCUBIRIM6;
+    data['BIRIMADET3'] = BIRIMADET3;
+    data['BIRIMADET4'] = BIRIMADET4;
+    data['BIRIMADET5'] = BIRIMADET5;
+
     return data;
   }
 }

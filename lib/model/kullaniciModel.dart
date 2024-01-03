@@ -75,6 +75,7 @@ class KullaniciModel {
   String? IRSNO;
   String? EIRSNO;
   String? OTOMATIKSTOKKODU;
+  String? MALFAZLASI;
 
   KullaniciModel(
       {this.KOD,
@@ -142,7 +143,9 @@ class KullaniciModel {
       this.FATNO,
       this.IRSNO,
       this.EIRSNO,
-      this.OTOMATIKSTOKKODU});
+      this.OTOMATIKSTOKKODU,
+      this.MALFAZLASI
+      });
 
   KullaniciModel.fromjson(Map<String, dynamic> json) {
     KOD = json['KOD'];
@@ -209,6 +212,7 @@ class KullaniciModel {
     EARSIVNO = json['EARSIVNO'];
     FATNO = json['FATNO'];
     IRSNO = json['IRSNO'];
+    MALFAZLASI = json['MALFAZLASI'];
 
     EIRSNO = json['EIRSNO'];
     OTOMATIKSTOKKODU = json['OTOMATIKSTOKKODU'];
@@ -237,6 +241,7 @@ class KullaniciModel {
     data['SFIYAT5'] = SFIYAT5; //
     data['LISTEFIYAT'] = LISTEFIYAT;
     data['SONFIYAT'] = SONFIYAT;
+    data['MALFAZLASI'] = MALFAZLASI;
 
     ///?????????
     data['FIYATDEGISTIRILSIN'] = FIYATDEGISTIRILSIN; //

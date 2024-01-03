@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/controller/fisController.dart';
@@ -105,7 +106,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
             gelenFiyatVeIskonto[2].toString();
         stokKartEx.searchList[i].guncelDegerler!.fiyatDegistirMi =
             gelenFiyatVeIskonto[3];
-        stokKartEx.searchList[i].guncelDegerler!.carpan = 1.0;
+        stokKartEx.searchList[i].guncelDegerler!.carpan = 1;
 
         stokKartEx.searchList[i].guncelDegerler!.netfiyat =
             stokKartEx.searchList[i].guncelDegerler!.hesaplaNetFiyat();
@@ -128,7 +129,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
             widget.cari.cariAltHesaplar.first.ALTHESAPID);
         stokKartEx.searchList[i].guncelDegerler!.guncelBarkod =
             stokKartEx.searchList[i].KOD;
-        stokKartEx.searchList[i].guncelDegerler!.carpan = 1.0;
+        stokKartEx.searchList[i].guncelDegerler!.carpan = 1;
         stokKartEx.searchList[i].guncelDegerler!.fiyat =
             double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -376,15 +377,27 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   seciliAltHesap!.ALTHESAPID!);
 
                               if (stokKartEx.tempList.length == 1) {
-                                double gelenMiktar = stokKartEx
-                                    .tempList[0].guncelDegerler!.carpan!*okutulanCarpan;
+                                double gelenMiktar = double.parse(stokKartEx
+                                    .tempList[0].guncelDegerler!.carpan.toString())!*okutulanCarpan;
                                 // FocusScope.of(context).requestFocus(focusNode);
+                                bool urunVar  = false;
+                                int Fmiktar = 0;
+
+                                for(var element in fisEx.fis!.value.fisStokListesi){
+                                  if(stokKartEx.tempList[0].KOD == element.STOKKOD){
+                                    urunVar = true;
+                                    Fmiktar = element.MIKTAR!;
+                                    
+                                  }
+                                }
 
                                  showDialog(
                                     context: context,
                                     builder: (context) {
                                       return fisHareketDuzenle(
-                                        urunDuzenlemeyeGeldim: false,
+                                        urunDuzenlemeyeGeldim: urunVar,
+                                        fisHareketMiktar: Fmiktar,
+                                        
                                         okutulanCarpan: okutulanCarpan,
                                         altHesap: seciliAltHesap!.ALTHESAP!,
                                         gelenStokKart: stokKartEx.tempList[0],
@@ -442,8 +455,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 seciliAltHesap!.ALTHESAPID);
                             if (okumaModu == true) {
                               if (stokKartEx.tempList.length == 1) {
-                                double gelenMiktar = stokKartEx
-                                    .tempList[0].guncelDegerler!.carpan!;
+                                double gelenMiktar =double.parse( stokKartEx
+                                    .tempList[0].guncelDegerler!.carpan!.toString());
 
                                 showDialog(
                                     context: context,
@@ -595,7 +608,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                             .fiyatDegistirMi =
                                         gelenFiyatVeIskonto[3];
                                     stokKartEx.searchList[i].guncelDegerler!
-                                        .carpan = 1.0;
+                                        .carpan = 1;
 
                                     stokKartEx.searchList[i].guncelDegerler!
                                             .netfiyat =
@@ -629,7 +642,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                             .guncelBarkod =
                                         stokKartEx.searchList[i].KOD;
                                     stokKartEx.searchList[i].guncelDegerler!
-                                        .carpan = 1.0;
+                                        .carpan = 1;
                                     stokKartEx.searchList[i].guncelDegerler!
                                             .fiyat =
                                         double.parse(
@@ -702,15 +715,15 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                     color: Colors.black87,
                   ),
                   Container(
-                    height: ekranYuksekligi < 550
-                        ? ekranYuksekligi * .25
-                        : ekranYuksekligi * 0.42,
+                    height: ekranYuksekligi < 650
+                        ? ekranYuksekligi * .53
+                        : ekranYuksekligi * 0.57,
                     child: okumaModu == true
                         ? okumaModuList()
                         : SingleChildScrollView(
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.5,
+                              height: MediaQuery.of(context).size.height * 0.6,
                               child: ListView.builder(
                                 itemCount: stokKartEx.tempList
                                     .length, // stokKartEx.searchList.length,
@@ -719,8 +732,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                       stokKartEx.tempList[index];
                                   //    stokKartEx.searchList[index];
                                   return Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 12,
+                                    padding:  EdgeInsets.only(
+                                      bottom: ekranYuksekligi<650?ekranYuksekligi*0.07:ekranYuksekligi*0.002,
                                     ),
                                     child: Column(
                                       children: [
@@ -976,13 +989,23 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                             aramaMiktarController[
                                                                     index]
                                                                 .text);
+                                                              bool  urunDuz = false;
+                                                              int Fismiktar = 0;
+                                                          for(var element in fisEx.fis!.value.fisStokListesi){
+                                                            if(element.STOKKOD == stokModel.guncelDegerler!.guncelBarkod! ){
+                                                              urunDuz = true;
+                                                              Fismiktar = element.MIKTAR!;
+
+                                                            }
+                                                          }      
                                                     print(
                                                         "gelen miktar $gelenMiktar");
                                                     showDialog(
                                                         context: context,
                                                         builder: (context) {
                                                           return fisHareketDuzenle(
-                                                            urunDuzenlemeyeGeldim: false,
+                                                            urunDuzenlemeyeGeldim: urunDuz,
+                                                            fisHareketMiktar: Fismiktar!,
                                                             okutulanCarpan: 1,
                                                             altHesap:
                                                                 seciliAltHesap!
@@ -1057,6 +1080,98 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                             ],
                                           ),
                                         ),
+                                        Padding(
+                                          padding:  EdgeInsets.only(top:8.0),
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.vertical,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                              stokModel.OLCUBIRIM2 != "" ?  Row(
+                                                  children: [
+                                                    Text(
+                                                      stokModel.OLCUBIRIM2!+" :",
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: Colors.orange),
+                                                    ),
+                                                    Text(
+                                                      stokModel.BIRIMADET1!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ):Container(),
+                                                stokModel.OLCUBIRIM3 != "" ?  Row(
+                                                  children: [
+                                                    Text(
+                                                      stokModel.OLCUBIRIM3!+" :",
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: Colors.orange),
+                                                    ),
+                                                    Text(
+                                                      stokModel.BIRIMADET2!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ):Container(),
+                                                stokModel.OLCUBIRIM4 != "" ?  Row(
+                                                  children: [
+                                                    Text(
+                                                      stokModel.OLCUBIRIM4!+" :",
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: Colors.orange),
+                                                    ),
+                                                    Text(
+                                                      stokModel.BIRIMADET3!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ):Container(),
+                                                stokModel.OLCUBIRIM5 != "" ?  Row(
+                                                  children: [
+                                                    Text(
+                                                      stokModel.OLCUBIRIM5!+" :",
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: Colors.orange),
+                                                    ),
+                                                    Text(
+                                                      stokModel.BIRIMADET4!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ):Container(),
+                                                stokModel.OLCUBIRIM6 != "" ?  Row(
+                                                  children: [
+                                                    Text(
+                                                      stokModel.OLCUBIRIM5!+" :",
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: Colors.orange),
+                                                    ),
+                                                    Text(
+                                                      stokModel.BIRIMADET5!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ):Container(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                         Divider(
                                           thickness: 1.5,
                                           color: Colors.black87,
@@ -1069,33 +1184,38 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             ),
                           ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Satış Toplamı:",
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        height: MediaQuery.of(context).size.height * 0.04,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: Center(
-                            child: Text(
-                          Ctanim.donusturMusteri(
-                              fisEx.fis!.value.GENELTOPLAM.toString()),
+                  SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 0.045,
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Satış Toplamı:",
                           style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold),
-                        )),
-                      ),
-                    ],
+                            fontSize: 15,
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Center(
+                              child: Text(
+                            Ctanim.donusturMusteri(
+                                fisEx.fis!.value.GENELTOPLAM.toString()),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -1162,7 +1282,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         stokAdi: stokKart.ADI!,
         KDVOrani: double.parse(stokKart.SATIS_KDV.toString()),
         birim: stokKart.OLCUBIRIM1!,
-        birimID: birimID,
+        birimID: 1,
         dovizAdi: stokKartKur.ACIKLAMA!,
         dovizId: stokKartKur.ID!,
         burutFiyat: tempFiyat,

@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 9;
+  static final _databaseVersion = 10; // atarken 10 yap
 
   static Database? _database;
 
@@ -47,38 +47,17 @@ class DatabaseHelper {
     print(oldVersion);
     print(newVersion);
     for (int i = oldVersion; i <= newVersion; i++) {
-      if (i == 9) {
-        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ISK3 DECIMAL;");
-        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ISK4 DECIMAL;");
-        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ISK5 DECIMAL;");
-        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ISK6 DECIMAL;");
-        db.execute("ALTER TABLE TBLFISSB ADD COLUMN USTUUID TEXT;");
-        db.execute("ALTER TABLE TBLFISSB ADD COLUMN SIPARISSAYISI INTEGER;");
-        db.execute("ALTER TABLE TBLFISSB ADD COLUMN KALEMSAYISI INTEGER;");
-        db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN ZORUNLU TEXT;");
-        db.execute("ALTER TABLE TBLCARISB ADD COLUMN ACIKLAMA4 TEXT;");
-        //fishar mf
-        //VERGI DAİRESİ
-        //SIPARISSAYISI
-
-      }
-        if (i == 8) {
-        db.execute("ALTER TABLE TBLCARISB ADD COLUMN AKTARILDIMI TEXT;");
+      if (i == 10){
+       
+         db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN OLCUBIRIM4 TEXT;");
+          db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN OLCUBIRIM5 TEXT;");
+           db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN OLCUBIRIM6 TEXT;");
+           db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN BIRIMADET3 TEXT;");
+           db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN BIRIMADET4 TEXT;");
+           db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN BIRIMADET5 TEXT;");
         
-      }
-      if (i == 7) {
-        db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN ALTHESAPID INTEGER;");
-      }
-      if (i == 6) {
-        db.execute("ALTER TABLE TBLSTOKKOSULSB ADD COLUMN ALTHESAPID INTEGER;");
-      }
-        if (i == 3) {
-        db.execute("ALTER TABLE TBLCARISB ADD COLUMN ACIKLAMA1 TEXT;");
-      }
-
-      if (i == 2) {
-        db.execute("ALTER TABLE TBLFISHAR ADD COLUMN ALTHESAP TEXT;");
-      }
+      } 
+   
 
 
 
@@ -115,7 +94,15 @@ class DatabaseHelper {
       OLCUBIRIM2 TEXT ,
       BIRIMADET1 TEXT ,
       OLCUBIRIM3 TEXT ,
+
+      OLCUBIRIM4 TEXT ,
+      OLCUBIRIM5 TEXT ,
+      OLCUBIRIM6 TEXT ,
+
       BIRIMADET2 TEXT ,
+      BIRIMADET3 TEXT ,
+      BIRIMADET4 TEXT ,
+      BIRIMADET5 TEXT ,
       RAPORKOD1 TEXT ,
       RAPORKOD1ADI TEXT ,
       RAPORKOD2 TEXT ,

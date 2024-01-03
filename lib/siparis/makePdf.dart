@@ -7,11 +7,7 @@ import 'package:pdf/widgets.dart';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 
-
-Future<Uint8List> makePdf(Fis m, Uint8List imagePath
-) async {
- 
-
+Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
   final image = pw.MemoryImage(imagePath);
   final fontData = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
   final ttfFont = pw.Font.ttf(fontData);
@@ -43,119 +39,191 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath
         i == 0
             ? Padding(
                 padding: EdgeInsets.only(bottom: 20),
-                child: pw.Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        child: pw.Column(
-                          children: [
-                            SizedBox(
-                                height: 20,
-                                child: Text("İşlem Tarihi:",
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                            SizedBox(
-                                height: 20,
-                                child: Text("Cari Kodu:",
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                            SizedBox(
-                                height: 60,
-                                child: Text("Cari Adı:",
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                            SizedBox(
-                                height: 20,
-                                child: Text("Belge Tipi:",
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                            SizedBox(
-                                height: 20,
-                                child: Text("Cari Bakiye:",
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                                        SizedBox(
-                                height: 20,
-                                width: 400,
-                                child: Text("Belge Numarası:",
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                          ],
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
+                child: Column(children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: Text("SATICI SİPARİŞ FORMU",
+                        style: pw.TextStyle(
+                            fontSize: 22,
+                            fontWeight: pw.FontWeight.bold,
+                            font: boldttfFont)),
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: pw.Column(
+                            mainAxisSize:MainAxisSize.min, 
+                            children: [
+                              pw.Image(image, width: 150, height: 100), //RESIM
+                              /*
+                              SizedBox(
+                                  height: 20,
+                                  child: Row(
+                                    children: [
+                                      Text("İşlem Tarihi:",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont)),
+                                           SizedBox(
+                                    height: 20,
+                                    child: Text(m.TARIH.toString(),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont))),
+                                    ]
+                                  )),
+                                  */
+                              SizedBox(
+                                  height: 20,
+                                  child: Row(
+                                    children: [
+                                      Text("Cari Ünvanı:",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont),),
+                                            SizedBox(
+                                    height: 20,
+                                    width: 350,
+                                    child: Text(m.CARIADI.toString(),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont))),
+                                    ]
+                                  )),
+                              SizedBox(
+                                  height: 60,
+                                  child: Row(
+                                    children: [
+                                      Text("Cari Adresi:",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont)),
+                              
+                                  Text(m.cariKart.ADRES.toString(),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont)),
+                                    ]
+                                  )),
+                              SizedBox(
+                                  height: 20,
+                                  child: Row(
+                                    children: [
+                                      Text("Cari Kodu:",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont)),SizedBox(
+                                    height: 20,
+                                    child: Text(m.CARIKOD.toString(),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont))),
+                                    ]
+                                  )),
+                              SizedBox(
+                                  height: 40,
+                                 
+                                  child: Text("Müşteri Ünvan:",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont))),
+                              SizedBox(
+                                  height: 40,
+                                  width: 400,
+                                  child: Text("Müşteri Adresi:",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont))),
+                               SizedBox(
+                                  height:20,
+                                  width: 400,
+                                  child: Row(
+                                    children: [
+                                      Text("Mail:",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont)),SizedBox(
+                                    height: 20,
+                                    child: Text(m.cariKart.EMAIL.toString(),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont)))
+                                    ]
+                                  )),
+                            ],
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                          ),
                         ),
-                      ),
-                      pw.Column(
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                                height: 20,
-                                child: Text(m.TARIH.toString(),
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                            SizedBox(
-                                height: 20,
-                                child: Text(m.CARIKOD.toString(),
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                            SizedBox(
-                              height: 60,
-                              child: SizedBox(
-                                width: 200,
-                                child: Text(m.CARIADI.toString(),
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont)),
-                              ),
-                            ),
-                            SizedBox(
-                                height: 20,
-                                child: Text(
-                                    "Müşteri Sipariş",
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                            SizedBox(
-                                height: 20,
-                                child: Text(
-                                    Ctanim.donusturMusteri(
-                                        m.cariKart.BAKIYE.toString()),
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                                         SizedBox(
-                                height: 20,
-                                child: Text(
-                                  
-                                        m.FATURANO! ,
-                                    style: pw.TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: pw.FontWeight.bold,
-                                        font: boldttfFont))),
-                          ]),
-                      Spacer(),
-                      pw.Image(image, width: 150, height: 100),
-                      Container(height: 40),
-                    ]))
+                        /*
+                        Padding(
+                          padding: EdgeInsets.only(top: 100, left: 0),
+                          child: pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                /*
+                                /*
+                                SizedBox(
+                                    height: 20,
+                                    child: Text(m.TARIH.toString(),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont))),*/
+                              
+                                SizedBox(
+                                  height: 60,
+                                  child: SizedBox(
+                                    width: 200,
+                                    child: Text(m.CARIADI.toString(),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont)),
+                                  ),
+                                ),
+                                SizedBox(
+                                    height: 20,
+                                    child: Text("Müşteri Sipariş",
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont))),
+                                SizedBox(
+                                    height: 20,
+                                    child: Text(
+                                        Ctanim.donusturMusteri(
+                                            m.cariKart.BAKIYE.toString()),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont))),
+                                SizedBox(
+                                    height: 20,
+                                    child: Text(m.FATURANO!,
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont))),
+                                            */
+                              ]),
+                        )
+                        */
+                      ])
+                ]))
             : Container(),
         i == 0
             ? pw.Table.fromTextArray(
@@ -345,7 +413,7 @@ pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
               mainAxisAlignment: pw.MainAxisAlignment.end,
               children: [
                 pw.Text(
-                  Ctanim.donusturMusteri(m.TOPLAM!.toString()) + " "+ m.DOVIZ!,
+                  Ctanim.donusturMusteri(m.TOPLAM!.toString()) + " " + m.DOVIZ!,
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
@@ -353,7 +421,9 @@ pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
                   ),
                 ),
                 pw.Text(
-                  Ctanim.donusturMusteri(m.INDIRIM_TOPLAMI!.toString())+ " " +  m.DOVIZ!,
+                  Ctanim.donusturMusteri(m.INDIRIM_TOPLAMI!.toString()) +
+                      " " +
+                      m.DOVIZ!,
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
@@ -361,7 +431,9 @@ pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
                   ),
                 ),
                 pw.Text(
-                  Ctanim.donusturMusteri(m.ARA_TOPLAM!.toString()) + " "+ m.DOVIZ!,
+                  Ctanim.donusturMusteri(m.ARA_TOPLAM!.toString()) +
+                      " " +
+                      m.DOVIZ!,
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
@@ -369,7 +441,9 @@ pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
                   ),
                 ),
                 pw.Text(
-                  Ctanim.donusturMusteri(m.KDVTUTARI!.toString()) + " "+ m.DOVIZ!,
+                  Ctanim.donusturMusteri(m.KDVTUTARI!.toString()) +
+                      " " +
+                      m.DOVIZ!,
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
@@ -377,7 +451,9 @@ pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
                   ),
                 ),
                 pw.Text(
-                  Ctanim.donusturMusteri(m.GENELTOPLAM!.toString()) + " "+ m.DOVIZ!,
+                  Ctanim.donusturMusteri(m.GENELTOPLAM!.toString()) +
+                      " " +
+                      m.DOVIZ!,
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,

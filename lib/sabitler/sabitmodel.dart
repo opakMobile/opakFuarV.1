@@ -39,7 +39,7 @@ appBarDizayn(context) {
 bottombarDizayn(context, {Widget? button, bool buttonVarMi = false}) {
   return Container(
     width: MediaQuery.of(context).size.width,
-    height: 70,
+    height: MediaQuery.of(context).size.height*.09,
     color: Colors.white,
     child: Padding(
       padding:

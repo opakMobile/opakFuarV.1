@@ -57,14 +57,15 @@ class VeriIslemleri {
 
       await Ctanim.db?.execute("DROP TABLE IF EXISTS TBLSTOKSB");
 
-      await Ctanim.db?.execute("""CREATE TABLE TBLSTOKSB (
+      await Ctanim.db?.execute("""
+    CREATE TABLE TBLSTOKSB (
       ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       KOD TEXT NOT NULL,
       ADI TEXT NOT NULL,
+      STOKTIP TEXT,
       SATDOVIZ TEXT,
       ALDOVIZ TEXT ,
       SATIS_KDV DECIMAL ,
-      STOKTIP TEXT,
       ALIS_KDV DECIMAL,
       SFIYAT1 DECIMAL ,
       SFIYAT2 DECIMAL ,
@@ -80,7 +81,15 @@ class VeriIslemleri {
       OLCUBIRIM2 TEXT ,
       BIRIMADET1 TEXT ,
       OLCUBIRIM3 TEXT ,
+
+      OLCUBIRIM4 TEXT ,
+      OLCUBIRIM5 TEXT ,
+      OLCUBIRIM6 TEXT ,
+
       BIRIMADET2 TEXT ,
+      BIRIMADET3 TEXT ,
+      BIRIMADET4 TEXT ,
+      BIRIMADET5 TEXT ,
       RAPORKOD1 TEXT ,
       RAPORKOD1ADI TEXT ,
       RAPORKOD2 TEXT ,
@@ -181,8 +190,7 @@ class VeriIslemleri {
       BARKODISK5 DECIMAL,
       BARKODISK6 DECIMAL,
       BAKIYE DECIMAL,
-      LISTEDOVIZ TEXT 
-      )""");
+      LISTEDOVIZ TEXT )""");
 
       print("TBLCARISB tablosu temizlendi ve yeniden oluşturuldu.");
     } catch (e) {
