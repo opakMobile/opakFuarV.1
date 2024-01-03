@@ -125,7 +125,7 @@ class _okumaModuListState extends State<okumaModuList> {
                         Column(
                           children: [
                             Text(
-                              "M.Fazlası",
+                              "MF",
                               style: TextStyle(fontSize: 13),
                             ),
                             Container(

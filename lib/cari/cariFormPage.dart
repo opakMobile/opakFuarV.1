@@ -447,6 +447,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                       child: Center(
                                         child: ElevatedButton.icon(
                                           onPressed: () async {
+                                            if(_MailAdresi.text != "" && _CepTelefonu.text != "" && _AdresBilgileri.text != "" && _SirketIsmi.text != ""){
                                             showDialog(
                                               context: context,
                                               barrierDismissible: false,
@@ -531,6 +532,23 @@ class _CariFormPageState extends State<CariFormPage> {
                                                     buttonText: 'Tamam',
                                                   );
                                                 });
+                                            }else{
+                                               showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return CustomAlertDialog(
+                                                    align: TextAlign.left,
+                                                    title: 'Hata',
+                                                    message:
+                                                        'Yeni cari eklemede cari adı, mail adresi, telefon numarası ve adres bilgileri boş bırakılamaz.',
+                                                    onPres: () async {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    buttonText: 'Geri',
+                                                  );
+                                                });
+                                            }
+
                                           },
                                           icon: Icon(Icons.save),
                                           label: Text("Kaydet"),

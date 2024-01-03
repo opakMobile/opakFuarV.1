@@ -42,12 +42,64 @@ class _BayiSecState extends State<BayiSec> {
     if (query.isEmpty) {
       tempBayiList.assignAll(widget.bayiList);
     } else {
-      var results = widget.bayiList
-          .where((value) =>
-              value.ADI!.toLowerCase().contains(query.toLowerCase()) ||
-              value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
-              value.IL!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      var results;
+
+      List<String> queryparcali = query.split(" ");
+      if (queryparcali.length == 1) {
+        results = widget.bayiList
+            .where((value) =>
+                value.ADI!
+                    .toLowerCase()
+                    .contains(queryparcali[0].toLowerCase()) ||
+                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else if (queryparcali.length == 2) {
+        results = widget.bayiList
+            .where((value) =>
+                (value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[0].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[1].toLowerCase())) ||
+                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else if (queryparcali.length == 3) {
+        results = widget.bayiList
+            .where((value) =>
+                (value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[0].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[1].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[2].toLowerCase())) ||
+                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else if (queryparcali.length == 4) {
+        results = widget.bayiList
+            .where((value) =>
+                (value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[0].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[1].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[2].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[3].toLowerCase())) ||
+                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
       tempBayiList.assignAll(results);
     }
   }

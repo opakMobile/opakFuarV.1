@@ -48,7 +48,7 @@ class fisHareketDuzenle extends StatefulWidget {
 }
 
 class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
-  FocusNode focusNode = FocusNode();
+  FocusNode focusNode1 = FocusNode();
   @override
   void initState() {
     // TODO: implement initState
@@ -57,7 +57,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
         ? widget.gelenMiktar.toStringAsFixed(2).toString()
         : widget.gelenStokKart.guncelDegerler!.carpan!.toString();
 
-        
+
     fiyatController.text = widget.fiyat != -1
         ? widget.fiyat.toString()
         : widget.gelenStokKart.guncelDegerler!.fiyat!.toString();
@@ -199,7 +199,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
   @override
   Widget build(BuildContext context) {
     if(i==0){
-       FocusScope.of(context).requestFocus(focusNode);
+      print("ŞLKLKFDLKFSŞLKFKŞLSDKLKFLKDŞF");
+  FocusScope.of(context).requestFocus(focusNode1);
   miktarController.selection = TextSelection(baseOffset: 0, extentOffset: miktarController.value.text.length);
   i++;
     }
@@ -209,7 +210,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
           
           child: Row(
             children: [
-              const Text("Stok Düzenleme"),
+              const Text("Stok Ekle"),
               Spacer(),
               IconButton(
                 onPressed: () {
@@ -237,7 +238,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                ElevatedButton(
                 style: ButtonStyle(
                   minimumSize: MaterialStateProperty.all(Size(
-                      MediaQuery.of(context).size.width * 0.3,
+                      MediaQuery.of(context).size.width * 0.6,
                       MediaQuery.of(context).size.height * 0.05)),
                 ),
                 onPressed: () {
@@ -295,18 +296,15 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                             onEditingComplete: () {
                              fisHareketUygula(context);
                             },
-                            onSaved: (newValue) {
-                              
-                              print("anan");
-                            },
+                          
                                       keyboardType: TextInputType.number,
                              inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'^\d+\.?\d{0,2}')),
-                                    FilteringTextInputFormatter.digitsOnly,
+                                    //FilteringTextInputFormatter.allow(
+                                     //   RegExp(r'^\d+\.?\d{0,2}')),
+                                    //FilteringTextInputFormatter.digitsOnly,
                                   ],
                             controller: miktarController,
-                            focusNode: focusNode,
+                            focusNode: focusNode1,
                             onTap: () => miktarController.selection = TextSelection(baseOffset: 0, extentOffset: miktarController.value.text.length),
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -346,6 +344,51 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 color: Colors.black45,
               ),
               // !
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+               Text(
+                "Fiyat",
+                style: TextStyle(fontSize: 22),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.height * 0.07,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Material(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextFormField(
+                        controller: fiyatController,
+                     onTap: () => fiyatController.selection = TextSelection(baseOffset: 0, extentOffset: fiyatController.value.text.length),
+
+                        enabled: Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E"
+                            ? true
+                            : false,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "1",
+                          hintStyle:
+                              TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      )),
+                ),
+              ),
+              Divider(
+                endIndent: 20,
+                indent: 20,
+                thickness: 1,
+                color: Colors.black45,
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
@@ -657,51 +700,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
-              Text(
-                "Fiyat",
-                style: TextStyle(fontSize: 22),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.height * 0.07,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Material(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextFormField(
-                        controller: fiyatController,
-                     onTap: () => fiyatController.selection = TextSelection(baseOffset: 0, extentOffset: fiyatController.value.text.length),
-
-                        enabled: Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E"
-                            ? true
-                            : false,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "1",
-                          hintStyle:
-                              TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                      )),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Divider(
-                endIndent: 20,
-                indent: 20,
-                thickness: 1,
-                color: Colors.black45,
-              ),
+             
+              
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
@@ -714,6 +714,31 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
   }
 
   void fisHareketUygula(BuildContext context) {
+
+    if(miktarController.text.contains("*")){
+      List<String> parcali = miktarController.text.split("*");
+      double miktar = double.parse(parcali[0]) * double.parse(parcali[1]);
+      miktarController.text = miktar.toString();
+
+    }else if (miktarController.text.contains("x")){
+      List<String> parcali = miktarController.text.split("x");
+      double miktar = double.parse(parcali[0]) * double.parse(parcali[1]);
+      miktarController.text = miktar.toString();
+
+    }else if (miktarController.text.contains("X")){
+      List<String> parcali = miktarController.text.split("X");
+      double miktar = double.parse(parcali[0]) * double.parse(parcali[1]);
+      miktarController.text = miktar.toString();
+    }
+
+    if(double.parse(miktarController.text) % widget.gelenStokKart.guncelDegerler!.carpan! != 0 ){
+      // HATA GOSTER
+      return;
+     
+    }
+
+
+
     KurModel gidecekKur = listeler.listKur.first;
     if (Ctanim.kullanici!.LISTEFIYAT! == "E") {
       for (var element in listeler.listKur) {

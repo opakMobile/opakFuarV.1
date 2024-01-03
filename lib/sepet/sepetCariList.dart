@@ -37,8 +37,85 @@ class _SepetCariListState extends State<SepetCariList> {
   List<Fis> bekleyenler = [];
   List<Fis> aktarilanlar = [];
   List<Fis> tumu = [];
+    void cariAra(String query) {
+
+
+    if (query.isEmpty) {
+        tempCari.assignAll(listenecekCariler);
+    } else {
+      var results;
+      List<String> queryparcali = query.split(" ");
+      if (queryparcali.length == 1) {
+        results = listenecekCariler
+            .where((value) =>
+                value.ADI!
+                    .toLowerCase()
+                    .contains(queryparcali[0].toLowerCase()) ||
+                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else if (queryparcali.length == 2) {
+        results = listenecekCariler
+            .where((value) =>
+                (value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[0].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[1].toLowerCase())) ||
+                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else if (queryparcali.length == 3) {
+        results = listenecekCariler
+            .where((value) =>
+                (value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[0].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[1].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[2].toLowerCase())) ||
+                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else if (queryparcali.length == 4) {
+        results = listenecekCariler
+            .where((value) =>
+                (value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[0].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[1].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[2].toLowerCase()) &&
+                    value.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[3].toLowerCase())) ||
+                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+     tempCari.assignAll(results);
+    }
+
+
+
+
+
+
+
+
+
+
+  }
 
   List<Cari> listenecekCariler = [];
+  List<Cari> tempCari = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -46,6 +123,7 @@ class _SepetCariListState extends State<SepetCariList> {
     for (var element in fisEx.list_tum_fis) {
     //  tumu.add(element);
       listenecekCariler.add(element.cariKart);
+      tempCari.add( element.cariKart);
       /*
       if(element.AKTARILDIMI == false){
         bekleyenler.add(element);
@@ -116,7 +194,11 @@ class _SepetCariListState extends State<SepetCariList> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
-                        onChanged: ((value) => cariEx.searchCari(value)),
+                        onChanged: ((value) {
+                         setState(() {
+                            cariAra(value);
+                         });
+                        }),
                       ),
                     ),
                     SizedBox(
@@ -177,9 +259,9 @@ class _SepetCariListState extends State<SepetCariList> {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.6,
                       child: ListView.builder(
-                        itemCount: listenecekCariler.length,
+                        itemCount: tempCari.length,
                         itemBuilder: (context, index) {
-                          Cari cari = listenecekCariler[index];
+                          Cari cari = tempCari[index];
                           String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                           String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                           return Column(
@@ -197,7 +279,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                  
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
-                                          0.5,
+                                          0.45,
                                       child: Text(
                                         cari.ADI.toString(),
                                         maxLines: 3,
@@ -216,7 +298,8 @@ class _SepetCariListState extends State<SepetCariList> {
                                     children: [
                                       Text(cari.IL!.toString()),
                                       widget.islem == true
-                                          ? Text(cari.BAKIYE.toString())
+                                          ? Text(cari.BAKIYE.toString()
+                                          )
                                           : Container(),
                                     ],
                                   ),

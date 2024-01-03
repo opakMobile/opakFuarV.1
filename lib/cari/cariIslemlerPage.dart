@@ -84,7 +84,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                         maxLines: 2,
                                         textAlign: TextAlign.right,
                                         style: GoogleFonts.doppioOne(
-                                          fontSize: 22,
+                                          fontSize: MediaQuery.of(context).size.height * 0.035,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -160,7 +160,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                       maxLines: 2,
                                       textAlign: TextAlign.right,
                                       style: GoogleFonts.doppioOne(
-                                        fontSize: 22,
+                                        fontSize: MediaQuery.of(context).size.height * 0.035,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -235,7 +235,7 @@ class _CariIslemlerPageState extends State<CariIslemlerPage> {
                                       maxLines: 2,
                                       textAlign: TextAlign.right,
                                       style: GoogleFonts.doppioOne(
-                                        fontSize: 22,
+                                        fontSize:MediaQuery.of(context).size.height * 0.035,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),

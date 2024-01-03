@@ -60,7 +60,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
       seciliAltHesap = altHesaplar.first;
     }
 
-   
+    for (int i = 0; i < stokKartEx.searchList.length; i++) {
+      aramaMiktarController.add(TextEditingController(text: "1"));
+    }
     stokKartEx.tempList.clear();
     SatisTipiModel satisTipiModel =
         SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
@@ -178,8 +180,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   }
 
   String result = '';
-  bool aramaModu = true;
-  bool okumaModu = false;
+  bool aramaModu = false;
+  bool okumaModu = true;
   TextEditingController editingController = TextEditingController();
   List<TextEditingController> aramaMiktarController = [];
   final StokKartController stokKartEx = Get.find();
@@ -277,7 +279,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             ),
                             value: okumaModu,
                             onChanged: (value) {
-                              FocusScope.of(context).requestFocus(focusNode);
+                             // FocusScope.of(context).requestFocus(focusNode);
                               setState(() {
                                 okumaModu = value!;
                                 if (value == true) {
@@ -317,9 +319,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         child: TextFormField(
                           focusNode: focusNode,
                           controller: editingController,
-                          // onTap: () =>   editingController.selection = TextSelection(baseOffset: 0, extentOffset: editingController.value.text.length),
-
-                          onChanged: ((value) async {
+                         onTap: () =>   editingController.selection = TextSelection(baseOffset: 0, extentOffset: editingController.value.text.length),
+                          onFieldSubmitted: ((value)  {
+                            stokKartEx.tempList.clear();
                             if (okumaModu == false) {
                               SatisTipiModel m = SatisTipiModel(
                                   ID: -1,
@@ -328,18 +330,19 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   ISK1: "",
                                   ISK2: "");
                               stokKartEx.searchC(
-                                  value,
+                                  value!,
                                   widget.cari.KOD!,
                                   "Fiyat1",
                                   m,
                                   Ctanim.seciliStokFiyatListesi,
                                   seciliAltHesap!.ALTHESAPID!);
+
                               setState(() {});
                               //editingController.text = "";
                             } else {
                               int okutulanCarpan = 1;
                                List<String> aranacak = [];
-                              if (value.contains("*")) {
+                              if (value!.contains("*")) {
                                aranacak = value.split("*");
                                 okutulanCarpan = int.parse(aranacak[0]);
                                 value = aranacak[1];
@@ -373,10 +376,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
 
                               if (stokKartEx.tempList.length == 1) {
                                 double gelenMiktar = stokKartEx
-                                    .tempList[0].guncelDegerler!.carpan!;
+                                    .tempList[0].guncelDegerler!.carpan!*okutulanCarpan;
                                 // FocusScope.of(context).requestFocus(focusNode);
 
-                                await showDialog(
+                                 showDialog(
                                     context: context,
                                     builder: (context) {
                                       return fisHareketDuzenle(
@@ -392,6 +395,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 });
                               }
                               editingController.text = "";
+                              FocusScope.of(context).requestFocus(focusNode);
+                              
                             }
                           }),
                           decoration: InputDecoration(
@@ -461,7 +466,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   Ctanim.seciliStokFiyatListesi,
                                   seciliAltHesap!.ALTHESAPID);
                             }
-                            editingController.text = "";
+                           // editingController.text = "";
 
                             setState(() {});
                           },
@@ -1009,7 +1014,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                           gidecekKur = element;
                                                         }
                                                       }
-                                                      double miktar = double.parse(
+                                                      double miktar = stokModel.guncelDegerler!.carpan !>1 ?stokModel.guncelDegerler!.carpan!
+                                                        :double.parse(
                                                           aramaMiktarController[
                                                                   index]
                                                               .text);
