@@ -39,7 +39,7 @@ class _CariListePageState extends State<CariListePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: appBarDizayn(context),
+       
         bottomNavigationBar: bottombarDizayn(context),
         body: Container(
           width: MediaQuery.of(context).size.width,
@@ -74,6 +74,7 @@ class _CariListePageState extends State<CariListePage> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: TextFormField(
+                    textCapitalization: TextCapitalization.characters,
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.search),
                       hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
@@ -93,7 +94,7 @@ class _CariListePageState extends State<CariListePage> {
                 SingleChildScrollView(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.55,
+                    height: MediaQuery.of(context).size.height * 0.8,
                     child: Obx(() => ListView.builder(
                           itemCount: cariEx.searchCariList.length,
                           itemBuilder: (context, index) {

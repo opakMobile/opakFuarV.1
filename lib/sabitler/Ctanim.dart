@@ -13,6 +13,7 @@ import '../model/stokFiyatListesiModel.dart';
 class Ctanim {
   //degiskenler
   static var db;
+  static bool urunAraFocus = true;
   static String? sirket;
   static String IP = "";
   static int siparisNumarasi = 0;

@@ -14,8 +14,9 @@ import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 
 class SiparisTamamla extends StatefulWidget {
-  const SiparisTamamla({super.key, });
-
+  const SiparisTamamla({
+    super.key,
+  });
 
   @override
   State<SiparisTamamla> createState() => _SiparisTamamlaState();
@@ -139,8 +140,8 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                     ),
                   ),
                   onPressed: () async {
-                   
-                    fisEx.fis!.value.DURUM = true;
+                        if(fisEx.fis!.value.fisStokListesi.length > 0){
+                            fisEx.fis!.value.DURUM = true;
                     final now = DateTime.now();
                     final formatter = DateFormat('HH:mm');
                     String saat = formatter.format(now);
@@ -152,14 +153,10 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                           return CustomAlertDialog(
                             secondButtonText: "Tamam",
                             onSecondPress: () async {
-                    await Fis.empty()
-                        .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
-                    fisEx.fis!.value = Fis.empty();
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                       Navigator.pop(context);
-                              
-                          
+                             
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
                             },
                             pdfSimgesi: true,
                             align: TextAlign.center,
@@ -168,11 +165,11 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                 'Fatura Kaydedildi. PDF Dosyasını Görüntülemek İster misiniz?',
                             onPres: () async {
                               Fis fiss = fisEx.fis!.value;
-                               await Fis.empty()
-                        .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
-                    fisEx.fis!.value = Fis.empty();
-                    Navigator.pop(context);Navigator.pop(context);
-
+                              await Fis.empty().fisEkle(
+                                  fis: fisEx.fis!.value, belgeTipi: "YOK");
+                              fisEx.fis!.value = Fis.empty();
+                              Navigator.pop(context);
+                              Navigator.pop(context);
                               Navigator.pop(context);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -181,13 +178,28 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                           fastReporttanMiGelsin: false,
                                         )),
                               );
-
-                   
-                 
                             },
                             buttonText: 'Pdf\'i\ Gör',
                           );
                         });
+
+                        }else{
+                             await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CustomAlertDialog(
+                                    align: TextAlign.left,
+                                    title: 'Stok Eklemediniz',
+                                    message: 'Fişe stok eklemeden fiş kaydedilemez.',
+                                    onPres: () async {
+                                      Navigator.pop(context);
+                                    },
+                                    buttonText: 'Tamam',
+                                  );
+                                });
+
+                        }
+                  
                   },
                   child: Text(
                     "Siparişi Yazdır",
@@ -364,7 +376,6 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                         controller: aciklamaController,
                         onChanged: (value) {
                           fisEx.fis!.value.ACIKLAMA1 = value;
-                       
                         },
                         maxLines: 8,
                         decoration: InputDecoration(

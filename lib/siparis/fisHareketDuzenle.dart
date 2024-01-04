@@ -52,7 +52,7 @@ class fisHareketDuzenle extends StatefulWidget {
 }
 
 class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
-  FocusNode focusNode1 = FocusNode();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -202,14 +202,18 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
   bool detay = false;
   @override
   Widget build(BuildContext context) {
-    if (i == 0) {
+    if (i == 0 &&  Ctanim.urunAraFocus == false) {
       print("ŞLKLKFDLKFSŞLKFKŞLSDKLKFLKDŞF");
+      /*
       FocusScope.of(context).requestFocus(focusNode1);
+      */
       miktarController.selection = TextSelection(
           baseOffset: 0, extentOffset: miktarController.value.text.length);
+          
       i++;
     }
     return AlertDialog(
+     insetPadding: EdgeInsets.all(10),
       title: SizedBox(
         width: MediaQuery.of(context).size.width * .8,
         child: Column(
@@ -219,7 +223,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 SizedBox(
                     width: MediaQuery.of(context).size.width * .5,
                     child: Text(
-                      widget.gelenStokKart.ADI!,
+                      widget.gelenStokKart.ADI!+ " - %" + widget.gelenStokKart.SATIS_KDV!.toStringAsFixed(0),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 15),
@@ -238,101 +242,147 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 )
               ],
             ),
-             SizedBox(
-             width:MediaQuery.of(context).size.width * .7,
-             
-               child: Padding(
-                                            padding:  EdgeInsets.only(top:8.0),
-                                            child: SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: Row(
-                                                
-                                                children: [
-                                                widget.gelenStokKart.OLCUBIRIM2 != "" ?  Row(
-                                                    children: [
-                                                      Text(
-                                                        widget.gelenStokKart.OLCUBIRIM2!+" :",
-                                                        style: TextStyle(
-                                                            fontSize: 11,
-                                                            color: Colors.orange),
-                                                      ),
-                                                      Text(
-                                                        widget.gelenStokKart.BIRIMADET1!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ):Container(),
-                                                  widget.gelenStokKart.OLCUBIRIM3 != "" ?  Row(
-                                                    children: [
-                                                      Text(
-                                                        widget.gelenStokKart.OLCUBIRIM3!+" :",
-                                                        style: TextStyle(
-                                                            fontSize: 11,
-                                                            color: Colors.orange),
-                                                      ),
-                                                      Text(
-                                                        widget.gelenStokKart.BIRIMADET2!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ):Container(),
-                                                  widget.gelenStokKart.OLCUBIRIM4 != "" ?  Row(
-                                                    children: [
-                                                      Text(
-                                                        widget.gelenStokKart.OLCUBIRIM4!+" :",
-                                                        style: TextStyle(
-                                                            fontSize: 11,
-                                                            color: Colors.orange),
-                                                      ),
-                                                      Text(
-                                                        widget.gelenStokKart.BIRIMADET3!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ):Container(),
-                                                  widget.gelenStokKart.OLCUBIRIM5 != "" ?  Row(
-                                                    children: [
-                                                      Text(
-                                                        widget.gelenStokKart.OLCUBIRIM5!+" :",
-                                                        style: TextStyle(
-                                                            fontSize: 11,
-                                                            color: Colors.orange),
-                                                      ),
-                                                      Text(
-                                                        widget.gelenStokKart.BIRIMADET4!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ):Container(),
-                                                  widget.gelenStokKart.OLCUBIRIM6 != "" ?  Row(
-                                                    children: [
-                                                      Text(
-                                                        widget.gelenStokKart.OLCUBIRIM5!+" :",
-                                                        style: TextStyle(
-                                                            fontSize: 11,
-                                                            color: Colors.orange),
-                                                      ),
-                                                      Text(
-                                                        widget.gelenStokKart.BIRIMADET5!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ):Container(),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-             ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * .8,
+              child: Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        widget.gelenStokKart.OLCUBIRIM2 != ""
+                            ? SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.23,
+                              child: Row(
+                                  children: [
+                                    Text(
+                                       widget.gelenStokKart.OLCUBIRIM2! + " :",
+                                      style: TextStyle(
+                                          fontSize: 11, color: Colors.orange),
+                                    ),
+                                    Text(
+                                      widget.gelenStokKart
+                                          .BIRIMADET1!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                            )
+                            : Container(),
+                        widget.gelenStokKart.OLCUBIRIM3 != ""
+                            ? Padding(
+                              padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
+                              child: SizedBox(
+                               width: MediaQuery.of(context).size.width * 0.23,
+                                child: Row(
+                                    children: [
+                                      Text(
+                                        widget.gelenStokKart.OLCUBIRIM3! + " :",
+                                        style: TextStyle(
+                                            fontSize: 11, color: Colors.orange),
+                                      ),
+                                      Text(
+                                        widget.gelenStokKart
+                                            .BIRIMADET2!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                              ),
+                            )
+                            : Container(),
+    
+                      ],
+                    ),
+                    Row(
+                      children: [
+                          widget.gelenStokKart.OLCUBIRIM4 != ""
+                          ? SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.23,
+                            child: Row(
+                                children: [
+                                  Text(
+                                    widget.gelenStokKart.OLCUBIRIM4! + " :",
+                                    style: TextStyle(
+                                        fontSize: 11, color: Colors.orange),
+                                  ),
+                                  Text(
+                                    widget.gelenStokKart
+                                        .BIRIMADET3!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  )
+                                ],
+                              ),
+                          )
+                          : Container(),
+                      widget.gelenStokKart.OLCUBIRIM5 != ""
+                          ? Padding(
+          
+                           padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
+
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.23,
+                              child: Row(
+                                  children: [
+                                    Text(
+                                      widget.gelenStokKart.OLCUBIRIM5! + " :",
+                                      style: TextStyle(
+                                          fontSize: 11, color: Colors.orange),
+                                    ),
+                                    Text(
+                                      widget.gelenStokKart
+                                          .BIRIMADET4!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                            ),
+                          )
+                          : Container(),
+                      widget.gelenStokKart.OLCUBIRIM6 != ""
+                          ? Padding(
+                              padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.04),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.23,
+                              child: Row(
+                                  children: [
+                                    Text(
+                                      widget.gelenStokKart.OLCUBIRIM6! + " :",
+                                      style: TextStyle(
+                                          fontSize: 11, color: Colors.orange),
+                                    ),
+                                    Text(
+                                      widget.gelenStokKart
+                                          .BIRIMADET5!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                            ),
+                          )
+                          : Container(),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Text("Bakiye: ",style: TextStyle(fontSize: 14,color: Colors.orange),),
+                Text( widget.gelenStokKart.BAKIYE!.toStringAsFixed(0),style: TextStyle(fontSize: 14),)
+              ],
+            ),
           ],
         ),
       ),
@@ -345,6 +395,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+        
               ElevatedButton(
                 style: ButtonStyle(
                   minimumSize: MaterialStateProperty.all(Size(
@@ -413,14 +464,14 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                               fisHareketUygula(context);
                             },
                             keyboardType: TextInputType.number,
-                            
                             inputFormatters: [
                               //FilteringTextInputFormatter.allow(
                               //   RegExp(r'^\d+\.?\d{0,2}')),
                               //FilteringTextInputFormatter.digitsOnly,
                             ],
                             controller: miktarController,
-                            focusNode: focusNode1,
+                            //focusNode: focusNode1,
+                            autofocus: true,
                             onTap: () => miktarController.selection =
                                 TextSelection(
                                     baseOffset: 0,
@@ -920,47 +971,57 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
                                 Ctanim.kullanici!.MALFAZLASI == "E"
-                                    ?
-                                Text(
-                                  "Mal Fazlası",
-                                  style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.04),
-                                ):Container(),
-                               Ctanim.kullanici!.MALFAZLASI=="E" ? SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.01,
-                                ):Container(),
-                               Ctanim.kullanici!.MALFAZLASI == "E"
-                                    ?  Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.07,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: Colors.grey),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Material(
-                                        shape: RoundedRectangleBorder(
+                                    ? Text(
+                                        "Mal Fazlası",
+                                        style: TextStyle(
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04),
+                                      )
+                                    : Container(),
+                                Ctanim.kullanici!.MALFAZLASI == "E"
+                                    ? SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.01,
+                                      )
+                                    : Container(),
+                                Ctanim.kullanici!.MALFAZLASI == "E"
+                                    ? Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.07,
+                                        decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
+                                          border:
+                                              Border.all(color: Colors.grey),
                                         ),
-                                        child: TextFormField(
-                                          controller: malFazlasiController,
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: "1",
-                                            hintStyle: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey),
-                                          ),
-                                        )),
-                                  ),
-                                ):Container(),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Material(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: TextFormField(
+                                                controller:
+                                                    malFazlasiController,
+                                                decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText: "1",
+                                                  hintStyle: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.grey),
+                                                ),
+                                              )),
+                                        ),
+                                      )
+                                    : Container(),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.01,
@@ -988,7 +1049,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
   }
 
   Future<void> fisHareketUygula(BuildContext context) async {
-
+    Ctanim.urunAraFocus = true;
     if (miktarController.text.contains("*")) {
       List<String> parcali = miktarController.text.split("*");
       double miktar = double.parse(parcali[0]) * double.parse(parcali[1]);
@@ -1007,27 +1068,29 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
       miktarController.text = miktar.toString();
     }
 
-
     if (double.parse(miktarController.text) %
             widget.gelenStokKart.guncelDegerler!.carpan! !=
         0) {
       // HATA GOSTER
+      Ctanim.urunAraFocus = false;
       await showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return CustomAlertDialog(
-                                      align: TextAlign.left,
-                                      title: 'Hata',
-                                      message:
-                                          'Eklemeye çalıştığınız miktar  '+widget.gelenStokKart.guncelDegerler!.carpan!.toString()+" katı olmalıdır.",
-                                           
-                                      onPres: () async {
-                                        Navigator.pop(context);
-                                      },
-                                      buttonText: 'Tamam',
-                                    );
-                                  });
- 
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              align: TextAlign.left,
+              title: 'Hata',
+              message: 'Eklemeye çalıştığınız miktar  ' +
+                  widget.gelenStokKart.guncelDegerler!.carpan!.toString() +
+                  " katı olmalıdır.",
+              onPres: () async {
+                Navigator.pop(context);
+                 Ctanim.urunAraFocus = false;
+              },
+              buttonText: 'Tamam',
+            );
+          });
+           Ctanim.urunAraFocus = false;
+
       return;
     }
 

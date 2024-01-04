@@ -9,6 +9,7 @@ import 'package:opak_fuar/db/veriTabaniIslemleri.dart';
 import 'package:opak_fuar/model/ShataModel.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
+import 'package:opak_fuar/pages/ver%C4%B1GondermeHataDiyalog.dart';
 import 'package:opak_fuar/raporlar/raporlar.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
@@ -683,7 +684,22 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.85,
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                           showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return LoadingSpinner(
+                                color: Colors.black,
+                                message:
+                                    "Stok Miktarı ve Bakiye Güncelleniyor. Lütfen Bekleyiniz...",
+                              );
+                            },
+                          );
+                          await widget.bs.stokVerileriGuncelle();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
                         child: Row(
                           children: [
                             Icon(
@@ -902,7 +918,7 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                               await showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return CustomAlertDialog(
+                                    return VeriGondermeHataDialog(
                                       align: TextAlign.left,
                                       title: 'Hata',
                                       message:

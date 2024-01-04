@@ -24,8 +24,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //! Ekranı yatay yapmaz
+
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+        
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(

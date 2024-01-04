@@ -106,7 +106,7 @@ class _okumaModuListState extends State<okumaModuList> {
                         stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD6;
 
                        }
-
+            Ctanim.urunAraFocus = false;
                        
                      
                               showDialog(

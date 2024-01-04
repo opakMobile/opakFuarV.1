@@ -172,9 +172,20 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
+
     Ctanim.secililiMarkalarFiltre.clear();
-    Fis.empty().fisEkle(fis: fisEx.fis!.value!, belgeTipi: "YOK");
+    if(fisEx.fis!.value.fisStokListesi.length > 0){
+    fisEx.fis!.value.DURUM = true;
+    final now = DateTime.now();
+    final formatter = DateFormat('HH:mm');
+    String saat = formatter.format(now);
+    fisEx.fis!.value.SAAT = saat;
+    Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+    fisEx.fis!.value = Fis.empty();
+      
+    }
+
+    super.dispose();
     //Ctanim.seciliMarkalarFiltreMap.clear();
     /* stokKartEx.searchC(
         "", "", "", Ctanim.seciliIslemTip, Ctanim.seciliStokFiyatListesi);*/
@@ -207,11 +218,15 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   @override
   Widget build(BuildContext context) {
     FocusNode focusNode = FocusNode();
-    //FocusScope.of(context).requestFocus(focusNode);
+    if (Ctanim.urunAraFocus == true) {
+      FocusScope.of(context).requestFocus(focusNode);
+      Ctanim.urunAraFocus = false;
+    }
+
     double ekranYuksekligi = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-       // appBar: appBarDizayn(context),
+        // appBar: appBarDizayn(context),
         bottomNavigationBar: bottombarDizayn(
           context,
           buttonVarMi: true,
@@ -248,7 +263,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
           color: Colors.white,
           child: Padding(
             padding: EdgeInsets.only(
-              top: ekranYuksekligi*0.01,
+              top: ekranYuksekligi * 0.01,
               left: MediaQuery.of(context).size.width * 0.05,
               right: MediaQuery.of(context).size.width * 0.05,
             ),
@@ -281,7 +296,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                             ),
                             value: okumaModu,
                             onChanged: (value) {
-                             // FocusScope.of(context).requestFocus(focusNode);
+                              // FocusScope.of(context).requestFocus(focusNode);
                               setState(() {
                                 okumaModu = value!;
                                 if (value == true) {
@@ -319,103 +334,25 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: TextFormField(
+                          autofocus: true,
                           focusNode: focusNode,
                           controller: editingController,
-                         onTap: () =>   editingController.selection = TextSelection(baseOffset: 0, extentOffset: editingController.value.text.length),
-                          onFieldSubmitted: ((value)  {
-                            stokKartEx.tempList.clear();
-                            if (okumaModu == false) {
-                              SatisTipiModel m = SatisTipiModel(
-                                  ID: -1,
-                                  TIP: "",
-                                  FIYATTIP: "",
-                                  ISK1: "",
-                                  ISK2: "");
-                              stokKartEx.searchC(
-                                  value!,
-                                  widget.cari.KOD!,
-                                  "Fiyat1",
-                                  m,
-                                  Ctanim.seciliStokFiyatListesi,
-                                  seciliAltHesap!.ALTHESAPID!);
-
-                              setState(() {});
-                              //editingController.text = "";
-                            } else {
-                              int okutulanCarpan = 1;
-                               List<String> aranacak = [];
-                              if (value!.contains("*")) {
-                               aranacak = value.split("*");
-                                okutulanCarpan = int.parse(aranacak[0]);
-                                value = aranacak[1];
-                                print(aranacak);
-                              }
-                               else   if (value.contains("x")) {
-                               aranacak = value.split("x");
-                                okutulanCarpan = int.parse(aranacak[0]);
-                                value = aranacak[1];
-                                print(aranacak);
-                              }
-                                else  if (value.contains("X")) {
-                               aranacak = value.split("X");
-                                okutulanCarpan = int.parse(aranacak[0]);
-                                value = aranacak[1];
-                                print(aranacak);
-                              }
-                              SatisTipiModel m = SatisTipiModel(
-                                  ID: -1,
-                                  TIP: "",
-                                  FIYATTIP: "",
-                                  ISK1: "",
-                                  ISK2: "");
-                              stokKartEx.searchC(
-                                  value,
-                                  widget.cari.KOD!,
-                                  "Fiyat1",
-                                  m,
-                                  Ctanim.seciliStokFiyatListesi,
-                                  seciliAltHesap!.ALTHESAPID!);
-
-                              if (stokKartEx.tempList.length == 1) {
-                                double gelenMiktar = double.parse(stokKartEx
-                                    .tempList[0].guncelDegerler!.carpan.toString())!*okutulanCarpan;
-                                // FocusScope.of(context).requestFocus(focusNode);
-                                bool urunVar  = false;
-                                int Fmiktar = 0;
-
-                                for(var element in fisEx.fis!.value.fisStokListesi){
-                                  if(stokKartEx.tempList[0].KOD == element.STOKKOD){
-                                    urunVar = true;
-                                    Fmiktar = element.MIKTAR!;
-                                    
-                                  }
-                                }
-
-                                 showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return fisHareketDuzenle(
-                                        urunDuzenlemeyeGeldim: urunVar,
-                                        fisHareketMiktar: Fmiktar,
-                                        
-                                        okutulanCarpan: okutulanCarpan,
-                                        altHesap: seciliAltHesap!.ALTHESAP!,
-                                        gelenStokKart: stokKartEx.tempList[0],
-                                        gelenMiktar: gelenMiktar,
-                                      );
-                                    }).then((value) {
-                                  setState(() {
-                                    Ctanim.genelToplamHesapla(fisEx);
-                                  });
-                                });
-                              }
-                              editingController.text = "";
-                              FocusScope.of(context).requestFocus(focusNode);
-                              
-                            }
+                          onTap: () => editingController.selection =
+                              TextSelection(
+                                  baseOffset: 0,
+                                  extentOffset:
+                                      editingController.value.text.length),
+                          onFieldSubmitted: ((value) async {
+                            await textAramaYap(value, context);
                           }),
                           decoration: InputDecoration(
-                            suffixIcon: Icon(Icons.search),
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.search),
+                              onPressed: () async {
+                                await textAramaYap(
+                                    editingController.text, context);
+                              },
+                            ),
                             hintText: 'Aranacak Kelime( Kod/ Ad / Barkod)',
                             hintStyle: TextStyle(
                               color: Colors.grey.shade400,
@@ -455,8 +392,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 seciliAltHesap!.ALTHESAPID);
                             if (okumaModu == true) {
                               if (stokKartEx.tempList.length == 1) {
-                                double gelenMiktar =double.parse( stokKartEx
-                                    .tempList[0].guncelDegerler!.carpan!.toString());
+                                double gelenMiktar = double.parse(stokKartEx
+                                    .tempList[0].guncelDegerler!.carpan!
+                                    .toString());
+                                Ctanim.urunAraFocus = false;
+                                editingController.text = "";
 
                                 showDialog(
                                     context: context,
@@ -482,7 +422,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   Ctanim.seciliStokFiyatListesi,
                                   seciliAltHesap!.ALTHESAPID);
                             }
-                           // editingController.text = "";
+                            // editingController.text = "";
 
                             setState(() {});
                           },
@@ -732,8 +672,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                       stokKartEx.tempList[index];
                                   //    stokKartEx.searchList[index];
                                   return Padding(
-                                    padding:  EdgeInsets.only(
-                                      bottom: ekranYuksekligi<650?ekranYuksekligi*0.07:ekranYuksekligi*0.002,
+                                    padding: EdgeInsets.only(
+                                      bottom: ekranYuksekligi < 650
+                                          ? ekranYuksekligi * 0.07
+                                          : ekranYuksekligi * 0.002,
                                     ),
                                     child: Column(
                                       children: [
@@ -989,23 +931,33 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                             aramaMiktarController[
                                                                     index]
                                                                 .text);
-                                                              bool  urunDuz = false;
-                                                              int Fismiktar = 0;
-                                                          for(var element in fisEx.fis!.value.fisStokListesi){
-                                                            if(element.STOKKOD == stokModel.guncelDegerler!.guncelBarkod! ){
-                                                              urunDuz = true;
-                                                              Fismiktar = element.MIKTAR!;
-
-                                                            }
-                                                          }      
+                                                    bool urunDuz = false;
+                                                    int Fismiktar = 0;
+                                                    for (var element in fisEx
+                                                        .fis!
+                                                        .value
+                                                        .fisStokListesi) {
+                                                      if (element.STOKKOD ==
+                                                          stokModel
+                                                              .guncelDegerler!
+                                                              .guncelBarkod!) {
+                                                        urunDuz = true;
+                                                        Fismiktar =
+                                                            element.MIKTAR!;
+                                                      }
+                                                    }
                                                     print(
                                                         "gelen miktar $gelenMiktar");
+                                                    Ctanim.urunAraFocus = false;
+                                                    editingController.text = "";
                                                     showDialog(
                                                         context: context,
                                                         builder: (context) {
                                                           return fisHareketDuzenle(
-                                                            urunDuzenlemeyeGeldim: urunDuz,
-                                                            fisHareketMiktar: Fismiktar!,
+                                                            urunDuzenlemeyeGeldim:
+                                                                urunDuz,
+                                                            fisHareketMiktar:
+                                                                Fismiktar!,
                                                             okutulanCarpan: 1,
                                                             altHesap:
                                                                 seciliAltHesap!
@@ -1041,11 +993,17 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                           gidecekKur = element;
                                                         }
                                                       }
-                                                      double miktar = stokModel.guncelDegerler!.carpan !>1 ?stokModel.guncelDegerler!.carpan!
-                                                        :double.parse(
-                                                          aramaMiktarController[
-                                                                  index]
-                                                              .text);
+                                                      double miktar = stokModel
+                                                                  .guncelDegerler!
+                                                                  .carpan! >
+                                                              1
+                                                          ? stokModel
+                                                              .guncelDegerler!
+                                                              .carpan!
+                                                          : double.parse(
+                                                              aramaMiktarController[
+                                                                      index]
+                                                                  .text);
                                                       print("turan" +
                                                           miktar.toString());
                                                       sepeteEkle(
@@ -1081,93 +1039,123 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                           ),
                                         ),
                                         Padding(
-                                          padding:  EdgeInsets.only(top:8.0),
+                                          padding: EdgeInsets.only(top: 8.0),
                                           child: SingleChildScrollView(
                                             scrollDirection: Axis.vertical,
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceAround,
                                               children: [
-                                              stokModel.OLCUBIRIM2 != "" ?  Row(
-                                                  children: [
-                                                    Text(
-                                                      stokModel.OLCUBIRIM2!+" :",
-                                                      style: TextStyle(
-                                                          fontSize: 11,
-                                                          color: Colors.orange),
-                                                    ),
-                                                    Text(
-                                                      stokModel.BIRIMADET1!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ):Container(),
-                                                stokModel.OLCUBIRIM3 != "" ?  Row(
-                                                  children: [
-                                                    Text(
-                                                      stokModel.OLCUBIRIM3!+" :",
-                                                      style: TextStyle(
-                                                          fontSize: 11,
-                                                          color: Colors.orange),
-                                                    ),
-                                                    Text(
-                                                      stokModel.BIRIMADET2!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ):Container(),
-                                                stokModel.OLCUBIRIM4 != "" ?  Row(
-                                                  children: [
-                                                    Text(
-                                                      stokModel.OLCUBIRIM4!+" :",
-                                                      style: TextStyle(
-                                                          fontSize: 11,
-                                                          color: Colors.orange),
-                                                    ),
-                                                    Text(
-                                                      stokModel.BIRIMADET3!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ):Container(),
-                                                stokModel.OLCUBIRIM5 != "" ?  Row(
-                                                  children: [
-                                                    Text(
-                                                      stokModel.OLCUBIRIM5!+" :",
-                                                      style: TextStyle(
-                                                          fontSize: 11,
-                                                          color: Colors.orange),
-                                                    ),
-                                                    Text(
-                                                      stokModel.BIRIMADET4!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ):Container(),
-                                                stokModel.OLCUBIRIM6 != "" ?  Row(
-                                                  children: [
-                                                    Text(
-                                                      stokModel.OLCUBIRIM5!+" :",
-                                                      style: TextStyle(
-                                                          fontSize: 11,
-                                                          color: Colors.orange),
-                                                    ),
-                                                    Text(
-                                                      stokModel.BIRIMADET5!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ):Container(),
+                                                stokModel.OLCUBIRIM2 != ""
+                                                    ? Row(
+                                                        children: [
+                                                          Text(
+                                                            stokModel
+                                                                    .OLCUBIRIM2! +
+                                                                " :",
+                                                            style: TextStyle(
+                                                                fontSize: 11,
+                                                                color: Colors
+                                                                    .orange),
+                                                          ),
+                                                          Text(
+                                                            stokModel
+                                                                .BIRIMADET1!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    : Container(),
+                                                stokModel.OLCUBIRIM3 != ""
+                                                    ? Row(
+                                                        children: [
+                                                          Text(
+                                                            stokModel
+                                                                    .OLCUBIRIM3! +
+                                                                " :",
+                                                            style: TextStyle(
+                                                                fontSize: 11,
+                                                                color: Colors
+                                                                    .orange),
+                                                          ),
+                                                          Text(
+                                                            stokModel
+                                                                .BIRIMADET2!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    : Container(),
+                                                stokModel.OLCUBIRIM4 != ""
+                                                    ? Row(
+                                                        children: [
+                                                          Text(
+                                                            stokModel
+                                                                    .OLCUBIRIM4! +
+                                                                " :",
+                                                            style: TextStyle(
+                                                                fontSize: 11,
+                                                                color: Colors
+                                                                    .orange),
+                                                          ),
+                                                          Text(
+                                                            stokModel
+                                                                .BIRIMADET3!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    : Container(),
+                                                stokModel.OLCUBIRIM5 != ""
+                                                    ? Row(
+                                                        children: [
+                                                          Text(
+                                                            stokModel
+                                                                    .OLCUBIRIM5! +
+                                                                " :",
+                                                            style: TextStyle(
+                                                                fontSize: 11,
+                                                                color: Colors
+                                                                    .orange),
+                                                          ),
+                                                          Text(
+                                                            stokModel
+                                                                .BIRIMADET4!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    : Container(),
+                                                stokModel.OLCUBIRIM6 != ""
+                                                    ? Row(
+                                                        children: [
+                                                          Text(
+                                                            stokModel
+                                                                    .OLCUBIRIM6! +
+                                                                " :",
+                                                            style: TextStyle(
+                                                                fontSize: 11,
+                                                                color: Colors
+                                                                    .orange),
+                                                          ),
+                                                          Text(
+                                                            stokModel
+                                                                .BIRIMADET5!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    : Container(),
                                               ],
                                             ),
                                           ),
@@ -1185,9 +1173,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                           ),
                   ),
                   SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.045,
-
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.045,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -1224,6 +1211,99 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         ),
       ),
     );
+  }
+
+  Future<void> textAramaYap(String value, BuildContext context) async {
+    stokKartEx.tempList.clear();
+    if (okumaModu == false) {
+      SatisTipiModel m =
+          SatisTipiModel(ID: -1, TIP: "", FIYATTIP: "", ISK1: "", ISK2: "");
+      stokKartEx.searchC(
+          value!,
+          widget.cari.KOD!,
+          Ctanim.satisFiyatListesi.first,
+          m,
+          Ctanim.seciliStokFiyatListesi,
+          seciliAltHesap!.ALTHESAPID!);
+
+      setState(() {});
+      //editingController.text = "";
+    } else {
+      int okutulanCarpan = 1;
+      List<String> aranacak = [];
+      if (value!.contains("*")) {
+        aranacak = value.split("*");
+        okutulanCarpan = int.parse(aranacak[0]);
+        value = aranacak[1];
+        print(aranacak);
+      } else if (value.contains("x")) {
+        aranacak = value.split("x");
+        okutulanCarpan = int.parse(aranacak[0]);
+        value = aranacak[1];
+        print(aranacak);
+      } else if (value.contains("X")) {
+        aranacak = value.split("X");
+        okutulanCarpan = int.parse(aranacak[0]);
+        value = aranacak[1];
+        print(aranacak);
+      }
+      // buraya da nokta ekleneblir ama beklesin
+      SatisTipiModel m =
+          SatisTipiModel(ID: -1, TIP: "", FIYATTIP: "", ISK1: "", ISK2: "");
+      stokKartEx.searchC(
+          value,
+          widget.cari.KOD!,
+          Ctanim.satisFiyatListesi.first,
+          m,
+          Ctanim.seciliStokFiyatListesi,
+          seciliAltHesap!.ALTHESAPID!);
+
+      if (stokKartEx.tempList.length == 1) {
+        double gelenMiktar = double.parse(
+                stokKartEx.tempList[0].guncelDegerler!.carpan.toString())! *
+            okutulanCarpan;
+        // FocusScope.of(context).requestFocus(focusNode);
+        bool urunVar = false;
+        int Fmiktar = 0;
+
+        for (var element in fisEx.fis!.value.fisStokListesi) {
+          if (stokKartEx.tempList[0].KOD == element.STOKKOD ||
+              stokKartEx.tempList[0].BARKOD1 == element.STOKKOD ||
+              stokKartEx.tempList[0].BARKOD2 == element.STOKKOD ||
+              stokKartEx.tempList[0].BARKOD3 == element.STOKKOD ||
+              stokKartEx.tempList[0].BARKOD4 == element.STOKKOD ||
+              stokKartEx.tempList[0].BARKOD5 == element.STOKKOD ||
+              stokKartEx.tempList[0].BARKOD6 == element.STOKKOD) {
+            urunVar = true;
+            Fmiktar = element.MIKTAR!;
+          }
+        }
+        Ctanim.urunAraFocus = false;
+        editingController.text = "";
+        var donen = await showDialog(
+            context: context,
+            builder: (context) {
+              return fisHareketDuzenle(
+                urunDuzenlemeyeGeldim: urunVar,
+                fisHareketMiktar: Fmiktar,
+                okutulanCarpan: okutulanCarpan,
+                altHesap: seciliAltHesap!.ALTHESAP!,
+                gelenStokKart: stokKartEx.tempList[0],
+                gelenMiktar: gelenMiktar,
+              );
+            });
+        if (donen != null || donen == null) {
+          print("NULL DEĞİL");
+
+          setState(() {
+            Ctanim.genelToplamHesapla(fisEx);
+            //FocusScope.of(context).requestFocus(focusNode);
+          });
+        }
+      }
+      // editingController.text = "";
+      //FocusScope.of(context).requestFocus(focusNode);
+    }
   }
 
   void showSnackBar(BuildContext context, double miktar) {

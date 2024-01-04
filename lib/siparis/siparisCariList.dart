@@ -44,7 +44,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: appBarDizayn(context),
+
         bottomNavigationBar: bottombarDizayn(context),
         body: Container(
           width: MediaQuery.of(context).size.width,
@@ -79,6 +79,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: TextFormField(
+                    textCapitalization: TextCapitalization.characters,
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.search),
                       hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
@@ -101,7 +102,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                 SingleChildScrollView(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.9,
                     child: Obx(() {
                       return ListView.builder(
                         itemCount: cariEx.searchCariList.length,

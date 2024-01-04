@@ -13,7 +13,8 @@ import 'package:uuid/uuid.dart';
 import '../db/veriTabaniIslemleri.dart';
 import '../model/cariModel.dart';
 import '../sabitler/Ctanim.dart';
-enum SampleItem { itemOne, itemTwo,itemTheree}
+
+enum SampleItem { itemOne, itemTwo }
 
 class SepetCariList extends StatefulWidget {
   SepetCariList({required this.islem});
@@ -25,7 +26,7 @@ class SepetCariList extends StatefulWidget {
 
 class _SepetCariListState extends State<SepetCariList> {
   FisController fisEx = Get.find();
-    SampleItem? selectedMenu;
+  SampleItem? selectedMenu;
 
   Color randomColor() {
     Random random = Random();
@@ -33,98 +34,103 @@ class _SepetCariListState extends State<SepetCariList> {
     int green = random.nextInt(128);
     int blue = random.nextInt(128);
     return Color.fromARGB(255, red, green, blue);
-
   }
+
   List<Fis> bekleyenler = [];
   List<Fis> aktarilanlar = [];
   List<Fis> tumu = [];
-    void cariAra(String query) {
-
-
+  void cariAra(String query) {
     if (query.isEmpty) {
-        tempCari.assignAll(listenecekCariler);
+      tempFis.assignAll(fisEx.list_tum_fis);
     } else {
       var results;
       List<String> queryparcali = query.split(" ");
       if (queryparcali.length == 1) {
-        results = listenecekCariler
+        results = fisEx.list_tum_fis
             .where((value) =>
-                value.ADI!
+               ( value.cariKart.ADI!
                     .toLowerCase()
                     .contains(queryparcali[0].toLowerCase()) ||
-                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
-                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+                value.cariKart.KOD!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()) ||
+                value.cariKart.TELEFON!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))&&value.AKTARILDIMI==localAktarildiMi)
             .toList();
       } else if (queryparcali.length == 2) {
-        results = listenecekCariler
+        results = fisEx.list_tum_fis
             .where((value) =>
-                (value.ADI!
+                ((value.cariKart.ADI!
                         .toLowerCase()
                         .contains(queryparcali[0].toLowerCase()) &&
-                    value.ADI!
+                    value.cariKart.ADI!
                         .toLowerCase()
                         .contains(queryparcali[1].toLowerCase())) ||
-                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
-                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+                value.cariKart.KOD!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()) ||
+                value.cariKart.TELEFON!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))&& value.AKTARILDIMI==localAktarildiMi)
             .toList();
       } else if (queryparcali.length == 3) {
-        results = listenecekCariler
+        results = fisEx.list_tum_fis
             .where((value) =>
-                (value.ADI!
+                ((value.cariKart.ADI!
                         .toLowerCase()
                         .contains(queryparcali[0].toLowerCase()) &&
-                    value.ADI!
+                    value.cariKart.ADI!
                         .toLowerCase()
                         .contains(queryparcali[1].toLowerCase()) &&
-                    value.ADI!
+                    value.cariKart.ADI!
                         .toLowerCase()
                         .contains(queryparcali[2].toLowerCase())) ||
-                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
-                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+                value.cariKart.KOD!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()) ||
+                value.cariKart.TELEFON!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))&& value.AKTARILDIMI==localAktarildiMi)
             .toList();
       } else if (queryparcali.length == 4) {
-        results = listenecekCariler
+        results = fisEx.list_tum_fis
             .where((value) =>
-                (value.ADI!
+                ((value.cariKart.ADI!
                         .toLowerCase()
                         .contains(queryparcali[0].toLowerCase()) &&
-                    value.ADI!
+                    value.cariKart.ADI!
                         .toLowerCase()
                         .contains(queryparcali[1].toLowerCase()) &&
-                    value.ADI!
+                    value.cariKart.ADI!
                         .toLowerCase()
                         .contains(queryparcali[2].toLowerCase()) &&
-                    value.ADI!
+                    value.cariKart.ADI!
                         .toLowerCase()
                         .contains(queryparcali[3].toLowerCase())) ||
-                value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
-                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+                value.cariKart.KOD!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()) ||
+                value.cariKart.TELEFON!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))&& value.AKTARILDIMI==localAktarildiMi)
             .toList();
       }
-     tempCari.assignAll(results);
+      tempFis.assignAll(results);
     }
-
-
-
-
-
-
-
-
-
-
   }
 
-  List<Cari> listenecekCariler = [];
-  List<Cari> tempCari = [];
+  //List<Cari> listenecekCariler = [];
+  List<Fis> tempFis = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     for (var element in fisEx.list_tum_fis) {
-    //  tumu.add(element);
-      listenecekCariler.add(element.cariKart);
-      tempCari.add( element.cariKart);
+      if (element.AKTARILDIMI == false) {
+        tempFis.add(element);
+      }
+
       /*
       if(element.AKTARILDIMI == false){
         bekleyenler.add(element);
@@ -132,8 +138,8 @@ class _SepetCariListState extends State<SepetCariList> {
         aktarilanlar.add(element);
     }
     */
+    }
   }
-}
 
   @override
   void dispose() {
@@ -142,11 +148,11 @@ class _SepetCariListState extends State<SepetCariList> {
     cariEx.searchCari("");
   }
 
+  bool localAktarildiMi = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: appBarDizayn(context),
         bottomNavigationBar: bottombarDizayn(context),
         body: Container(
           width: MediaQuery.of(context).size.width,
@@ -176,13 +182,14 @@ class _SepetCariListState extends State<SepetCariList> {
                 Row(
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.75,
                       height: MediaQuery.of(context).size.height * 0.07,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: TextFormField(
+                        textCapitalization: TextCapitalization.characters,
                         decoration: InputDecoration(
                           suffixIcon: Icon(Icons.search),
                           hintText: 'Aranacak Kelime( Ünvan/ Kod / İl/ İlçe)',
@@ -196,59 +203,56 @@ class _SepetCariListState extends State<SepetCariList> {
                           ),
                         ),
                         onChanged: ((value) {
-                         setState(() {
+                          setState(() {
                             cariAra(value);
-                         });
+                          });
                         }),
                       ),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.02,
-                      child:   PopupMenuButton<SampleItem>(
-                  icon: Icon(Icons.filter_list),
-                  onOpened: () {},
-                  initialValue: selectedMenu,
-                  // Callback that sets the selected popup menu item.
-                  onSelected: (SampleItem item) {
-                    setState(() {
-                      selectedMenu = item;
-                    });
-                  },
+                    PopupMenuButton<SampleItem>(
+                      icon: Icon(Icons.filter_list),
+                      onOpened: () {
+                        print("object");
+                      },
+                      initialValue: selectedMenu,
+                      // Callback that sets the selected popup menu item.
+                      onSelected: (SampleItem item) {
+                        setState(() {
+                          selectedMenu = item;
+                        });
+                      },
 
-                  itemBuilder: (context) => <PopupMenuEntry<SampleItem>>[
-                    PopupMenuItem<SampleItem>(
-                      value: SampleItem.itemOne,
-                      onTap: () {
-                        stokKartEx.tempList
-                            .removeWhere((cari) => cari.BAKIYE! >= 0);
-             
-                        setState(() {});
-                      },
-                      child: Text('Sadece Aktarılanlar'),
-                    ),
-                    PopupMenuItem<SampleItem>(
-                      value: SampleItem.itemTwo,
-                      child: Text('Sadece Bekleyenler'),
-                      onTap: () {
-                       
-                          setState(() {
-                            
-                          });
-                       
-                      },
-                    ),
-                     PopupMenuItem<SampleItem>(
-                      value: SampleItem.itemTheree,
-                      child: Text('Hepsini Göster'),
-                      onTap: () {
-                          setState(() {
-                            
-                          });
-                       
-                      },
-                    ),
-                  ],
-                ),)
+                      itemBuilder: (context) => <PopupMenuEntry<SampleItem>>[
+                        PopupMenuItem<SampleItem>(
+                          value: SampleItem.itemOne,
+                          onTap: () {
+                            localAktarildiMi = false;
+                            tempFis.clear();
+                            for (var element in fisEx.list_tum_fis) {
+                              if (element.AKTARILDIMI == false) {
+                                tempFis.add(element);
+                              }
+                              setState(() {});
+                            }
+                          },
+                          child: Text('Bekleyenleri Göster'),
+                        ),
+                        PopupMenuItem<SampleItem>(
+                          value: SampleItem.itemTwo,
+                          child: Text('Aktarılanları Göster'),
+                          onTap: () {
+                            localAktarildiMi = true;
+                            tempFis.clear();
+                            for (var element in fisEx.list_tum_fis) {
+                              if (element.AKTARILDIMI == true) {
+                                tempFis.add(element);
+                              }
+                              setState(() {});
+                            }
+                          },
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 SizedBox(
@@ -258,11 +262,11 @@ class _SepetCariListState extends State<SepetCariList> {
                 SingleChildScrollView(
                   child: SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.6,
+                      height: MediaQuery.of(context).size.height * 0.7,
                       child: ListView.builder(
-                        itemCount: tempCari.length,
+                        itemCount: tempFis.length,
                         itemBuilder: (context, index) {
-                          Cari cari = tempCari[index];
+                          Cari cari = tempFis[index].cariKart;
                           String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                           String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                           return Column(
@@ -277,7 +281,6 @@ class _SepetCariListState extends State<SepetCariList> {
                                 ),
                                 title: Row(
                                   children: [
-                                 
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.45,
@@ -287,8 +290,29 @@ class _SepetCariListState extends State<SepetCariList> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    fisEx.list_tum_fis[index].AKTARILDIMI == false ? SizedBox(width: MediaQuery.of(context).size.width*.15,child: Text("Beklemede",style: TextStyle(color: Colors.amber,fontSize: 9),)) : SizedBox(width: MediaQuery.of(context).size.width*.15,child: Text("Aktarıldı",style: TextStyle(color: Colors.green,fontSize: 11),))
-                                    
+                                    tempFis[index].AKTARILDIMI == false
+                                        ? SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .15,
+                                            child: Text(
+                                              "Beklemede",
+                                              style: TextStyle(
+                                                  color: Colors.amber,
+                                                  fontSize: 9),
+                                            ))
+                                        : SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .15,
+                                            child: Text(
+                                              "Aktarıldı",
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontSize: 11),
+                                            ))
                                   ],
                                 ),
                                 subtitle: Padding(
@@ -299,22 +323,24 @@ class _SepetCariListState extends State<SepetCariList> {
                                     children: [
                                       Text(cari.IL!.toString()),
                                       widget.islem == true
-                                          ? Text(Ctanim.donusturMusteri(fisEx.list_tum_fis[index].GENELTOPLAM!.toString())
-                                          )
+                                          ? Text(Ctanim.donusturMusteri(
+                                              tempFis[index]
+                                                  .GENELTOPLAM!
+                                                  .toString()))
                                           : Container(),
                                     ],
                                   ),
                                 ),
                                 onLongPress: () async {
-                               //  await showAlertDialog(context,index);
+                                  if(localAktarildiMi == false){
+                                    await showAlertDialog(context,index);
                                   
-
-                                  
+                                  }
+                                   
                                 },
                                 onTap: () {
-                                  if(fisEx.list_tum_fis[index].AKTARILDIMI! == false){
-                                    fisEx.fis!.value =
-                                        fisEx.list_tum_fis[index];
+                                  if (tempFis[index].AKTARILDIMI! == false) {
+                                    fisEx.fis!.value = tempFis[index];
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -323,8 +349,6 @@ class _SepetCariListState extends State<SepetCariList> {
                                                   cari: cari,
                                                 )));
                                   }
-                                
-                                  
                                 },
                               ),
                               Divider(
@@ -343,7 +367,8 @@ class _SepetCariListState extends State<SepetCariList> {
       ),
     );
   }
-   showAlertDialog(BuildContext context, int index) {
+
+  showAlertDialog(BuildContext context, int index) {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("İptal"),
@@ -355,10 +380,15 @@ class _SepetCariListState extends State<SepetCariList> {
       child: Text("Devam"),
       onPressed: () {
         try {
-          fisEx.fis?.value = fisEx.list_fis[index];
+          fisEx.fis?.value = tempFis[index];
           print(fisEx.fis?.value.ID);
           Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
-          fisEx.list_fis.removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
+          fisEx.list_tum_fis.removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
+          
+          setState(() {
+            tempFis.removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
+            
+          });
           const snackBar = SnackBar(
             duration: Duration(microseconds: 500),
             content: Text(
@@ -374,7 +404,7 @@ class _SepetCariListState extends State<SepetCariList> {
           print(e);
         }
         Navigator.pop(context);
-        Navigator.pop(context);
+        
       },
     );
 

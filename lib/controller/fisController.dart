@@ -207,7 +207,7 @@ class FisController extends GetxController {
     list_tum_fis.addAll(tt);
   }
    Future<List<Fis>> getTumfis() async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
+    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",  orderBy: 'ID DESC'
         );
     return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
   }

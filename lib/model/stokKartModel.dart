@@ -459,18 +459,13 @@ class StokKart {
     BARKODISK4 = double.parse(json['BARKODISK4'].toString());
     BARKODISK5 = double.parse(json['BARKODISK5'].toString());
     BARKODISK6 = double.parse(json['BARKODISK6'].toString());
-
-  
     OLCUBIRIM4 = json['OLCUBIRIM4'];
     OLCUBIRIM5 = json['OLCUBIRIM5'];
     OLCUBIRIM6 = json['OLCUBIRIM6'];
     BIRIMADET3 = json['BIRIMADET3'];
     BIRIMADET4 = json['BIRIMADET4'];
     BIRIMADET5 = json['BIRIMADET5'];
-
-
-    
-BAKIYE = double.parse(json['BAKIYE'].toString());
+    BAKIYE = double.parse(json['BAKIYE'].toString());
     guncelDegerler = guncelDeger();
   }
 

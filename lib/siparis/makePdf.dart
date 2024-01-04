@@ -1,11 +1,13 @@
 import 'dart:typed_data';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
+import 'package:path/path.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
+
 
 Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
   final image = pw.MemoryImage(imagePath);
@@ -52,7 +54,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: 100,
+                          width: 200,
                           child: pw.Column(
                             mainAxisSize:MainAxisSize.min, 
                             children: [
@@ -78,7 +80,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                   )),
                                   */
                               SizedBox(
-                                  height: 20,
+                                  height: 10,
                                   child: Row(
                                     children: [
                                       Text("Cari Ünvanı:",
@@ -87,7 +89,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                           fontWeight: pw.FontWeight.bold,
                                           font: boldttfFont),),
                                             SizedBox(
-                                    height: 20,
+                                    height: 10,
                                     width: 350,
                                     child: Text(m.CARIADI.toString(),
                                         style: pw.TextStyle(
@@ -130,22 +132,8 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                             font: boldttfFont))),
                                     ]
                                   )),
-                              SizedBox(
-                                  height: 40,
-                                 
-                                  child: Text("Müşteri Ünvan:",
-                                      style: pw.TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          font: boldttfFont))),
-                              SizedBox(
-                                  height: 40,
-                                  width: 400,
-                                  child: Text("Müşteri Adresi:",
-                                      style: pw.TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          font: boldttfFont))),
+                            
+                              
                                SizedBox(
                                   height:20,
                                   width: 400,
@@ -168,85 +156,106 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                             crossAxisAlignment: pw.CrossAxisAlignment.start,
                           ),
                         ),
-                        /*
-                        Padding(
-                          padding: EdgeInsets.only(top: 100, left: 0),
+                        SizedBox(
+                          width: 200,
                           child: pw.Column(
-                              crossAxisAlignment: pw.CrossAxisAlignment.start,
-                              children: [
-                                /*
-                                /*
-                                SizedBox(
+                            mainAxisSize:MainAxisSize.min, 
+                            children: [
+                              SizedBox(
+                                  height: 20,
+                                  child: Row(
+                                    children: [
+                                      Text("Fiş Numarası: ",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont),),
+                                            SizedBox(
                                     height: 20,
+                                    width: 350,
+                                    child: Text(Ctanim.siparisNumarasi.toString(),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont))),
+                                    ]
+                                  )),
+                                    SizedBox(
+                                  height: 20,
+                                  child: Row(
+                                    children: [
+                                      Text("Fiş Tarihi: ",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont),),
+                                            SizedBox(
+                                    height: 20,
+                                    width: 350,
                                     child: Text(m.TARIH.toString(),
                                         style: pw.TextStyle(
                                             fontSize: 15,
                                             fontWeight: pw.FontWeight.bold,
-                                            font: boldttfFont))),*/
+                                            font: boldttfFont))),
+                                    ]
+                                  )),
+                                   SizedBox(
+                                  height: 20,
+                                  child: Row(
+                                    children: [
+                                      Text("Siparişi Veren: ",
+                                      style: pw.TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          font: boldttfFont),),
+                                            SizedBox(
+                                    height: 20,
+                                    width: 350,
+                                    child: Text(Ctanim.kullanici!.KOD!.toString(),
+                                        style: pw.TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: pw.FontWeight.bold,
+                                            font: boldttfFont))),
+                                    ]
+                                  )),
+                             
+                          
+                            
                               
-                                SizedBox(
-                                  height: 60,
-                                  child: SizedBox(
-                                    width: 200,
-                                    child: Text(m.CARIADI.toString(),
-                                        style: pw.TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: pw.FontWeight.bold,
-                                            font: boldttfFont)),
-                                  ),
-                                ),
-                                SizedBox(
-                                    height: 20,
-                                    child: Text("Müşteri Sipariş",
-                                        style: pw.TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: pw.FontWeight.bold,
-                                            font: boldttfFont))),
-                                SizedBox(
-                                    height: 20,
-                                    child: Text(
-                                        Ctanim.donusturMusteri(
-                                            m.cariKart.BAKIYE.toString()),
-                                        style: pw.TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: pw.FontWeight.bold,
-                                            font: boldttfFont))),
-                                SizedBox(
-                                    height: 20,
-                                    child: Text(m.FATURANO!,
-                                        style: pw.TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: pw.FontWeight.bold,
-                                            font: boldttfFont))),
-                                            */
-                              ]),
-                        )
-                        */
+                              
+                            ],
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                          ),
+                        ),
+                        
                       ])
                 ]))
             : Container(),
         i == 0
             ? pw.Table.fromTextArray(
                 headers: [
-                  'Ürün Açıklaması',
-                  'Fiyat',
-                  'Isk',
-                  'N.Fiyat',
+                  'Sıra',
+                  'Kod',
+                  'Adı',
                   'Miktar',
-                  'Toplam',
+                  'Fiyat',
+                  'İsk',
+                  'Toplam'
                 ],
                 data: buildTableRows(m, start: i, end: i + 1),
                 cellAlignments: {
                   0: pw.Alignment.centerLeft,
-                  1: pw.Alignment.centerRight,
-                  2: pw.Alignment.centerRight,
+                  1: pw.Alignment.centerLeft,
+                  2: pw.Alignment.centerLeft,
                   3: pw.Alignment.centerRight,
                   4: pw.Alignment.centerRight,
                   5: pw.Alignment.centerRight,
+                  6: pw.Alignment.centerRight,
+              
                 },
                 cellStyle: pw.TextStyle(
                   font: ttfFont,
-                  fontSize: 10,
+                  fontSize: 11,
                 ),
                 headerStyle: pw.TextStyle(
                   font: boldttfFont,
@@ -255,47 +264,54 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                 ),
                 border: pw.TableBorder.all(color: PdfColors.black),
                 headerDecoration: pw.BoxDecoration(
+
                   color: PdfColors.grey300,
                 ),
                 columnWidths: {
                   0: pw.FractionColumnWidth(
-                      0.4), // 1. sütun için tablonun genişliğinin yüzde 40'ı
+                      0.15), 
                   1: pw.FractionColumnWidth(
-                      0.15), // 2. sütun için tablonun genişliğinin yüzde 10'u
+                      0.20), 
                   2: pw.FractionColumnWidth(
-                      0.1), // 3. sütun için tablonun genişliğinin yüzde 10'u
+                      0.40), 
                   3: pw.FractionColumnWidth(
-                      0.15), // 4. sütun için tablonun genişliğinin yüzde 10'u
+                      0.1), 
                   4: pw.FractionColumnWidth(
-                      0.1), // 5. sütun için tablonun genişliğinin yüzde 10'u
+                      0.1), 
                   5: pw.FractionColumnWidth(
-                      0.2), // 6. sütun için tablonun genişliğinin yüzde 20'si
+                      0.1), 
+                6: pw.FractionColumnWidth(
+                      0.1),
+               
                 },
-                headerHeight: 40)
+                headerHeight: 10)
             : pw.Table.fromTextArray(
                 data: buildTableRows(m, start: i, end: i + 1),
                 cellAlignments: {
                   0: pw.Alignment.centerLeft,
-                  1: pw.Alignment.centerRight,
-                  2: pw.Alignment.centerRight,
+                  1: pw.Alignment.centerLeft,
+                  2: pw.Alignment.centerLeft,
                   3: pw.Alignment.centerRight,
                   4: pw.Alignment.centerRight,
                   5: pw.Alignment.centerRight,
+                  6: pw.Alignment.centerRight,
                 },
                 border: pw.TableBorder.all(color: PdfColors.black),
                 columnWidths: {
-                  0: pw.FractionColumnWidth(
-                      0.4), // 1. sütun için tablonun genişliğinin yüzde 40'ı
+                   0: pw.FractionColumnWidth(
+                      0.15), 
                   1: pw.FractionColumnWidth(
-                      0.15), // 2. sütun için tablonun genişliğinin yüzde 10'u
+                      0.20), 
                   2: pw.FractionColumnWidth(
-                      0.1), // 3. sütun için tablonun genişliğinin yüzde 10'u
+                      0.40), 
                   3: pw.FractionColumnWidth(
-                      0.15), // 4. sütun için tablonun genişliğinin yüzde 10'u
+                      0.1), 
                   4: pw.FractionColumnWidth(
-                      0.1), // 5. sütun için tablonun genişliğinin yüzde 10'u
+                      0.1), 
                   5: pw.FractionColumnWidth(
-                      0.2), // 6. sütun için tablonun genişliğinin yüzde 20'si
+                      0.1), 
+                6: pw.FractionColumnWidth(
+                      0.1),// 6. sütun için tablonun genişliğinin yüzde 20'si
                 },
               ),
         i == m.fisStokListesi.length - 1
@@ -313,6 +329,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
   pdf.addPage(
     pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
+      orientation: PageOrientation.landscape,
       theme: pw.ThemeData(defaultTextStyle: pw.TextStyle(font: ttfFont)),
       build: (context) {
         return glen;
@@ -328,13 +345,12 @@ List<List<String>> buildTableRows(Fis m, {int start = 0, int end = 0}) {
 
   for (var j = start; j < end; j++) {
     List<String> row = [
-      "BARKOD : ${m.fisStokListesi[j].STOKKOD}\n"
-          "ADI: ${m.fisStokListesi[j].STOKADI}\n"
-          "KDV: ${m.fisStokListesi[j].KDVORANI}",
-      "${Ctanim.donusturMusteri(m.fisStokListesi[j].BRUTFIYAT.toString())}",
-      "${Ctanim.donusturMusteri(m.fisStokListesi[j].ISK.toString())}",
-      "${Ctanim.donusturMusteri(m.fisStokListesi[j].NETFIYAT.toString())}",
+      "${j + 1}",
+      "${m.fisStokListesi[j].STOKKOD}",
+      "${m.fisStokListesi[j].STOKKOD}",
       "${m.fisStokListesi[j].MIKTAR}",
+      "${Ctanim.donusturMusteri(m.fisStokListesi[j].BRUTFIYAT.toString())}",
+      "${Ctanim.donusturMusteri(m.fisStokListesi[j].ISKONTOTOPLAM.toString())}",
       "${Ctanim.donusturMusteri(m.fisStokListesi[j].NETTOPLAM.toString())}",
     ];
     rows.add(row);
@@ -367,7 +383,7 @@ pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               pw.Text(
-                "Ürün Toplamı:",
+                "Toplam:",
                 style: pw.TextStyle(
                   fontSize: 15,
                   fontWeight: pw.FontWeight.bold,
@@ -375,7 +391,7 @@ pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
                 ),
               ),
               pw.Text(
-                "İndirim Toplamı:",
+                "Toplam İndirim:",
                 style: pw.TextStyle(
                   fontSize: 15,
                   fontWeight: pw.FontWeight.bold,
@@ -391,7 +407,7 @@ pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
                 ),
               ),
               pw.Text(
-                "KDV Tutarı:",
+                "KDV Toplam:",
                 style: pw.TextStyle(
                   fontSize: 15,
                   fontWeight: pw.FontWeight.bold,
