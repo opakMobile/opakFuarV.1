@@ -26,20 +26,20 @@ import '../sabitler/sharedPreferences.dart';
 
 class BaseService {
   Future<void> tumVerileriGuncelle() async {
-    await getirStoklar(sirket: Ctanim.sirket, kullaniciKodu: "1");
-    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: "1");
+    await getirStoklar(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);
+    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);
     await getirCariAltHesap(sirket: Ctanim.sirket!);
     await getirKur(sirket: Ctanim.sirket);
     await getirStokKosul(sirket: Ctanim.sirket!);
   }
 
   Future<void> cariVerileriGuncelle() async {
-    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: "1");
+    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD! );
     await getirCariAltHesap(sirket: Ctanim.sirket!);
   }
 
   Future<void> stokVerileriGuncelle() async {
-    await getirStoklar(sirket: Ctanim.sirket, kullaniciKodu: "1");
+    await getirStoklar(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);
   }
 
   String temizleKontrolKarakterleri(String metin) {

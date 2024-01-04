@@ -263,7 +263,9 @@ class _SepetCariListState extends State<SepetCariList> {
                   child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.7,
-                      child: ListView.builder(
+                      child: 
+                      tempFis.length == 0 ? localAktarildiMi? Center(child: Text("Aktarılan Sipariş Yok."),):Center(child: Text("Bekleyen Sipariş Yok."),):
+                      ListView.builder(
                         itemCount: tempFis.length,
                         itemBuilder: (context, index) {
                           Cari cari = tempFis[index].cariKart;
@@ -341,6 +343,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                 onTap: () {
                                   if (tempFis[index].AKTARILDIMI! == false) {
                                     fisEx.fis!.value = tempFis[index];
+                                    Ctanim.genelToplamHesapla(fisEx);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(

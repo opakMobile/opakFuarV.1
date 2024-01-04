@@ -160,7 +160,7 @@ class FisController extends GetxController {
       NETTOPLAM: Ctanim.noktadanSonraAlinacak(HnetToplamFiyat),
     );
 
-    fis!.value.fisStokListesi.add(yeniFisHareket);
+    fis!.value.fisStokListesi.insert(0,yeniFisHareket);
   }
 
   Future<List<FisHareket>> getFisHar(int fisId) async {

@@ -10,6 +10,7 @@ import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
+import 'package:opak_fuar/siparis/okumaModuTasarim.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 
@@ -202,6 +203,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
   bool detay = false;
   @override
   Widget build(BuildContext context) {
+    
     if (i == 0 &&  Ctanim.urunAraFocus == false) {
       print("ŞLKLKFDLKFSŞLKFKŞLSDKLKFLKDŞF");
       /*
@@ -217,13 +219,14 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
       title: SizedBox(
         width: MediaQuery.of(context).size.width * .8,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
                 SizedBox(
                     width: MediaQuery.of(context).size.width * .5,
                     child: Text(
-                      widget.gelenStokKart.ADI!+ " - %" + widget.gelenStokKart.SATIS_KDV!.toStringAsFixed(0),
+                      widget.gelenStokKart.ADI!+ " - %" + widget.gelenStokKart.SATIS_KDV!.toStringAsFixed(0)+" KDV",
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 15),
@@ -395,7 +398,6 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-        
               ElevatedButton(
                 style: ButtonStyle(
                   minimumSize: MaterialStateProperty.all(Size(
@@ -407,9 +409,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 },
                 child: Text("Uygula"),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
+           
 
               Text(
                 "Miktar",
@@ -421,9 +421,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                       style: TextStyle(fontSize: 11),
                     )
                   : Container(),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
+           
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -432,11 +430,12 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                         borderRadius: BorderRadius.circular(25)),
                     child: IconButton(
                         onPressed: () {
-                          if (double.parse(miktarController.text) > 0) {
+                          if ((int.parse(miktarController.text))- (widget.gelenStokKart.guncelDegerler!
+                                            .carpan!).toInt() > 0) {
                             miktarController.text =
-                                (double.parse(miktarController.text) -
-                                        widget.gelenStokKart.guncelDegerler!
-                                            .carpan!)
+                                (int.parse(miktarController.text) -
+                                        (widget.gelenStokKart.guncelDegerler!
+                                            .carpan!).toInt())
                                     .toString();
                           }
                         },
@@ -492,8 +491,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                     child: IconButton(
                         onPressed: () {
                           miktarController
-                              .text = (double.parse(miktarController.text) +
-                                  widget.gelenStokKart.guncelDegerler!.carpan!)
+                              .text = (int.parse(miktarController.text) +
+                              (widget.gelenStokKart.guncelDegerler!.carpan!).toInt())
                               .toString();
                         },
                         icon: Icon(
@@ -504,9 +503,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
+            
               Divider(
                 endIndent: 20,
                 indent: 20,
@@ -514,9 +511,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 color: Colors.black45,
               ),
               // !
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
+            
               Text(
                 "Fiyat",
                 style: TextStyle(fontSize: 22),

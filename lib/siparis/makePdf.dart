@@ -9,7 +9,7 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 
 
-Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
+Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath ) async {
   final image = pw.MemoryImage(imagePath);
   final fontData = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
   final ttfFont = pw.Font.ttf(fontData);
@@ -19,22 +19,20 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
 
   final pdf = pw.Document();
 
-  int ilkSayfa = 0;
-  bool ikinciGozuksun = false;
 
-  if (m.fisStokListesi.length <= 8) {
-    ilkSayfa = m.fisStokListesi.length;
-    ikinciGozuksun = false;
-  } else {
-    ilkSayfa = 8;
-    ikinciGozuksun = true;
-  }
+
 
   // İlk sayfada üst bilgiler ve tablo başlıkları
 
   List<Widget> glen = [];
-  int i = 0;
-  while (i < m.fisStokListesi.length) {
+
+  
+ 
+    
+  for(var m in gelen){
+    glen = [];
+    int i = 0;
+      while (i < m.fisStokListesi.length) {
     glen.add(pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
@@ -52,45 +50,27 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                   ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 200,
+                          width: 360,
                           child: pw.Column(
                             mainAxisSize:MainAxisSize.min, 
                             children: [
                               pw.Image(image, width: 150, height: 100), //RESIM
-                              /*
+                          
                               SizedBox(
                                   height: 20,
                                   child: Row(
                                     children: [
-                                      Text("İşlem Tarihi:",
+                                      Text("Cari Ünvanı: ",
                                       style: pw.TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          font: boldttfFont)),
-                                           SizedBox(
-                                    height: 20,
-                                    child: Text(m.TARIH.toString(),
-                                        style: pw.TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: pw.FontWeight.bold,
-                                            font: boldttfFont))),
-                                    ]
-                                  )),
-                                  */
-                              SizedBox(
-                                  height: 10,
-                                  child: Row(
-                                    children: [
-                                      Text("Cari Ünvanı:",
-                                      style: pw.TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 13,
                                           fontWeight: pw.FontWeight.bold,
                                           font: boldttfFont),),
                                             SizedBox(
-                                    height: 10,
-                                    width: 350,
+                                    height: 20,
+                                    width: 300,
                                     child: Text(m.CARIADI.toString(),
                                         style: pw.TextStyle(
                                             fontSize: 15,
@@ -102,7 +82,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                   height: 60,
                                   child: Row(
                                     children: [
-                                      Text("Cari Adresi:",
+                                      Text("Cari Adresi: ",
                                       style: pw.TextStyle(
                                           fontSize: 15,
                                           fontWeight: pw.FontWeight.bold,
@@ -119,13 +99,13 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                   height: 20,
                                   child: Row(
                                     children: [
-                                      Text("Cari Kodu:",
+                                      Text("Cari Kodu: ",
                                       style: pw.TextStyle(
                                           fontSize: 15,
                                           fontWeight: pw.FontWeight.bold,
                                           font: boldttfFont)),SizedBox(
                                     height: 20,
-                                    child: Text(m.CARIKOD.toString(),
+                                    child: Text(m.CARIKOD.toString()+" ("+m.ALTHESAP!+")",
                                         style: pw.TextStyle(
                                             fontSize: 15,
                                             fontWeight: pw.FontWeight.bold,
@@ -139,7 +119,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                                   width: 400,
                                   child: Row(
                                     children: [
-                                      Text("Mail:",
+                                      Text("Mail: ",
                                       style: pw.TextStyle(
                                           fontSize: 15,
                                           fontWeight: pw.FontWeight.bold,
@@ -156,6 +136,7 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
                             crossAxisAlignment: pw.CrossAxisAlignment.start,
                           ),
                         ),
+                   
                         SizedBox(
                           width: 200,
                           child: pw.Column(
@@ -323,19 +304,33 @@ Future<Uint8List> makePdf(Fis m, Uint8List imagePath) async {
     ));
     i++;
   }
-
-  // Diğer sayfalarda sadece tablo
-
-  pdf.addPage(
+   
+    pdf.addPage(
     pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
-      orientation: PageOrientation.landscape,
+      orientation: PageOrientation.portrait,
       theme: pw.ThemeData(defaultTextStyle: pw.TextStyle(font: ttfFont)),
+      footer: (pw.Context context) {
+      return pw.Container(
+        alignment: pw.Alignment.centerRight,
+        margin: const pw.EdgeInsets.only(top: 10.0),
+        child: pw.Text(
+          'Sayfa ${context.pageNumber} / ${context.pagesCount}',
+          style: pw.TextStyle(fontSize: 10),
+        ),
+      );
+    },
       build: (context) {
         return glen;
       },
     ),
   );
+  }
+
+
+  // Diğer sayfalarda sadece tablo
+
+
 
   return pdf.save();
 }
@@ -347,7 +342,7 @@ List<List<String>> buildTableRows(Fis m, {int start = 0, int end = 0}) {
     List<String> row = [
       "${j + 1}",
       "${m.fisStokListesi[j].STOKKOD}",
-      "${m.fisStokListesi[j].STOKKOD}",
+      "${m.fisStokListesi[j].STOKADI}",
       "${m.fisStokListesi[j].MIKTAR}",
       "${Ctanim.donusturMusteri(m.fisStokListesi[j].BRUTFIYAT.toString())}",
       "${Ctanim.donusturMusteri(m.fisStokListesi[j].ISKONTOTOPLAM.toString())}",

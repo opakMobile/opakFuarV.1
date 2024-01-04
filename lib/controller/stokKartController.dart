@@ -861,6 +861,7 @@ class StokKartController extends GetxController {
         }
 
         if (results.length == 0) {
+
           results = listeler.listStok
               .where((value) =>
                   value.BARKOD2!.toLowerCase() == query.toLowerCase())

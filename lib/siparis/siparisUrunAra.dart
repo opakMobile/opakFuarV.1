@@ -40,6 +40,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     for (var element in listeler.listCariAltHesap) {
       if (element.KOD == fisEx.fis!.value.cariKart.KOD) {
         altHesaplar.add(element);
+        if(element.VARSAYILAN == "E"){
+          seciliAltHesap = element;
+        }
       }
       /*
       if(element.VARSAYILAN == "E"){
@@ -58,7 +61,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
       altHesaplar.add(ss);
       seciliAltHesap = ss;
     } else {
-      seciliAltHesap = altHesaplar.first;
+      if(seciliAltHesap == null){
+     seciliAltHesap = altHesaplar.first;
+
+      }
     }
 
     for (int i = 0; i < stokKartEx.searchList.length; i++) {
@@ -174,15 +180,14 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     // TODO: implement dispose
 
     Ctanim.secililiMarkalarFiltre.clear();
-    if(fisEx.fis!.value.fisStokListesi.length > 0){
-    fisEx.fis!.value.DURUM = true;
-    final now = DateTime.now();
-    final formatter = DateFormat('HH:mm');
-    String saat = formatter.format(now);
-    fisEx.fis!.value.SAAT = saat;
-    Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
-    fisEx.fis!.value = Fis.empty();
-      
+    if (fisEx.fis!.value.fisStokListesi.length > 0) {
+      fisEx.fis!.value.DURUM = true;
+      final now = DateTime.now();
+      final formatter = DateFormat('HH:mm');
+      String saat = formatter.format(now);
+      fisEx.fis!.value.SAAT = saat;
+      Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+      fisEx.fis!.value = Fis.empty();
     }
 
     super.dispose();
@@ -218,9 +223,17 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   @override
   Widget build(BuildContext context) {
     FocusNode focusNode = FocusNode();
+
     if (Ctanim.urunAraFocus == true) {
+   
       FocusScope.of(context).requestFocus(focusNode);
       Ctanim.urunAraFocus = false;
+    }
+
+    if (okumaModu == false && aramaModu == false) {
+      setState(() {
+        okumaModu = true;
+      });
     }
 
     double ekranYuksekligi = MediaQuery.of(context).size.height;
@@ -410,14 +423,14 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                       );
                                     }).then((value) {
                                   setState(() {
-                                    Ctanim.genelToplamHesapla(fisEx);
+                                   // Ctanim.genelToplamHesapla(fisEx);
                                   });
                                 });
                               }
                               stokKartEx.searchC(
                                   "",
                                   "",
-                                  "Fiyat1",
+                                  Ctanim.satisFiyatListesi.first,
                                   m,
                                   Ctanim.seciliStokFiyatListesi,
                                   seciliAltHesap!.ALTHESAPID);
@@ -468,7 +481,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         child: Padding(
                           padding: EdgeInsets.only(top: 15.0),
                           child: DropdownButtonHideUnderline(
+                            
                             child: DropdownButton<CariAltHesap>(
+                            
                               value: seciliAltHesap,
                               items: altHesaplar.map((CariAltHesap banka) {
                                 return DropdownMenuItem<CariAltHesap>(
@@ -479,7 +494,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   ),
                                 );
                               }).toList(),
+                             
+
                               onChanged: (CariAltHesap? selected) {
+                                
                                 setState(() {
                                   seciliAltHesap = selected!;
                                   fisEx.fis!.value.ALTHESAP = selected.ALTHESAP;
@@ -642,7 +660,15 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                         .add(stokKartEx.searchList[i]);
                                   }
                                 }
-                                setState(() {});
+                               
+                               setState(() {
+                          
+                               });
+                    
+                           
+                                
+                                  
+                             
                               },
                             ),
                           ),
@@ -659,7 +685,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         ? ekranYuksekligi * .53
                         : ekranYuksekligi * 0.57,
                     child: okumaModu == true
-                        ? okumaModuList()
+                        ? okumaModuList(seciliAltHesap: seciliAltHesap!.ALTHESAP!,)
                         : SingleChildScrollView(
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
@@ -700,7 +726,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
-                                                  Text(stokModel.KOD! +
+                                                  Text(stokModel.guncelDegerler!.guncelBarkod! +
                                                       "  " +
                                                       "KDV " +
                                                       stokModel.SATIS_KDV
@@ -940,7 +966,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       if (element.STOKKOD ==
                                                           stokModel
                                                               .guncelDegerler!
-                                                              .guncelBarkod!) {
+                                                              .guncelBarkod! && element.ALTHESAP == seciliAltHesap!.ALTHESAP!) {
                                                         urunDuz = true;
                                                         Fismiktar =
                                                             element.MIKTAR!;
@@ -969,9 +995,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                           );
                                                         }).then((value) {
                                                       setState(() {
+                                                        /*
                                                         Ctanim
                                                             .genelToplamHesapla(
                                                                 fisEx);
+                                                                */
                                                       });
                                                     });
                                                   },
@@ -981,6 +1009,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       size: 40,
                                                       color: Colors.green,
                                                     ),
+                                                  
                                                     onPressed: () {
                                                       KurModel gidecekKur =
                                                           listeler
@@ -1296,7 +1325,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
           print("NULL DEĞİL");
 
           setState(() {
-            Ctanim.genelToplamHesapla(fisEx);
+           // Ctanim.genelToplamHesapla(fisEx);
             //FocusScope.of(context).requestFocus(focusNode);
           });
         }
@@ -1373,7 +1402,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         iskonto5: iskonto5,
         iskonto6: iskonto6,
         miktar: (miktar).toInt(),
-        stokKodu: stokKart.KOD!,
+        stokKodu: stokKart.guncelDegerler!.guncelBarkod!,
         Aciklama1: '',
         KUR: stokKartKur.KUR!,
         TARIH: DateFormat("yyyy-MM-dd").format(DateTime.now()),

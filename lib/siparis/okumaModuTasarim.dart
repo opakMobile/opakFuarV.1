@@ -10,28 +10,38 @@ import 'package:opak_fuar/sabitler/listeler.dart';
 
 class okumaModuList extends StatefulWidget {
   const okumaModuList({
-    super.key,
+    super.key, required this.seciliAltHesap,
   });
+  final String seciliAltHesap;
 
   @override
   State<okumaModuList> createState() => _okumaModuListState();
 }
 
+
 class _okumaModuListState extends State<okumaModuList> {
+  
   FocusNode myFocusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
+   var result =  fisEx.fis!.value!.fisStokListesi
+              .where((value) =>
+                  value.ALTHESAP == widget.seciliAltHesap);
     return SingleChildScrollView(
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.55,
 
         //!! Sepet Listesi Buraya Gelecek
-        child: ListView.builder(
+        child: 
+        result.isEmpty ? Center(child: Text("Bu alt hesaba ait ürün bulunmamaktadır."),) :
+        ListView.builder(
           itemCount: fisEx.fis!.value.fisStokListesi.length,
           itemBuilder: (context, index) {
+        
             FisHareket stokModel = fisEx.fis!.value.fisStokListesi[index];
-            return Column(
+            return 
+           stokModel.ALTHESAP == widget.seciliAltHesap ? Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,7 +71,6 @@ class _okumaModuListState extends State<okumaModuList> {
                               //alt hesap
                               double gelenMiktar =
                                   double.parse(stokModel.MIKTAR.toString());
-                                  
 
                               List<StokKart> stok = listeler.listStok
                                   .where((stok) =>
@@ -73,48 +82,59 @@ class _okumaModuListState extends State<okumaModuList> {
                                       stok.BARKOD5 == stokModel.STOKKOD ||
                                       stok.BARKOD6 == stokModel.STOKKOD)
                                   .toList();
-                        if(stok.isEmpty){
-                        listeler.listDahaFazlaBarkod.where((element) => element.KOD == 
-                            stokModel.STOKKOD);
-                       } 
+                              if (stok.isEmpty) {
+                                listeler.listDahaFazlaBarkod.where((element) =>
+                                    element.KOD == stokModel.STOKKOD);
+                              }
 
-                       if(stok.first.KOD! == stokModel.STOKKOD){
-                        stok.first.guncelDegerler!.carpan = 1;
-                        stok.first.guncelDegerler!.guncelBarkod = stok.first.KOD;
-                       }else if (stok.first.BARKOD1 == stokModel.STOKKOD){
-                        stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN1;
-                        stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD1;
+                              if (stok.first.KOD! == stokModel.STOKKOD) {
+                                stok.first.guncelDegerler!.carpan = 1;
+                                stok.first.guncelDegerler!.guncelBarkod =
+                                    stok.first.KOD;
+                              } else if (stok.first.BARKOD1 ==
+                                  stokModel.STOKKOD) {
+                                stok.first.guncelDegerler!.carpan =
+                                    stok.first.BARKODCARPAN1;
+                                stok.first.guncelDegerler!.guncelBarkod =
+                                    stok.first.BARKOD1;
+                              } else if (stok.first.BARKOD2 ==
+                                  stokModel.STOKKOD) {
+                                stok.first.guncelDegerler!.carpan =
+                                    stok.first.BARKODCARPAN2;
+                                stok.first.guncelDegerler!.guncelBarkod =
+                                    stok.first.BARKOD2;
+                              } else if (stok.first.BARKOD3 ==
+                                  stokModel.STOKKOD) {
+                                stok.first.guncelDegerler!.carpan =
+                                    stok.first.BARKODCARPAN3;
+                                stok.first.guncelDegerler!.guncelBarkod =
+                                    stok.first.BARKOD3;
+                              } else if (stok.first.BARKOD4 ==
+                                  stokModel.STOKKOD) {
+                                stok.first.guncelDegerler!.carpan =
+                                    stok.first.BARKODCARPAN4;
+                                stok.first.guncelDegerler!.guncelBarkod =
+                                    stok.first.BARKOD4;
+                              } else if (stok.first.BARKOD5 ==
+                                  stokModel.STOKKOD) {
+                                stok.first.guncelDegerler!.carpan =
+                                    stok.first.BARKODCARPAN5;
+                                stok.first.guncelDegerler!.guncelBarkod =
+                                    stok.first.BARKOD5;
+                              } else if (stok.first.BARKOD6 ==
+                                  stokModel.STOKKOD) {
+                                stok.first.guncelDegerler!.carpan =
+                                    stok.first.BARKODCARPAN6;
+                                stok.first.guncelDegerler!.guncelBarkod =
+                                    stok.first.BARKOD6;
+                              }
+                              Ctanim.urunAraFocus = false;
 
-                       }else if (stok.first.BARKOD2 == stokModel.STOKKOD){
-                          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN2;
-                        stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD2;
-
-                       }else if (stok.first.BARKOD3 == stokModel.STOKKOD){
-                          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN3;
-                        stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD3;
-
-                       }else if (stok.first.BARKOD4 == stokModel.STOKKOD){
-                          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN4;
-                        stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD4;
-
-                       }else if (stok.first.BARKOD5 == stokModel.STOKKOD){
-                          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN5;
-                        stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD5;
-
-                       }else if (stok.first.BARKOD6 == stokModel.STOKKOD){ 
-                          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN6;
-                        stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD6;
-
-                       }
-            Ctanim.urunAraFocus = false;
-                       
-                     
                               showDialog(
                                   context: context,
                                   builder: (context) {
                                     return fisHareketDuzenle(
                                       urunDuzenlemeyeGeldim: true,
-                                    
                                       okutulanCarpan: 1,
                                       altHesap: stokModel.ALTHESAP!,
                                       gelenStokKart: stok.first,
@@ -123,9 +143,10 @@ class _okumaModuListState extends State<okumaModuList> {
                                       isk1: stokModel.ISK!,
                                     );
                                   }).then((value) {
-                                   FocusScope.of(context).requestFocus(myFocusNode);
+                                FocusScope.of(context)
+                                    .requestFocus(myFocusNode);
                                 setState(() {
-                                  Ctanim.genelToplamHesapla(fisEx);
+                                  // Ctanim.genelToplamHesapla(fisEx);
                                 });
                               });
                             },
@@ -201,8 +222,7 @@ class _okumaModuListState extends State<okumaModuList> {
                               border: Border.all(color: Colors.grey),
                             ),
                             child: Center(
-                              child:
-                                  Text(stokModel.MIKTAR!.toStringAsFixed(2)),
+                              child: Text(stokModel.MIKTAR!.toStringAsFixed(2)),
                             ),
                           )
                         ],
@@ -264,10 +284,12 @@ class _okumaModuListState extends State<okumaModuList> {
                                 });
                                 fisEx.fis?.value.fisStokListesi.removeWhere(
                                     (item) =>
-                                        item.STOKKOD == stokModel.STOKKOD!);
-                                setState(() {});
+                                        item.STOKKOD == stokModel.STOKKOD! && item.ALTHESAP == stokModel.ALTHESAP!);
+                               
                                 await Fis.empty().fisHareketSil(
-                                    fisEx.fis!.value.ID!, stokModel.STOKKOD!);
+                                    fisEx.fis!.value.ID!, stokModel.STOKKOD!,stokModel.ALTHESAP!);
+                                     setState(() {});
+                                     Ctanim.genelToplamHesapla(fisEx);
                               },
                               child: Text(
                                 "Sil",
@@ -359,6 +381,8 @@ class _okumaModuListState extends State<okumaModuList> {
                   color: Colors.black87,
                 )
               ],
+            ):Container(
+           
             );
           },
         ),

@@ -39,7 +39,30 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         appBar: appBarDizayn(context),
-        bottomNavigationBar: bottombarDizayn(context),
+        bottomNavigationBar: bottombarDizayn(context,button: 
+        Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Kullanıcı : " + Ctanim.kullanici!.KOD!,
+                style: GoogleFonts.lato(
+                  fontSize: 16,
+                  
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              ),
+              Text(
+                "Versiyon : 1.0.0",
+                style: TextStyle(fontSize: 9),
+              ),
+            ],
+          ),
+        ),
+        buttonVarMi: true
+        
+        ),
         resizeToAvoidBottomInset: false,
         body: Container(
           width: MediaQuery.of(context).size.width,

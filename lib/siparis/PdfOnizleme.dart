@@ -15,7 +15,7 @@ import 'package:printing/printing.dart';
 
 
 class PdfOnizleme extends StatefulWidget {
-  final Fis m;
+  final List<Fis> m;
   final bool fastReporttanMiGelsin;
   const PdfOnizleme(
       {Key? key, required this.m, required this.fastReporttanMiGelsin})

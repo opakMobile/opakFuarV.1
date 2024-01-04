@@ -23,6 +23,14 @@ class SiparisTamamla extends StatefulWidget {
 }
 
 class _SiparisTamamlaState extends State<SiparisTamamla> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(fisEx.fis!.value.ISK1 != 0.0){
+      genelIskonto1Controller.text = (fisEx.fis!.value.ISK1!.toInt()).toString();
+    }
+  }
   Color getRandomColor() {
     List<Color> colors = [
       Colors.red,
@@ -63,7 +71,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
       elevation: 5,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.2,
-        height: MediaQuery.of(context).size.height * 0.08,
+        //height: MediaQuery.of(context).size.height * 0.009,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
         ),
@@ -73,28 +81,29 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
             Text(
               altHesapAdi,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 color: color,
               ),
             ),
             Text(
               Ctanim.donusturMusteri(altHesapTutari.toString()),
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 color: color,
               ),
             ),
             Padding(
               padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.08,
+                    width: MediaQuery.of(context).size.width * 0.05,
                     height: 3,
                     color: color,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.08,
+                    width: MediaQuery.of(context).size.width * 0.05,
                     height: 3,
                     color: Colors.grey,
                   ),
@@ -109,6 +118,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
 
   List<Widget> altHesaplar = [];
   TextEditingController aciklamaController = TextEditingController();
+  TextEditingController genelIskonto1Controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +135,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: appBarDizayn(context),
+     
         bottomNavigationBar: bottombarDizayn(context,
             button: Card(
               elevation: 5,
@@ -140,66 +150,67 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                     ),
                   ),
                   onPressed: () async {
-                        if(fisEx.fis!.value.fisStokListesi.length > 0){
-                            fisEx.fis!.value.DURUM = true;
-                    final now = DateTime.now();
-                    final formatter = DateFormat('HH:mm');
-                    String saat = formatter.format(now);
-                    fisEx.fis!.value.SAAT = saat;
+                    if (fisEx.fis!.value.fisStokListesi.length > 0) {
+                      fisEx.fis!.value.DURUM = true;
+                      final now = DateTime.now();
+                      final formatter = DateFormat('HH:mm');
+                      String saat = formatter.format(now);
+                      fisEx.fis!.value.SAAT = saat;
 
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CustomAlertDialog(
-                            secondButtonText: "Tamam",
-                            onSecondPress: () async {
-                             
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                            pdfSimgesi: true,
-                            align: TextAlign.center,
-                            title: 'Kayıt Başarılı',
-                            message:
-                                'Fatura Kaydedildi. PDF Dosyasını Görüntülemek İster misiniz?',
-                            onPres: () async {
-                              Fis fiss = fisEx.fis!.value;
-                              await Fis.empty().fisEkle(
-                                  fis: fisEx.fis!.value, belgeTipi: "YOK");
-                              fisEx.fis!.value = Fis.empty();
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomAlertDialog(
+                              secondButtonText: "Tamam",
+                              onSecondPress: () async {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              pdfSimgesi: true,
+                              align: TextAlign.center,
+                              title: 'Kayıt Başarılı',
+                              message:
+                                  'Fatura Kaydedildi. PDF Dosyasını Görüntülemek İster misiniz?',
+                              onPres: () async {
+                                String hataTopla = "";
+                                List<Fis> pdfeGidecek =  parcalaFis(fisEx.fis!.value);
+
+                                await Fis.empty().fisEkle(
+                                    fis: fisEx.fis!.value, belgeTipi: "YOK");
+                                fisEx.fis!.value = Fis.empty();
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                // ha bura
+
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                     builder: (context) => PdfOnizleme(
-                                          m: fiss,
+                                          m: pdfeGidecek,
                                           fastReporttanMiGelsin: false,
                                         )),
                               );
-                            },
-                            buttonText: 'Pdf\'i\ Gör',
-                          );
-                        });
-
-                        }else{
-                             await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return CustomAlertDialog(
-                                    align: TextAlign.left,
-                                    title: 'Stok Eklemediniz',
-                                    message: 'Fişe stok eklemeden fiş kaydedilemez.',
-                                    onPres: () async {
-                                      Navigator.pop(context);
-                                    },
-                                    buttonText: 'Tamam',
-                                  );
-                                });
-
-                        }
-                  
+                              
+                              },
+                              buttonText: 'Pdf\'i\ Gör',
+                            );
+                          });
+                    } else {
+                      await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomAlertDialog(
+                              align: TextAlign.left,
+                              title: 'Stok Eklemediniz',
+                              message: 'Fişe stok eklemeden fiş kaydedilemez.',
+                              onPres: () async {
+                                Navigator.pop(context);
+                              },
+                              buttonText: 'Tamam',
+                            );
+                          });
+                    }
                   },
                   child: Text(
                     "Siparişi Yazdır",
@@ -213,7 +224,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
         body: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.78,
+            height: MediaQuery.of(context).size.height ,
             child: Padding(
               padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
               child: Column(
@@ -266,7 +277,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             child: Center(
                                 child: Text(
                               Ctanim.donusturMusteri(
-                                fisEx.fis!.value.GENELTOPLAM.toString(),
+                                fisEx.fis!.value.TOPLAM.toString(),
                               ),
                               style: TextStyle(
                                   fontSize: 20,
@@ -349,7 +360,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             child: Center(
                                 child: Text(
                               Ctanim.donusturMusteri(
-                                fisEx.fis!.value.TOPLAM.toString(),
+                                fisEx.fis!.value.GENELTOPLAM.toString(),
                               ),
                               style: TextStyle(
                                   fontSize: 20,
@@ -361,6 +372,59 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E" ?  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    child: Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: TextFormField(
+                        style: TextStyle(
+                          fontSize: 14.0,
+                        ),
+                        controller: genelIskonto1Controller,
+                        onChanged: (value) {
+                          setState(() {
+                              if (value == "") {
+                                fisEx.fis!.value.ISK1 = 0.0;
+                                Ctanim.genelToplamHesapla(fisEx);
+                          
+                              }else{
+                                 fisEx.fis!.value.ISK1 =
+                                  Ctanim.noktadanSonraAlinacak(double.tryParse(
+                                      genelIskonto1Controller.text)??0.0);
+                              Ctanim.genelToplamHesapla(fisEx);
+                              
+
+                              }
+                             
+                            });
+                         
+                        },
+                        maxLines: 8,
+                        decoration: InputDecoration(
+                          /* contentPadding: EdgeInsets.symmetric(
+                              vertical: MediaQuery.of(context).size.height * 0.05,
+                            ),*/
+
+                          hintText: 'Genel İskonto (ör:50)',
+                          hintStyle: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ):Container(),
+               
                   // ! sipariş açıklaması
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
@@ -444,7 +508,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                   fisEx.fis!.value!.ACIKLAMA4! +
                                   " - " +
                                   fisEx.fis!.value!.ACIKLAMA5!
-                              : "Bayi Seç"),
+                              : "Bayi Seç",),
                         ),
                       ),
                     ),
@@ -456,5 +520,48 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
         ),
       ),
     );
+  }
+
+  List<Fis> parcalaFis(Fis fisParam){
+    List<Fis> parcaliFisler = [];
+    if (fisParam.fisStokListesi.length > 0) {
+      List<String> althesaplar = [];
+      for (int i = 0;
+          i < fisParam.fisStokListesi.length;
+          i++) {
+        if (!althesaplar
+            .contains(fisParam.fisStokListesi[i].ALTHESAP)) {
+          althesaplar
+              .add(fisParam.fisStokListesi[i].ALTHESAP!);
+        }
+      }
+      for (var element in althesaplar) {
+        
+        Fis fis = Fis.empty();
+        fis = Fis.fromFis(fisParam, []);
+        fis.USTUUID = fis.UUID;
+        //   fis.UUID = neu;
+        fis.SIPARISSAYISI = althesaplar.length;
+        fis.KALEMSAYISI = 0;
+        fis.ALTHESAP = element;
+
+
+        for (int k = 0;
+            k < fisParam.fisStokListesi.length;
+            k++) {
+          if (fisParam.fisStokListesi[k].ALTHESAP == element) {
+            //fis.fisStokListesi[k].UUID = fis.UUID;
+
+            fis.fisStokListesi.add(fisParam.fisStokListesi[k]);
+            fis.KALEMSAYISI = fis.KALEMSAYISI! + 1;
+          }
+        }
+
+        parcaliFisler.add(fis);
+      } 
+      
+    } 
+
+    return parcaliFisler;
   }
 }

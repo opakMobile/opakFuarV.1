@@ -202,6 +202,7 @@ class Fis {
     this.USTUUID = fis.USTUUID;
     this.SIPARISSAYISI = SIPARISSAYISI;
     this.KALEMSAYISI = KALEMSAYISI;
+    this.cariKart = fis.cariKart;
 
     this.fisStokListesi = fisHareket;
     this.altHesapToplamlar = altHesapToplamlar;
@@ -471,10 +472,10 @@ class Fis {
     await Ctanim.db?.delete("TBLFISSB", where: "ID = ?", whereArgs: [fisId]);
   }
 
-  Future<void> fisHareketSil(int fisId, String stokKodu) async {
+  Future<void> fisHareketSil(int fisId, String stokKodu,String altHesap) async {
     //FisHareket idsi fiş id te eşitleri sil
 
     await Ctanim.db?.delete("TBLFISHAR",
-        where: "FIS_ID = ? AND STOKKOD = ? ", whereArgs: [fisId, stokKodu]);
+        where: "FIS_ID = ? AND STOKKOD = ? AND ALTHESAP = ?", whereArgs: [fisId, stokKodu,altHesap]);
   }
 }
