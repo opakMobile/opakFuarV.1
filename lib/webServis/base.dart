@@ -302,10 +302,11 @@ class BaseService {
           return gelenHata.HataMesaj!;
         } else {
           String modelNode = gelenHata.HataMesaj!;
-          List<dynamic> parsedList = json.decode(modelNode);
+          List<dynamic> parsedList = json.decode(temizleKontrolKarakterleri(modelNode));
 
           Map<String, dynamic> kullaniciJson = parsedList[0];
           Ctanim.kullanici = KullaniciModel.fromjson(kullaniciJson);
+          printWrapped(Ctanim.kullanici!.PDFACIKLAMA!);
           return "";
         }
       } else {

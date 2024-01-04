@@ -113,6 +113,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      sha256: "831883fb353c8bdc1d71979e5b342c7d88acfbc643113c14ae51e2442ea0f20f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.17.3"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -264,6 +272,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.0"
+  html:
+    dependency: transitive
+    description:
+      name: html
+      sha256: "3a7812d5bcd2894edf53dfaf8cd640876cf6cef50a8f238745c8b8120ea74d3a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.4"
+  htmltopdfwidgets:
+    dependency: "direct main"
+    description:
+      name: htmltopdfwidgets
+      sha256: a9cbb4ea26a0207a694d96d102df4b7054fbbc9b9d72ba56e3f7c7c8d6f7468c
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9+2"
   http:
     dependency: "direct main"
     description:

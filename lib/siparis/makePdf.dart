@@ -1,4 +1,6 @@
+import 'dart:ffi';
 import 'dart:typed_data';
+
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:path/path.dart';
@@ -7,9 +9,12 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:htmltopdfwidgets/htmltopdfwidgets.dart';
 
 
-Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath ) async {
+
+
+Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath) async {
   final image = pw.MemoryImage(imagePath);
   final fontData = await rootBundle.load("assets/fonts/Roboto-Regular.ttf");
   final ttfFont = pw.Font.ttf(fontData);
@@ -18,13 +23,15 @@ Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath ) async {
   final boldttfFont = pw.Font.ttf(boldfontData);
 
   final pdf = pw.Document();
+  String htmlText = Ctanim.kullanici!.PDFACIKLAMA!;
+   List<Widget> widgets = await HTMLToPdf().convert(htmlText);
 
 
 
-
-  // İlk sayfada üst bilgiler ve tablo başlıkları
 
   List<Widget> glen = [];
+
+
 
   
  
@@ -298,7 +305,7 @@ Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath ) async {
         i == m.fisStokListesi.length - 1
             ? Padding(
                 padding: EdgeInsets.only(top: 40),
-                child: buildAdditionalInfo(m, boldttfFont))
+                child: buildAdditionalInfo(m, boldttfFont,widgets))
             : Container(),
       ],
     ));
@@ -310,7 +317,35 @@ Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath ) async {
       pageFormat: PdfPageFormat.a4,
       orientation: PageOrientation.portrait,
       theme: pw.ThemeData(defaultTextStyle: pw.TextStyle(font: ttfFont)),
+
       footer: (pw.Context context) {
+      if(context.pageNumber == context.pagesCount){
+        return Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: 350,
+              child: ListView.builder(itemCount: widgets.length,itemBuilder: (context, index) {
+              return widgets[index];
+            
+            },),
+            ),
+            
+            pw.Container(
+        alignment: pw.Alignment.centerRight,
+        margin: const pw.EdgeInsets.only(top: 140.0),
+        child: pw.Text(
+          'Sayfa ${context.pageNumber} / ${context.pagesCount}',
+          style: pw.TextStyle(fontSize: 10),
+        ),
+      )
+
+
+
+          ]
+        );
+      }  
+     else{
       return pw.Container(
         alignment: pw.Alignment.centerRight,
         margin: const pw.EdgeInsets.only(top: 10.0),
@@ -319,8 +354,11 @@ Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath ) async {
           style: pw.TextStyle(fontSize: 10),
         ),
       );
+
+     } 
     },
       build: (context) {
+
         return glen;
       },
     ),
@@ -366,13 +404,25 @@ List<List<String>> buildTableRowsUst(Fis m, {int start = 0, int end = 0}) {
   return rows;
 }
 
-pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont) {
-  return pw.Row(
+pw.Widget buildAdditionalInfo(Fis m, pw.Font boldttfFont,List<Widget> w) {
+  
+
+  return Row(
     mainAxisAlignment: pw.MainAxisAlignment.end,
     crossAxisAlignment: pw.CrossAxisAlignment.end,
     children: [
       pw.Row(
         children: [
+        
+           Padding(padding: EdgeInsets.only(top: 0), child: SizedBox(
+            width: 300,
+            child: Text("Sipariş Notu : "+m.ACIKLAMA1.toString(),
+                style: pw.TextStyle(
+                    fontSize: 15,
+                    fontWeight: pw.FontWeight.bold,
+                    font: boldttfFont)),
+          )),
+        
           SizedBox(
             width: 150,
             child:

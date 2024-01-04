@@ -21,6 +21,7 @@ class KullaniciModel {
   String? SFIYAT3;
   String? SFIYAT4;
   String? SFIYAT5;
+  
 
   String? LISTEFIYAT;
   String? SONFIYAT;
@@ -76,6 +77,7 @@ class KullaniciModel {
   String? EIRSNO;
   String? OTOMATIKSTOKKODU;
   String? MALFAZLASI;
+  String? PDFACIKLAMA;
 
   KullaniciModel(
       {this.KOD,
@@ -144,7 +146,8 @@ class KullaniciModel {
       this.IRSNO,
       this.EIRSNO,
       this.OTOMATIKSTOKKODU,
-      this.MALFAZLASI
+      this.MALFAZLASI,
+      this.PDFACIKLAMA
       });
 
   KullaniciModel.fromjson(Map<String, dynamic> json) {
@@ -213,9 +216,9 @@ class KullaniciModel {
     FATNO = json['FATNO'];
     IRSNO = json['IRSNO'];
     MALFAZLASI = json['MALFAZLASI'];
-
     EIRSNO = json['EIRSNO'];
     OTOMATIKSTOKKODU = json['OTOMATIKSTOKKODU'];
+    PDFACIKLAMA = json['PDFACIKLAMA'];
   }
 
   Map<String, dynamic> tojson() {
@@ -311,7 +314,7 @@ class KullaniciModel {
     data['IRSNO'] = IRSNO;
     data['EIRSNO'] = EIRSNO;
     data['OTOMATIKSTOKKODU'] = OTOMATIKSTOKKODU;
-
+    data['PDFACIKLAMA'] = PDFACIKLAMA;
     return data;
   }
 

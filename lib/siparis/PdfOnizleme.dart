@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:opak_fuar/db/veriTabaniIslemleri.dart';
 import 'package:opak_fuar/model/fis.dart';
@@ -26,7 +27,8 @@ class PdfOnizleme extends StatefulWidget {
 }
 
 class _PdfOnizlemeState extends State<PdfOnizleme> {
-  
+
+
   Uint8List? _imageData;
   Future<void> _loadImage() async {
     String? imagePath = await VeriIslemleri().getFirstImage();
@@ -67,8 +69,12 @@ class _PdfOnizlemeState extends State<PdfOnizleme> {
     return donecek;
   }
   */
+
+  
   @override
   Widget build(BuildContext context) {
+  
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData( 
@@ -81,10 +87,10 @@ class _PdfOnizlemeState extends State<PdfOnizleme> {
         ),
         backgroundColor: const Color.fromARGB(255, 80, 79, 79),
         body: PdfPreview(
+           
           build: (context) {
            // if (widget.fastReporttanMiGelsin == false) {
-              return makePdf(widget.m,_imageData!
-               );
+              return makePdf(widget.m,_imageData!);
            // } else {
            //   return pdfGetirFastReport();
           //  }
