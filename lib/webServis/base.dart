@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:opak_fuar/db/veriTabaniIslemleri.dart';
 import 'package:opak_fuar/model/KurModel.dart';
@@ -25,17 +26,27 @@ import '../sabitler/Ctanim.dart';
 import '../sabitler/sharedPreferences.dart';
 
 class BaseService {
+
+
+
+
+
   Future<void> tumVerileriGuncelle() async {
+
+
     await getirStoklar(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);
-    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);
-    await getirCariAltHesap(sirket: Ctanim.sirket!);
+
+    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);//aktarilmayanVarmi: aktarilmayanVarmi);
+    await getirCariAltHesap(sirket: Ctanim.sirket!);//aktarilmayanVarMi: aktarilmayanVarmi);
+
     await getirKur(sirket: Ctanim.sirket);
     await getirStokKosul(sirket: Ctanim.sirket!);
   }
 
   Future<void> cariVerileriGuncelle() async {
-    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD! );
-    await getirCariAltHesap(sirket: Ctanim.sirket!);
+   
+    await getirCariler(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);//aktarilmayanVarmi: aktarilmayanVarmi);
+    await getirCariAltHesap(sirket: Ctanim.sirket!);//aktarilmayanVarMi:aktarilmayanVarmi);
   }
 
   Future<void> stokVerileriGuncelle() async {
@@ -188,6 +199,9 @@ class BaseService {
             webservisCari.AKTARILDIMI = "E";
             await VeriIslemleri().cariEkle(webservisCari);
           });
+          
+     
+          
 
           await VeriIslemleri().cariGetir();
 
@@ -306,7 +320,7 @@ class BaseService {
 
           Map<String, dynamic> kullaniciJson = parsedList[0];
           Ctanim.kullanici = KullaniciModel.fromjson(kullaniciJson);
-          printWrapped(Ctanim.kullanici!.PDFACIKLAMA!);
+    
           return "";
         }
       } else {
@@ -326,16 +340,16 @@ class BaseService {
         Ctanim.IP); // dış ve iç denecek;
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
-      'SOAPAction': 'http://tempuri.org/GetirCariAltHesap'
+      'SOAPAction': 'http://tempuri.org/GetirAltHesap'
     };
 
     String body = '''
 <?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetirCariAltHesap xmlns="http://tempuri.org/">
+    <GetirAltHesap xmlns="http://tempuri.org/">
       <Sirket>$sirket</Sirket>
-    </GetirCariAltHesap>
+    </GetirAltHesap>
   </soap:Body>
 </soap:Envelope>
 ''';
@@ -356,39 +370,32 @@ class BaseService {
         if (gelenHata.Hata == "true") {
           return gelenHata.HataMesaj!;
         } else {
-          List<dynamic> jsonData =
-              jsonDecode(temizleKontrolKarakterleri(gelenHata.HataMesaj!));
+         String modelNode = gelenHata.HataMesaj!;
+
+          Iterable? l;
+          String temizJson = temizleKontrolKarakterleri(modelNode);
+          try {
+            l = json.decode(temizJson);
+          } catch (e) {
+            print(e);
+          }
+  
+          List<CariAltHesap> listcariTemp = [];
+          listcariTemp =
+              List<CariAltHesap>.from(l!.map((model) => CariAltHesap.fromJson(model)));
+
           listeler.listCariAltHesap.clear();
           await VeriIslemleri().cariAltHesapTabloTemizle();
 
-          for (var element in jsonData) {
-            String KOD = element['KOD'];
-            String ALTHESAP = element['ALTHESAP'];
-            int DOVIZID = int.parse(element["DOVIZID"].toString());
-            String VARSAYILAN = element['VARSAYILAN'];
-            int ALTHESAPID = int.parse(element["ALTHESAPID"].toString());
-            String ZORUNLU = element['ZORUNLU'];
+          listcariTemp.forEach((webservisCari) async {
+           
+            await VeriIslemleri().cariAltHesapEkle(webservisCari);
+          });
+          
 
-            await VeriIslemleri().cariAltHesapEkle(CariAltHesap(
-                ALTHESAPID: ALTHESAPID,
-                KOD: KOD,
-                ALTHESAP: ALTHESAP,
-                DOVIZID: DOVIZID,
-                VARSAYILAN: VARSAYILAN,
-                ZORUNLU: ZORUNLU
+          
 
-                ));
-
-            listeler.listCariAltHesap.add(CariAltHesap(
-                ALTHESAPID: ALTHESAPID,
-                KOD: KOD,
-                ALTHESAP: ALTHESAP,
-                DOVIZID: DOVIZID,
-                VARSAYILAN: VARSAYILAN,
-               ZORUNLU: ZORUNLU
-                
-                ));
-          }
+          await VeriIslemleri().cariAltHesapGetir();
 
           return "";
         }
@@ -800,65 +807,20 @@ class BaseService {
     }
   }
 
-  Future<SHataModel> ekleFatura(
-      {required String sirket,
-      required Map<String, dynamic> jsonDataList}) async {
-    SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
-
-    var jsonString;
-    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
-
-    jsonString = jsonEncode(jsonDataList);
-
-    var headers = {
-      'Content-Type': 'text/xml; charset=utf-8',
-      'SOAPAction': 'http://tempuri.org/EkleFatura',
-    };
-    String body = '''
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <EkleFatura xmlns="http://tempuri.org/">
-      <Sirket>$sirket</Sirket>
-      <Fis>$jsonString</Fis>
-    </EkleFatura>
-  </soap:Body>
-</soap:Envelope>
-''';
-    printWrapped(jsonString);
-    try {
-      http.Response response = await http.post(
-        url,
-        headers: headers,
-        body: body,
-      );
-
-      if (response.statusCode == 200) {
-        var rawXmlResponse = response.body;
-        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
-
-        Map<String, dynamic> jsonData = jsonDecode(parsedXml.innerText);
-        SHataModel gelenHata = SHataModel.fromJson(jsonData);
-        return gelenHata;
-      } else {
-        Exception(
-            'Fatura Verisi Gönderilemedi. StatusCode: ${response.statusCode}');
-        return hata;
-      }
-    } catch (e) {
-      Exception('Hata: $e');
-      return hata;
-    }
-  }
+  
     Future<SHataModel> ekleSiparisFuar(
       {required String sirket,
       required Map<String, dynamic> jsonDataList}) async {
     SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
 
     var jsonString;
-    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+
+    var url = Uri.parse(Ctanim.IP); 
+    // dış ve iç denecek;
 
     jsonString = jsonEncode(jsonDataList);
+     String base64EncodedString = base64Encode(utf8.encode(jsonString));
+    
 
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
@@ -870,12 +832,12 @@ class BaseService {
   <soap:Body>
     <EkleSiparisFuar xmlns="http://tempuri.org/">
       <Sirket>$sirket</Sirket>
-      <Fis>$jsonString</Fis>
+      <Fis>$base64EncodedString</Fis>
     </EkleSiparisFuar>
   </soap:Body>
 </soap:Envelope>
 ''';
-    printWrapped(jsonString);
+    //printWrapped(base64EncodedString);
     try {
       http.Response response = await http.post(
         url,
@@ -986,7 +948,7 @@ class BaseService {
   </soap:Body>
 </soap:Envelope>
 ''';
-    printWrapped(jsonString);
+    //printWrapped(jsonString);
     try {
       http.Response response = await http.post(
         url,

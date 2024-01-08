@@ -127,7 +127,21 @@ class _CariListePageState extends State<CariListePage> {
                                           cariEx.searchCariList[index].ADI!);
                                           */
                                        double genelToplam = await fisEx.cariToplamGetir( cariEx
-                                                        .searchCariList[index].KOD!);  
+                                                        .searchCariList[index].KOD!); 
+                                    cariEx.searchCariList[index].cariAltHesaplar.clear();
+                                    List<String> altListe = cariEx.searchCariList[index].ALTHESAPLAR!.split(",");
+                                    for(var elemnt in listeler.listCariAltHesap){
+                                      if(altListe.contains(elemnt.ALTHESAPID.toString())){
+                                        cariEx.searchCariList[index].cariAltHesaplar.add(elemnt);
+                                      }
+                                    }
+                                    if(cariEx.searchCariList[index].cariAltHesaplar.isEmpty){
+                                      for(var elemnt in listeler.listCariAltHesap){
+                                        if(elemnt.ZORUNLU == "E" && elemnt.VARSAYILAN == "E"){
+                                          cariEx.searchCariList[index].cariAltHesaplar.add(elemnt);
+                                        }
+                                      }
+                                    } 
                                                         
                                       Navigator.push(
                                           context,
@@ -140,6 +154,20 @@ class _CariListePageState extends State<CariListePage> {
                                                   )));
                                     } else {
                                       // cari listesine gidecek
+                              cariEx.searchCariList[index].cariAltHesaplar.clear();
+                                    List<String> altListe = cariEx.searchCariList[index].ALTHESAPLAR!.split(",");
+                                    for(var elemnt in listeler.listCariAltHesap){
+                                      if(altListe.contains(elemnt.ALTHESAPID.toString())){
+                                        cariEx.searchCariList[index].cariAltHesaplar.add(elemnt);
+                                      }
+                                    }
+                                    if(cariEx.searchCariList[index].cariAltHesaplar.isEmpty){
+                                      for(var elemnt in listeler.listCariAltHesap){
+                                        if(elemnt.ZORUNLU == "E" && elemnt.VARSAYILAN == "E"){
+                                          cariEx.searchCariList[index].cariAltHesaplar.add(elemnt);
+                                        }
+                                      }
+                                    }
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(

@@ -429,7 +429,8 @@ class Fis {
                 where: "ID=?", whereArgs: [element.ID]);
           } else {
             element.ID = null;
-            Ctanim.db?.insert("TBLFISHAR", element.toJson());
+            int a = await Ctanim.db?.insert("TBLFISHAR", element.toJson());
+            element.ID = a;
           }
         }
         // alt hesap toplamları gezebiliriz

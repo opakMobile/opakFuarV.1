@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/controller/fisController.dart';
+import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/fis.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/sepet/sepetDetay.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
@@ -125,17 +127,16 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                 ),
                                 subtitle: Padding(
                                   padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(cari.IL!.toString()),
-                                      widget.islem == true
-                                          ? Text(cari.BAKIYE.toString())
-                                          : Container(),
-                                    ],
-                                  ),
-                                ),
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.8,
+                                    child: Text(
+                                      cari.ADRES!.toString(),
+                                      maxLines: 3,
+                                      
+                                      overflow: TextOverflow.ellipsis,
+                                    ), 
+                                )),
                                 onTap: () async {
                                   if (widget.islem) {
                                     /*
@@ -147,6 +148,25 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                                 )));
                                                 */
                                   } else {
+                                    CariAltHesap? vs;
+                                    cari.cariAltHesaplar.clear();
+                                    List<String> altListe = cari.ALTHESAPLAR!.split(",");
+                                    for(var elemnt in listeler.listCariAltHesap){
+                                      if(altListe.contains(elemnt.ALTHESAPID.toString())){
+                                        cari.cariAltHesaplar.add(elemnt);
+                                      }
+                                       if(elemnt.ZORUNLU == "E" && elemnt.VARSAYILAN == "E"){
+                                          vs = elemnt;
+                                        }
+
+                                    }
+                                    if(cari.cariAltHesaplar.isEmpty){
+                                      for(var elemnt in listeler.listCariAltHesap){
+                                        if(elemnt.ZORUNLU == "E" && elemnt.VARSAYILAN == "E"){
+                                          cari.cariAltHesaplar.add(elemnt);
+                                        }
+                                      }
+                                    }
                                     Fis fis = Fis.empty();
                                     fisEx.fis!.value = fis;
                                     fisEx.fis!.value.cariKart = cari;
@@ -159,7 +179,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                     fisEx.fis!.value.DEPOID = int.parse(Ctanim
                                         .kullanici!.YERELDEPOID!); //TODO
                                     fisEx.fis!.value.ISLEMTIPI = "0";
-                                    fisEx.fis!.value.ALTHESAP = cari.cariAltHesaplar.first.ALTHESAP;
+                                    fisEx.fis!.value.ALTHESAP = vs!=null?vs.ALTHESAP:cari.cariAltHesaplar.first.ALTHESAP;
 
                                     fisEx.fis!.value.UUID = uuid.v1();
                                     fisEx.fis!.value.VADEGUNU = cari.VADEGUNU;
@@ -179,6 +199,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 SiparisUrunAra(
+                                                  varsayilan: vs!=null?vs:cari.cariAltHesaplar.first,
                                                   cari: cari,
                                                 )));
                                   }

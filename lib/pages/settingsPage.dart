@@ -192,6 +192,8 @@ class _settings_pageState extends State<settings_page> {
                                                                 lisans.text);
 
                                                         Navigator.pop(context);
+                                                        
+                                                        // ftp
 
                                                         if (donenAPIler.length >
                                                             1) {

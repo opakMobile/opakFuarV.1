@@ -206,7 +206,6 @@ class VeriIslemleri {
 
     cariEx.searchCariList.assignAll(listeler.listCari);
 
-    await cariAltHesapGetir();
     return listeler.listCari;
   }
 
@@ -218,17 +217,16 @@ class VeriIslemleri {
   }
 
   //database cari ekle
-  Future<int?> cariEkle(Cari cariKart,{bool guncellemeMi = false}) async {
-    if(guncellemeMi == true){
+  Future<int?> cariEkle(Cari cariKart, {bool guncellemeMi = false}) async {
+    if (guncellemeMi == true) {
       try {
-      cariKart.ID = null;
-      var result = await Ctanim.db?.update("TBLCARISB", cariKart.toJson(),
-        where: 'KOD = ?', whereArgs: [cariKart.KOD]);
-      return result;
-    } on PlatformException catch (e) {
-      print(e);
-    }
-      
+        cariKart.ID = null;
+        var result = await Ctanim.db?.update("TBLCARISB", cariKart.toJson(),
+            where: 'KOD = ?', whereArgs: [cariKart.KOD]);
+        return result;
+      } on PlatformException catch (e) {
+        print(e);
+      }
     }
     try {
       cariKart.ID = null;
@@ -274,7 +272,8 @@ class VeriIslemleri {
       ACIKLAMA1 TEXT ,
       BAKIYE DECIMAL,
       AKTARILDIMI TEXT,
-      ACIKLAMA4 TEXT
+      ACIKLAMA4 TEXT,
+      ALTHESAPLAR TEXT
       )""");
 
       print("TBLCARISB tablosu temizlendi ve yeniden oluşturuldu.");
@@ -294,7 +293,6 @@ class VeriIslemleri {
 
       // "TBLCARISTOKKOSULSB" tablosunu yeniden oluştur.
       await Ctanim.db?.execute(""" CREATE TABLE TBLCARIALTHESAPSB (
-      KOD TEXT ,
       ALTHESAP TEXT,
       DOVIZID INTEGER,
       VARSAYILAN TEXT,
@@ -312,10 +310,23 @@ class VeriIslemleri {
     //   var result = await Ctanim.db?.query("TBLCARISB");
     List<Map<String, dynamic>> maps =
         await Ctanim.db?.query("TBLCARIALTHESAPSB");
+    // kaldık 4
 
     listeler.listCariAltHesap =
         List.generate(maps.length, (i) => CariAltHesap.fromJson(maps[i]));
+    /*   
+    List<CariAltHesap> temp = [];
+    for (var element in listeler.listCari) {
+      temp.clear();
 
+      temp.assignAll(listeler.listCariAltHesap
+          .where((x) => x.KOD == element.KOD)
+          .toList());
+        
+      element.cariAltHesaplar.assignAll(temp);
+    }
+    */
+/*
     for (int i = 0; i < listeler.listCari.length; i++) {
       for (var element2 in listeler.listCariAltHesap) {
         if (listeler.listCari[i].KOD == element2.KOD) {
@@ -323,6 +334,7 @@ class VeriIslemleri {
         }
       }
     }
+    */
     return listeler.listCariAltHesap;
   }
 
@@ -330,7 +342,7 @@ class VeriIslemleri {
   Future<int?> cariAltHesapGuncelle(CariAltHesap cariAltHesap) async {
     var result = await Ctanim.db?.update(
         "TBLCARIALTHESAPSB", cariAltHesap.toJson(),
-        where: 'KOD = ?', whereArgs: [cariAltHesap.KOD]);
+        where: 'ALTHESAPID = ?', whereArgs: [cariAltHesap.ALTHESAPID]);
     return result;
   }
 
@@ -484,7 +496,8 @@ class VeriIslemleri {
       print("Hata: $e");
     }
   }
-    Future<List<StokKosulModel>?> stokKosulGetir() async {
+
+  Future<List<StokKosulModel>?> stokKosulGetir() async {
     //   var result = await Ctanim.db?.query("TBLCARISB");
     List<Map<String, dynamic>> maps = await Ctanim.db?.query("TBLSTOKKOSULSB");
     listeler.listStokKosul =
@@ -535,11 +548,13 @@ class VeriIslemleri {
       print("Hata: $e");
     }
   }
-    Future<void> deleteAllImages() async {
+
+  Future<void> deleteAllImages() async {
     final db = await Ctanim?.db;
     await db?.execute('DELETE FROM images');
   }
-    Future<int> insertImage(String imagePath) async {
+
+  Future<int> insertImage(String imagePath) async {
     await deleteAllImages();
     return await Ctanim?.db.insert(
       'images',
@@ -558,28 +573,18 @@ class VeriIslemleri {
   }
 
   Future<int> veriGetir() async {
-    await cariAltHesapGetir();
-
-    //  await fisEkParamGetir();
-    // await ondalikGetir();
-    //   await islemTipiGetir();
-    //   await plasiyerBankaGetir();
-//    await plasiyerBankaSozlesmeGetir();
+    await cariGetir();
+    await stokGetir();
     await stokFiyatListesiGetir();
     await stokFiyatListesiHarGetir();
-    //   await rafGetir();
     await olcuBirimGetir();
     await kurGetir();
-//    await cariKosulGetir();
-   await stokKosulGetir();
-    //   await cariStokKosulGetir();
+    await stokKosulGetir();
     await dahaFazlaBarkodGetir();
-    await stokGetir();
-
-    await cariGetir();
-    // List<SubeDepoModel>? temp3 = await subeDepoGetir();
-    if (listeler.listStok.length > 0 ||
-        listeler.listCari.length > 0 /* || temp3!.length > 0*/) {
+    await cariAltHesapGetir();
+    
+    if (listeler.listCari.length > 0 ||
+        listeler.listStok.length > 0 /* || temp3!.length > 0*/) {
       return 1;
     } else {
       return 0;

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:opak_fuar/model/cariModel.dart';
 
 import '../db/veriTabaniIslemleri.dart';
 import '../model/fis.dart';
@@ -202,7 +203,7 @@ class FisController extends GetxController {
       element.fisStokListesi = fisHar;
 
       element.cariKart =
-          cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
+          cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD,orElse: () => element.cariKart = Cari(ADI: "CARİ GÖNDERİLMEDEN SİLİNMİŞ"),);
     }
     list_tum_fis.addAll(tt);
   }

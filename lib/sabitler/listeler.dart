@@ -99,6 +99,8 @@ class listeler {
   static List<Cari> listCari = [];
   static List<OlcuBirimModel> listOlcuBirim = [];
   static List<CariAltHesap> listCariAltHesap = [];
+  static List<Cari> aktarilmayanCariler = [];
+  static List<CariAltHesap> aktarilmayanAlthesaplar = [];
   static List<KullaniciYetki> yetki = [];
   static List<bool> plasiyerYetkileri = [
     false,

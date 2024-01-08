@@ -111,16 +111,10 @@ class _LoginPageState extends State<LoginPage> {
 
         if (_passwordController.text == Ctanim.kullanici?.SIFRE &&
             _userNameController.text == Ctanim.kullanici!.KOD) {
-
-           int cariKod = await SharedPrefsHelper.cariKoduGetir();  
-           if(cariKod != -1){
+          int cariKod = await SharedPrefsHelper.cariKoduGetir();
+          if (cariKod != -1) {
             Ctanim.cariKod = cariKod;
-           }
-            
-
-           
-
-          
+          }
           int value1 = await SharedPrefsHelper.siparisNumarasiGetir();
           if (value1 != -1) {
             Ctanim.siparisNumarasi = value1;
@@ -148,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
           if (Ctanim.kullanici!.SFIYAT5 == "E") {
             Ctanim.satisFiyatListesi.add("Fiyat5");
           }
-          if(Ctanim.kullanici!.LISTEFIYAT == "E"){
+          if (Ctanim.kullanici!.LISTEFIYAT == "E") {
             Ctanim.satisFiyatListesi.add("ListeFiyat");
           }
 
@@ -158,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
           if (Ctanim.kullanici!.GISK2 == "E") {
             Ctanim.genelIskontoListesi.add("GISK2");
           }
-           showDialog(
+          showDialog(
             context: context,
             barrierDismissible: false,
             builder: (BuildContext context) {
@@ -169,11 +163,8 @@ class _LoginPageState extends State<LoginPage> {
               );
             },
           );
-         
-          await SharedPrefsHelper.yetkiCek("yetkiler");
-     
 
-      
+          await SharedPrefsHelper.yetkiCek("yetkiler");
 
           veriislemi.veriGetir().then((value) async {
             if (value == 0) {
@@ -206,28 +197,12 @@ class _LoginPageState extends State<LoginPage> {
               } else {
                 String genelHata = "";
                 List<String?> hatalar = [];
-                //      hatalar.add(await bs.getirFisEkParam(sirket: Ctanim.sirket!));
-                /*    hatalar.add(await bs.getirOndalikParam(
-                    subeId: int.parse(Ctanim.kullanici!.YERELSUBEID!),
-                    sirket: Ctanim.sirket!));*/
-                //hatalar.add(await bs.getirPlasiyerYetki(sirket: Ctanim.sirket!, kullaniciKodu:  Ctanim.kullanici!.KOD!,IP: Ctanim.IP));
-                /*  hatalar.add(await bs.getirPlasiyerBanka(
-                    sirket: Ctanim.sirket!,
-                    kullaniciKodu: Ctanim.kullanici!.KOD!));*/
-                /* hatalar.add(await bs.getirPlasiyerBankaSozlesme(
-                    sirket: Ctanim.sirket!,
-                    kullaniciKodu: Ctanim.kullanici!.KOD!));*/
-                /*hatalar.add(await bs.getirIslemTip(
-                    sirket: Ctanim.sirket!,
-                    kullaniciKodu: Ctanim.kullanici!.KOD!));*/
-                //  hatalar.add(await bs.getirRaf(sirket: Ctanim.sirket!));
-               hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
+
+                // burdan sonra
+                hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
                 hatalar.add(await stokKartEx.servisStokGetir());
                 hatalar.add(await cariEx.servisCariGetir());
-                //  hatalar.add(await bs.getirSubeDepo(sirket: Ctanim.sirket!));
-                 hatalar.add(await bs.getirStokKosul(sirket: Ctanim.sirket!));
-                //   hatalar.add(await bs.getirCariKosul(sirket: Ctanim.sirket!));
-                //   hatalar.add(await bs.getirCariStokKosul(sirket: Ctanim.sirket!));
+                hatalar.add(await bs.getirStokKosul(sirket: Ctanim.sirket!));
                 hatalar.add(await bs.getirKur(sirket: Ctanim.sirket!));
                 hatalar.add(
                     await bs.getirStokFiyatListesi(sirket: Ctanim.sirket!));
@@ -236,9 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                 hatalar.add(await bs.getirDahaFazlaBarkod(
                     sirket: Ctanim.sirket!,
                     kullaniciKodu: Ctanim.kullanici!.KOD!));
-                /*  hatalar.add(await bs.getirStokDepo(
-                    sirket: Ctanim.sirket!,
-                    plasiyerKod: Ctanim.kullanici!.KOD!));*/
+                    
                 if (hatalar.length > 0) {
                   for (var element in hatalar) {
                     if (element != "") {
@@ -277,9 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                   } else {
                     hataGoster(
                         mesajVarMi: true,
-                        mesaj:
-                              "Parametre hatası...:\n" +
-                                genelHata);
+                        mesaj: "Parametre hatası...:\n" + genelHata);
                   }
                 } else {
                   Navigator.pushAndRemoveUntil(
@@ -344,27 +315,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       showAlertDialogLogin1(context, "Kullanıcı Tanımı Yapılamış.");
     }
-    /*  if (_userNameController.text == "" || _passwordController.text == "") {
-      hataGoster(mesajVarMi: false);
-      return;
-    } else {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return LoadingSpinner(
-            color: Colors.black,
-            message: "Tüm Veriler Güncelleniyor. Lütfen Bekleyiniz...",
-          );
-        },
-      );
 
-      await bs.tumVerileriGuncelle();
-      await bs.getirCariAltHesap(sirket: Ctanim.sirket);
-      Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => HomePage()), (r) => false);
-    }*/
   }
 
   Future<void> _getSavedPassword() async {
@@ -572,35 +523,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      /*
-                                      SizedBox(
-                                        width: ekranGenisligi * .5,
-                                        child: CheckboxListTile(
-                                          activeColor:
-                                              Color.fromRGBO(81, 82, 83, 1),
-
-                                          title: const Text(
-                                              "Dışarıda Kullanılacak",
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                              )),
-                                          //style: TextStyle(
-                                          // color: Colors.white,)
-                                          side: BorderSide(color: Colors.black),
-                                          value: dis_kullanim,
-                                          controlAffinity:
-                                              ListTileControlAffinity.leading,
-                                          onChanged: (bool? veri) {
-                                            print(
-                                                "Dışarıdan kullanılabilir : $veri");
-                                            setState(() {
-                                              dis_kullanim = veri!;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      */
+                                      
                                       SizedBox(
                                         width: ekranGenisligi * .5,
                                         child: CheckboxListTile(

@@ -26,6 +26,7 @@ class Cari {
   double? BAKIYE = 0.0;
   String? AKTARILDIMI = "H";
   String? ACIKLAMA4 = "";
+  String? ALTHESAPLAR = "";
   List<CariAltHesap> cariAltHesaplar = [];
 
   Cari(
@@ -53,6 +54,7 @@ class Cari {
       this.ACIKLAMA1,
       this.AKTARILDIMI,
       this.ACIKLAMA4,
+      this.ALTHESAPLAR,
       this.BAKIYE});
 
   Cari.empty()
@@ -82,6 +84,7 @@ class Cari {
           BAKIYE: 0.0,
           AKTARILDIMI: "H",
           ACIKLAMA4: "",
+          ALTHESAPLAR: "",
 
 
         );
@@ -112,6 +115,7 @@ class Cari {
     AKTARILDIMI = json['AKTARILDIMI'];
     BAKIYE = double.parse(json['BAKIYE'].toString());
     ACIKLAMA4 = json['ACIKLAMA4'];
+    ALTHESAPLAR = json['ALTHESAPLAR'];
   }
 
   Map<String, dynamic> toJson() {
@@ -140,6 +144,7 @@ class Cari {
     data['BAKIYE'] = BAKIYE;
     data['AKTARILDIMI'] = AKTARILDIMI;
     data['ACIKLAMA4'] = ACIKLAMA4;
+    data['ALTHESAPLAR'] = ALTHESAPLAR;
     return data;
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/model/KurModel.dart';
+import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
@@ -53,7 +54,6 @@ class fisHareketDuzenle extends StatefulWidget {
 }
 
 class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -91,7 +91,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
         ? widget.isk6.toString()
         : widget.gelenStokKart.guncelDegerler!.iskonto6!.toString();
 
-    malFazlasiController.text = "0";
+    malFazlasiController.text = widget.gelenStokKart.SACIKLAMA10!.toString();
     print("Miktar ${miktarController.text}");
   }
 
@@ -186,11 +186,18 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     }
   }
 
-  void showSnackBar(BuildContext context, double miktar) {
+  void showSnackBar(BuildContext context, {double miktar=0}) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+     miktar >= 1 ? SnackBar(
         content: Text(
           "Stok eklendi " + miktar.toString() + " adet ürün sepete eklendi ! ",
+          style: TextStyle(fontSize: 16, color: Colors.white),
+        ),
+        duration: Duration(milliseconds: 700),
+        backgroundColor: Colors.blue,
+      ):SnackBar(
+        content: Text(
+          "Stok sepetten kaldırıldı.",
           style: TextStyle(fontSize: 16, color: Colors.white),
         ),
         duration: Duration(milliseconds: 700),
@@ -203,19 +210,18 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
   bool detay = false;
   @override
   Widget build(BuildContext context) {
-    
-    if (i == 0 &&  Ctanim.urunAraFocus == false) {
+    if (i == 0 && Ctanim.urunAraFocus == false) {
       print("ŞLKLKFDLKFSŞLKFKŞLSDKLKFLKDŞF");
       /*
       FocusScope.of(context).requestFocus(focusNode1);
       */
       miktarController.selection = TextSelection(
           baseOffset: 0, extentOffset: miktarController.value.text.length);
-          
+
       i++;
     }
     return AlertDialog(
-     insetPadding: EdgeInsets.all(10),
+      insetPadding: EdgeInsets.all(10),
       title: SizedBox(
         width: MediaQuery.of(context).size.width * .8,
         child: Column(
@@ -226,7 +232,10 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 SizedBox(
                     width: MediaQuery.of(context).size.width * .5,
                     child: Text(
-                      widget.gelenStokKart.ADI!+ " - %" + widget.gelenStokKart.SATIS_KDV!.toStringAsFixed(0)+" KDV",
+                      widget.gelenStokKart.ADI! +
+                          " - %" +
+                          widget.gelenStokKart.SATIS_KDV!.toStringAsFixed(0) +
+                          " KDV",
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 15),
@@ -255,11 +264,11 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                       children: [
                         widget.gelenStokKart.OLCUBIRIM2 != ""
                             ? SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.23,
-                              child: Row(
+                                width: MediaQuery.of(context).size.width * 0.23,
+                                child: Row(
                                   children: [
                                     Text(
-                                       widget.gelenStokKart.OLCUBIRIM2! + " :",
+                                      widget.gelenStokKart.OLCUBIRIM2! + " :",
                                       style: TextStyle(
                                           fontSize: 11, color: Colors.orange),
                                     ),
@@ -272,14 +281,17 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                     )
                                   ],
                                 ),
-                            )
+                              )
                             : Container(),
                         widget.gelenStokKart.OLCUBIRIM3 != ""
                             ? Padding(
-                              padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
-                              child: SizedBox(
-                               width: MediaQuery.of(context).size.width * 0.23,
-                                child: Row(
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05),
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.23,
+                                  child: Row(
                                     children: [
                                       Text(
                                         widget.gelenStokKart.OLCUBIRIM3! + " :",
@@ -295,85 +307,88 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                       )
                                     ],
                                   ),
-                              ),
-                            )
+                                ),
+                              )
                             : Container(),
-    
                       ],
                     ),
                     Row(
                       children: [
-                          widget.gelenStokKart.OLCUBIRIM4 != ""
-                          ? SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.23,
-                            child: Row(
-                                children: [
-                                  Text(
-                                    widget.gelenStokKart.OLCUBIRIM4! + " :",
-                                    style: TextStyle(
-                                        fontSize: 11, color: Colors.orange),
+                        widget.gelenStokKart.OLCUBIRIM4 != ""
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.23,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.gelenStokKart.OLCUBIRIM4! + " :",
+                                      style: TextStyle(
+                                          fontSize: 11, color: Colors.orange),
+                                    ),
+                                    Text(
+                                      widget.gelenStokKart
+                                          .BIRIMADET3!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                        widget.gelenStokKart.OLCUBIRIM5 != ""
+                            ? Padding(
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05),
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.23,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        widget.gelenStokKart.OLCUBIRIM5! + " :",
+                                        style: TextStyle(
+                                            fontSize: 11, color: Colors.orange),
+                                      ),
+                                      Text(
+                                        widget.gelenStokKart
+                                            .BIRIMADET4!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Text(
-                                    widget.gelenStokKart
-                                        .BIRIMADET3!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                  )
-                                ],
-                              ),
-                          )
-                          : Container(),
-                      widget.gelenStokKart.OLCUBIRIM5 != ""
-                          ? Padding(
-          
-                           padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
-
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.23,
-                              child: Row(
-                                  children: [
-                                    Text(
-                                      widget.gelenStokKart.OLCUBIRIM5! + " :",
-                                      style: TextStyle(
-                                          fontSize: 11, color: Colors.orange),
-                                    ),
-                                    Text(
-                                      widget.gelenStokKart
-                                          .BIRIMADET4!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                    )
-                                  ],
                                 ),
-                            ),
-                          )
-                          : Container(),
-                      widget.gelenStokKart.OLCUBIRIM6 != ""
-                          ? Padding(
-                              padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.04),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.23,
-                              child: Row(
-                                  children: [
-                                    Text(
-                                      widget.gelenStokKart.OLCUBIRIM6! + " :",
-                                      style: TextStyle(
-                                          fontSize: 11, color: Colors.orange),
-                                    ),
-                                    Text(
-                                      widget.gelenStokKart
-                                          .BIRIMADET5!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                      style: TextStyle(
-                                        fontSize: 12,
+                              )
+                            : Container(),
+                        widget.gelenStokKart.OLCUBIRIM6 != ""
+                            ? Padding(
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.04),
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.23,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        widget.gelenStokKart.OLCUBIRIM6! + " :",
+                                        style: TextStyle(
+                                            fontSize: 11, color: Colors.orange),
                                       ),
-                                    )
-                                  ],
+                                      Text(
+                                        widget.gelenStokKart
+                                            .BIRIMADET5!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                            ),
-                          )
-                          : Container(),
+                              )
+                            : Container(),
                       ],
                     )
                   ],
@@ -382,8 +397,14 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
             ),
             Row(
               children: [
-                Text("Bakiye: ",style: TextStyle(fontSize: 14,color: Colors.orange),),
-                Text( widget.gelenStokKart.BAKIYE!.toStringAsFixed(0),style: TextStyle(fontSize: 14),)
+                Text(
+                  "Bakiye: ",
+                  style: TextStyle(fontSize: 14, color: Colors.orange),
+                ),
+                Text(
+                  widget.gelenStokKart.BAKIYE!.toStringAsFixed(0),
+                  style: TextStyle(fontSize: 14),
+                )
               ],
             ),
           ],
@@ -409,7 +430,6 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 },
                 child: Text("Uygula"),
               ),
-           
 
               Text(
                 "Miktar",
@@ -421,7 +441,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                       style: TextStyle(fontSize: 11),
                     )
                   : Container(),
-           
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -430,12 +450,15 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                         borderRadius: BorderRadius.circular(25)),
                     child: IconButton(
                         onPressed: () {
-                          if ((int.parse(miktarController.text))- (widget.gelenStokKart.guncelDegerler!
-                                            .carpan!).toInt() > 0) {
+                          if ((int.parse(miktarController.text)) -
+                                  (widget.gelenStokKart.guncelDegerler!.carpan!)
+                                      .toInt() >
+                              0) {
                             miktarController.text =
                                 (int.parse(miktarController.text) -
                                         (widget.gelenStokKart.guncelDegerler!
-                                            .carpan!).toInt())
+                                                .carpan!)
+                                            .toInt())
                                     .toString();
                           }
                         },
@@ -492,7 +515,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                         onPressed: () {
                           miktarController
                               .text = (int.parse(miktarController.text) +
-                              (widget.gelenStokKart.guncelDegerler!.carpan!).toInt())
+                                  (widget.gelenStokKart.guncelDegerler!.carpan!)
+                                      .toInt())
                               .toString();
                         },
                         icon: Icon(
@@ -503,7 +527,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                   ),
                 ],
               ),
-            
+
               Divider(
                 endIndent: 20,
                 indent: 20,
@@ -511,7 +535,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 color: Colors.black45,
               ),
               // !
-            
+
               Text(
                 "Fiyat",
                 style: TextStyle(fontSize: 22),
@@ -592,6 +616,72 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                             scrollDirection: Axis.horizontal,
                             child: Column(
                               children: [
+
+                                 Ctanim.kullanici!.MALFAZLASI == "E"
+                                    ? Text(
+                                        "Mal Fazlası",
+                                        style: TextStyle(
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04),
+                                      )
+                                    : Container(),
+                                Ctanim.kullanici!.MALFAZLASI == "E"
+                                    ? SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.01,
+                                      )
+                                    : Container(),
+                                Ctanim.kullanici!.MALFAZLASI == "E"
+                                    ? Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.07,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border:
+                                              Border.all(color: Colors.grey),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Material(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: TextFormField(
+                                                enabled: false,
+                                                controller:
+                                                    malFazlasiController,
+                                                decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText: "1",
+                                                  hintStyle: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.grey),
+                                                ),
+                                              )),
+                                        ),
+                                      )
+                                    : Container(),
+
+
+
+
+
+
+
+
+
+
+
+
                                 Text(
                                   "İskonto",
                                   style: TextStyle(
@@ -1004,6 +1094,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                                     BorderRadius.circular(10),
                                               ),
                                               child: TextFormField(
+                                                enabled: false,
                                                 controller:
                                                     malFazlasiController,
                                                 decoration: InputDecoration(
@@ -1062,65 +1153,117 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
       int miktar = int.parse(parcali[0]) * int.parse(parcali[1]);
       miktarController.text = miktar.toString();
     }
+    if (double.parse(miktarController.text) == 0) {
+      //sil
+      Ctanim.urunAraFocus = true;
+      if (fisEx.fis!.value.fisStokListesi.any((item1) =>
+          item1.STOKKOD == widget.gelenStokKart.guncelDegerler!.guncelBarkod &&
+          item1.ALTHESAP == widget.altHesap)) {
+        /*
+             fisEx.fis?.value.altHesapToplamlar
+                                    .removeWhere((item) {
+                                  String a = "";
+                                  for (var element in item.STOKKODLIST!) {
+                                    if (element == stokModel.STOKKOD) {
+                                      a = element;
+                                    }
+                                  }
 
-    if (double.parse(miktarController.text) %
-            widget.gelenStokKart.guncelDegerler!.carpan! !=
-        0) {
-      // HATA GOSTER
-      Ctanim.urunAraFocus = false;
-      await showDialog(
-          context: context,
-          builder: (context) {
-            return CustomAlertDialog(
-              align: TextAlign.left,
-              title: 'Hata',
-              message: 'Eklemeye çalıştığınız miktar  ' +
-                  widget.gelenStokKart.guncelDegerler!.carpan!.toString() +
-                  " katı olmalıdır.",
-              onPres: () async {
-                Navigator.pop(context);
-                 Ctanim.urunAraFocus = false;
-              },
-              buttonText: 'Tamam',
-            );
-          });
-           Ctanim.urunAraFocus = false;
+                                  return a == stokModel.STOKKOD!;
+                                });
+                                */
+        fisEx.fis?.value.fisStokListesi.removeWhere((item) =>
+            item.STOKKOD == widget.gelenStokKart.guncelDegerler!.guncelBarkod &&
+            item.ALTHESAP == widget.altHesap);
 
-      return;
-    }
+        await Fis.empty().fisHareketSil(
+            fisEx.fis!.value.ID!,
+            widget.gelenStokKart.guncelDegerler!.guncelBarkod!,
+            widget.altHesap);
+        setState(() {});
+        Ctanim.genelToplamHesapla(fisEx);
 
-    KurModel gidecekKur = listeler.listKur.first;
-    if (Ctanim.kullanici!.LISTEFIYAT! == "E") {
-      for (var element in listeler.listKur) {
-        if (widget.gelenStokKart.LISTEDOVIZ == element.ACIKLAMA) {
-          gidecekKur = element;
-        }
+        Navigator.pop(context);
+        showSnackBar(context);
+      }else{
+        await showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                align: TextAlign.left,
+                title: 'Uyarı',
+                message: 'Silinmek istenen ürün sepette mevcut değil.',
+                onPres: () async {
+                  Navigator.pop(context);
+                  Ctanim.urunAraFocus = false;
+                },
+                buttonText: 'Tamam',
+              );
+            });
+
       }
     } else {
-      for (var element in listeler.listKur) {
-        if (widget.gelenStokKart.SATDOVIZ == element.ACIKLAMA) {
-          gidecekKur = element;
+      if (double.parse(miktarController.text) %
+              widget.gelenStokKart.guncelDegerler!.carpan! !=
+          0) {
+        // HATA GOSTER
+        Ctanim.urunAraFocus = false;
+        await showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                align: TextAlign.left,
+                title: 'Hata',
+                message: 'Eklemeye çalıştığınız miktar  ' +
+                    widget.gelenStokKart.guncelDegerler!.carpan!.toString() +
+                    " katı olmalıdır.",
+                onPres: () async {
+                  Navigator.pop(context);
+                  Ctanim.urunAraFocus = false;
+                },
+                buttonText: 'Tamam',
+              );
+            });
+        Ctanim.urunAraFocus = false;
+
+        return;
+      }
+
+      KurModel gidecekKur = listeler.listKur.first;
+      if (Ctanim.kullanici!.LISTEFIYAT! == "E") {
+        for (var element in listeler.listKur) {
+          if (widget.gelenStokKart.LISTEDOVIZ == element.ACIKLAMA) {
+            gidecekKur = element;
+          }
+        }
+      } else {
+        for (var element in listeler.listKur) {
+          if (widget.gelenStokKart.SATDOVIZ == element.ACIKLAMA) {
+            gidecekKur = element;
+          }
         }
       }
+
+      double miktar = double.parse(miktarController.text);
+      print("turan" + miktar.toString());
+      sepeteEkle(widget.gelenStokKart, gidecekKur, miktar,
+          iskonto1: double.parse(
+                  isk1Controller.text == "" ? "0" : isk1Controller.text) ??
+              0,
+          iskonto2: double.parse(
+                  isk2Controller.text == "" ? "0" : isk2Controller.text) ??
+              0,
+          iskonto3: double.tryParse(isk3Controller.text) ?? 0,
+          iskonto4: double.tryParse(isk4Controller.text) ?? 0,
+          iskonto5: double.tryParse(isk5Controller.text) ?? 0,
+          iskonto6: double.tryParse(isk6Controller.text) ?? 0,
+          malFazlasi:
+              (double.tryParse(malFazlasiController.text)!).toInt() ?? 0,
+          //
+          fiyat: double.tryParse(fiyatController.text) ?? 0);
+
+      Navigator.pop(context);
+      showSnackBar(context, miktar: miktar);
     }
-
-    double miktar = double.parse(miktarController.text);
-    print("turan" + miktar.toString());
-    sepeteEkle(widget.gelenStokKart, gidecekKur, miktar,
-        iskonto1: double.parse(
-                isk1Controller.text == "" ? "0" : isk1Controller.text) ??
-            0,
-        iskonto2: double.parse(
-                isk2Controller.text == "" ? "0" : isk2Controller.text) ??
-            0,
-        iskonto3: double.parse(isk3Controller.text) ?? 0,
-        iskonto4: double.parse(isk4Controller.text) ?? 0,
-        iskonto5: double.parse(isk5Controller.text) ?? 0,
-        iskonto6: double.parse(isk6Controller.text) ?? 0,
-        malFazlasi: int.parse(malFazlasiController.text) ?? 0,
-        fiyat: double.parse(fiyatController.text));
-
-    Navigator.pop(context);
-    showSnackBar(context, miktar);
   }
 }

@@ -91,6 +91,7 @@ class Ctanim {
       if(!altHesapToplamList.any((alt) => alt.ALTHESAPADI == element.ALTHESAP)){
         AltHesapToplamModel alt = AltHesapToplamModel.empty();
         alt.ALTHESAPADI = element.ALTHESAP;
+        
         //alt.FISID = fisEx.fis!.value.ID;
         alt.TOPLAM = 0;
         altHesapToplamList.add(alt);
@@ -189,7 +190,7 @@ class Ctanim {
         double.tryParse((fisEx.fis!.value.ISK1.toString())) ?? 0;
     double? controllerDeger2 =
         double.tryParse(fisEx.fis!.value.ISK2.toString()) ?? 0;
-    double nettoplam = (urunToplami - kalemindirimToplami);
+    double nettoplam = (genelUrunToplami - genelKalemIndirimToplami);
 
     double altIndirimToplami =
         double.parse(((nettoplam * controllerDeger / 100)).toStringAsFixed(2));

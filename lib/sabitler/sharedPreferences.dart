@@ -72,6 +72,15 @@ class SharedPrefsHelper {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('lisansNo', lisans);
   }
+    static Future<String> lisansNumarasiGetir() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedNumber = prefs.getString('lisansNo');
+    if (storedNumber != null) {
+      return storedNumber;
+    } else {
+      return "";
+    }
+  }
 
   static Future<void> saveList(List<bool> list) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
@@ -45,8 +46,27 @@ var uuid = Uuid();
             ),
             child: ElevatedButton.icon(
               onPressed: () async {
+                                    CariAltHesap? vs;
+                                    widget.cari.cariAltHesaplar.clear();
+                                    List<String> altListe = widget.cari.ALTHESAPLAR!.split(",");
+                                    for(var elemnt in listeler.listCariAltHesap){
+                                      if(altListe.contains(elemnt.ALTHESAPID.toString())){
+                                       widget.cari.cariAltHesaplar.add(elemnt);
+                                      }
+                                       if(elemnt.ZORUNLU == "E" && elemnt.VARSAYILAN == "E"){
+                                          vs = elemnt;
+                                        }
 
-                  Fis fis = Fis.empty();
+                                    }
+                                    if(widget.cari.cariAltHesaplar.isEmpty){
+                                      for(var elemnt in listeler.listCariAltHesap){
+                                        if(elemnt.ZORUNLU == "E" && elemnt.VARSAYILAN == "E"){
+                                          widget.cari.cariAltHesaplar.add(elemnt);
+                                        }
+                                      }
+                                    }
+
+                                    Fis fis = Fis.empty();
                                     fisEx.fis!.value = fis;
                                     fisEx.fis!.value.cariKart = widget.cari;
                                     fisEx.fis!.value.CARIKOD = widget.cari.KOD;
@@ -78,6 +98,7 @@ var uuid = Uuid();
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 SiparisUrunAra(
+                                                  varsayilan: vs!=null?vs:widget.cari.cariAltHesaplar.first,
                                                   cari: widget.cari,
                                                 )));
               },

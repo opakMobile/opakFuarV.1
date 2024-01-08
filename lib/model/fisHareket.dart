@@ -70,6 +70,46 @@ class FisHareket {
     required this.UUID,
     required this.MALFAZLASI
   });
+  
+ 
+FisHareket.fromFishareket(FisHareket fisHareket){
+  this.ID = fisHareket.ID;
+  this.ALTHESAP = fisHareket.ALTHESAP;
+  this.FIS_ID = fisHareket.FIS_ID;
+  this.STOKKOD = fisHareket.STOKKOD;
+  this.STOKADI = fisHareket.STOKADI;
+  this.KDVORANI = fisHareket.KDVORANI;
+  this.MIKTAR = fisHareket.MIKTAR;
+  this.BRUTFIYAT = fisHareket.BRUTFIYAT;
+  this.ISKONTO = fisHareket.ISKONTO;
+  this.ISK = fisHareket.ISK;
+  this.ISK2 = fisHareket.ISK2;
+  this.ISK3 = fisHareket.ISK3;
+  this.ISK4 = fisHareket.ISK4;
+  this.ISK5 = fisHareket.ISK5;
+  this.ISK6 = fisHareket.ISK6;
+  this.NETFIYAT = fisHareket.NETFIYAT;
+  this.KDVDAHILNETFIYAT = fisHareket.KDVDAHILNETFIYAT;
+  this.BRUTTOPLAMFIYAT = fisHareket.BRUTTOPLAMFIYAT;
+  this.NETTOPLAM = fisHareket.NETTOPLAM;
+  this.KDVDAHILNETTOPLAM = fisHareket.KDVDAHILNETTOPLAM;
+  this.KDVTOPLAM = fisHareket.KDVTOPLAM;
+  this.ISKONTOTOPLAM = fisHareket.ISKONTOTOPLAM;
+  this.BIRIM = fisHareket.BIRIM;
+  this.BIRIMID = fisHareket.BIRIMID;
+  this.KDVTUTAR = fisHareket.KDVTUTAR;
+  this.DOVIZID = fisHareket.DOVIZID;
+  this.DOVIZADI = fisHareket.DOVIZADI;
+  this.TARIH = fisHareket.TARIH;
+  this.KUR = fisHareket.KUR;
+  this.ACIKLAMA1 = fisHareket.ACIKLAMA1;
+  this.UUID = fisHareket.UUID;
+  this.MALFAZLASI = fisHareket.MALFAZLASI;
+
+    
+
+}
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();

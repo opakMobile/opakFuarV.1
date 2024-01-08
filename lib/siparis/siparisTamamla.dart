@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/fis.dart';
@@ -30,6 +31,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
     if(fisEx.fis!.value.ISK1 != 0.0){
       genelIskonto1Controller.text = (fisEx.fis!.value.ISK1!.toInt()).toString();
     }
+    aciklamaController.text = fisEx.fis!.value.ACIKLAMA1!;
   }
   Color getRandomColor() {
     List<Color> colors = [
@@ -163,6 +165,10 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             return CustomAlertDialog(
                               secondButtonText: "Tamam",
                               onSecondPress: () async {
+                                 await Fis.empty().fisEkle(
+                                    fis: fisEx.fis!.value, belgeTipi: "YOK");
+                                fisEx.fis!.value = Fis.empty();
+
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
@@ -376,7 +382,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
                 Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E" ?  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.12,
+                   
                     child: Card(
                       elevation: 5,
                       shape: RoundedRectangleBorder(
@@ -387,6 +393,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                           fontSize: 14.0,
                         ),
                         controller: genelIskonto1Controller,
+                        keyboardType: TextInputType.number,
                         onChanged: (value) {
                           setState(() {
                               if (value == "") {
@@ -405,13 +412,19 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             });
                          
                         },
-                        maxLines: 8,
+                        maxLines:1,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d{0,2}')),
+                                FilteringTextInputFormatter.digitsOnly
+                          ],
                         decoration: InputDecoration(
                           /* contentPadding: EdgeInsets.symmetric(
                               vertical: MediaQuery.of(context).size.height * 0.05,
                             ),*/
 
                           hintText: 'Genel İskonto (ör:50)',
+                        
                           hintStyle: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w400,

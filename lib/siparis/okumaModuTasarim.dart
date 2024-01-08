@@ -141,6 +141,13 @@ class _okumaModuListState extends State<okumaModuList> {
                                       gelenMiktar: gelenMiktar,
                                       fiyat: stokModel.BRUTFIYAT!,
                                       isk1: stokModel.ISK!,
+                                      isk2: stokModel.ISK2!,
+                                      isk3: stokModel.ISK3!,
+                                      isk4: stokModel.ISK4!,
+                                      isk5: stokModel.ISK5!,
+                                      isk6: stokModel.ISK6!,
+                                      
+
                                     );
                                   }).then((value) {
                                 FocusScope.of(context)

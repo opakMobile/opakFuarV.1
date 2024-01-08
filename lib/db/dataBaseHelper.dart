@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 10; // atarken 10 yap
+  static final _databaseVersion = 11; // atarken 10 yap
 
   static Database? _database;
 
@@ -47,24 +47,16 @@ class DatabaseHelper {
     print(oldVersion);
     print(newVersion);
     for (int i = oldVersion; i <= newVersion; i++) {
-      if (i == 10){
-       
-         db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN OLCUBIRIM4 TEXT;");
-          db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN OLCUBIRIM5 TEXT;");
-           db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN OLCUBIRIM6 TEXT;");
-           db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN BIRIMADET3 TEXT;");
-           db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN BIRIMADET4 TEXT;");
-           db.execute("ALTER TABLE TBLSTOKSB ADD COLUMN BIRIMADET5 TEXT;");
-        
-      } 
+ 
+      if (i == 11) {
+ 
+      }
+      if (i == 10) {
    
-
-
-
+      }
     }
     if (oldVersion < newVersion) {
       //   db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN  INTEGER;");
-  
     }
   }
 
@@ -94,11 +86,9 @@ class DatabaseHelper {
       OLCUBIRIM2 TEXT ,
       BIRIMADET1 TEXT ,
       OLCUBIRIM3 TEXT ,
-
       OLCUBIRIM4 TEXT ,
       OLCUBIRIM5 TEXT ,
       OLCUBIRIM6 TEXT ,
-
       BIRIMADET2 TEXT ,
       BIRIMADET3 TEXT ,
       BIRIMADET4 TEXT ,
@@ -236,8 +226,8 @@ class DatabaseHelper {
       ACIKLAMA1 TEXT ,
       BAKIYE DECIMAL,
       AKTARILDIMI TEXT ,
-      ACIKLAMA4 TEXT
-     
+      ACIKLAMA4 TEXT,
+      ALTHESAPLAR TEXT
       )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {
@@ -341,7 +331,6 @@ class DatabaseHelper {
     try {
       String Sorgu = """
     CREATE TABLE TBLCARIALTHESAPSB (
-      KOD TEXT ,
       ALTHESAP TEXT,
       DOVIZID INTEGER,
       VARSAYILAN TEXT,
@@ -550,7 +539,7 @@ class DatabaseHelper {
     } on PlatformException catch (e) {
       print(e);
     }
-       try {
+    try {
       String Sorgu = """
     CREATE TABLE images (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -9,6 +9,7 @@ import 'package:opak_fuar/model/KurModel.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/fisHareketDuzenle.dart';
@@ -23,9 +24,10 @@ import '../sabitler/Ctanim.dart';
 FisController fisEx = Get.find();
 
 class SiparisUrunAra extends StatefulWidget {
-  SiparisUrunAra({required this.cari});
+  SiparisUrunAra({required this.cari,required this.varsayilan});
 
   late Cari cari;
+  late CariAltHesap varsayilan;
 
   @override
   State<SiparisUrunAra> createState() => _SiparisUrunAraState();
@@ -34,38 +36,14 @@ class SiparisUrunAra extends StatefulWidget {
 class _SiparisUrunAraState extends State<SiparisUrunAra> {
   @override
   void initState() {
-    // TODO: implement initState
+ 
     super.initState();
+    //doğrudan cari alt hesapları verecez
 
-    for (var element in listeler.listCariAltHesap) {
-      if (element.KOD == fisEx.fis!.value.cariKart.KOD) {
-        altHesaplar.add(element);
-        if(element.VARSAYILAN == "E"){
-          seciliAltHesap = element;
-        }
-      }
-      /*
-      if(element.VARSAYILAN == "E"){
-        seciliAltHesap = element;
-      }
-      */
-    }
-    if (altHesaplar.isEmpty) {
-      CariAltHesap ss = CariAltHesap(
-          KOD: "-1",
-          ALTHESAP: "YOK",
-          DOVIZID: -1,
-          VARSAYILAN: "H",
-          ALTHESAPID: -1,
-          ZORUNLU: "H");
-      altHesaplar.add(ss);
-      seciliAltHesap = ss;
-    } else {
-      if(seciliAltHesap == null){
-     seciliAltHesap = altHesaplar.first;
+ seciliAltHesap = widget.cari.cariAltHesaplar.first;  
+    
+   
 
-      }
-    }
 
     for (int i = 0; i < stokKartEx.searchList.length; i++) {
       aramaMiktarController.add(TextEditingController(text: "1"));
@@ -204,7 +182,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   final StokKartController stokKartEx = Get.find();
 
   CariAltHesap? seciliAltHesap;
-  List<CariAltHesap> altHesaplar = [];
+
 
 /*  @override
   void initState() {
@@ -224,8 +202,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   Widget build(BuildContext context) {
     FocusNode focusNode = FocusNode();
 
+
     if (Ctanim.urunAraFocus == true) {
-   
       FocusScope.of(context).requestFocus(focusNode);
       Ctanim.urunAraFocus = false;
     }
@@ -356,14 +334,16 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   extentOffset:
                                       editingController.value.text.length),
                           onFieldSubmitted: ((value) async {
-                            await textAramaYap(value, context);
+                             await textAramaYap(value, context);
                           }),
                           decoration: InputDecoration(
                             suffixIcon: IconButton(
                               icon: Icon(Icons.search),
                               onPressed: () async {
+
                                 await textAramaYap(
                                     editingController.text, context);
+                                    
                               },
                             ),
                             hintText: 'Aranacak Kelime( Kod/ Ad / Barkod)',
@@ -423,7 +403,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                       );
                                     }).then((value) {
                                   setState(() {
-                                   // Ctanim.genelToplamHesapla(fisEx);
+                                    // Ctanim.genelToplamHesapla(fisEx);
                                   });
                                 });
                               }
@@ -481,11 +461,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         child: Padding(
                           padding: EdgeInsets.only(top: 15.0),
                           child: DropdownButtonHideUnderline(
-                            
                             child: DropdownButton<CariAltHesap>(
-                            
                               value: seciliAltHesap,
-                              items: altHesaplar.map((CariAltHesap banka) {
+                              
+                              items: widget.cari.cariAltHesaplar.map((CariAltHesap banka) {
                                 return DropdownMenuItem<CariAltHesap>(
                                   value: banka,
                                   child: Text(
@@ -494,10 +473,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   ),
                                 );
                               }).toList(),
-                             
-
                               onChanged: (CariAltHesap? selected) {
-                                
                                 setState(() {
                                   seciliAltHesap = selected!;
                                   fisEx.fis!.value.ALTHESAP = selected.ALTHESAP;
@@ -660,15 +636,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                         .add(stokKartEx.searchList[i]);
                                   }
                                 }
-                               
-                               setState(() {
-                          
-                               });
-                    
-                           
-                                
-                                  
-                             
+
+                                setState(() {});
                               },
                             ),
                           ),
@@ -685,7 +654,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         ? ekranYuksekligi * .53
                         : ekranYuksekligi * 0.57,
                     child: okumaModu == true
-                        ? okumaModuList(seciliAltHesap: seciliAltHesap!.ALTHESAP!,)
+                        ? okumaModuList(
+                            seciliAltHesap: seciliAltHesap!.ALTHESAP!,
+                          )
                         : SingleChildScrollView(
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
@@ -694,6 +665,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 itemCount: stokKartEx.tempList
                                     .length, // stokKartEx.searchList.length,
                                 itemBuilder: (context, index) {
+                                  FocusNode ff = FocusNode();
                                   StokKart stokModel =
                                       stokKartEx.tempList[index];
                                   //    stokKartEx.searchList[index];
@@ -719,18 +691,44 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    stokModel.ADI! +
-                                                        " " +
-                                                        stokModel.SATDOVIZ!,
+                                                    stokModel.ADI!,
+                                                    style: TextStyle(
+                                                      color: 
+                                                      fisEx.fis!.value.fisStokListesi
+                                                              .any((element) =>
+                                                                  element.STOKKOD ==
+                                                                  stokModel
+                                                                      .guncelDegerler!
+                                                                      .guncelBarkod)
+                                                          
+                                                          
+                                                          ? Colors.red
+                                                          : Colors.black,
+                                                    ),
+                                                       
+                                                      
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
-                                                  Text(stokModel.guncelDegerler!.guncelBarkod! +
+                                                  Text(stokModel.guncelDegerler!
+                                                          .guncelBarkod! +
                                                       "  " +
                                                       "KDV " +
                                                       stokModel.SATIS_KDV
-                                                          .toString()),
+                                                          .toString(),   style: TextStyle(
+                                                      color: 
+                                                      fisEx.fis!.value.fisStokListesi
+                                                              .any((element) =>
+                                                                  element.STOKKOD ==
+                                                                  stokModel
+                                                                      .guncelDegerler!
+                                                                      .guncelBarkod)
+                                                          
+                                                          
+                                                          ? Colors.red
+                                                          : Colors.black,
+                                                    ),),
                                                 ],
                                               ),
                                             ),
@@ -756,6 +754,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       color: Colors.grey),
                                                 ),
                                                 child: TextFormField(
+                                                  focusNode: ff,
                                                   onTap: () =>
                                                       aramaMiktarController[
                                                                   index]
@@ -768,7 +767,6 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                                       .value
                                                                       .text
                                                                       .length),
-                                                  autocorrect: true,
                                                   controller:
                                                       aramaMiktarController[
                                                           index],
@@ -951,7 +949,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                     child: GestureDetector(
                                                   onLongPress: () {
                                                     // ! Miktar Gir ve iskonto mal fazlası fiyat değiştir
-
+                                              
                                                     double gelenMiktar =
                                                         double.parse(
                                                             aramaMiktarController[
@@ -964,9 +962,12 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                         .value
                                                         .fisStokListesi) {
                                                       if (element.STOKKOD ==
-                                                          stokModel
-                                                              .guncelDegerler!
-                                                              .guncelBarkod! && element.ALTHESAP == seciliAltHesap!.ALTHESAP!) {
+                                                              stokModel
+                                                                  .guncelDegerler!
+                                                                  .guncelBarkod! &&
+                                                          element.ALTHESAP ==
+                                                              seciliAltHesap!
+                                                                  .ALTHESAP!) {
                                                         urunDuz = true;
                                                         Fismiktar =
                                                             element.MIKTAR!;
@@ -1009,8 +1010,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       size: 40,
                                                       color: Colors.green,
                                                     ),
+                                                    onPressed: () async {
+                                                      ff.unfocus();
                                                   
-                                                    onPressed: () {
                                                       KurModel gidecekKur =
                                                           listeler
                                                               .listKur.first;
@@ -1022,44 +1024,93 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                           gidecekKur = element;
                                                         }
                                                       }
-                                                      double miktar = stokModel
-                                                                  .guncelDegerler!
-                                                                  .carpan! >
-                                                              1
-                                                          ? stokModel
+                                                      double miktar = 0.0;
+                                                      if (stokModel
                                                               .guncelDegerler!
-                                                              .carpan!
-                                                          : double.parse(
+                                                              .carpan! >=
+                                                          1) {
+                                                        if (double.parse(
+                                                                    aramaMiktarController[
+                                                                            index]
+                                                                        .text) %
+                                                                stokModel
+                                                                    .guncelDegerler!
+                                                                    .carpan! >
+                                                            0) {
+                                                          await showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (context) {
+                                                                return CustomAlertDialog(
+                                                                  align:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  title: 'Hata',
+                                                                  message: 'Eklemeye çalıştığınız miktar  ' +
+                                                                      stokModel
+                                                                          .guncelDegerler!
+                                                                          .carpan!
+                                                                          .toString() +
+                                                                      " katı olmalıdır.",
+                                                                  onPres:
+                                                                      () async {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    
+                                                                  },
+                                                                  buttonText:
+                                                                      'Tamam',
+                                                                );
+                                                              });
+                                                              return;
+                                                        } else {
+                                                          miktar = double.parse(
                                                               aramaMiktarController[
                                                                       index]
                                                                   .text);
+                                                        }
+                                                      } else {
+                                                        miktar = double.parse(
+                                                            aramaMiktarController[
+                                                                    index]
+                                                                .text);
+                                                      }
+
                                                       print("turan" +
                                                           miktar.toString());
-                                                      sepeteEkle(
-                                                        stokModel,
-                                                        gidecekKur,
-                                                        miktar,
-                                                        iskonto1: stokModel
-                                                            .guncelDegerler!
-                                                            .iskonto1!,
-                                                        iskonto2: stokModel
-                                                            .guncelDegerler!
-                                                            .iskonto2!,
-                                                        iskonto3: stokModel
-                                                            .guncelDegerler!
-                                                            .iskonto3!,
-                                                        iskonto4: stokModel
-                                                            .guncelDegerler!
-                                                            .iskonto4!,
-                                                        iskonto5: stokModel
-                                                            .guncelDegerler!
-                                                            .iskonto5!,
-                                                        iskonto6: stokModel
-                                                            .guncelDegerler!
-                                                            .iskonto6!,
-                                                      );
+                                                      sepeteEkle(stokModel, gidecekKur,
+                                                          miktar,
+                                                          iskonto1: stokModel
+                                                              .guncelDegerler!
+                                                              .iskonto1!,
+                                                          iskonto2: stokModel
+                                                              .guncelDegerler!
+                                                              .iskonto2!,
+                                                          iskonto3: stokModel
+                                                              .guncelDegerler!
+                                                              .iskonto3!,
+                                                          iskonto4: stokModel
+                                                              .guncelDegerler!
+                                                              .iskonto4!,
+                                                          iskonto5: stokModel
+                                                              .guncelDegerler!
+                                                              .iskonto5!,
+                                                          iskonto6: stokModel
+                                                              .guncelDegerler!
+                                                              .iskonto6!,
+                                                          malFazlasi: (double.tryParse(
+                                                                      stokModel
+                                                                          .SACIKLAMA10!)!)
+                                                                  .toInt() ??
+                                                              0);
                                                       showSnackBar(
                                                           context, miktar);
+                                                  
+                                                          
+                                                          setState(() {
+                                                            Ctanim.urunAraFocus = true;
+                                                            
+                                                          });
                                                     },
                                                   ),
                                                 )),
@@ -1325,7 +1376,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
           print("NULL DEĞİL");
 
           setState(() {
-           // Ctanim.genelToplamHesapla(fisEx);
+            // Ctanim.genelToplamHesapla(fisEx);
             //FocusScope.of(context).requestFocus(focusNode);
           });
         }
@@ -1346,6 +1397,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         backgroundColor: Colors.blue,
       ),
     );
+    setState(() {
+      Ctanim.urunAraFocus = true;
+    });
   }
 
   void sepeteEkle(StokKart stokKart, KurModel stokKartKur, double miktar,
@@ -1385,9 +1439,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     {
       fisEx.fiseStokEkle(
         // belgeTipi: widget.belgeTipi,
-
+        
+        malFazlasi: malFazlasi,
         ALTHESAP: seciliAltHesap!.ALTHESAP!,
-        urunListedenMiGeldin: false,
+        urunListedenMiGeldin: true,
         stokAdi: stokKart.ADI!,
         KDVOrani: double.parse(stokKart.SATIS_KDV.toString()),
         birim: stokKart.OLCUBIRIM1!,

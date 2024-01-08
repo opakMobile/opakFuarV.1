@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/controller/fisController.dart';
+import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/sepet/sepetDetay.dart';
@@ -13,6 +14,7 @@ import 'package:uuid/uuid.dart';
 import '../db/veriTabaniIslemleri.dart';
 import '../model/cariModel.dart';
 import '../sabitler/Ctanim.dart';
+import 'package:opak_fuar/sabitler/listeler.dart';
 
 enum SampleItem { itemOne, itemTwo }
 
@@ -48,72 +50,76 @@ class _SepetCariListState extends State<SepetCariList> {
       if (queryparcali.length == 1) {
         results = fisEx.list_tum_fis
             .where((value) =>
-               ( value.cariKart.ADI!
-                    .toLowerCase()
-                    .contains(queryparcali[0].toLowerCase()) ||
-                value.cariKart.KOD!
-                    .toLowerCase()
-                    .contains(query.toLowerCase()) ||
-                value.cariKart.TELEFON!
-                    .toLowerCase()
-                    .contains(query.toLowerCase()))&&value.AKTARILDIMI==localAktarildiMi)
+                (value.cariKart.ADI!
+                        .toLowerCase()
+                        .contains(queryparcali[0].toLowerCase()) ||
+                    value.cariKart.KOD!
+                        .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.TELEFON!
+                        .toLowerCase()
+                        .contains(query.toLowerCase())) &&
+                value.AKTARILDIMI == localAktarildiMi)
             .toList();
       } else if (queryparcali.length == 2) {
         results = fisEx.list_tum_fis
             .where((value) =>
                 ((value.cariKart.ADI!
+                            .toLowerCase()
+                            .contains(queryparcali[0].toLowerCase()) &&
+                        value.cariKart.ADI!
+                            .toLowerCase()
+                            .contains(queryparcali[1].toLowerCase())) ||
+                    value.cariKart.KOD!
                         .toLowerCase()
-                        .contains(queryparcali[0].toLowerCase()) &&
-                    value.cariKart.ADI!
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.TELEFON!
                         .toLowerCase()
-                        .contains(queryparcali[1].toLowerCase())) ||
-                value.cariKart.KOD!
-                    .toLowerCase()
-                    .contains(query.toLowerCase()) ||
-                value.cariKart.TELEFON!
-                    .toLowerCase()
-                    .contains(query.toLowerCase()))&& value.AKTARILDIMI==localAktarildiMi)
+                        .contains(query.toLowerCase())) &&
+                value.AKTARILDIMI == localAktarildiMi)
             .toList();
       } else if (queryparcali.length == 3) {
         results = fisEx.list_tum_fis
             .where((value) =>
                 ((value.cariKart.ADI!
+                            .toLowerCase()
+                            .contains(queryparcali[0].toLowerCase()) &&
+                        value.cariKart.ADI!
+                            .toLowerCase()
+                            .contains(queryparcali[1].toLowerCase()) &&
+                        value.cariKart.ADI!
+                            .toLowerCase()
+                            .contains(queryparcali[2].toLowerCase())) ||
+                    value.cariKart.KOD!
                         .toLowerCase()
-                        .contains(queryparcali[0].toLowerCase()) &&
-                    value.cariKart.ADI!
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.TELEFON!
                         .toLowerCase()
-                        .contains(queryparcali[1].toLowerCase()) &&
-                    value.cariKart.ADI!
-                        .toLowerCase()
-                        .contains(queryparcali[2].toLowerCase())) ||
-                value.cariKart.KOD!
-                    .toLowerCase()
-                    .contains(query.toLowerCase()) ||
-                value.cariKart.TELEFON!
-                    .toLowerCase()
-                    .contains(query.toLowerCase()))&& value.AKTARILDIMI==localAktarildiMi)
+                        .contains(query.toLowerCase())) &&
+                value.AKTARILDIMI == localAktarildiMi)
             .toList();
       } else if (queryparcali.length == 4) {
         results = fisEx.list_tum_fis
             .where((value) =>
                 ((value.cariKart.ADI!
+                            .toLowerCase()
+                            .contains(queryparcali[0].toLowerCase()) &&
+                        value.cariKart.ADI!
+                            .toLowerCase()
+                            .contains(queryparcali[1].toLowerCase()) &&
+                        value.cariKart.ADI!
+                            .toLowerCase()
+                            .contains(queryparcali[2].toLowerCase()) &&
+                        value.cariKart.ADI!
+                            .toLowerCase()
+                            .contains(queryparcali[3].toLowerCase())) ||
+                    value.cariKart.KOD!
                         .toLowerCase()
-                        .contains(queryparcali[0].toLowerCase()) &&
-                    value.cariKart.ADI!
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.TELEFON!
                         .toLowerCase()
-                        .contains(queryparcali[1].toLowerCase()) &&
-                    value.cariKart.ADI!
-                        .toLowerCase()
-                        .contains(queryparcali[2].toLowerCase()) &&
-                    value.cariKart.ADI!
-                        .toLowerCase()
-                        .contains(queryparcali[3].toLowerCase())) ||
-                value.cariKart.KOD!
-                    .toLowerCase()
-                    .contains(query.toLowerCase()) ||
-                value.cariKart.TELEFON!
-                    .toLowerCase()
-                    .contains(query.toLowerCase()))&& value.AKTARILDIMI==localAktarildiMi)
+                        .contains(query.toLowerCase())) &&
+                value.AKTARILDIMI == localAktarildiMi)
             .toList();
       }
       tempFis.assignAll(results);
@@ -263,105 +269,161 @@ class _SepetCariListState extends State<SepetCariList> {
                   child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.7,
-                      child: 
-                      tempFis.length == 0 ? localAktarildiMi? Center(child: Text("Aktarılan Sipariş Yok."),):Center(child: Text("Bekleyen Sipariş Yok."),):
-                      ListView.builder(
-                        itemCount: tempFis.length,
-                        itemBuilder: (context, index) {
-                          Cari cari = tempFis[index].cariKart;
-                          String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                          String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                          return Column(
-                            children: [
-                              ListTile(
-                                leading: CircleAvatar(
-                                  backgroundColor: randomColor(),
-                                  child: Text(
-                                    harf1 + harf2,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                                title: Row(
+                      child: tempFis.length == 0
+                          ? localAktarildiMi
+                              ? Center(
+                                  child: Text("Aktarılan Sipariş Yok."),
+                                )
+                              : Center(
+                                  child: Text("Bekleyen Sipariş Yok."),
+                                )
+                          : ListView.builder(
+                              itemCount: tempFis.length,
+                              itemBuilder: (context, index) {
+                                Cari cari = tempFis[index].cariKart;
+                                String harf1 =
+                                    Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                                String harf2 =
+                                    Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+                                return Column(
                                   children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.45,
-                                      child: Text(
-                                        cari.ADI.toString(),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
+                                    ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: randomColor(),
+                                        child: Text(
+                                          harf1 + harf2,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
+                                      title: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.45,
+                                            child: Text(
+                                              cari.ADI.toString(),
+                                              maxLines: 3,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          tempFis[index].AKTARILDIMI == false
+                                              ? SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      .15,
+                                                  child: Text(
+                                                    "Beklemede",
+                                                    style: TextStyle(
+                                                        color: Colors.amber,
+                                                        fontSize: 9),
+                                                  ))
+                                              : SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      .15,
+                                                  child: Text(
+                                                    "Aktarıldı",
+                                                    style: TextStyle(
+                                                        color: Colors.green,
+                                                        fontSize: 11),
+                                                  ))
+                                        ],
+                                      ),
+                                      subtitle: Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.8,
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                             
+                                              children: [
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.45,
+                                                  child: Text(
+                                                    cari.ADRES!.toString()??"",
+                                                    maxLines: 3,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                                
+                                                widget.islem == true
+                                                    ? Text(
+                                                        maxLines: 1,
+                                                        style: TextStyle(fontSize: 12),
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                        Ctanim.donusturMusteri(
+                                                            tempFis[index]
+                                                                .GENELTOPLAM!
+                                                                .toString()))
+                                                    : Container(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      onLongPress: () async {
+                                        if (localAktarildiMi == false) {
+                                          await showAlertDialog(context, index);
+                                        }
+                                      },
+                                      onTap: () {
+                                        if (tempFis[index].AKTARILDIMI! ==
+                                            false) {
+                                          fisEx.fis!.value = tempFis[index];
+                                          Ctanim.genelToplamHesapla(fisEx);
+                                    CariAltHesap? vs;
+                                    cari.cariAltHesaplar.clear();
+                                    List<String> altListe = cari.ALTHESAPLAR!.split(",");
+                                    for(var elemnt in listeler.listCariAltHesap){
+                                      if(altListe.contains(elemnt.ALTHESAPID.toString())){
+                                        cari.cariAltHesaplar.add(elemnt);
+                                      }
+                                       if(elemnt.ZORUNLU == "E" && elemnt.VARSAYILAN == "E"){
+                                          vs = elemnt;
+                                        }
+
+                                    }
+                                    if(cari.cariAltHesaplar.isEmpty){
+                                      for(var elemnt in listeler.listCariAltHesap){
+                                        if(elemnt.ZORUNLU == "E" && elemnt.VARSAYILAN == "E"){
+                                          cari.cariAltHesaplar.add(elemnt);
+                                        }
+                                      }
+                                    }
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SiparisUrunAra(
+                                                        varsayilan: vs!=null?vs:cari.cariAltHesaplar.first,
+                                                        cari: cari,
+                                                      )));
+                                        }
+                                      },
                                     ),
-                                    tempFis[index].AKTARILDIMI == false
-                                        ? SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                .15,
-                                            child: Text(
-                                              "Beklemede",
-                                              style: TextStyle(
-                                                  color: Colors.amber,
-                                                  fontSize: 9),
-                                            ))
-                                        : SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                .15,
-                                            child: Text(
-                                              "Aktarıldı",
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 11),
-                                            ))
+                                    Divider(
+                                      thickness: 2,
+                                      color: Colors.black87,
+                                    )
                                   ],
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(cari.IL!.toString()),
-                                      widget.islem == true
-                                          ? Text(Ctanim.donusturMusteri(
-                                              tempFis[index]
-                                                  .GENELTOPLAM!
-                                                  .toString()))
-                                          : Container(),
-                                    ],
-                                  ),
-                                ),
-                                onLongPress: () async {
-                                  if(localAktarildiMi == false){
-                                    await showAlertDialog(context,index);
-                                  
-                                  }
-                                   
-                                },
-                                onTap: () {
-                                  if (tempFis[index].AKTARILDIMI! == false) {
-                                    fisEx.fis!.value = tempFis[index];
-                                    Ctanim.genelToplamHesapla(fisEx);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SiparisUrunAra(
-                                                  cari: cari,
-                                                )));
-                                  }
-                                },
-                              ),
-                              Divider(
-                                thickness: 2,
-                                color: Colors.black87,
-                              )
-                            ],
-                          );
-                        },
-                      )),
+                                );
+                              },
+                            )),
                 ),
               ]),
             ),
@@ -386,11 +448,11 @@ class _SepetCariListState extends State<SepetCariList> {
           fisEx.fis?.value = tempFis[index];
           print(fisEx.fis?.value.ID);
           Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
-          fisEx.list_tum_fis.removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
-          
+          fisEx.list_tum_fis
+              .removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
+
           setState(() {
             tempFis.removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
-            
           });
           const snackBar = SnackBar(
             duration: Duration(microseconds: 500),
@@ -407,7 +469,6 @@ class _SepetCariListState extends State<SepetCariList> {
           print(e);
         }
         Navigator.pop(context);
-        
       },
     );
 
