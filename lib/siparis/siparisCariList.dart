@@ -190,9 +190,8 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                     await SharedPrefsHelper
                                         .siparisNumarasiKaydet(
                                             Ctanim.siparisNumarasi);
-                                    fisEx.fis!.value.TARIH =
-                                        DateFormat("yyyy-MM-dd")
-                                            .format(DateTime.now());
+                                    fisEx.fis!.value.TARIH = DateFormat("yyyy-MM-dd")
+                                          .format(DateTime.now());
 
                                     Navigator.push(
                                         context,

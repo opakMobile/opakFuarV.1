@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/fis.dart';
+import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
@@ -13,6 +14,7 @@ import 'package:opak_fuar/siparis/PdfOnizleme.dart';
 import 'package:opak_fuar/siparis/bayiSec.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
+import 'package:uuid/uuid.dart';
 
 class SiparisTamamla extends StatefulWidget {
   const SiparisTamamla({
@@ -165,6 +167,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                             return CustomAlertDialog(
                               secondButtonText: "Tamam",
                               onSecondPress: () async {
+                                fisEx.fis!.value.AKTARILDIMI = false;
                                  await Fis.empty().fisEkle(
                                     fis: fisEx.fis!.value, belgeTipi: "YOK");
                                 fisEx.fis!.value = Fis.empty();
@@ -181,7 +184,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                               onPres: () async {
                                 String hataTopla = "";
                                 List<Fis> pdfeGidecek =  parcalaFis(fisEx.fis!.value);
-
+                                fisEx.fis!.value.AKTARILDIMI = false;
                                 await Fis.empty().fisEkle(
                                     fis: fisEx.fis!.value, belgeTipi: "YOK");
                                 fisEx.fis!.value = Fis.empty();
@@ -194,7 +197,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                 MaterialPageRoute(
                                     builder: (context) => PdfOnizleme(
                                           m: pdfeGidecek,
-                                          fastReporttanMiGelsin: false,
+                                          fastReporttanMiGelsin: true,
                                         )),
                               );
                               
@@ -549,11 +552,13 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
         }
       }
       for (var element in althesaplar) {
+            var uuidx = Uuid();
+             String neu = uuidx.v1();
         
         Fis fis = Fis.empty();
         fis = Fis.fromFis(fisParam, []);
         fis.USTUUID = fis.UUID;
-        //   fis.UUID = neu;
+        fis.UUID = neu;
         fis.SIPARISSAYISI = althesaplar.length;
         fis.KALEMSAYISI = 0;
         fis.ALTHESAP = element;
@@ -563,9 +568,11 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
             k < fisParam.fisStokListesi.length;
             k++) {
           if (fisParam.fisStokListesi[k].ALTHESAP == element) {
-            //fis.fisStokListesi[k].UUID = fis.UUID;
-
-            fis.fisStokListesi.add(fisParam.fisStokListesi[k]);
+            FisHareket aa = FisHareket.fromFishareket(fisParam.fisStokListesi[k]);
+            aa.UUID = fis.UUID;
+        
+            
+            fis.fisStokListesi.add(aa);
             fis.KALEMSAYISI = fis.KALEMSAYISI! + 1;
           }
         }

@@ -810,7 +810,9 @@ class BaseService {
   
     Future<SHataModel> ekleSiparisFuar(
       {required String sirket,
-      required Map<String, dynamic> jsonDataList}) async {
+      required List<Map<String, dynamic>>jsonDataList,
+      required String UstUuid,
+      }) async {
     SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
 
     var jsonString;
@@ -819,7 +821,9 @@ class BaseService {
     // dış ve iç denecek;
 
     jsonString = jsonEncode(jsonDataList);
+   
      String base64EncodedString = base64Encode(utf8.encode(jsonString));
+      printWrapped(base64EncodedString);
     
 
     var headers = {
@@ -833,9 +837,11 @@ class BaseService {
     <EkleSiparisFuar xmlns="http://tempuri.org/">
       <Sirket>$sirket</Sirket>
       <Fis>$base64EncodedString</Fis>
+      <UstUuid>$UstUuid</UstUuid>
     </EkleSiparisFuar>
   </soap:Body>
 </soap:Envelope>
+
 ''';
     //printWrapped(base64EncodedString);
     try {

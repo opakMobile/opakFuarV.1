@@ -59,7 +59,9 @@ class _HomePageState extends State<HomePage> {
                    // "Versiyon : 1.0.6", // carigüncellme sorunu, cari gönder ayır
                    // "Versiyon : 1.0.7", // pazar günü çeşitli güncellemeler
                   //  "Versiyon : TEST", // cari güncelleme sorunu
-                    "Versiyon : 1.0.8", // veriGonderme base64 e çekildi
+                  //  "Versiyon : 1.0.8", // veriGonderme base64 e çekildi
+                   // "Versiyon : 1.0.9" ,// misyon kamera ürün arama 
+                    "Versiyon : 1.1.0", // urunAra focus ,pdfFast,seçili fis gönder
                     style: TextStyle(fontSize: 9),
                   ),
                 ],
@@ -1086,7 +1088,6 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                                     fis.SIPARISSAYISI = althesaplar.length;
                                     fis.KALEMSAYISI = 0;
                                     fis.ALTHESAP = element;
-
                                     for (int k = 0;
                                         k <
                                             fisEx.list_fis_gidecek[j]
@@ -1115,19 +1116,20 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                                       belgeTipi: "YOK",
                                       fis: fisEx.list_fis_gidecek[j]);
                                   String genelHata = "";
+                                List<Map<String,dynamic>> listeFisler = [];
                                   for (var element in parcaliFisler) {
-                                    Map<String, dynamic> jsonListesi =
-                                        element.toJson2();
-                                    SHataModel gelenHata = await widget.bs
-                                        .ekleSiparisFuar(
-                                            jsonDataList: jsonListesi,
-                                            sirket: Ctanim.sirket!);
-                                    if (gelenHata.
+                                    listeFisler.add(element.toJson2());
                                     
-                                       Hata == "true") {
+                             
+                                  }
+                                  SHataModel gelenHata = await widget.bs
+                                        .ekleSiparisFuar(
+                                          UstUuid: listeFisler[0]["USTUUID"],
+                                            jsonDataList: listeFisler,
+                                            sirket: Ctanim.sirket!);
+                                    if (gelenHata.Hata == "true") {
                                       genelHata += gelenHata.HataMesaj!;
                                     }
-                                  }
                                   if (genelHata != "") {
                                     fisEx.list_fis_gidecek[j].AKTARILDIMI =
                                         false;

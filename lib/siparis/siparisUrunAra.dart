@@ -47,6 +47,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
 
     for (int i = 0; i < stokKartEx.searchList.length; i++) {
       aramaMiktarController.add(TextEditingController(text: "1"));
+      focusNodeList.add(FocusNode());
     }
     stokKartEx.tempList.clear();
     SatisTipiModel satisTipiModel =
@@ -159,13 +160,16 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
 
     Ctanim.secililiMarkalarFiltre.clear();
     if (fisEx.fis!.value.fisStokListesi.length > 0) {
+
       fisEx.fis!.value.DURUM = true;
       final now = DateTime.now();
       final formatter = DateFormat('HH:mm');
       String saat = formatter.format(now);
       fisEx.fis!.value.SAAT = saat;
+      fisEx.fis!.value.AKTARILDIMI = false;
       Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
       fisEx.fis!.value = Fis.empty();
+      
     }
 
     super.dispose();
@@ -197,7 +201,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
       }
     }
   }*/
-
+  List<FocusNode> focusNodeList = []; 
   @override
   Widget build(BuildContext context) {
     FocusNode focusNode = FocusNode();
@@ -376,6 +380,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                               result = res;
                               editingController.text = result;
                             }
+                            await textAramaYap(result, context);
+                            /*
                             stokKartEx.searchC(
                                 result,
                                 widget.cari.KOD!,
@@ -384,6 +390,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 Ctanim.seciliStokFiyatListesi,
                                 seciliAltHesap!.ALTHESAPID);
                             if (okumaModu == true) {
+                              asdas
+                              
                               if (stokKartEx.tempList.length == 1) {
                                 double gelenMiktar = double.parse(stokKartEx
                                     .tempList[0].guncelDegerler!.carpan!
@@ -391,11 +399,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 Ctanim.urunAraFocus = false;
                                 editingController.text = "";
 
-                                showDialog(
+                               await showDialog(
                                     context: context,
                                     builder: (context) {
                                       return fisHareketDuzenle(
-                                        urunDuzenlemeyeGeldim: false,
+                                        urunDuzenlemeyeGeldim: true,
                                         okutulanCarpan: 1,
                                         altHesap: seciliAltHesap!.ALTHESAP!,
                                         gelenStokKart: stokKartEx.tempList[0],
@@ -414,10 +422,12 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                   m,
                                   Ctanim.seciliStokFiyatListesi,
                                   seciliAltHesap!.ALTHESAPID);
+                                  
                             }
                             // editingController.text = "";
 
                             setState(() {});
+                            */
                           },
                           icon: Icon(
                             Icons.camera_alt,
@@ -665,7 +675,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 itemCount: stokKartEx.tempList
                                     .length, // stokKartEx.searchList.length,
                                 itemBuilder: (context, index) {
-                                  FocusNode ff = FocusNode();
+                                 
                                   StokKart stokModel =
                                       stokKartEx.tempList[index];
                                   //    stokKartEx.searchList[index];
@@ -754,9 +764,20 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       color: Colors.grey),
                                                 ),
                                                 child: TextFormField(
-                                                  focusNode: ff,
-                                                  onTap: () =>
-                                                      aramaMiktarController[
+                                                  focusNode: focusNodeList[
+                                                      index],
+                                                   
+                                                      
+                                                  onTap: () {
+                                                    
+                                                    
+                                                    focusNode.unfocus();
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            focusNodeList[
+                                                                index]);
+
+                                                    aramaMiktarController[
                                                                   index]
                                                               .selection =
                                                           TextSelection(
@@ -766,7 +787,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                                           index]
                                                                       .value
                                                                       .text
-                                                                      .length),
+                                                                      .length);
+                                                  },
                                                   controller:
                                                       aramaMiktarController[
                                                           index],
@@ -1011,8 +1033,10 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                       color: Colors.green,
                                                     ),
                                                     onPressed: () async {
-                                                      ff.unfocus();
-                                                  
+                                                      focusNodeList[index]
+                                                          .unfocus();
+                                                      Ctanim.urunAraFocus =
+                                                          true;
                                                       KurModel gidecekKur =
                                                           listeler
                                                               .listKur.first;
@@ -1105,12 +1129,6 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                               0);
                                                       showSnackBar(
                                                           context, miktar);
-                                                  
-                                                          
-                                                          setState(() {
-                                                            Ctanim.urunAraFocus = true;
-                                                            
-                                                          });
                                                     },
                                                   ),
                                                 )),
@@ -1397,9 +1415,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
         backgroundColor: Colors.blue,
       ),
     );
+    /*
     setState(() {
       Ctanim.urunAraFocus = true;
     });
+    */
   }
 
   void sepeteEkle(StokKart stokKart, KurModel stokKartKur, double miktar,
