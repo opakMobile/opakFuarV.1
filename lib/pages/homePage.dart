@@ -60,11 +60,12 @@ class _HomePageState extends State<HomePage> {
                     // "Versiyon : 1.0.7", // pazar günü çeşitli güncellemeler
                     //  "Versiyon : TEST", // cari güncelleme sorunu
                     //  "Versiyon : 1.0.8", // veriGonderme base64 e çekildi
-                    // "Versiyon : 1.0.9" ,// misyon kamera ürün arama 
+                    // "Versiyon : 1.0.9" ,// misyon kamera ürün arama
                     // "Versiyon : 1.1.0", // urunAra focus ,pdfFast,seçili fis gönder
-                  //"Versiyon:1.1.1" ,// cariArama düzenleme, saciklama9
-                  //"Versiyon 1.1.2", // sacikla9 daki 0.0 hatası
-                  "Versiyon : 1.1.3", // alt hesap değişince boş arama yapıldı 
+                    //"Versiyon:1.1.1" ,// cariArama düzenleme, saciklama9
+                    //"Versiyon 1.1.2", // sacikla9 daki 0.0 hatası
+                    // "Versiyon : 1.1.3", // alt hesap değişince boş arama yapıldı
+                    "Versiyon : 1.1.4", // focus düzenlemeleri
                     style: TextStyle(fontSize: 9),
                   ),
                 ],
@@ -620,10 +621,9 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                             );
                             await widget.bs.tumVerileriGuncelle();
 
-                          Navigator.pop(context);
-                          Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                           }
-
                         },
                         child: Row(
                           children: [
@@ -682,11 +682,9 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                               },
                             );
                             await widget.bs.cariVerileriGuncelle();
-                             Navigator.pop(context);
-                          Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                           }
-
-                         
                         },
                         child: Row(
                           children: [
@@ -1037,191 +1035,199 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                                   );
                                 });
                           } else {
-                                                      String hataTopla = "";
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return LoadingSpinner(
-                                color: Colors.black,
-                                message:
-                                    "Siparişler Gönderiliyor. Lütfen Bekleyiniz...",
-                              );
-                            },
-                          );
+                            String hataTopla = "";
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return LoadingSpinner(
+                                  color: Colors.black,
+                                  message:
+                                      "Siparişler Gönderiliyor. Lütfen Bekleyiniz...",
+                                );
+                              },
+                            );
 
-                          await fisEx.listGidecekFisGetir();
-                          if (fisEx.list_fis_gidecek.length > 0) {
-                            for (int j = 0;
-                                j < fisEx.list_fis_gidecek.length;
-                                j++) {
-                              if (fisEx.list_fis_gidecek[j].ACIKLAMA4 != "" &&
-                                  fisEx.list_fis_gidecek[j].ACIKLAMA5 != "") {
-                                if (fisEx.list_fis_gidecek[j].fisStokListesi
-                                        .length >
-                                    0) {
-                                  List<String> althesaplar = [];
-                                  for (int i = 0;
-                                      i <
-                                          fisEx.list_fis_gidecek[j]
-                                              .fisStokListesi.length;
-                                      i++) {
-                                    if (!althesaplar.contains(fisEx
-                                        .list_fis_gidecek[j]
-                                        .fisStokListesi[i]
-                                        .ALTHESAP)) {
-                                      althesaplar.add(fisEx.list_fis_gidecek[j]
-                                          .fisStokListesi[i].ALTHESAP!);
-                                    }
-                                  }
-                                  List<Fis> parcaliFisler = [];
-
-                                  for (var element in althesaplar) {
-                                    var uuidx = Uuid();
-                                    String neu = uuidx.v1();
-
-                                    print("Baba fiş UUID:"+fisEx.list_fis_gidecek[j].UUID!);
-                                    Fis fis = Fis.empty();
-                                    fis = Fis.fromFis(
-                                        fisEx.list_fis_gidecek[j], []);
-                                    fis.USTUUID = fis.UUID;
-                                    fis.UUID = neu;
-                                    print("Yavru fiş USTUUID:"+fis.USTUUID!);
-                                    print("Yavru fiş UUID:"+ fis.UUID!);
-                                    fis.SIPARISSAYISI = althesaplar.length;
-                                    fis.KALEMSAYISI = 0;
-                                    fis.ALTHESAP = element;
-                                    for (int k = 0;
-                                        k <
+                            await fisEx.listGidecekFisGetir();
+                            if (fisEx.list_fis_gidecek.length > 0) {
+                              for (int j = 0;
+                                  j < fisEx.list_fis_gidecek.length;
+                                  j++) {
+                                if (fisEx.list_fis_gidecek[j].ACIKLAMA4 != "" &&
+                                    fisEx.list_fis_gidecek[j].ACIKLAMA5 != "") {
+                                  if (fisEx.list_fis_gidecek[j].fisStokListesi
+                                          .length >
+                                      0) {
+                                    List<String> althesaplar = [];
+                                    for (int i = 0;
+                                        i <
                                             fisEx.list_fis_gidecek[j]
                                                 .fisStokListesi.length;
-                                        k++) {
-                                      if (fisEx.list_fis_gidecek[j]
-                                              .fisStokListesi[k].ALTHESAP ==
-                                          element) {
-                                            // ha bura 
-                                        FisHareket yavruFishareket = FisHareket.fromFishareket(fisEx.list_fis_gidecek[j]
-                                            .fisStokListesi[k]);
-                                        yavruFishareket.UUID = fis.UUID;
-                                        print("Baba fişHAR UUID:"+fisEx.list_fis_gidecek[j]
-                                            .fisStokListesi[k].UUID!);
-                                    print("Yavru fişHAR UUID:"+ yavruFishareket.UUID!);
-
-                                        fis.fisStokListesi.add(yavruFishareket);
-                                        fis.KALEMSAYISI = fis.KALEMSAYISI! + 1;
+                                        i++) {
+                                      if (!althesaplar.contains(fisEx
+                                          .list_fis_gidecek[j]
+                                          .fisStokListesi[i]
+                                          .ALTHESAP)) {
+                                        althesaplar.add(fisEx
+                                            .list_fis_gidecek[j]
+                                            .fisStokListesi[i]
+                                            .ALTHESAP!);
                                       }
                                     }
+                                    List<Fis> parcaliFisler = [];
 
-                                    parcaliFisler.add(fis);
-                                  }
-                                  fisEx.list_fis_gidecek[j].AKTARILDIMI = true;
-                                  Fis.empty().fisEkle(
-                                      belgeTipi: "YOK",
-                                      fis: fisEx.list_fis_gidecek[j]);
-                                  String genelHata = "";
-                                List<Map<String,dynamic>> listeFisler = [];
-                                  for (var element in parcaliFisler) {
-                                    listeFisler.add(element.toJson2());
-                                    
-                             
-                                  }
-                                  SHataModel gelenHata = await widget.bs
+                                    for (var element in althesaplar) {
+                                      var uuidx = Uuid();
+                                      String neu = uuidx.v1();
+
+                                      print("Baba fiş UUID:" +
+                                          fisEx.list_fis_gidecek[j].UUID!);
+                                      Fis fis = Fis.empty();
+                                      fis = Fis.fromFis(
+                                          fisEx.list_fis_gidecek[j], []);
+                                      fis.USTUUID = fis.UUID;
+                                      fis.UUID = neu;
+                                      print(
+                                          "Yavru fiş USTUUID:" + fis.USTUUID!);
+                                      print("Yavru fiş UUID:" + fis.UUID!);
+                                      fis.SIPARISSAYISI = althesaplar.length;
+                                      fis.KALEMSAYISI = 0;
+                                      fis.ALTHESAP = element;
+                                      for (int k = 0;
+                                          k <
+                                              fisEx.list_fis_gidecek[j]
+                                                  .fisStokListesi.length;
+                                          k++) {
+                                        if (fisEx.list_fis_gidecek[j]
+                                                .fisStokListesi[k].ALTHESAP ==
+                                            element) {
+                                          // ha bura
+                                          FisHareket yavruFishareket =
+                                              FisHareket.fromFishareket(fisEx
+                                                  .list_fis_gidecek[j]
+                                                  .fisStokListesi[k]);
+                                          yavruFishareket.UUID = fis.UUID;
+                                          print("Baba fişHAR UUID:" +
+                                              fisEx.list_fis_gidecek[j]
+                                                  .fisStokListesi[k].UUID!);
+                                          print("Yavru fişHAR UUID:" +
+                                              yavruFishareket.UUID!);
+
+                                          fis.fisStokListesi
+                                              .add(yavruFishareket);
+                                          fis.KALEMSAYISI =
+                                              fis.KALEMSAYISI! + 1;
+                                        }
+                                      }
+
+                                      parcaliFisler.add(fis);
+                                    }
+                                    fisEx.list_fis_gidecek[j].AKTARILDIMI =
+                                        true;
+                                    Fis.empty().fisEkle(
+                                        belgeTipi: "YOK",
+                                        fis: fisEx.list_fis_gidecek[j]);
+                                    String genelHata = "";
+                                    List<Map<String, dynamic>> listeFisler = [];
+                                    for (var element in parcaliFisler) {
+                                      listeFisler.add(element.toJson2());
+                                    }
+                                    SHataModel gelenHata = await widget.bs
                                         .ekleSiparisFuar(
-                                          UstUuid: listeFisler[0]["USTUUID"],
+                                            UstUuid: listeFisler[0]["USTUUID"],
                                             jsonDataList: listeFisler,
                                             sirket: Ctanim.sirket!);
                                     if (gelenHata.Hata == "true") {
                                       genelHata += gelenHata.HataMesaj!;
                                     }
-                                  if (genelHata != "") {
-                                    fisEx.list_fis_gidecek[j].AKTARILDIMI =
-                                        false;
-                                    Fis.empty().fisEkle(
-                                        belgeTipi: "YOK",
-                                        fis: fisEx.list_fis_gidecek[j]);
+                                    if (genelHata != "") {
+                                      fisEx.list_fis_gidecek[j].AKTARILDIMI =
+                                          false;
+                                      Fis.empty().fisEkle(
+                                          belgeTipi: "YOK",
+                                          fis: fisEx.list_fis_gidecek[j]);
+                                      hataTopla = hataTopla +
+                                          "\n" +
+                                          fisEx.list_fis_gidecek[j].CARIADI! +
+                                          " ait belge gönderilemedi.\n Hata Mesajı :" +
+                                          genelHata +
+                                          "\n";
+                                    }
+                                  } else {
                                     hataTopla = hataTopla +
                                         "\n" +
                                         fisEx.list_fis_gidecek[j].CARIADI! +
-                                        " ait belge gönderilemedi.\n Hata Mesajı :" +
-                                        genelHata +
-                                        "\n";
-
+                                        " ait " +
+                                        "belge gönderilemedi.\nHata Mesajı :" +
+                                        "Fis Stok Listesi Boş\n";
                                   }
                                 } else {
                                   hataTopla = hataTopla +
                                       "\n" +
                                       fisEx.list_fis_gidecek[j].CARIADI! +
                                       " ait " +
-                                      "belge gönderilemedi.\nHata Mesajı :" +
-                                      "Fis Stok Listesi Boş\n";
+                                      "sipariş gönderilemedi. " +
+                                      "Bayi seçimi yapılmamış\n";
                                 }
-                              } else {
-                                hataTopla = hataTopla +
-                                    "\n" +
-                                    fisEx.list_fis_gidecek[j].CARIADI! +
-                                    " ait " +
-                                    "sipariş gönderilemedi. " +
-                                    "Bayi seçimi yapılmamış\n";
                               }
-                            }
 
-                            if (hataTopla != "") {
-                              Navigator.pop(context);
-                              widget.bs.printWrapped(hataTopla);
-                              await showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return VeriGondermeHataDialog(
-                                      align: TextAlign.left,
-                                      title: 'Hata',
-                                      message:
-                                          'Web Servise Veri Gönderilirken Bazı Hatalar İle Karşılaşıldı:\n' +
-                                              hataTopla,
-                                      onPres: () async {
-                                        Navigator.pop(context);
-                                      },
-                                      buttonText: 'Tamam',
-                                    );
-                                  });
+                              if (hataTopla != "") {
+                                Navigator.pop(context);
+                                widget.bs.printWrapped(hataTopla);
+                                await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return VeriGondermeHataDialog(
+                                        align: TextAlign.left,
+                                        title: 'Hata',
+                                        message:
+                                            'Web Servise Veri Gönderilirken Bazı Hatalar İle Karşılaşıldı:\n' +
+                                                hataTopla,
+                                        onPres: () async {
+                                          Navigator.pop(context);
+                                        },
+                                        buttonText: 'Tamam',
+                                      );
+                                    });
+                              } else {
+                                await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return CustomAlertDialog(
+                                        align: TextAlign.left,
+                                        title: 'İşlem Başarılı',
+                                        message:
+                                            'Siparişler başarıyla gönderildi.',
+                                        onPres: () async {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        },
+                                        buttonText: 'Tamam',
+                                      );
+                                    });
+                              }
+
+                              fisEx.list_fis_gidecek.clear();
+
+                              print("Liste Temizlendi : " +
+                                  fisEx.list_fis_gidecek.length.toString());
                             } else {
+                              Navigator.pop(context);
                               await showDialog(
                                   context: context,
                                   builder: (context) {
                                     return CustomAlertDialog(
                                       align: TextAlign.left,
-                                      title: 'İşlem Başarılı',
-                                      message:'Siparişler başarıyla gönderildi.',
+                                      title: 'Boş Liste',
+                                      message: 'Gönderilecek Sipariş Yok',
                                       onPres: () async {
-                                        Navigator.pop(context);
                                         Navigator.pop(context);
                                       },
                                       buttonText: 'Tamam',
                                     );
                                   });
                             }
-
-                            fisEx.list_fis_gidecek.clear();
-
-                            print("Liste Temizlendi : " +
-                                fisEx.list_fis_gidecek.length.toString());
-                          } else {
-                            Navigator.pop(context);
-                            await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return CustomAlertDialog(
-                                    align: TextAlign.left,
-                                    title: 'Boş Liste',
-                                    message: 'Gönderilecek Sipariş Yok',
-                                    onPres: () async {
-                                      Navigator.pop(context);
-                                    },
-                                    buttonText: 'Tamam',
-                                  );
-                                });
                           }
-                          }
-
                         },
                         child: Row(
                           children: [
