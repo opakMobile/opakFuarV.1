@@ -48,12 +48,17 @@ class _SepetCariListState extends State<SepetCariList> {
   List<Fis> bekleyenler = [];
   List<Fis> aktarilanlar = [];
   List<Fis> tumu = [];
-  List<Fis> gonderilecekFis = [];
-  List<bool> gonderilecekFisDurum = [];
+  //List<Fis> gonderilecekFis = [];
+  //List<bool> gonderilecekFisDurum = [];
 
   void cariAra(String query) {
     if (query.isEmpty) {
-      tempFis.assignAll(fisEx.list_tum_fis);
+      tempFis.clear();
+      for (var element in fisEx.list_tum_fis) {
+        if (element.AKTARILDIMI == localAktarildiMi) {
+          tempFis.add(element);
+        }
+      }
     } else {
       var results;
       List<String> queryparcali = query.split(" ");
@@ -67,6 +72,12 @@ class _SepetCariListState extends State<SepetCariList> {
                         .toLowerCase()
                         .contains(query.toLowerCase()) ||
                     value.cariKart.TELEFON!
+                        .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.IL!
+                        .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.ILCE!
                         .toLowerCase()
                         .contains(query.toLowerCase())) &&
                 value.AKTARILDIMI == localAktarildiMi)
@@ -85,8 +96,14 @@ class _SepetCariListState extends State<SepetCariList> {
                         .contains(query.toLowerCase()) ||
                     value.cariKart.TELEFON!
                         .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.IL!
+                        .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.ILCE!
+                        .toLowerCase()
                         .contains(query.toLowerCase())) &&
-                value.AKTARILDIMI == localAktarildiMi)
+                value.cariKart.AKTARILDIMI == localAktarildiMi)
             .toList();
       } else if (queryparcali.length == 3) {
         results = fisEx.list_tum_fis
@@ -104,6 +121,12 @@ class _SepetCariListState extends State<SepetCariList> {
                         .toLowerCase()
                         .contains(query.toLowerCase()) ||
                     value.cariKart.TELEFON!
+                        .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.IL!
+                        .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.ILCE!
                         .toLowerCase()
                         .contains(query.toLowerCase())) &&
                 value.AKTARILDIMI == localAktarildiMi)
@@ -128,6 +151,12 @@ class _SepetCariListState extends State<SepetCariList> {
                         .contains(query.toLowerCase()) ||
                     value.cariKart.TELEFON!
                         .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.IL!
+                        .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    value.cariKart.ILCE!
+                        .toLowerCase()
                         .contains(query.toLowerCase())) &&
                 value.AKTARILDIMI == localAktarildiMi)
             .toList();
@@ -145,7 +174,6 @@ class _SepetCariListState extends State<SepetCariList> {
     for (var element in fisEx.list_tum_fis) {
       if (element.AKTARILDIMI == false) {
         tempFis.add(element);
-        gonderilecekFisDurum.add(false);
       }
 
       /*
@@ -174,201 +202,11 @@ class _SepetCariListState extends State<SepetCariList> {
         // Gönderilecek fişleri gönder butonu
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            if (listeler.listCari
-                .any((element) => element.AKTARILDIMI == "H")) {
-              await showDialog(
-                  context: context,
-                  builder: (context) {
-                    return CustomAlertDialog(
-                      align: TextAlign.left,
-                      title: 'Uyarı',
-                      message:
-                          'Henüz gönderilmemiş cariler mevcut. Lütfen güncellemeden önce carileri gönderin.',
-                      onPres: () async {
-                        Navigator.pop(context);
-                      },
-                      buttonText: 'Tamam',
-                    );
-                  });
-            } else {
-              String hataTopla = "";
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return LoadingSpinner(
-                    color: Colors.black,
-                    message: "Siparişler Gönderiliyor. Lütfen Bekleyiniz...",
-                  );
-                },
-              );
-//  buna gerek yok çünkü zaten listeye eklenmiş oluyor.
-
-              if (gonderilecekFis.length > 0) {
-                for (int j = 0; j < gonderilecekFis.length; j++) {
-                  if (gonderilecekFis[j].ACIKLAMA4 != "" &&
-                      gonderilecekFis[j].ACIKLAMA5 != "") {
-                    if (gonderilecekFis[j].fisStokListesi.length > 0) {
-                      List<String> althesaplar = [];
-                      for (int i = 0;
-                          i < gonderilecekFis[j].fisStokListesi.length;
-                          i++) {
-                        if (!althesaplar.contains(
-                            gonderilecekFis[j].fisStokListesi[i].ALTHESAP)) {
-                          althesaplar.add(
-                              gonderilecekFis[j].fisStokListesi[i].ALTHESAP!);
-                        }
-                      }
-                      List<Fis> parcaliFisler = [];
-
-                      for (var element in althesaplar) {
-                        var uuidx = Uuid();
-                        String neu = uuidx.v1();
-
-                        print("Baba fiş UUID:" + gonderilecekFis[j].UUID!);
-                        Fis fis = Fis.empty();
-                        fis = Fis.fromFis(gonderilecekFis[j], []);
-                        fis.USTUUID = fis.UUID;
-                        fis.UUID = neu;
-                        print("Yavru fiş USTUUID:" + fis.USTUUID!);
-                        print("Yavru fiş UUID:" + fis.UUID!);
-                        fis.SIPARISSAYISI = althesaplar.length;
-                        fis.KALEMSAYISI = 0;
-                        fis.ALTHESAP = element;
-
-                        for (int k = 0;
-                            k < gonderilecekFis[j].fisStokListesi.length;
-                            k++) {
-                          if (gonderilecekFis[j].fisStokListesi[k].ALTHESAP ==
-                              element) {
-                            // ha bura
-                            FisHareket yavruFishareket =
-                                FisHareket.fromFishareket(
-                                    gonderilecekFis[j].fisStokListesi[k]);
-                            yavruFishareket.UUID = fis.UUID;
-                            print("Baba fişHAR UUID:" +
-                                gonderilecekFis[j].fisStokListesi[k].UUID!);
-                            print("Yavru fişHAR UUID:" + yavruFishareket.UUID!);
-
-                            fis.fisStokListesi.add(yavruFishareket);
-                            fis.KALEMSAYISI = fis.KALEMSAYISI! + 1;
-                          }
-                        }
-
-                        parcaliFisler.add(fis);
-                      }
-                      gonderilecekFis[j].AKTARILDIMI = true;
-                      Fis.empty()
-                          .fisEkle(belgeTipi: "YOK", fis: gonderilecekFis[j]);
-                      String genelHata = "";
-                      List<Map<String, dynamic>> jsonListesi = [];
-                      for (var element in parcaliFisler) {
-                        jsonListesi.add(element.toJson2());
-                      }
-                      SHataModel gelenHata = await bs.ekleSiparisFuar(
-                          UstUuid: jsonListesi[0]["USTUUID"]!,
-                          jsonDataList: jsonListesi,
-                          sirket: Ctanim.sirket!);
-
-                      if (gelenHata.Hata == "true") {
-                        genelHata += gelenHata.HataMesaj!;
-                      }
-                      if (genelHata != "") {
-                        gonderilecekFis[j].AKTARILDIMI = false;
-                        Fis.empty()
-                            .fisEkle(belgeTipi: "YOK", fis: gonderilecekFis[j]);
-                        hataTopla = hataTopla +
-                            "\n" +
-                            gonderilecekFis[j].CARIADI! +
-                            " ait belge gönderilemedi.\n Hata Mesajı :" +
-                            genelHata +
-                            "\n";
-                      }
-                    } else {
-                      hataTopla = hataTopla +
-                          "\n" +
-                          gonderilecekFis[j].CARIADI! +
-                          " ait " +
-                          "belge gönderilemedi.\nHata Mesajı :" +
-                          "Fis Stok Listesi Boş\n";
-                    }
-                  } else {
-                    hataTopla = hataTopla +
-                        "\n" +
-                        gonderilecekFis[j].CARIADI! +
-                        " ait " +
-                        "sipariş gönderilemedi. " +
-                        "Bayi seçimi yapılmamış\n";
-                  }
-                }
-
-                if (hataTopla != "") {
-                  Navigator.pop(context);
-                  bs.printWrapped(hataTopla);
-                  await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return VeriGondermeHataDialog(
-                          align: TextAlign.left,
-                          title: 'Hata',
-                          message:
-                              'Web Servise Veri Gönderilirken Bazı Hatalar İle Karşılaşıldı:\n' +
-                                  hataTopla,
-                          onPres: () async {
-                            Navigator.pop(context);
-                          },
-                          buttonText: 'Tamam',
-                        );
-                      });
-                } else {
-                  await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return CustomAlertDialog(
-                          align: TextAlign.left,
-                          title: 'İşlem Başarılı',
-                          message: 'Siparişler başarıyla gönderildi.',
-                          onPres: () async {
-                            gonderilecekFisDurum.clear();
-                            gonderilecekFis.clear();
-                            tempFis.clear();
-                            for (var element in fisEx.list_tum_fis) {
-                              if (element.AKTARILDIMI == false) {
-                                tempFis.add(element);
-                                gonderilecekFisDurum.add(false);
-                              }}
-                              setState(() {
-                                
-                              });
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                          buttonText: 'Tamam',
-                        );
-                      });
-                }
-
-                gonderilecekFis.clear();
-
-                print(
-                    "Liste Temizlendi : " + gonderilecekFis.length.toString());
-              } else {
-                Navigator.pop(context);
-                await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return CustomAlertDialog(
-                        align: TextAlign.left,
-                        title: 'Boş Liste',
-                        message: 'Seçilmiş Sipariş Yok',
-                        onPres: () async {
-                          Navigator.pop(context);
-                        },
-                        buttonText: 'Tamam',
-                      );
-                    });
-              }
-            }
+            await seciliFisGonder(
+                context,
+                tempFis
+                    .where((element) => element.seciliFisGonder == true)
+                    .toList());
           },
           child: Icon(Icons.send),
         ),
@@ -476,12 +314,14 @@ class _SepetCariListState extends State<SepetCariList> {
                   ],
                 ),
 
-               localAktarildiMi == false ? Text(
-                  "Siparişi silmek için uzun basınız",
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.03,
-                      fontStyle: FontStyle.italic),
-                ):Container(),
+                localAktarildiMi == false
+                    ? Text(
+                        "Siparişi silmek için uzun basınız",
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.03,
+                            fontStyle: FontStyle.italic),
+                      )
+                    : Container(),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
@@ -520,23 +360,12 @@ class _SepetCariListState extends State<SepetCariList> {
                                               ),
                                             )
                                           : Checkbox(
-                                              value:
-                                                  gonderilecekFisDurum[index],
+                                              value: tempFis[index]
+                                                  .seciliFisGonder,
                                               onChanged: (value) {
                                                 setState(() {
-                                                  gonderilecekFisDurum[index] =
-                                                      value!;
-                                                  if (gonderilecekFisDurum[
-                                                          index] ==
-                                                      true) {
-                                                    gonderilecekFis
-                                                        .add(tempFis[index]);
-                                                  } else {
-                                                    gonderilecekFis.removeWhere(
-                                                        (element) =>
-                                                            element.ID ==
-                                                            tempFis[index].ID);
-                                                  }
+                                                  tempFis[index]
+                                                      .seciliFisGonder = value!;
                                                 });
                                               },
                                             ),
@@ -782,6 +611,205 @@ class _SepetCariListState extends State<SepetCariList> {
         ),
       ),
     );
+  }
+
+  Future<void> seciliFisGonder(
+      BuildContext context, List<Fis> gonderilecekFis) async {
+    if (listeler.listCari.any((element) => element.AKTARILDIMI == "H")) {
+      await showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              align: TextAlign.left,
+              title: 'Uyarı',
+              message:
+                  'Henüz gönderilmemiş cariler mevcut. Lütfen güncellemeden önce carileri gönderin.',
+              onPres: () async {
+                Navigator.pop(context);
+              },
+              buttonText: 'Tamam',
+            );
+          });
+    } else {
+      String hataTopla = "";
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return LoadingSpinner(
+            color: Colors.black,
+            message: "Siparişler Gönderiliyor. Lütfen Bekleyiniz...",
+          );
+        },
+      );
+
+      if (gonderilecekFis.length > 0) {
+        for (int j = 0; j < gonderilecekFis.length; j++) {
+          if (gonderilecekFis[j].ACIKLAMA4 != "" &&
+              gonderilecekFis[j].ACIKLAMA5 != "") {
+            if (gonderilecekFis[j].fisStokListesi.length > 0) {
+              List<String> althesaplar = [];
+              for (int i = 0;
+                  i < gonderilecekFis[j].fisStokListesi.length;
+                  i++) {
+                if (!althesaplar
+                    .contains(gonderilecekFis[j].fisStokListesi[i].ALTHESAP)) {
+                  althesaplar
+                      .add(gonderilecekFis[j].fisStokListesi[i].ALTHESAP!);
+                }
+              }
+              List<Fis> parcaliFisler = [];
+
+              for (var element in althesaplar) {
+                var uuidx = Uuid();
+                String neu = uuidx.v1();
+
+                print("Baba fiş UUID:" + gonderilecekFis[j].UUID!);
+                Fis fis = Fis.empty();
+                fis = Fis.fromFis(gonderilecekFis[j], []);
+                fis.USTUUID = fis.UUID;
+                fis.UUID = neu;
+                print("Yavru fiş USTUUID:" + fis.USTUUID!);
+                print("Yavru fiş UUID:" + fis.UUID!);
+                fis.SIPARISSAYISI = althesaplar.length;
+                fis.KALEMSAYISI = 0;
+                fis.ALTHESAP = element;
+
+                for (int k = 0;
+                    k < gonderilecekFis[j].fisStokListesi.length;
+                    k++) {
+                  if (gonderilecekFis[j].fisStokListesi[k].ALTHESAP ==
+                      element) {
+                    // ha bura
+                    FisHareket yavruFishareket = FisHareket.fromFishareket(
+                        gonderilecekFis[j].fisStokListesi[k]);
+                    yavruFishareket.UUID = fis.UUID;
+                    print("Baba fişHAR UUID:" +
+                        gonderilecekFis[j].fisStokListesi[k].UUID!);
+                    print("Yavru fişHAR UUID:" + yavruFishareket.UUID!);
+
+                    fis.fisStokListesi.add(yavruFishareket);
+                    fis.KALEMSAYISI = fis.KALEMSAYISI! + 1;
+                  }
+                }
+
+                parcaliFisler.add(fis);
+              }
+              gonderilecekFis[j].AKTARILDIMI = true;
+
+              Fis.empty().fisEkle(belgeTipi: "YOK", fis: gonderilecekFis[j]);
+              print("E YAPILAN FİŞ:" +
+                  gonderilecekFis[j].CARIADI! +
+                  "//" +
+                  gonderilecekFis[j].fisStokListesi.length.toString());
+              String genelHata = "";
+              List<Map<String, dynamic>> jsonListesi = [];
+              for (var element in parcaliFisler) {
+                jsonListesi.add(element.toJson2());
+              }
+              SHataModel gelenHata = await bs.ekleSiparisFuar(
+                  UstUuid: jsonListesi[0]["USTUUID"]!,
+                  jsonDataList: jsonListesi,
+                  sirket: Ctanim.sirket!);
+
+              if (gelenHata.Hata == "true") {
+                genelHata += gelenHata.HataMesaj!;
+              }
+              if (genelHata != "") {
+                gonderilecekFis[j].AKTARILDIMI = false;
+                Fis.empty().fisEkle(belgeTipi: "YOK", fis: gonderilecekFis[j]);
+                print("H YAPILAN FİŞ:" +
+                    gonderilecekFis[j].CARIADI! +
+                    "//" +
+                    gonderilecekFis[j].fisStokListesi.length.toString());
+
+                hataTopla = hataTopla +
+                    "\n" +
+                    gonderilecekFis[j].CARIADI! +
+                    " ait belge gönderilemedi.\n Hata Mesajı :" +
+                    genelHata +
+                    "\n";
+              }
+            } else {
+              hataTopla = hataTopla +
+                  "\n" +
+                  gonderilecekFis[j].CARIADI! +
+                  " ait " +
+                  "belge gönderilemedi.\nHata Mesajı :" +
+                  "Fis Stok Listesi Boş\n";
+            }
+          } else {
+            hataTopla = hataTopla +
+                "\n" +
+                gonderilecekFis[j].CARIADI! +
+                " ait " +
+                "sipariş gönderilemedi. " +
+                "Bayi seçimi yapılmamış\n";
+          }
+        }
+
+        if (hataTopla != "") {
+          Navigator.pop(context);
+          bs.printWrapped(hataTopla);
+          await showDialog(
+              context: context,
+              builder: (context) {
+                return VeriGondermeHataDialog(
+                  align: TextAlign.left,
+                  title: 'Hata',
+                  message:
+                      'Web Servise Veri Gönderilirken Bazı Hatalar İle Karşılaşıldı:\n' +
+                          hataTopla,
+                  onPres: () async {
+                    Navigator.pop(context);
+                  },
+                  buttonText: 'Tamam',
+                );
+              });
+        } else {
+          await showDialog(
+              context: context,
+              builder: (context) {
+                return CustomAlertDialog(
+                  align: TextAlign.left,
+                  title: 'İşlem Başarılı',
+                  message: 'Siparişler başarıyla gönderildi.',
+                  onPres: () async {
+                    setState(() {});
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  buttonText: 'Tamam',
+                );
+              });
+        }
+
+        setState(() {});
+      } else {
+        Navigator.pop(context);
+        await showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                align: TextAlign.left,
+                title: 'Boş Liste',
+                message: 'Seçilmiş Sipariş Yok',
+                onPres: () async {
+                  Navigator.pop(context);
+                },
+                buttonText: 'Tamam',
+              );
+            });
+      }
+    }
+    setState(() {
+      tempFis.clear();
+      for (var element in fisEx.list_tum_fis) {
+        if (element.AKTARILDIMI == localAktarildiMi) {
+          tempFis.add(element);
+        }
+      }
+    });
   }
 
   List<Fis> parcalaFis(Fis fisParam) {

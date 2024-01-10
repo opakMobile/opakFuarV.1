@@ -135,6 +135,7 @@ class _okumaModuListState extends State<okumaModuList> {
                                   builder: (context) {
                                     return fisHareketDuzenle(
                                       urunDuzenlemeyeGeldim: true,
+                                      
                                       okutulanCarpan: 1,
                                       altHesap: stokModel.ALTHESAP!,
                                       gelenStokKart: stok.first,

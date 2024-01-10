@@ -16,7 +16,8 @@ class CariController extends GetxController {
     super.onInit();
   }
 
-  void searchCari(String query) {
+  void 
+  searchCari(String query) {
     if (query.isEmpty) {
       searchCariList.assignAll(listeler.listCari);
     } else {
@@ -30,7 +31,9 @@ class CariController extends GetxController {
                     .toLowerCase()
                     .contains(queryparcali[0].toLowerCase()) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
-                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase())||
+                value.IL!.toLowerCase().contains(query.toLowerCase())||
+                value.ILCE!.toLowerCase().contains(query.toLowerCase()))
             .toList();
       } else if (queryparcali.length == 2) {
         results = listeler.listCari
@@ -42,7 +45,14 @@ class CariController extends GetxController {
                         .toLowerCase()
                         .contains(queryparcali[1].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
-                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase())||
+                value.IL!.toLowerCase().contains(query.toLowerCase())||
+                value.ILCE!.toLowerCase().contains(query.toLowerCase())||
+                (value.IL!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[1].toLowerCase()))||
+                (value.ILCE!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase())) ||
+                (value.ADI!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase()))||
+                (value.IL!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.ADI!.toLowerCase().contains(queryparcali[1].toLowerCase()))
+                )
             .toList();
       } else if (queryparcali.length == 3) {
         results = listeler.listCari
@@ -57,7 +67,15 @@ class CariController extends GetxController {
                         .toLowerCase()
                         .contains(queryparcali[2].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
-                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase())||
+                value.IL!.toLowerCase().contains(query.toLowerCase())||
+                value.ILCE!.toLowerCase().contains(query.toLowerCase())||
+                (value.IL!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.ADI!.toLowerCase().contains(queryparcali[2].toLowerCase()))||
+                (value.ILCE!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.ADI!.toLowerCase().contains(queryparcali[2].toLowerCase())) ||
+                (value.ADI!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[2].toLowerCase())) ||
+                (value.ADI!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[2].toLowerCase()))
+                
+                )
             .toList();
       } else if (queryparcali.length == 4) {
         results = listeler.listCari
@@ -75,7 +93,9 @@ class CariController extends GetxController {
                         .toLowerCase()
                         .contains(queryparcali[3].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
-                value.TELEFON!.toLowerCase().contains(query.toLowerCase()))
+                value.TELEFON!.toLowerCase().contains(query.toLowerCase())||
+                value.IL!.toLowerCase().contains(query.toLowerCase())||
+                value.ILCE!.toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
       searchCariList.assignAll(results);

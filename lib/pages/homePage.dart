@@ -56,12 +56,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Text(
                     //  "Versiyon : 1.0.5", //pdf mf ekle , alt hesap bi tık hızlı ol
-                   // "Versiyon : 1.0.6", // carigüncellme sorunu, cari gönder ayır
-                   // "Versiyon : 1.0.7", // pazar günü çeşitli güncellemeler
-                  //  "Versiyon : TEST", // cari güncelleme sorunu
-                  //  "Versiyon : 1.0.8", // veriGonderme base64 e çekildi
-                   // "Versiyon : 1.0.9" ,// misyon kamera ürün arama 
-                    "Versiyon : 1.1.0", // urunAra focus ,pdfFast,seçili fis gönder
+                    // "Versiyon : 1.0.6", // carigüncellme sorunu, cari gönder ayır
+                    // "Versiyon : 1.0.7", // pazar günü çeşitli güncellemeler
+                    //  "Versiyon : TEST", // cari güncelleme sorunu
+                    //  "Versiyon : 1.0.8", // veriGonderme base64 e çekildi
+                    // "Versiyon : 1.0.9" ,// misyon kamera ürün arama 
+                    // "Versiyon : 1.1.0", // urunAra focus ,pdfFast,seçili fis gönder
+                  //"Versiyon:1.1.1" ,// cariArama düzenleme, saciklama9
+                  //"Versiyon 1.1.2", // sacikla9 daki 0.0 hatası
+                  "Versiyon : 1.1.3", // alt hesap değişince boş arama yapıldı 
                     style: TextStyle(fontSize: 9),
                   ),
                 ],

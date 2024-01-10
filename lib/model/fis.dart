@@ -60,6 +60,7 @@ class Fis {
   String? USTUUID = "";
   int? SIPARISSAYISI = 0;
   int? KALEMSAYISI = 0;
+  bool? seciliFisGonder = false;
 
   Fis(
       this.ID,
@@ -107,7 +108,7 @@ class Fis {
       this.USTUUID,
       this.SIPARISSAYISI,
       this.KALEMSAYISI,
-      {this.isExpanded = false});
+      {this.isExpanded = false,this.seciliFisGonder=false});
   Fis.empty()
       : this(
             0,

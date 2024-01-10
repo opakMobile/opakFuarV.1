@@ -186,23 +186,27 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
     }
   }
 
-  void showSnackBar(BuildContext context, {double miktar=0}) {
+  void showSnackBar(BuildContext context, {double miktar = 0}) {
     ScaffoldMessenger.of(context).showSnackBar(
-     miktar >= 1 ? SnackBar(
-        content: Text(
-          "Stok eklendi " + miktar.toString() + " adet ürün sepete eklendi ! ",
-          style: TextStyle(fontSize: 16, color: Colors.white),
-        ),
-        duration: Duration(milliseconds: 700),
-        backgroundColor: Colors.blue,
-      ):SnackBar(
-        content: Text(
-          "Stok sepetten kaldırıldı.",
-          style: TextStyle(fontSize: 16, color: Colors.white),
-        ),
-        duration: Duration(milliseconds: 700),
-        backgroundColor: Colors.blue,
-      ),
+      miktar >= 1
+          ? SnackBar(
+              content: Text(
+                "Stok eklendi " +
+                    miktar.toString() +
+                    " adet ürün sepete eklendi ! ",
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+              duration: Duration(milliseconds: 700),
+              backgroundColor: Colors.blue,
+            )
+          : SnackBar(
+              content: Text(
+                "Stok sepetten kaldırıldı.",
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+              duration: Duration(milliseconds: 700),
+              backgroundColor: Colors.blue,
+            ),
     );
   }
 
@@ -450,15 +454,27 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                         borderRadius: BorderRadius.circular(25)),
                     child: IconButton(
                         onPressed: () {
+                        String tempSaciklama9 =
+                              widget.gelenStokKart.SACIKLAMA9!.split(".")[0];
+                     if(tempSaciklama9 == "0"){
+                            tempSaciklama9 = "1";
+                          }
+                          String tempMiktar =
+                              widget.gelenStokKart.guncelDegerler!.carpan! > 1
+                                  ? ((widget.gelenStokKart.guncelDegerler!
+                                              .carpan!)
+                                          .toInt())
+                                      .toString()
+                                  : tempSaciklama9;
+
+                       
                           if ((int.parse(miktarController.text)) -
-                                  (widget.gelenStokKart.guncelDegerler!.carpan!)
-                                      .toInt() >
+                                  int.parse(tempMiktar)
+                                       >
                               0) {
                             miktarController.text =
                                 (int.parse(miktarController.text) -
-                                        (widget.gelenStokKart.guncelDegerler!
-                                                .carpan!)
-                                            .toInt())
+                                        int.parse(tempMiktar))
                                     .toString();
                           }
                         },
@@ -513,11 +529,24 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                         borderRadius: BorderRadius.circular(25)),
                     child: IconButton(
                         onPressed: () {
-                          miktarController
-                              .text = (int.parse(miktarController.text) +
-                                  (widget.gelenStokKart.guncelDegerler!.carpan!)
-                                      .toInt())
-                              .toString();
+                          String tempSaciklama9 =
+                              widget.gelenStokKart.SACIKLAMA9!.split(".")[0];
+                          if(tempSaciklama9 == "0"){
+                            tempSaciklama9 = "1";
+                          }
+
+                          String tempMiktar =
+                              widget.gelenStokKart.guncelDegerler!.carpan! > 1
+                                  ? ((widget.gelenStokKart.guncelDegerler!
+                                              .carpan!)
+                                          .toInt())
+                                      .toString()
+                                  : tempSaciklama9;
+
+                          miktarController.text =
+                              (int.parse(miktarController.text) +
+                                      int.parse(tempMiktar))
+                                  .toString();
                         },
                         icon: Icon(
                           Icons.add_circle,
@@ -616,8 +645,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                             scrollDirection: Axis.horizontal,
                             child: Column(
                               children: [
-
-                                 Ctanim.kullanici!.MALFAZLASI == "E"
+                                Ctanim.kullanici!.MALFAZLASI == "E"
                                     ? Text(
                                         "Mal Fazlası",
                                         style: TextStyle(
@@ -670,18 +698,6 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                         ),
                                       )
                                     : Container(),
-
-
-
-
-
-
-
-
-
-
-
-
                                 Text(
                                   "İskonto",
                                   style: TextStyle(
@@ -1185,7 +1201,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
 
         Navigator.pop(context);
         showSnackBar(context);
-      }else{
+      } else {
         await showDialog(
             context: context,
             builder: (context) {
@@ -1200,12 +1216,22 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 buttonText: 'Tamam',
               );
             });
-
       }
     } else {
-      if (double.parse(miktarController.text) %
-              widget.gelenStokKart.guncelDegerler!.carpan! !=
-          0) {
+      String tempSacikalama9 = widget.gelenStokKart.SACIKLAMA9!.split(".")[0];
+      double kontrolCarpan = 0.0;
+      if(tempSacikalama9 == "0"){
+        tempSacikalama9 = "1";
+
+      }
+         kontrolCarpan = widget.gelenStokKart.guncelDegerler!.carpan! > 1
+          ? widget.gelenStokKart.guncelDegerler!.carpan!
+          : double.tryParse(tempSacikalama9) ?? 1;
+
+      
+  
+
+      if (double.parse(miktarController.text) % kontrolCarpan != 0) {
         // HATA GOSTER
         Ctanim.urunAraFocus = false;
         await showDialog(
@@ -1215,7 +1241,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 align: TextAlign.left,
                 title: 'Hata',
                 message: 'Eklemeye çalıştığınız miktar  ' +
-                    widget.gelenStokKart.guncelDegerler!.carpan!.toString() +
+                    kontrolCarpan.toString() +
                     " katı olmalıdır.",
                 onPres: () async {
                   Navigator.pop(context);
