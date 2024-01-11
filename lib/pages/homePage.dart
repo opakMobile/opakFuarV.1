@@ -21,7 +21,6 @@ import 'package:opak_fuar/sepet/sepetCariList.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/webServis/base.dart';
 import 'package:uuid/uuid.dart';
-
 import '../controller/fisController.dart';
 import '../model/fis.dart';
 
@@ -69,7 +68,9 @@ class _HomePageState extends State<HomePage> {
                    // "Versiyon : 1.1.5", // mal fazlası eklendi
                    // "Versiyon: 1.1.6", // malfazlası değiştirme eklendi for temat
                    //"Versiyon: 1.1.7", // tablette ürün arama düzeltilmesi for südor
-                    "Versiyon:1.1.8",//MF HESABI DÜZELTİLDİ (BENCE BOZULDU)
+                   // "Versiyon:1.1.8",//MF HESABI DÜZELTİLDİ (BENCE BOZULDU)
+                   // "Versiyon: 1.1.9", // artık pdf den önce kayıt yapılıyor
+                    "Versiyon: 1.2.0", // cari eklemede koda tarih saat eklendi
                     
 
                     style: TextStyle(fontSize: 9),

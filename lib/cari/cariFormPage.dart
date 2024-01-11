@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:opak_fuar/db/veriTabaniIslemleri.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
@@ -523,15 +524,22 @@ class _CariFormPageState extends State<CariFormPage> {
                                                   },
                                                 );
                                                 Cari cari = Cari.empty();
+                                                  DateTime now = DateTime.now();
+                                                  String formattedDate = DateFormat('ddMMHHmm').format(now);
+                                            
+
 
                                                 String paddedString = Ctanim
                                                     .cariKod
                                                     .toString()
                                                     .padLeft(5, "0");
+                                                    print( Ctanim.kullanici!.KOD! +
+                                                        "-" +
+                                                        formattedDate+paddedString);
                                                 cari.KOD =
                                                     Ctanim.kullanici!.KOD! +
                                                         "-" +
-                                                        paddedString;
+                                                        formattedDate+paddedString;
                                                 cari.PLASIYERID = int.parse(
                                                     Ctanim.kullanici!.KOD!);
                                                 cari.ADI = _SirketIsmi.text;
