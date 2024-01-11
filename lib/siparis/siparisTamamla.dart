@@ -183,10 +183,11 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                   'Fatura Kaydedildi. PDF Dosyasını Görüntülemek İster misiniz?',
                               onPres: () async {
                                 String hataTopla = "";
-                                List<Fis> pdfeGidecek =  parcalaFis(fisEx.fis!.value);
+                                
                                 fisEx.fis!.value.AKTARILDIMI = false;
                                 await Fis.empty().fisEkle(
                                     fis: fisEx.fis!.value, belgeTipi: "YOK");
+                                List<Fis> pdfeGidecek =  parcalaFis(fisEx.fis!.value);
                                 fisEx.fis!.value = Fis.empty();
                                 Navigator.pop(context);
                                 Navigator.pop(context);

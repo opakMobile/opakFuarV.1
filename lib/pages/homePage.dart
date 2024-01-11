@@ -68,9 +68,9 @@ class _HomePageState extends State<HomePage> {
                    // "Versiyon : 1.1.4", // focus düzenlemeleri
                    // "Versiyon : 1.1.5", // mal fazlası eklendi
                    // "Versiyon: 1.1.6", // malfazlası değiştirme eklendi for temat
-
-                   
-                    "Versiyon: 1.1.7", // tablette ürün arama düzeltilmesi for südor
+                   //"Versiyon: 1.1.7", // tablette ürün arama düzeltilmesi for südor
+                    "Versiyon:1.1.8",//MF HESABI DÜZELTİLDİ (BENCE BOZULDU)
+                    
 
                     style: TextStyle(fontSize: 9),
                   ),

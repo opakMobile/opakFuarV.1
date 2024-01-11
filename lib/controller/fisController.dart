@@ -54,8 +54,9 @@ class FisController extends GetxController {
           malFazlasi = 0;
         }
    int tempMiktar  = miktar;
-  int a = (miktar * malFazlasi / 100).toInt();   
-  miktar = miktar - a;
+  int a = (miktar / (1+(malFazlasi / 100))).toInt();   
+  //a = 25
+  miktar =  a;
     
     bool stokVarMi = false;
     int? fisId = fis!.value.ID;

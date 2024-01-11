@@ -453,7 +453,8 @@ class Fis {
           for (var element in fis.fisStokListesi) {
             element.FIS_ID = result;
             element.ID = null;
-            Ctanim.db?.insert("TBLFISHAR", element.toJson());
+           int a = await  Ctanim.db?.insert("TBLFISHAR", element.toJson());
+           element.ID = a;
           }
 
           return result;
