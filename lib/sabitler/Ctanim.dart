@@ -88,6 +88,7 @@ class Ctanim {
     fisEx.fis!.value!.altHesapToplamlar.clear();
     List<AltHesapToplamModel> altHesapToplamList = [];
     for(var element in fisEx.fis!.value.fisStokListesi){
+
       if(!altHesapToplamList.any((alt) => alt.ALTHESAPADI == element.ALTHESAP)){
         AltHesapToplamModel alt = AltHesapToplamModel.empty();
         alt.ALTHESAPADI = element.ALTHESAP;
@@ -107,6 +108,8 @@ class Ctanim {
 
       double kdvOrani = element.KDVORANI! / 100;
       int miktar = element.MIKTAR!;
+      int a = (miktar * element.MALFAZLASI / 100).toInt();   
+      miktar = miktar - a;
 //listefiyatınını kurun gelmedi????
       if (fisEx.fis!.value.DOVIZID != anaBirimID) {
         brut = brut / fisEx.fis!.value.KUR!;

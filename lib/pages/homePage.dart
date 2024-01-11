@@ -65,7 +65,8 @@ class _HomePageState extends State<HomePage> {
                     //"Versiyon:1.1.1" ,// cariArama düzenleme, saciklama9
                     //"Versiyon 1.1.2", // sacikla9 daki 0.0 hatası
                     // "Versiyon : 1.1.3", // alt hesap değişince boş arama yapıldı
-                    "Versiyon : 1.1.4", // focus düzenlemeleri
+                   // "Versiyon : 1.1.4", // focus düzenlemeleri
+                    "Versiyon : 1.1.5", // mal fazlası eklendi
                     style: TextStyle(fontSize: 9),
                   ),
                 ],

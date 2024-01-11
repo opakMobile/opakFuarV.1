@@ -29,7 +29,7 @@ class FisController extends GetxController {
   void fiseStokEkle(
       {required bool urunListedenMiGeldin,
       required double KUR,
-      int malFazlasi = 0,
+      required int malFazlasi,
       required String ALTHESAP,
       required String TARIH,
       required String Aciklama1,
@@ -53,6 +53,10 @@ class FisController extends GetxController {
         if(malFazlasi == null || malFazlasi == 0){
           malFazlasi = 0;
         }
+   int tempMiktar  = miktar;
+  int a = (miktar * malFazlasi / 100).toInt();   
+  miktar = miktar - a;
+    
     bool stokVarMi = false;
     int? fisId = fis!.value.ID;
 
@@ -75,19 +79,19 @@ class FisController extends GetxController {
           // sepet listesi düzenle true gelecek
           fisHareket.MALFAZLASI = malFazlasi;
           fisHareket.MIKTAR =
-              int.parse((fisHareket.MIKTAR! + miktar).toString());
-          HbrutToplamFiyat = HbrutFiyat * fisHareket.MIKTAR!;
-          HnetToplamFiyat = HnetFiyat * fisHareket.MIKTAR!;
-          HiskontoToplamFiyat = Hiskonto * fisHareket.MIKTAR!;
-          HkdvDahilNetFiyatToplam = HkdvDahilNetFiyat * fisHareket.MIKTAR!;
-          HkdvTutarToplam = HkdvTutar * fisHareket.MIKTAR!;
+              int.parse((fisHareket.MIKTAR! + tempMiktar).toString());
+          HbrutToplamFiyat = HbrutFiyat * miktar;
+          HnetToplamFiyat = HnetFiyat * miktar;
+          HiskontoToplamFiyat = Hiskonto * miktar;
+          HkdvDahilNetFiyatToplam = HkdvDahilNetFiyat * miktar;
+          HkdvTutarToplam = HkdvTutar * miktar;
         } else {
-          fisHareket.MIKTAR = int.parse((miktar).toString());
-          HbrutToplamFiyat = HbrutFiyat * fisHareket.MIKTAR!;
-          HnetToplamFiyat = HnetFiyat * fisHareket.MIKTAR!;
-          HiskontoToplamFiyat = Hiskonto * fisHareket.MIKTAR!;
-          HkdvDahilNetFiyatToplam = HkdvDahilNetFiyat * fisHareket.MIKTAR!;
-          HkdvTutarToplam = HkdvTutar * fisHareket.MIKTAR!;
+          fisHareket.MIKTAR = int.parse((tempMiktar).toString());
+          HbrutToplamFiyat = HbrutFiyat * miktar;
+          HnetToplamFiyat = HnetFiyat * miktar;
+          HiskontoToplamFiyat = Hiskonto * miktar;
+          HkdvDahilNetFiyatToplam = HkdvDahilNetFiyat * miktar;
+          HkdvTutarToplam = HkdvTutar * miktar;
         }
 
         fisHareket.KDVORANI = Ctanim.noktadanSonraAlinacak(KDVOrani);
@@ -138,7 +142,7 @@ class FisController extends GetxController {
       STOKKOD: stokKodu,
       STOKADI: stokAdi,
       KDVORANI: KDVOrani,
-      MIKTAR: int.parse(miktar.toString()),
+      MIKTAR: int.parse(tempMiktar.toString()),
       BRUTFIYAT: Ctanim.noktadanSonraAlinacak(HbrutFiyat),
       ISK: iskonto,
       ISK2: iskonto2,
