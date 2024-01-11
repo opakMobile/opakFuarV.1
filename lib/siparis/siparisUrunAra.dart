@@ -345,10 +345,13 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 focusNodeList[i].unfocus();
                               }
                               Ctanim.urunAraFocus = true;
+                              editingController.text = "";
+                              /*
                               editingController.selection = TextSelection(
                                   baseOffset: 0,
                                   extentOffset:
                                       editingController.value.text.length);
+                                      */
                             },
                             onFieldSubmitted: ((value) async {
                               await textAramaYap(value, context);
@@ -896,6 +899,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                             .unfocus();
                                                         Ctanim.urunAraFocus =
                                                             true;
+                                                         editingController.text =
+                                                            "";   
                                                         KurModel gidecekKur =
                                                             listeler
                                                                 .listKur.first;

@@ -86,6 +86,7 @@ class FisController extends GetxController {
           HkdvDahilNetFiyatToplam = HkdvDahilNetFiyat * miktar;
           HkdvTutarToplam = HkdvTutar * miktar;
         } else {
+          fisHareket.MALFAZLASI = malFazlasi;
           fisHareket.MIKTAR = int.parse((tempMiktar).toString());
           HbrutToplamFiyat = HbrutFiyat * miktar;
           HnetToplamFiyat = HnetFiyat * miktar;

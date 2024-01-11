@@ -91,7 +91,11 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
         ? widget.isk6.toString()
         : widget.gelenStokKart.guncelDegerler!.iskonto6!.toString();
 
-    malFazlasiController.text = widget.gelenStokKart.SACIKLAMA10!.toString();
+    malFazlasiController.text = widget.malFazlasi != -1
+        ? widget.malFazlasi.toString()
+        :
+    
+    widget.gelenStokKart.SACIKLAMA10!.toString();
     print("Miktar ${miktarController.text}");
   }
 
@@ -684,7 +688,17 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                                     BorderRadius.circular(10),
                                               ),
                                               child: TextFormField(
-                                                enabled: false,
+                                                onTap: () => 
+                                                      malFazlasiController
+                                                              .selection =
+                                                          TextSelection(
+                                                              baseOffset: 0,
+                                                              extentOffset:
+                                                                 malFazlasiController
+                                                                      .value
+                                                                      .text
+                                                                      .length),
+                                         
                                                 controller:
                                                     malFazlasiController,
                                                 decoration: InputDecoration(
@@ -1071,59 +1085,8 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
-                                Ctanim.kullanici!.MALFAZLASI == "E"
-                                    ? Text(
-                                        "Mal Fazlası",
-                                        style: TextStyle(
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.04),
-                                      )
-                                    : Container(),
-                                Ctanim.kullanici!.MALFAZLASI == "E"
-                                    ? SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.01,
-                                      )
-                                    : Container(),
-                                Ctanim.kullanici!.MALFAZLASI == "E"
-                                    ? Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.07,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Material(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              child: TextFormField(
-                                                enabled: false,
-                                                controller:
-                                                    malFazlasiController,
-                                                decoration: InputDecoration(
-                                                  border: InputBorder.none,
-                                                  hintText: "1",
-                                                  hintStyle: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey),
-                                                ),
-                                              )),
-                                        ),
-                                      )
-                                    : Container(),
+                             
+                               
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.01,
