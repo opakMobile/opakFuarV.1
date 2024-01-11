@@ -49,21 +49,29 @@ class FisController extends GetxController {
       required int birimID,
       required int dovizId,
       required String dovizAdi}) {
+    if (malFazlasi == null || malFazlasi == 0) {
+      malFazlasi = 0;
+    }
+    int tempMiktar = miktar;
+    int a = (miktar / (1 + (malFazlasi / 100))).toInt();
+    print(a);
+    if (a > 0) {
+      miktar = a;
+    }else{
+      malFazlasi = 0;
 
-        if(malFazlasi == null || malFazlasi == 0){
-          malFazlasi = 0;
-        }
-   int tempMiktar  = miktar;
-  int a = (miktar / (1+(malFazlasi / 100))).toInt();   
-  //a = 25
-  miktar =  a;
-    
+    }
     bool stokVarMi = false;
     int? fisId = fis!.value.ID;
 
     double HbrutFiyat = burutFiyat;
-    double HnetFiyat = HbrutFiyat * (1 - iskonto / 100) * (1 - iskonto2 / 100)*(1 - iskonto3 / 100)
-    * (1 - iskonto4 / 100) * (1 - iskonto5 / 100)*(1 - iskonto6 / 100);
+    double HnetFiyat = HbrutFiyat *
+        (1 - iskonto / 100) *
+        (1 - iskonto2 / 100) *
+        (1 - iskonto3 / 100) *
+        (1 - iskonto4 / 100) *
+        (1 - iskonto5 / 100) *
+        (1 - iskonto6 / 100);
     double Hiskonto = HbrutFiyat - HnetFiyat;
     double HkdvDahilNetFiyat = (HnetFiyat * (1 + KDVOrani / 100));
     double HkdvTutar = HnetFiyat * (KDVOrani / 100);
@@ -167,7 +175,7 @@ class FisController extends GetxController {
       NETTOPLAM: Ctanim.noktadanSonraAlinacak(HnetToplamFiyat),
     );
 
-    fis!.value.fisStokListesi.insert(0,yeniFisHareket);
+    fis!.value.fisStokListesi.insert(0, yeniFisHareket);
   }
 
   Future<List<FisHareket>> getFisHar(int fisId) async {
@@ -177,45 +185,47 @@ class FisController extends GetxController {
         List.generate(result.length, (i) => FisHareket.fromJson(result[i]));
     return tt1;
   }
-    Future<double> cariToplamGetir(String cariKod) async {
+
+  Future<double> cariToplamGetir(String cariKod) async {
     List<Fis> tt = await getCariToplam(cariKod);
     double genelToplam = 0;
-    if(tt.length == 0){
+    if (tt.length == 0) {
       return genelToplam;
-
-    }else{
-         for (var i = 0; i < tt.length; i++) {
-      var element = tt[i];
-      genelToplam += element.GENELTOPLAM!;
+    } else {
+      for (var i = 0; i < tt.length; i++) {
+        var element = tt[i];
+        genelToplam += element.GENELTOPLAM!;
+      }
     }
 
-    }
- 
     return genelToplam;
   }
-   Future<List<Fis>> getCariToplam(String cariKod) async {
-     List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'CARIKOD = ? AND AKTARILDIMI = ?', whereArgs: [cariKod,true]);
+
+  Future<List<Fis>> getCariToplam(String cariKod) async {
+    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
+        where: 'CARIKOD = ? AND AKTARILDIMI = ?', whereArgs: [cariKod, true]);
     return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
   }
 
-
-
-    Future<void> listTumFisleriGetir() async {
+  Future<void> listTumFisleriGetir() async {
     List<Fis> tt = await getTumfis();
     for (var i = 0; i < tt.length; i++) {
       var element = tt[i];
       List<FisHareket> fisHar = await getFisHar(element.ID!);
       element.fisStokListesi = fisHar;
 
-      element.cariKart =
-          cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD,orElse: () => element.cariKart = Cari(ADI: "CARİ GÖNDERİLMEDEN SİLİNMİŞ"),);
+      element.cariKart = cariEx.searchCariList.firstWhere(
+        (c) => c.KOD == element.CARIKOD,
+        orElse: () =>
+            element.cariKart = Cari(ADI: "CARİ GÖNDERİLMEDEN SİLİNMİŞ"),
+      );
     }
     list_tum_fis.addAll(tt);
   }
-   Future<List<Fis>> getTumfis() async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",  orderBy: 'ID DESC'
-        );
+
+  Future<List<Fis>> getTumfis() async {
+    List<Map<String, dynamic>> result =
+        await Ctanim.db?.query("TBLFISSB", orderBy: 'ID DESC');
     return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
   }
 
@@ -231,7 +241,8 @@ class FisController extends GetxController {
     }
     list_fis_gidecek.addAll(tt);
   }
-   Future<List<Fis>> getGidecekfis() async {
+
+  Future<List<Fis>> getGidecekfis() async {
     List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
         where: 'DURUM = ? AND AKTARILDIMI = ?', whereArgs: [true, false]);
     return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
@@ -317,7 +328,6 @@ class FisController extends GetxController {
     await Future.forEach(tt, (element) async {
       List<FisHareket> fisHarList = await getFisHar(element.ID!);
       element.fisStokListesi = fisHarList;
-      
     });
 
     list_fis_cari_ozel.assignAll(tt);

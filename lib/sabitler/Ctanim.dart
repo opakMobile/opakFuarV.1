@@ -108,8 +108,11 @@ class Ctanim {
 
       double kdvOrani = element.KDVORANI! / 100;
       int miktar = element.MIKTAR!;
-     int a = (miktar / (1+(element.MALFAZLASI / 100))).toInt();   
+     int a = (miktar / (1+(element.MALFAZLASI / 100))).toInt();  
+     if(a>0){
       miktar = a;
+     } 
+      
 //listefiyatınını kurun gelmedi????
       if (fisEx.fis!.value.DOVIZID != anaBirimID) {
         brut = brut / fisEx.fis!.value.KUR!;
