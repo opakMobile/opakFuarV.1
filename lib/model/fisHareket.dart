@@ -35,6 +35,7 @@ class FisHareket {
   double? KUR = 0.0;
   String? ACIKLAMA1 = "";
   int MALFAZLASI = 0;
+  bool? AltHesapDegistir = false;
 
   FisHareket({
     required this.ID,

@@ -11,6 +11,7 @@ import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/PdfOnizleme.dart';
+import 'package:opak_fuar/siparis/altHesapAyarla.dart';
 import 'package:opak_fuar/siparis/bayiSec.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
@@ -30,11 +31,13 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(fisEx.fis!.value.ISK1 != 0.0){
-      genelIskonto1Controller.text = (fisEx.fis!.value.ISK1!.toInt()).toString();
+    if (fisEx.fis!.value.ISK1 != 0.0) {
+      genelIskonto1Controller.text =
+          (fisEx.fis!.value.ISK1!.toInt()).toString();
     }
     aciklamaController.text = fisEx.fis!.value.ACIKLAMA1!;
   }
+
   Color getRandomColor() {
     List<Color> colors = [
       Colors.red,
@@ -139,7 +142,6 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
 
     return SafeArea(
       child: Scaffold(
-     
         bottomNavigationBar: bottombarDizayn(context,
             button: Card(
               elevation: 5,
@@ -168,7 +170,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                               secondButtonText: "Tamam",
                               onSecondPress: () async {
                                 fisEx.fis!.value.AKTARILDIMI = false;
-                                 await Fis.empty().fisEkle(
+                                await Fis.empty().fisEkle(
                                     fis: fisEx.fis!.value, belgeTipi: "YOK");
                                 fisEx.fis!.value = Fis.empty();
 
@@ -183,25 +185,25 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                   'Fatura Kaydedildi. PDF Dosyasını Görüntülemek İster misiniz?',
                               onPres: () async {
                                 String hataTopla = "";
-                                
+
                                 fisEx.fis!.value.AKTARILDIMI = false;
                                 await Fis.empty().fisEkle(
                                     fis: fisEx.fis!.value, belgeTipi: "YOK");
-                                List<Fis> pdfeGidecek =  parcalaFis(fisEx.fis!.value);
+                                List<Fis> pdfeGidecek =
+                                    parcalaFis(fisEx.fis!.value);
                                 fisEx.fis!.value = Fis.empty();
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 // ha bura
 
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => PdfOnizleme(
-                                          m: pdfeGidecek,
-                                          fastReporttanMiGelsin: true,
-                                        )),
-                              );
-                              
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => PdfOnizleme(
+                                            m: pdfeGidecek,
+                                            fastReporttanMiGelsin: true,
+                                          )),
+                                );
                               },
                               buttonText: 'Pdf\'i\ Gör',
                             );
@@ -234,7 +236,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
         body: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height ,
+            height: MediaQuery.of(context).size.height,
             child: Padding(
               padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
               child: Column(
@@ -247,6 +249,30 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                       itemCount: altHesaplar.length,
                       scrollDirection: Axis.horizontal,
                     ),
+                  ),
+                   Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text("Alt Hesap Ayarla"),
+                        onPressed: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AltHesapAyarla())).then((value) => setState(() {
+                                    
+                                  }));
+                    
+                        },
+                      ),
+                    )
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -385,63 +411,59 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
-                Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E" ?  SizedBox(
-                   
-                    child: Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: TextFormField(
-                        style: TextStyle(
-                          fontSize: 14.0,
-                        ),
-                        controller: genelIskonto1Controller,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          setState(() {
-                              if (value == "") {
-                                fisEx.fis!.value.ISK1 = 0.0;
-                                Ctanim.genelToplamHesapla(fisEx);
-                          
-                              }else{
-                                 fisEx.fis!.value.ISK1 =
-                                  Ctanim.noktadanSonraAlinacak(double.tryParse(
-                                      genelIskonto1Controller.text)??0.0);
-                              Ctanim.genelToplamHesapla(fisEx);
-                              
-
-                              }
-                             
-                            });
-                         
-                        },
-                        maxLines:1,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d+\.?\d{0,2}')),
+                  Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
+                      ? SizedBox(
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: TextFormField(
+                              style: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                              controller: genelIskonto1Controller,
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value == "") {
+                                    fisEx.fis!.value.ISK1 = 0.0;
+                                    Ctanim.genelToplamHesapla(fisEx);
+                                  } else {
+                                    fisEx.fis!.value.ISK1 = Ctanim
+                                        .noktadanSonraAlinacak(double.tryParse(
+                                                genelIskonto1Controller.text) ??
+                                            0.0);
+                                    Ctanim.genelToplamHesapla(fisEx);
+                                  }
+                                });
+                              },
+                              maxLines: 1,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d{0,2}')),
                                 FilteringTextInputFormatter.digitsOnly
-                          ],
-                        decoration: InputDecoration(
-                          /* contentPadding: EdgeInsets.symmetric(
+                              ],
+                              decoration: InputDecoration(
+                                /* contentPadding: EdgeInsets.symmetric(
                               vertical: MediaQuery.of(context).size.height * 0.05,
                             ),*/
 
-                          hintText: 'Genel İskonto (ör:50)',
-                        
-                          hintStyle: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
+                                hintText: 'Genel İskonto (ör:50)',
+                                hintStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                            ),
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ):Container(),
-               
+                        )
+                      : Container(),
+
                   // ! sipariş açıklaması
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
@@ -519,13 +541,15 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                           bayiList: bayiler,
                                         )));*/
                           },
-                          child: Text(fisEx.fis!.value.ACIKLAMA4 != "" &&
-                                  fisEx.fis!.value.ACIKLAMA5 != ""
-                              ? "Bayi : " +
-                                  fisEx.fis!.value!.ACIKLAMA4! +
-                                  " - " +
-                                  fisEx.fis!.value!.ACIKLAMA5!
-                              : "Bayi Seç",),
+                          child: Text(
+                            fisEx.fis!.value.ACIKLAMA4 != "" &&
+                                    fisEx.fis!.value.ACIKLAMA5 != ""
+                                ? "Bayi : " +
+                                    fisEx.fis!.value!.ACIKLAMA4! +
+                                    " - " +
+                                    fisEx.fis!.value!.ACIKLAMA5!
+                                : "Bayi Seç",
+                          ),
                         ),
                       ),
                     ),
@@ -539,23 +563,19 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
     );
   }
 
-  List<Fis> parcalaFis(Fis fisParam){
+  List<Fis> parcalaFis(Fis fisParam) {
     List<Fis> parcaliFisler = [];
     if (fisParam.fisStokListesi.length > 0) {
       List<String> althesaplar = [];
-      for (int i = 0;
-          i < fisParam.fisStokListesi.length;
-          i++) {
-        if (!althesaplar
-            .contains(fisParam.fisStokListesi[i].ALTHESAP)) {
-          althesaplar
-              .add(fisParam.fisStokListesi[i].ALTHESAP!);
+      for (int i = 0; i < fisParam.fisStokListesi.length; i++) {
+        if (!althesaplar.contains(fisParam.fisStokListesi[i].ALTHESAP)) {
+          althesaplar.add(fisParam.fisStokListesi[i].ALTHESAP!);
         }
       }
       for (var element in althesaplar) {
-            var uuidx = Uuid();
-             String neu = uuidx.v1();
-        
+        var uuidx = Uuid();
+        String neu = uuidx.v1();
+
         Fis fis = Fis.empty();
         fis = Fis.fromFis(fisParam, []);
         fis.USTUUID = fis.UUID;
@@ -564,24 +584,20 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
         fis.KALEMSAYISI = 0;
         fis.ALTHESAP = element;
 
-
-        for (int k = 0;
-            k < fisParam.fisStokListesi.length;
-            k++) {
+        for (int k = 0; k < fisParam.fisStokListesi.length; k++) {
           if (fisParam.fisStokListesi[k].ALTHESAP == element) {
-            FisHareket aa = FisHareket.fromFishareket(fisParam.fisStokListesi[k]);
+            FisHareket aa =
+                FisHareket.fromFishareket(fisParam.fisStokListesi[k]);
             aa.UUID = fis.UUID;
-        
-            
+
             fis.fisStokListesi.add(aa);
             fis.KALEMSAYISI = fis.KALEMSAYISI! + 1;
           }
         }
 
         parcaliFisler.add(fis);
-      } 
-      
-    } 
+      }
+    }
 
     return parcaliFisler;
   }
