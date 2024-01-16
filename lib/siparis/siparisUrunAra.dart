@@ -865,6 +865,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                                           context: context,
                                                           builder: (context) {
                                                             return fisHareketDuzenle(
+                                                              
+                                                              
                                                               urunDuzenlemeyeGeldim:
                                                                   urunDuz,
                                                               fisHareketMiktar:
@@ -1274,6 +1276,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
             context: context,
             builder: (context) {
               return fisHareketDuzenle(
+                
                 urunDuzenlemeyeGeldim: urunVar,
                 fisHareketMiktar: Fmiktar,
                 okutulanCarpan: okutulanCarpan,

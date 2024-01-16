@@ -71,7 +71,8 @@ class _HomePageState extends State<HomePage> {
                    // "Versiyon:1.1.8",//MF HESABI DÜZELTİLDİ (BENCE BOZULDU)
                    // "Versiyon: 1.1.9", // artık pdf den önce kayıt yapılıyor
                    // "Versiyon: 1.2.0", // cari eklemede koda tarih saat eklendi
-                    "Versiyon: 1.2.1", // mal fazlası 0 gelirseeeee..... // sade zeko reise gitti atarsa son versiyon atmazsa yeni güncellemede yükseltme gerek yok
+                   // "Versiyon: 1.2.1", // mal fazlası 0 gelirseeeee.....
+                    "Versiyon: 1.2.2", // mal fazlası üste yuvarlama
                     
 
                     style: TextStyle(fontSize: 9),

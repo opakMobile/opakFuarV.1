@@ -108,7 +108,7 @@ class Ctanim {
 
       double kdvOrani = element.KDVORANI! / 100;
       int miktar = element.MIKTAR!;
-     int a = (miktar / (1+(element.MALFAZLASI / 100))).toInt();  
+     int a = (miktar / (1+(element.MALFAZLASI / 100))).ceil();  
      if(a>0){
       miktar = a;
      } 
