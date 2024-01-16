@@ -469,7 +469,8 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                                                       color: Colors.grey),
                                                 ),
                                                 child: Center(
-                                                  child: Text("1"),
+                                                  child: Text(stokModel.MIKTAR!
+                                                      .toStringAsFixed(2)),
                                                 ),
                                               )
                                             ],
