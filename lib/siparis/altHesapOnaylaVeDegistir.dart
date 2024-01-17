@@ -81,9 +81,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
             if (widget.hepsiMi == false) {
               for (var element in fisEx.fis!.value.fisStokListesi) {
                 if (element.AltHesapDegistir == true) {
-
                   element.ALTHESAP = seciliAltHesap!.ALTHESAP;
-
                   altHesapDegistirFiseEkle(element);
                 }
               }
@@ -180,11 +178,14 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
     
     double KDVTUtarTemp = stok.first.guncelDegerler!.fiyat! *
         (1 + (stok.first.SATIS_KDV!));
-                     fisEx.fis!.value.fisStokListesi.remove(element);
+
+
+ //  fisEx.fis!.value.fisStokListesi.remove(element);
     
                      
     fisEx.fiseStokEkle(
       // belgeTipi: widget.belgeTipi,
+      altHesapDegistirMi: true,
     
       malFazlasi: element.MALFAZLASI,
       ALTHESAP: seciliAltHesap!.ALTHESAP!,

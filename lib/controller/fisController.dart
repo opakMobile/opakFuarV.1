@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:opak_fuar/model/cariModel.dart';
+import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 
 import '../db/veriTabaniIslemleri.dart';
 import '../model/fis.dart';
@@ -25,9 +26,12 @@ class FisController extends GetxController {
   RxDouble toplam = 0.0.obs;
   late DateTime fis_tarihi;
   List<FisHareket> denemelistesi = [];
+  //s
 
   void fiseStokEkle(
-      {required bool urunListedenMiGeldin,
+      {
+      bool altHesapDegistirMi = false,  
+      required bool urunListedenMiGeldin,
       required double KUR,
       required int malFazlasi,
       required String ALTHESAP,
@@ -81,9 +85,28 @@ class FisController extends GetxController {
     double HiskontoToplamFiyat = 0.0;
     double HkdvDahilNetFiyatToplam = 0.0;
     double HkdvTutarToplam = 0.0;
+/*
+    if(altHesapDegistirMi == true){
+       FisHareket? silinecek ;
+      for(var element in fisEx.fis!.value!.fisStokListesi){
+        if(stokKodu == element.STOKKOD && ALTHESAP == element.ALTHESAP &&element.MIKTAR! != tempMiktar){
+          int altHesapMiktar = element.MIKTAR!;
+        silinecek = element;
+          tempMiktar += altHesapMiktar;
+
+        }
+      }
+      if(silinecek !=null){
+      fisEx.fis!.value!.fisStokListesi.remove(silinecek);
+
+      }
+
+    }
+    */
 
     for (FisHareket fisHareket in fis!.value.fisStokListesi) {
       if (fisHareket.STOKKOD == stokKodu && fisHareket.ALTHESAP == ALTHESAP) {
+
         stokVarMi = true;
         if (urunListedenMiGeldin == false) {
           // sepet listesi düzenle true gelecek
