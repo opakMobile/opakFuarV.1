@@ -32,8 +32,13 @@ class StokKartController extends GetxController {
     update();
   }*/
 
-  List<dynamic> fiyatgetir(StokKart Stok, String CariKod, String _FiyatTip,
-      SatisTipiModel satisTipi, StokFiyatListesiModel stokFiyatListesi,int seciliAltHesapID) {
+  List<dynamic> fiyatgetir(
+      StokKart Stok,
+      String CariKod,
+      String _FiyatTip,
+      SatisTipiModel satisTipi,
+      StokFiyatListesiModel stokFiyatListesi,
+      int seciliAltHesapID) {
     bool fiyatDegistirsinMi = false;
     if (Ctanim.kullanici!.FIYATDEGISTIRILSIN == "E") {
       fiyatDegistirsinMi = true;
@@ -48,7 +53,7 @@ class StokKartController extends GetxController {
     double iskontoDegeri4 = 0;
     double iskontoDegeri5 = 0;
     double iskontoDegeri6 = 0;
-  
+
     for (var cari in listeler.listCari) {
       if (cari.KOD == CariKod) {
         seciliCari = cari;
@@ -133,7 +138,17 @@ class StokKartController extends GetxController {
           fiyat = double.parse(Stok.ALISISK.toString());
         }
 
-        return [fiyat, iskonto, Ctanim.seciliIslemTip.TIP, false,0.0,0.0,0.0,0.0,0.0];
+        return [
+          fiyat,
+          iskonto,
+          Ctanim.seciliIslemTip.TIP,
+          false,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ];
       } else {
         if (Ctanim.kullanici!.SATISTIPI == "0") {
           StokKart ff = searchList.where((p0) => p0.KOD == Stok.KOD).first;
@@ -141,57 +156,120 @@ class StokKartController extends GetxController {
           if (Fiyattip == 'Fiyat1') {
             kosulYoksaTekrarDonecek == ff.SFIYAT1;
             //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-            return [ff.SFIYAT1, ff.SATISISK, "Fiyat1", true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              ff.SFIYAT1,
+              ff.SATISISK,
+              "Fiyat1",
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == 'Fiyat2') {
             // iskontoGetir(Stok.KOD, CariKod);
             kosulYoksaTekrarDonecek == ff.SFIYAT2;
             // double iskonto = iskontoGetir(Stok.KOD, CariKod);
-            return [ff.SFIYAT2, ff.SATISISK, "Fiyat2", true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              ff.SFIYAT2,
+              ff.SATISISK,
+              "Fiyat2",
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == 'Fiyat3') {
             // iskontoGetir(Stok.KOD, CariKod);
             kosulYoksaTekrarDonecek == ff.SFIYAT3;
             // double iskonto = iskontoGetir(Stok.KOD, CariKod);
-            return [ff.SFIYAT3, ff.SATISISK, "Fiyat3", true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              ff.SFIYAT3,
+              ff.SATISISK,
+              "Fiyat3",
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == 'Fiyat4') {
             // iskontoGetir(Stok.KOD, CariKod);
             kosulYoksaTekrarDonecek == ff.SFIYAT4;
             //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-            return [ff.SFIYAT4, ff.SATISISK, "Fiyat4", true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              ff.SFIYAT4,
+              ff.SATISISK,
+              "Fiyat4",
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == 'Fiyat5') {
             // iskontoGetir(Stok.KOD, CariKod);
             kosulYoksaTekrarDonecek == ff.SFIYAT5;
             //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-            return [ff.SFIYAT5, ff.SATISISK, "Fiyat5", true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              ff.SFIYAT5,
+              ff.SATISISK,
+              "Fiyat5",
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == 'ListeFiyat') {
             // iskontoGetir(Stok.KOD, CariKod);
             kosulYoksaTekrarDonecek == ff.LISTEFIYAT;
             //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-            return [ff.LISTEFIYAT, ff.SATISISK, "ListeFiyat", true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              ff.LISTEFIYAT,
+              ff.SATISISK,
+              "ListeFiyat",
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else {
             //double iskonto = iskontoGetir(Stok.KOD, CariKod);
             kosulYoksaTekrarDonecek == 0.0;
-            return [0.0, ff.SATISISK, Fiyattip, true,0.0,0.0,0.0,0.0,0.0];
+            return [0.0, ff.SATISISK, Fiyattip, true, 0.0, 0.0, 0.0, 0.0, 0.0];
           }
         } else if (Ctanim.kullanici!.SATISTIPI == "1") {
           // opak kosul
           for (var element in listeler.listStokKosul) {
             if (element.KOSULID == seciliCari.KOSULID &&
-                element.GRUPKODU == Stok.KOSULGRUP_KODU 
-                && element.ALTHESAPID == seciliAltHesapID) 
-             
-                 {
+                element.GRUPKODU == Stok.KOSULGRUP_KODU &&
+                element.ALTHESAPID == seciliAltHesapID) {
               // stok kosul var
               if (element.ISK1 != 0) {
                 iskontoDegeri1 = element.ISK1!;
-              }  if (element.ISK2 != 0) {
+              }
+              if (element.ISK2 != 0) {
                 iskontoDegeri2 = element.ISK2!;
-              }  if (element.ISK3 != 0) {
+              }
+              if (element.ISK3 != 0) {
                 iskontoDegeri3 = element.ISK3!;
-              }  if (element.ISK4 != 0) {
+              }
+              if (element.ISK4 != 0) {
                 iskontoDegeri4 = element.ISK4!;
-              }  if (element.ISK5 != 0) {
+              }
+              if (element.ISK5 != 0) {
                 iskontoDegeri5 = element.ISK5!;
-              }  if (element.ISK6 != 0) {
+              }
+              if (element.ISK6 != 0) {
                 iskontoDegeri6 = element.ISK6!;
               }
 
@@ -223,7 +301,17 @@ class StokKartController extends GetxController {
                 isk6: element.ISK6!,
               );
               */
-              return [kosuldanDonenFiyat, iskontoDegeri1, seciliFiyat, false,iskontoDegeri2,iskontoDegeri3,iskontoDegeri4,iskontoDegeri5,iskontoDegeri6];
+              return [
+                kosuldanDonenFiyat,
+                iskontoDegeri1,
+                seciliFiyat,
+                false,
+                iskontoDegeri2,
+                iskontoDegeri3,
+                iskontoDegeri4,
+                iskontoDegeri5,
+                iskontoDegeri6
+              ];
             } else {
               kosuldanDonenFiyat = 0;
             }
@@ -275,7 +363,17 @@ class StokKartController extends GetxController {
                   isk6: element.ISK6!,
                 );
                 */
-                return [kosuldanDonenFiyat, iskontoDegeri1, seciliFiyat, false,0.0,0.0,0.0,0.0,0.0];
+                return [
+                  kosuldanDonenFiyat,
+                  iskontoDegeri1,
+                  seciliFiyat,
+                  false,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ];
               } else {
                 kosuldanDonenFiyat = 0;
               }
@@ -315,14 +413,24 @@ class StokKartController extends GetxController {
                   isk2: element.ISK2!,
                 );
                 */
-                return [kosuldanDonenFiyat, iskontoDegeri1, seciliFiyat, false,0.0,0.0,0.0,0.0,0.0];
+                return [
+                  kosuldanDonenFiyat,
+                  iskontoDegeri1,
+                  seciliFiyat,
+                  false,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ];
               } else {
                 kosuldanDonenFiyat = 0;
               }
             }
           }
         } else if (Ctanim.kullanici!.SATISTIPI == "2") {
-          return [0, 0, seciliCari.FIYAT, false,0.0,0.0,0.0,0.0,0.0];
+          return [0, 0, seciliCari.FIYAT, false, 0.0, 0.0, 0.0, 0.0, 0.0];
         } else if (Ctanim.kullanici!.SATISTIPI == "3") {
           if (Ctanim.seciliStokFiyatListesi.ID != -1) {
             for (var element in listeler.listStokFiyatListesiHar) {
@@ -332,7 +440,12 @@ class StokKartController extends GetxController {
                   element.FIYAT,
                   element.ISK1,
                   Ctanim.seciliStokFiyatListesi.ADI,
-                  false,0.0,0.0,0.0,0.0,0.0
+                  false,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
                 ];
               }
             }
@@ -341,31 +454,91 @@ class StokKartController extends GetxController {
             if (Fiyattip == 'Fiyat1') {
               kosulYoksaTekrarDonecek == ff.SFIYAT1;
               //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT1, ff.SATISISK, "Fiyat1", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT1,
+                ff.SATISISK,
+                "Fiyat1",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else if (Fiyattip == 'Fiyat2') {
               // iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == ff.SFIYAT2;
               // double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT2, ff.SATISISK, "Fiyat2", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT2,
+                ff.SATISISK,
+                "Fiyat2",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else if (Fiyattip == 'Fiyat3') {
               // iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == ff.SFIYAT3;
               // double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT3, ff.SATISISK, "Fiyat3", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT3,
+                ff.SATISISK,
+                "Fiyat3",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else if (Fiyattip == 'Fiyat4') {
               // iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == ff.SFIYAT4;
               //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT4, ff.SATISISK, "Fiyat4", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT4,
+                ff.SATISISK,
+                "Fiyat4",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else if (Fiyattip == 'Fiyat5') {
               // iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == ff.SFIYAT5;
               //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT5, ff.SATISISK, "Fiyat5", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT5,
+                ff.SATISISK,
+                "Fiyat5",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else {
               //double iskonto = iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == 0.0;
-              return [0.0, ff.SATISISK, Fiyattip, true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                0.0,
+                ff.SATISISK,
+                Fiyattip,
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             }
           } else {
             StokKart ff = searchList.where((p0) => p0.KOD == Stok.KOD).first;
@@ -373,47 +546,167 @@ class StokKartController extends GetxController {
             if (Fiyattip == 'Fiyat1') {
               kosulYoksaTekrarDonecek == ff.SFIYAT1;
               //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT1, ff.SATISISK, "Fiyat1", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT1,
+                ff.SATISISK,
+                "Fiyat1",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else if (Fiyattip == 'Fiyat2') {
               // iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == ff.SFIYAT2;
               // double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT2, ff.SATISISK, "Fiyat2", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT2,
+                ff.SATISISK,
+                "Fiyat2",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else if (Fiyattip == 'Fiyat3') {
               // iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == ff.SFIYAT3;
               // double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT3, ff.SATISISK, "Fiyat3", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT3,
+                ff.SATISISK,
+                "Fiyat3",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else if (Fiyattip == 'Fiyat4') {
               // iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == ff.SFIYAT4;
               //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT4, ff.SATISISK, "Fiyat4", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT4,
+                ff.SATISISK,
+                "Fiyat4",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else if (Fiyattip == 'Fiyat5') {
               // iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == ff.SFIYAT5;
               //double iskonto = iskontoGetir(Stok.KOD, CariKod);
-              return [ff.SFIYAT5, ff.SATISISK, "Fiyat5", true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                ff.SFIYAT5,
+                ff.SATISISK,
+                "Fiyat5",
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             } else {
               //double iskonto = iskontoGetir(Stok.KOD, CariKod);
               kosulYoksaTekrarDonecek == 0.0;
-              return [0.0, ff.SATISISK, Fiyattip, true,0.0,0.0,0.0,0.0,0.0];
+              return [
+                0.0,
+                ff.SATISISK,
+                Fiyattip,
+                true,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ];
             }
           }
         }
         if (kosuldanDonenFiyat == 0) {
           if (Fiyattip == "Fiyat1") {
-            return [Stok.SFIYAT1, Stok.SATISISK, _FiyatTip, true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              Stok.SFIYAT1,
+              Stok.SATISISK,
+              _FiyatTip,
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == "Fiyat2") {
-            return [Stok.SFIYAT2, Stok.SATISISK, _FiyatTip, true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              Stok.SFIYAT2,
+              Stok.SATISISK,
+              _FiyatTip,
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == "Fiyat3") {
-            return [Stok.SFIYAT3, Stok.SATISISK, _FiyatTip, true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              Stok.SFIYAT3,
+              Stok.SATISISK,
+              _FiyatTip,
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == "Fiyat4") {
-            return [Stok.SFIYAT4, Stok.SATISISK, _FiyatTip, true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              Stok.SFIYAT4,
+              Stok.SATISISK,
+              _FiyatTip,
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == "Fiyat5") {
-            return [Stok.SFIYAT5, Stok.SATISISK, _FiyatTip, true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              Stok.SFIYAT5,
+              Stok.SATISISK,
+              _FiyatTip,
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           } else if (Fiyattip == "ListeFiyat") {
-            return [Stok.LISTEFIYAT, Stok.SATISISK, _FiyatTip, true,0.0,0.0,0.0,0.0,0.0];
+            return [
+              Stok.LISTEFIYAT,
+              Stok.SATISISK,
+              _FiyatTip,
+              true,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ];
           }
         }
       }
@@ -437,8 +730,13 @@ class StokKartController extends GetxController {
   }
 */
 
-  void searchC(String query, String cariKod, String fiyatTip,
-      SatisTipiModel satisTipi, StokFiyatListesiModel stokFiyatListesiModel,int seciliAltHesapID) {
+  void searchC(
+      String query,
+      String cariKod,
+      String fiyatTip,
+      SatisTipiModel satisTipi,
+      StokFiyatListesiModel stokFiyatListesiModel,
+      int seciliAltHesapID) {
     // QUERY BOŞSA
     if (query.isEmpty) {
       tempList.clear();
@@ -453,8 +751,9 @@ class StokKartController extends GetxController {
                   cariKod,
                   fiyatTip,
                   satisTipi,
-                  stokFiyatListesiModel,seciliAltHesapID);
-              listeler.listStok[i].guncelDegerler!.carpan  = 1.0;
+                  stokFiyatListesiModel,
+                  seciliAltHesapID);
+              listeler.listStok[i].guncelDegerler!.carpan = 1.0;
               listeler.listStok[i].guncelDegerler!.guncelBarkod =
                   listeler.listStok[i].KOD!;
               listeler.listStok[i].guncelDegerler!.fiyat =
@@ -463,26 +762,20 @@ class StokKartController extends GetxController {
               listeler.listStok[i].guncelDegerler!.iskonto1 =
                   double.parse(gelenFiyatVeIskonto[1].toString());
 
-                  listeler.listStok[i].guncelDegerler!.iskonto2 =
+              listeler.listStok[i].guncelDegerler!.iskonto2 =
                   double.parse(gelenFiyatVeIskonto[4].toString());
 
-                  listeler.listStok[i].guncelDegerler!.iskonto3 =
+              listeler.listStok[i].guncelDegerler!.iskonto3 =
                   double.parse(gelenFiyatVeIskonto[5].toString());
 
-                  listeler.listStok[i].guncelDegerler!.iskonto4 =
+              listeler.listStok[i].guncelDegerler!.iskonto4 =
                   double.parse(gelenFiyatVeIskonto[6].toString());
 
-                  listeler.listStok[i].guncelDegerler!.iskonto5 =
+              listeler.listStok[i].guncelDegerler!.iskonto5 =
                   double.parse(gelenFiyatVeIskonto[7].toString());
 
-                  listeler.listStok[i].guncelDegerler!.iskonto6 =
+              listeler.listStok[i].guncelDegerler!.iskonto6 =
                   double.parse(gelenFiyatVeIskonto[8].toString());
-
-
-
-
-
-
               listeler.listStok[i].guncelDegerler!.seciliFiyati =
                   gelenFiyatVeIskonto[2].toString();
               listeler.listStok[i].guncelDegerler!.fiyatDegistirMi =
@@ -516,39 +809,35 @@ class StokKartController extends GetxController {
 
             if (results.length > 100) {
               for (int i = 0; i < 100; i++) {
-                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
-                results[i].guncelDegerler!.carpan  = 1.0;
+                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                    results[i],
+                    cariKod,
+                    fiyatTip,
+                    satisTipi,
+                    stokFiyatListesiModel,
+                    seciliAltHesapID);
+                results[i].guncelDegerler!.carpan = 1.0;
                 results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
                 results[i].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
-                
-
-
                 results[i].guncelDegerler!.iskonto1 =
-                  double.parse(gelenFiyatVeIskonto[1].toString());
+                    double.parse(gelenFiyatVeIskonto[1].toString());
 
-                   results[i].guncelDegerler!.iskonto2 =
-                  double.parse(gelenFiyatVeIskonto[4].toString());
+                results[i].guncelDegerler!.iskonto2 =
+                    double.parse(gelenFiyatVeIskonto[4].toString());
 
-                    results[i].guncelDegerler!.iskonto3 =
-                  double.parse(gelenFiyatVeIskonto[5].toString());
+                results[i].guncelDegerler!.iskonto3 =
+                    double.parse(gelenFiyatVeIskonto[5].toString());
 
-                   results[i].guncelDegerler!.iskonto4 =
-                  double.parse(gelenFiyatVeIskonto[6].toString());
+                results[i].guncelDegerler!.iskonto4 =
+                    double.parse(gelenFiyatVeIskonto[6].toString());
 
-                    results[i].guncelDegerler!.iskonto5 =
-                  double.parse(gelenFiyatVeIskonto[7].toString());
+                results[i].guncelDegerler!.iskonto5 =
+                    double.parse(gelenFiyatVeIskonto[7].toString());
 
-                    results[i].guncelDegerler!.iskonto6 =
-                  double.parse(gelenFiyatVeIskonto[8].toString());
-
-
-
-
-
-
+                results[i].guncelDegerler!.iskonto6 =
+                    double.parse(gelenFiyatVeIskonto[8].toString());
 
                 results[i].guncelDegerler!.seciliFiyati =
                     gelenFiyatVeIskonto[2].toString();
@@ -567,33 +856,35 @@ class StokKartController extends GetxController {
               }
             } else {
               for (int i = 0; i < results.length; i++) {
-                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
-                results[i].guncelDegerler!.carpan  = 1.0;
+                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                    results[i],
+                    cariKod,
+                    fiyatTip,
+                    satisTipi,
+                    stokFiyatListesiModel,
+                    seciliAltHesapID);
+                results[i].guncelDegerler!.carpan = 1.0;
                 results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
                 results[i].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
-                                results[i].guncelDegerler!.iskonto1 =
-                  double.parse(gelenFiyatVeIskonto[1].toString());
+                results[i].guncelDegerler!.iskonto1 =
+                    double.parse(gelenFiyatVeIskonto[1].toString());
 
-                   results[i].guncelDegerler!.iskonto2 =
-                  double.parse(gelenFiyatVeIskonto[4].toString());
+                results[i].guncelDegerler!.iskonto2 =
+                    double.parse(gelenFiyatVeIskonto[4].toString());
 
-                    results[i].guncelDegerler!.iskonto3 =
-                  double.parse(gelenFiyatVeIskonto[5].toString());
+                results[i].guncelDegerler!.iskonto3 =
+                    double.parse(gelenFiyatVeIskonto[5].toString());
 
-                   results[i].guncelDegerler!.iskonto4 =
-                  double.parse(gelenFiyatVeIskonto[6].toString());
+                results[i].guncelDegerler!.iskonto4 =
+                    double.parse(gelenFiyatVeIskonto[6].toString());
 
-                    results[i].guncelDegerler!.iskonto5 =
-                  double.parse(gelenFiyatVeIskonto[7].toString());
+                results[i].guncelDegerler!.iskonto5 =
+                    double.parse(gelenFiyatVeIskonto[7].toString());
 
-                    results[i].guncelDegerler!.iskonto6 =
-                  double.parse(gelenFiyatVeIskonto[8].toString());
-
-
-
+                results[i].guncelDegerler!.iskonto6 =
+                    double.parse(gelenFiyatVeIskonto[8].toString());
 
                 results[i].guncelDegerler!.seciliFiyati =
                     gelenFiyatVeIskonto[2].toString();
@@ -624,37 +915,31 @@ class StokKartController extends GetxController {
                   cariKod,
                   fiyatTip,
                   satisTipi,
-                  stokFiyatListesiModel,seciliAltHesapID);
-              listeler.listStok[i].guncelDegerler!.carpan  = 1.0;
+                  stokFiyatListesiModel,
+                  seciliAltHesapID);
+              listeler.listStok[i].guncelDegerler!.carpan = 1.0;
               listeler.listStok[i].guncelDegerler!.guncelBarkod =
                   listeler.listStok[i].KOD!;
               listeler.listStok[i].guncelDegerler!.fiyat =
                   double.parse(gelenFiyatVeIskonto[0].toString());
 
-
-               listeler.listStok[i].guncelDegerler!.iskonto1 =
+              listeler.listStok[i].guncelDegerler!.iskonto1 =
                   double.parse(gelenFiyatVeIskonto[1].toString());
 
-                 listeler.listStok[i].guncelDegerler!.iskonto2 =
+              listeler.listStok[i].guncelDegerler!.iskonto2 =
                   double.parse(gelenFiyatVeIskonto[4].toString());
 
-                   listeler.listStok[i].guncelDegerler!.iskonto3 =
+              listeler.listStok[i].guncelDegerler!.iskonto3 =
                   double.parse(gelenFiyatVeIskonto[5].toString());
 
-                  listeler.listStok[i].guncelDegerler!.iskonto4 =
+              listeler.listStok[i].guncelDegerler!.iskonto4 =
                   double.parse(gelenFiyatVeIskonto[6].toString());
 
-                    listeler.listStok[i].guncelDegerler!.iskonto5 =
+              listeler.listStok[i].guncelDegerler!.iskonto5 =
                   double.parse(gelenFiyatVeIskonto[7].toString());
 
-                   listeler.listStok[i].guncelDegerler!.iskonto6 =
+              listeler.listStok[i].guncelDegerler!.iskonto6 =
                   double.parse(gelenFiyatVeIskonto[8].toString());
-
-
-
-
-
-
 
               listeler.listStok[i].guncelDegerler!.seciliFiyati =
                   gelenFiyatVeIskonto[2].toString();
@@ -688,38 +973,36 @@ class StokKartController extends GetxController {
                 !Ctanim.secililiMarkalarFiltre.contains(element.MARKA));
 
             for (int i = 0; i < results.length; i++) {
-              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
-              results[i].guncelDegerler!.carpan  = 1.0;
+              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                  results[i],
+                  cariKod,
+                  fiyatTip,
+                  satisTipi,
+                  stokFiyatListesiModel,
+                  seciliAltHesapID);
+              results[i].guncelDegerler!.carpan = 1.0;
               results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
               results[i].guncelDegerler!.fiyat =
                   double.parse(gelenFiyatVeIskonto[0].toString());
 
-                results[i].guncelDegerler!.iskonto1 =
+              results[i].guncelDegerler!.iskonto1 =
                   double.parse(gelenFiyatVeIskonto[1].toString());
 
-                   results[i].guncelDegerler!.iskonto2 =
+              results[i].guncelDegerler!.iskonto2 =
                   double.parse(gelenFiyatVeIskonto[4].toString());
 
-                    results[i].guncelDegerler!.iskonto3 =
+              results[i].guncelDegerler!.iskonto3 =
                   double.parse(gelenFiyatVeIskonto[5].toString());
 
-                   results[i].guncelDegerler!.iskonto4 =
+              results[i].guncelDegerler!.iskonto4 =
                   double.parse(gelenFiyatVeIskonto[6].toString());
 
-                    results[i].guncelDegerler!.iskonto5 =
+              results[i].guncelDegerler!.iskonto5 =
                   double.parse(gelenFiyatVeIskonto[7].toString());
 
-                    results[i].guncelDegerler!.iskonto6 =
+              results[i].guncelDegerler!.iskonto6 =
                   double.parse(gelenFiyatVeIskonto[8].toString());
 
-
-
-
-
-
-
-                  
               results[i].guncelDegerler!.seciliFiyati =
                   gelenFiyatVeIskonto[2].toString();
               results[i].guncelDegerler!.fiyatDegistirMi =
@@ -832,8 +1115,13 @@ class StokKartController extends GetxController {
                     .add(results[0].guncelDegerler!.seciliFiyati!);
               }
             } else {
-              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
+              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                  results[0],
+                  cariKod,
+                  fiyatTip,
+                  satisTipi,
+                  stokFiyatListesiModel,
+                  seciliAltHesapID);
               results[0].guncelDegerler!.fiyat =
                   double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -861,7 +1149,6 @@ class StokKartController extends GetxController {
         }
 
         if (results.length == 0) {
-
           results = listeler.listStok
               .where((value) =>
                   value.BARKOD2!.toLowerCase() == query.toLowerCase())
@@ -893,8 +1180,13 @@ class StokKartController extends GetxController {
                       .add(results[0].guncelDegerler!.seciliFiyati!);
                 }
               } else {
-                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
+                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                    results[0],
+                    cariKod,
+                    fiyatTip,
+                    satisTipi,
+                    stokFiyatListesiModel,
+                    seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -935,7 +1227,7 @@ class StokKartController extends GetxController {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN3!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD3!;
               } else {
-                results[0].guncelDegerler!.carpan  = 1.0;
+                results[0].guncelDegerler!.carpan = 1.0;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT3! > 0) {
@@ -953,8 +1245,13 @@ class StokKartController extends GetxController {
                       .add(results[0].guncelDegerler!.seciliFiyati!);
                 }
               } else {
-                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
+                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                    results[0],
+                    cariKod,
+                    fiyatTip,
+                    satisTipi,
+                    stokFiyatListesiModel,
+                    seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -996,7 +1293,7 @@ class StokKartController extends GetxController {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN4!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD4!;
               } else {
-                results[0].guncelDegerler!.carpan  = 1.0;
+                results[0].guncelDegerler!.carpan = 1.0;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT4! > 0) {
@@ -1014,8 +1311,13 @@ class StokKartController extends GetxController {
                       .add(results[0].guncelDegerler!.seciliFiyati!);
                 }
               } else {
-                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
+                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                    results[0],
+                    cariKod,
+                    fiyatTip,
+                    satisTipi,
+                    stokFiyatListesiModel,
+                    seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -1057,7 +1359,7 @@ class StokKartController extends GetxController {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN5!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD5!;
               } else {
-                results[0].guncelDegerler!.carpan  = 1.0;
+                results[0].guncelDegerler!.carpan = 1.0;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT5! > 0) {
@@ -1075,8 +1377,13 @@ class StokKartController extends GetxController {
                       .add(results[0].guncelDegerler!.seciliFiyati!);
                 }
               } else {
-                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
+                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                    results[0],
+                    cariKod,
+                    fiyatTip,
+                    satisTipi,
+                    stokFiyatListesiModel,
+                    seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -1118,7 +1425,7 @@ class StokKartController extends GetxController {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN6!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD6!;
               } else {
-                results[0].guncelDegerler!.carpan  = 1.0;
+                results[0].guncelDegerler!.carpan = 1.0;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT6! > 0) {
@@ -1136,8 +1443,13 @@ class StokKartController extends GetxController {
                       .add(results[0].guncelDegerler!.seciliFiyati!);
                 }
               } else {
-                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
+                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                    results[0],
+                    cariKod,
+                    fiyatTip,
+                    satisTipi,
+                    stokFiyatListesiModel,
+                    seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
@@ -1178,39 +1490,37 @@ class StokKartController extends GetxController {
               if (cariKod == "") {
                 tempList.assignAll(sonBulunan);
               } else {
-                sonBulunan[0].guncelDegerler!.carpan  = 1.0;//bul[0].CARPAN; burası değişecek
+                sonBulunan[0].guncelDegerler!.carpan =
+                    1.0; //bul[0].CARPAN; burası değişecek
                 sonBulunan[0].guncelDegerler!.guncelBarkod = bul[0].KOD;
 
-                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(sonBulunan[0],
-                    cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
+                List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                    sonBulunan[0],
+                    cariKod,
+                    fiyatTip,
+                    satisTipi,
+                    stokFiyatListesiModel,
+                    seciliAltHesapID);
                 sonBulunan[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
 
+                sonBulunan[0].guncelDegerler!.iskonto1 =
+                    double.parse(gelenFiyatVeIskonto[1].toString());
 
+                sonBulunan[0].guncelDegerler!.iskonto2 =
+                    double.parse(gelenFiyatVeIskonto[4].toString());
 
-                   sonBulunan[0].guncelDegerler!.iskonto1 =
-                  double.parse(gelenFiyatVeIskonto[1].toString());
+                sonBulunan[0].guncelDegerler!.iskonto3 =
+                    double.parse(gelenFiyatVeIskonto[5].toString());
 
-                    sonBulunan[0].guncelDegerler!.iskonto2 =
-                  double.parse(gelenFiyatVeIskonto[4].toString());
+                sonBulunan[0].guncelDegerler!.iskonto4 =
+                    double.parse(gelenFiyatVeIskonto[6].toString());
 
-                    sonBulunan[0].guncelDegerler!.iskonto3 =
-                  double.parse(gelenFiyatVeIskonto[5].toString());
+                sonBulunan[0].guncelDegerler!.iskonto5 =
+                    double.parse(gelenFiyatVeIskonto[7].toString());
 
-                   sonBulunan[0].guncelDegerler!.iskonto4 =
-                  double.parse(gelenFiyatVeIskonto[6].toString());
-
-                    sonBulunan[0].guncelDegerler!.iskonto5 =
-                  double.parse(gelenFiyatVeIskonto[7].toString());
-
-                     sonBulunan[0].guncelDegerler!.iskonto6 =
-                  double.parse(gelenFiyatVeIskonto[8].toString());
-
-
-
-
-
-
+                sonBulunan[0].guncelDegerler!.iskonto6 =
+                    double.parse(gelenFiyatVeIskonto[8].toString());
 
                 sonBulunan[0].guncelDegerler!.seciliFiyati =
                     gelenFiyatVeIskonto[2].toString();
@@ -1242,35 +1552,35 @@ class StokKartController extends GetxController {
         } else {
           if (Ctanim.secililiMarkalarFiltre.isEmpty) {
             for (int i = 0; i < 100; i++) {
-              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
-              results[i].guncelDegerler!.carpan  = 1.0;
+              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                  results[i],
+                  cariKod,
+                  fiyatTip,
+                  satisTipi,
+                  stokFiyatListesiModel,
+                  seciliAltHesapID);
+              results[i].guncelDegerler!.carpan = 1.0;
               results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
               results[i].guncelDegerler!.fiyat =
                   double.parse(gelenFiyatVeIskonto[0].toString());
 
-
-                  results[i].guncelDegerler!.iskonto1 =
+              results[i].guncelDegerler!.iskonto1 =
                   double.parse(gelenFiyatVeIskonto[1].toString());
 
-                  results[i].guncelDegerler!.iskonto2 =
+              results[i].guncelDegerler!.iskonto2 =
                   double.parse(gelenFiyatVeIskonto[4].toString());
 
-                  results[i].guncelDegerler!.iskonto3 =
+              results[i].guncelDegerler!.iskonto3 =
                   double.parse(gelenFiyatVeIskonto[5].toString());
 
-                   results[i].guncelDegerler!.iskonto4 =
+              results[i].guncelDegerler!.iskonto4 =
                   double.parse(gelenFiyatVeIskonto[6].toString());
 
-                   results[i].guncelDegerler!.iskonto5 =
+              results[i].guncelDegerler!.iskonto5 =
                   double.parse(gelenFiyatVeIskonto[7].toString());
 
-                    results[i].guncelDegerler!.iskonto6 =
+              results[i].guncelDegerler!.iskonto6 =
                   double.parse(gelenFiyatVeIskonto[8].toString());
-
-
-
-
 
               results[i].guncelDegerler!.seciliFiyati =
                   gelenFiyatVeIskonto[2].toString();
@@ -1301,37 +1611,35 @@ class StokKartController extends GetxController {
             }
 
             for (int i = 0; i < results2.length; i++) {
-              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results2[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
-              results2[i].guncelDegerler!.carpan  = 1.0;
+              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                  results2[i],
+                  cariKod,
+                  fiyatTip,
+                  satisTipi,
+                  stokFiyatListesiModel,
+                  seciliAltHesapID);
+              results2[i].guncelDegerler!.carpan = 1.0;
               results2[i].guncelDegerler!.guncelBarkod = results2[i].KOD!;
               results2[i].guncelDegerler!.fiyat =
                   double.parse(gelenFiyatVeIskonto[0].toString());
 
-
-
-             
-                  results2[i].guncelDegerler!.iskonto1 =
+              results2[i].guncelDegerler!.iskonto1 =
                   double.parse(gelenFiyatVeIskonto[1].toString());
 
-                  results2[i].guncelDegerler!.iskonto2 =
+              results2[i].guncelDegerler!.iskonto2 =
                   double.parse(gelenFiyatVeIskonto[4].toString());
 
-                  results2[i].guncelDegerler!.iskonto3 =
+              results2[i].guncelDegerler!.iskonto3 =
                   double.parse(gelenFiyatVeIskonto[5].toString());
 
-                   results2[i].guncelDegerler!.iskonto4 =
+              results2[i].guncelDegerler!.iskonto4 =
                   double.parse(gelenFiyatVeIskonto[6].toString());
 
-                   results2[i].guncelDegerler!.iskonto5 =
+              results2[i].guncelDegerler!.iskonto5 =
                   double.parse(gelenFiyatVeIskonto[7].toString());
 
-                    results2[i].guncelDegerler!.iskonto6 =
+              results2[i].guncelDegerler!.iskonto6 =
                   double.parse(gelenFiyatVeIskonto[8].toString());
-
-
-
-
 
               results2[i].guncelDegerler!.seciliFiyati =
                   gelenFiyatVeIskonto[2].toString();
@@ -1362,33 +1670,35 @@ class StokKartController extends GetxController {
         } else {
           if (Ctanim.secililiMarkalarFiltre.isEmpty) {
             for (int i = 0; i < results.length; i++) {
-              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(results[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
-              results[i].guncelDegerler!.carpan  = 1.0;
+              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                  results[i],
+                  cariKod,
+                  fiyatTip,
+                  satisTipi,
+                  stokFiyatListesiModel,
+                  seciliAltHesapID);
+              results[i].guncelDegerler!.carpan = 1.0;
               results[i].guncelDegerler!.guncelBarkod = results[i].KOD!;
               results[i].guncelDegerler!.fiyat =
                   double.parse(gelenFiyatVeIskonto[0].toString());
 
-
-                  results[i].guncelDegerler!.iskonto1 =
+              results[i].guncelDegerler!.iskonto1 =
                   double.parse(gelenFiyatVeIskonto[1].toString());
 
-                  results[i].guncelDegerler!.iskonto2 =
+              results[i].guncelDegerler!.iskonto2 =
                   double.parse(gelenFiyatVeIskonto[4].toString());
 
-                  results[i].guncelDegerler!.iskonto3 =
+              results[i].guncelDegerler!.iskonto3 =
                   double.parse(gelenFiyatVeIskonto[5].toString());
 
-                   results[i].guncelDegerler!.iskonto4 =
+              results[i].guncelDegerler!.iskonto4 =
                   double.parse(gelenFiyatVeIskonto[6].toString());
 
-                   results[i].guncelDegerler!.iskonto5 =
+              results[i].guncelDegerler!.iskonto5 =
                   double.parse(gelenFiyatVeIskonto[7].toString());
 
-                    results[i].guncelDegerler!.iskonto6 =
+              results[i].guncelDegerler!.iskonto6 =
                   double.parse(gelenFiyatVeIskonto[8].toString());
-
-
 
               results[i].guncelDegerler!.seciliFiyati =
                   gelenFiyatVeIskonto[2].toString();
@@ -1414,36 +1724,35 @@ class StokKartController extends GetxController {
               }
             }
             for (int i = 0; i < result2.length; i++) {
-              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(result2[i],
-                  cariKod, fiyatTip, satisTipi, stokFiyatListesiModel,seciliAltHesapID);
-              result2[i].guncelDegerler!.carpan  = 1.0;
+              List<dynamic> gelenFiyatVeIskonto = fiyatgetir(
+                  result2[i],
+                  cariKod,
+                  fiyatTip,
+                  satisTipi,
+                  stokFiyatListesiModel,
+                  seciliAltHesapID);
+              result2[i].guncelDegerler!.carpan = 1.0;
               result2[i].guncelDegerler!.guncelBarkod = result2[i].KOD!;
               result2[i].guncelDegerler!.fiyat =
                   double.parse(gelenFiyatVeIskonto[0].toString());
 
-
-                result2[i].guncelDegerler!.iskonto1 =
+              result2[i].guncelDegerler!.iskonto1 =
                   double.parse(gelenFiyatVeIskonto[1].toString());
 
-                  result2[i].guncelDegerler!.iskonto2 =
+              result2[i].guncelDegerler!.iskonto2 =
                   double.parse(gelenFiyatVeIskonto[4].toString());
 
-                  result2[i].guncelDegerler!.iskonto3 =
+              result2[i].guncelDegerler!.iskonto3 =
                   double.parse(gelenFiyatVeIskonto[5].toString());
 
-                   result2[i].guncelDegerler!.iskonto4 =
+              result2[i].guncelDegerler!.iskonto4 =
                   double.parse(gelenFiyatVeIskonto[6].toString());
 
-                   result2[i].guncelDegerler!.iskonto5 =
+              result2[i].guncelDegerler!.iskonto5 =
                   double.parse(gelenFiyatVeIskonto[7].toString());
 
-                    result2[i].guncelDegerler!.iskonto6 =
+              result2[i].guncelDegerler!.iskonto6 =
                   double.parse(gelenFiyatVeIskonto[8].toString());
-
-
-
-
-
 
               result2[i].guncelDegerler!.seciliFiyati =
                   gelenFiyatVeIskonto[2].toString();
