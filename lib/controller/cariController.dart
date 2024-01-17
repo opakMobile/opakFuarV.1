@@ -16,8 +16,7 @@ class CariController extends GetxController {
     super.onInit();
   }
 
-  void 
-  searchCari(String query) {
+  void searchCari(String query) {
     if (query.isEmpty) {
       searchCariList.assignAll(listeler.listCari);
     } else {

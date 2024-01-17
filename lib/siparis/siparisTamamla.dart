@@ -521,7 +521,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                           onPressed: () async {
                             List<Cari> bayiler = [];
                             for (var element in listeler.listCari) {
-                              if (element.TIPI == "Bayi") {
+                              if (element.TIPI == "Bayi" || element.TIPI == "Alt Bayi") {
                                 bayiler.add(element);
                               }
                             }

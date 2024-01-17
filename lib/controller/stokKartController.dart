@@ -729,7 +729,26 @@ class StokKartController extends GetxController {
     }
   }
 */
+String turkishToEnglish(String input) {
+  // Küçük harfe çevir
+  String lowerCaseText = input.toLowerCase();
 
+  // Türkçe karakterleri İngilizce karakterlere çevir
+  final Map<String, String> turkishToEnglishMap = {
+    'ç': 'c',
+    'ğ': 'g',
+    'ı': 'i',
+    'ö': 'o',
+    'ş': 's',
+    'ü': 'u',
+  };
+
+  for (var entry in turkishToEnglishMap.entries) {
+    lowerCaseText = lowerCaseText.replaceAll(entry.key, entry.value);
+  }
+
+  return lowerCaseText;
+}
   void searchC(
       String query,
       String cariKod,
@@ -1025,13 +1044,15 @@ class StokKartController extends GetxController {
     // QUERY DOLUYSA
     else {
       var results;
+      
 
-      List<String> queryparcali = query.split(" ");
+      
+      List<String> queryparcali = turkishToEnglish(query).split(" ");
       if (queryparcali.length == 1) {
         results = listeler.listStok
             .where((value) =>
-                value.ADI!
-                    .toLowerCase()
+                turkishToEnglish(value.ADI!)
+                    
                     .contains(queryparcali[0].toLowerCase()) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.MARKA!.toLowerCase().contains(query.toLowerCase()))
@@ -1039,11 +1060,9 @@ class StokKartController extends GetxController {
       } else if (queryparcali.length == 2) {
         results = listeler.listStok
             .where((value) =>
-                (value.ADI!
-                        .toLowerCase()
+                ( turkishToEnglish(value.ADI!)
                         .contains(queryparcali[0].toLowerCase()) &&
-                    value.ADI!
-                        .toLowerCase()
+                   turkishToEnglish(value.ADI!)
                         .contains(queryparcali[1].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.MARKA!.toLowerCase().contains(query.toLowerCase()))
@@ -1051,14 +1070,11 @@ class StokKartController extends GetxController {
       } else if (queryparcali.length == 3) {
         results = listeler.listStok
             .where((value) =>
-                (value.ADI!
-                        .toLowerCase()
+                ( turkishToEnglish(value.ADI!)
                         .contains(queryparcali[0].toLowerCase()) &&
-                    value.ADI!
-                        .toLowerCase()
+                     turkishToEnglish(value.ADI!)
                         .contains(queryparcali[1].toLowerCase()) &&
-                    value.ADI!
-                        .toLowerCase()
+                     turkishToEnglish(value.ADI!)
                         .contains(queryparcali[2].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.MARKA!.toLowerCase().contains(query.toLowerCase()))
@@ -1066,17 +1082,13 @@ class StokKartController extends GetxController {
       } else if (queryparcali.length == 4) {
         results = listeler.listStok
             .where((value) =>
-                (value.ADI!
-                        .toLowerCase()
+                ( turkishToEnglish(value.ADI!)
                         .contains(queryparcali[0].toLowerCase()) &&
-                    value.ADI!
-                        .toLowerCase()
+                     turkishToEnglish(value.ADI!)
                         .contains(queryparcali[1].toLowerCase()) &&
-                    value.ADI!
-                        .toLowerCase()
+                     turkishToEnglish(value.ADI!)
                         .contains(queryparcali[2].toLowerCase()) &&
-                    value.ADI!
-                        .toLowerCase()
+                     turkishToEnglish(value.ADI!)
                         .contains(queryparcali[3].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.MARKA!.toLowerCase().contains(query.toLowerCase()))
