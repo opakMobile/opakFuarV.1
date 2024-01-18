@@ -81,26 +81,27 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
         TextButton(
           onPressed: () async {
             if (widget.hepsiMi == false) {
-                       showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return LoadingSpinner(
-                                color: Colors.black,
-                                message:
-                                    "Seçili ürünlerin althesapları değiştiriliyor. Lütfen Bekleyiniz...",
-                              );
-                            },
-                          );
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return LoadingSpinner(
+                    color: Colors.black,
+                    message:
+                        "Seçili ürünlerin althesapları değiştiriliyor. Lütfen Bekleyiniz...",
+                  );
+                },
+              );
               String hataTopla = "";
               for (var element in fisEx.fis!.value.fisStokListesi) {
                 if (element.AltHesapDegistir == true) {
                   if (fisEx.fis!.value.fisStokListesi.any((vv) =>
                       vv.STOKKOD == element.STOKKOD &&
                       vv.ALTHESAP == seciliAltHesap!.ALTHESAP!)) {
-                        element.AltHesapDegistir = false;
-              hataTopla +=
-                        "${element.STOKKOD} / ${element.STOKADI}  zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";                  } else {
+                    element.AltHesapDegistir = false;
+                    hataTopla +=
+                        "${element.STOKKOD} / ${element.STOKADI} \n";
+                  } else {
                     element.ALTHESAP = seciliAltHesap!.ALTHESAP;
                     altHesapDegistirFiseEkle(element);
                     fisEx.fis!.value.AKTARILDIMI = false;
@@ -111,6 +112,9 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                 }
               }
               if (hataTopla != "") {
+                hataTopla +=
+                    "yukardaki ürün(ler) zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";
+
                 await showDialog(
                     context: context,
                     builder: (context) {
@@ -120,41 +124,37 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                         message: hataTopla,
                         onPres: () async {
                           Navigator.pop(context);
-                           Navigator.pop(context);
-                            Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                         buttonText: 'Tamam',
                       );
                     });
-                    setState(() {
-                      
-                    });
+                setState(() {});
               } else {
                 Navigator.pop(context);
-               Navigator.pop(context);
-       
+                Navigator.pop(context);
               }
             } else {
               String hataTopla = "";
-                       showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return LoadingSpinner(
-                                color: Colors.black,
-                                message:
-                                    "${seciliAltHesap!.ALTHESAP}'a ait ürünlerin alt hesapları değiştiriliyor. Lütfen Bekleyiniz...",
-                              );
-                            },
-                          );
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return LoadingSpinner(
+                    color: Colors.black,
+                    message:
+                        "${widget.gelenAltHesap!.ALTHESAP}'a ait ürünlerin alt hesapları değiştiriliyor. Lütfen Bekleyiniz...",
+                  );
+                },
+              );
               for (var element in fisEx.fis!.value.fisStokListesi) {
                 if (element.ALTHESAP == widget.gelenAltHesap!.ALTHESAP) {
                   if (fisEx.fis!.value.fisStokListesi.any((vv) =>
                       vv.STOKKOD == element.STOKKOD &&
                       vv.ALTHESAP == seciliAltHesap!.ALTHESAP!)) {
-                     element.AltHesapDegistir = false;
-                    hataTopla +=
-                        "${element.STOKKOD} / ${element.STOKADI}  zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";
+                    element.AltHesapDegistir = false;
+                    hataTopla += "${element.STOKKOD} / ${element.STOKADI} \n";
                   } else {
                     element.AltHesapDegistir = true;
                     element.ALTHESAP = seciliAltHesap!.ALTHESAP;
@@ -165,34 +165,30 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                     Ctanim.genelToplamHesapla(fisEx);
                   }
                 }
-          
               }
               if (hataTopla != "") {
-                   
-                  await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return CustomAlertDialog(
-                          align: TextAlign.left,
-                          title: 'Uyarı',
-                          message: hataTopla,
-                          onPres: () async {
-                            Navigator.pop(context);
-                             Navigator.pop(context);
-                              Navigator.pop(context);
-                   
-                          },
-                          buttonText: 'Tamam',
-                        );
-                      });
-                  
-                 
-                } else {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-               
-                }
+                hataTopla +=
+                    "yukardaki ürün(ler) zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";
 
+                await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CustomAlertDialog(
+                        align: TextAlign.left,
+                        title: 'Uyarı',
+                        message: hataTopla,
+                        onPres: () async {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        buttonText: 'Tamam',
+                      );
+                    });
+              } else {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              }
             }
           },
           child: Text('Tamam'),

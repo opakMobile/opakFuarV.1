@@ -37,14 +37,15 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
   void initState() {
     super.initState();
     altHesaplar.clear();
-   
-      for (var element1 in listeler.listCariAltHesap) {
-        if (fisEx.fis!.value.cariKart.cariAltHesaplar.any((asd) => asd.ALTHESAP == element1.ALTHESAP) &&
-            !altHesaplar.contains(element1)) {
-          altHesaplar.add(element1);
-        }
+
+    for (var element1 in listeler.listCariAltHesap) {
+      if (fisEx.fis!.value.cariKart.cariAltHesaplar
+              .any((asd) => asd.ALTHESAP == element1.ALTHESAP) &&
+          !altHesaplar.contains(element1)) {
+        altHesaplar.add(element1);
       }
-    
+    }
+
     if (altHesaplar.length > 0) {
       seciliAltHesap = altHesaplar[0];
     }
@@ -107,33 +108,48 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
             SpeedDialChild(
                 backgroundColor: Color.fromARGB(255, 70, 89, 105),
                 child: Icon(
-                  Icons.all_inbox,
-                  color: Colors.green,
-                  size: 32,
-                ),
-                label: "Seçilen stokların althesabını güncelle",
-                onTap: () async {
-                  await _showDialog(altHesaplar, seciliAltHesap!, false).then((value) {
-                    setState(() {
-                      
-                    });
-                    return ;
-                  });
-                }),
-            SpeedDialChild(
-                backgroundColor: Color.fromARGB(255, 70, 89, 105),
-                child: Icon(
                   Icons.check,
                   color: Colors.blue,
                   size: 32,
                 ),
                 label: "Tamamının althesabını güncelle",
                 onTap: () async {
-                  await _showDialog(altHesaplar, seciliAltHesap!, true).then((value) {
+                  await _showDialog(altHesaplar, seciliAltHesap!, true)
+                      .then((value) {
                     setState(() {
                       print("TURAN");
                     });
                     return null;
+                  });
+                }),
+            SpeedDialChild(
+                backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                child: Icon(
+                  Icons.all_inbox,
+                  color: Colors.green,
+                  size: 32,
+                ),
+                label: "Seçilen stokların althesabını güncelle",
+                onTap: () async {
+                  await _showDialog(altHesaplar, seciliAltHesap!, false)
+                      .then((value) {
+                    setState(() {});
+                    return;
+                  });
+                }),
+            SpeedDialChild(
+                backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.red,
+                  size: 32,
+                ),
+                label: "Seçilenleri temizle",
+                onTap: () async {
+                  fisEx.fis!.value.fisStokListesi
+                      .where((element) => element.AltHesapDegistir == true)
+                      .forEach((element) {
+                    element.AltHesapDegistir = false;
                   });
                 }),
           ],
@@ -195,7 +211,7 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                                       */
                             },
                             onFieldSubmitted: ((value) async {
-                              aramaAktif  = true;
+                              aramaAktif = true;
                               // await textAramaYap(value, context);
                             }),
                             decoration: InputDecoration(
@@ -357,26 +373,31 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                               FisHareket stokModel =
                                   fisEx.fis!.value!.fisStokListesi[index]!;
 
-                              if(aramaAktif == true && editingController.text != ""){
-                                if((stokModel.STOKKOD == editingController.text || stokModel.STOKADI!.toLowerCase().contains(editingController.text))&& stokModel.ALTHESAP == seciliAltHesap!.ALTHESAP){
+                              if (aramaAktif == true &&
+                                  editingController.text != "") {
+                                if ((stokModel.STOKKOD ==
+                                            editingController.text ||
+                                        stokModel.STOKADI!
+                                            .toLowerCase()
+                                            .contains(
+                                                editingController.text)) &&
+                                    stokModel.ALTHESAP ==
+                                        seciliAltHesap!.ALTHESAP) {
                                   //aramaAktif = false;
-                                  return altHesapDegistirListe(ekranYuksekligi, context, stokModel);
-                                }else{
+                                  return altHesapDegistirListe(
+                                      ekranYuksekligi, context, stokModel);
+                                } else {
                                   return Container();
                                 }
-
-                              }else{
-                                         return stokModel.ALTHESAP ==
-                                      seciliAltHesap!.ALTHESAP
-                                  ? altHesapDegistirListe(ekranYuksekligi, context, stokModel)
-                                  : Container();
-
+                              } else {
+                                return stokModel.ALTHESAP ==
+                                        seciliAltHesap!.ALTHESAP
+                                    ? altHesapDegistirListe(
+                                        ekranYuksekligi, context, stokModel)
+                                    : Container();
                               }
 
-
-
                               //    stokKartEx.searchList[index];
-                     
                             },
                           ),
                         ),
@@ -424,216 +445,147 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
     );
   }
 
-  Padding altHesapDegistirListe(double ekranYuksekligi, BuildContext context, FisHareket stokModel) {
+  Padding altHesapDegistirListe(
+      double ekranYuksekligi, BuildContext context, FisHareket stokModel) {
     return Padding(
-                                    padding: EdgeInsets.only(
-                                      bottom: ekranYuksekligi < 650
-                                          ? ekranYuksekligi * 0.07
-                                          : ekranYuksekligi * 0.002,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.75,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    stokModel.STOKADI!,
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  Text(
-                                                    stokModel.STOKKOD! +
-                                                        "  " +
-                                                        "KDV " +
-                                                        stokModel.KDVORANI
-                                                            .toString(),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Checkbox(
-                                              value:
-                                                  stokModel.AltHesapDegistir,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  stokModel.AltHesapDegistir =
-                                                      value!;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 5,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Text(
-                                                    "İskonto",
-                                                    style: TextStyle(
-                                                        fontSize: 13),
-                                                  ),
-                                                  Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.04,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.13,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius
-                                                              .circular(5),
-                                                      border: Border.all(
-                                                          color: Colors.grey),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        stokModel.ISK!
-                                                            .toStringAsFixed(
-                                                                2),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Text(
-                                                    "Miktar",
-                                                    style: TextStyle(
-                                                        fontSize: 13),
-                                                  ),
-                                                  Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.04,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.13,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius
-                                                              .circular(5),
-                                                      border: Border.all(
-                                                          color: Colors.grey),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(stokModel
-                                                          .MIKTAR!
-                                                          .toStringAsFixed(
-                                                              2)),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Text("Birim",
-                                                      style: TextStyle(
-                                                          fontSize: 13)),
-                                                  Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.04,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.13,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius
-                                                              .circular(5),
-                                                      border: Border.all(
-                                                          color: Colors.grey),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        stokModel.BIRIM!,
-                                                        style: TextStyle(
-                                                            fontSize: 12),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Text("Fiyat",
-                                                      style: TextStyle(
-                                                          fontSize: 13)),
-                                                  Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.04,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.13,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius
-                                                              .circular(5),
-                                                      border: Border.all(
-                                                          color: Colors.grey),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        stokModel
-                                                            .KDVDAHILNETFIYAT!
-                                                            .toStringAsFixed(
-                                                                2),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Divider(
-                                          thickness: 1.5,
-                                          color: Colors.black87,
-                                        )
-                                      ],
-                                    ),
-                                  );
+      padding: EdgeInsets.only(
+        bottom: ekranYuksekligi < 650
+            ? ekranYuksekligi * 0.07
+            : ekranYuksekligi * 0.002,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.75,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      stokModel.STOKADI!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      stokModel.STOKKOD! +
+                          "  " +
+                          "KDV " +
+                          stokModel.KDVORANI.toString(),
+                    ),
+                  ],
+                ),
+              ),
+              Checkbox(
+                value: stokModel.AltHesapDegistir,
+                onChanged: (value) {
+                  setState(() {
+                    stokModel.AltHesapDegistir = value!;
+                  });
+                },
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 5,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      "İskonto",
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                      width: MediaQuery.of(context).size.width * 0.13,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: Center(
+                        child: Text(
+                          stokModel.ISK!.toStringAsFixed(2),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      "Miktar",
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                      width: MediaQuery.of(context).size.width * 0.13,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: Center(
+                        child: Text(stokModel.MIKTAR!.toStringAsFixed(2)),
+                      ),
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text("Birim", style: TextStyle(fontSize: 13)),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                      width: MediaQuery.of(context).size.width * 0.13,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: Center(
+                        child: Text(
+                          stokModel.BIRIM!,
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text("Fiyat", style: TextStyle(fontSize: 13)),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                      width: MediaQuery.of(context).size.width * 0.13,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: Center(
+                        child: Text(
+                          stokModel.KDVDAHILNETFIYAT!.toStringAsFixed(2),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            thickness: 1.5,
+            color: Colors.black87,
+          )
+        ],
+      ),
+    );
   }
 
-_showDialog(List<CariAltHesap> altHesaplar, CariAltHesap seciliAltHesap,
+  _showDialog(List<CariAltHesap> altHesaplar, CariAltHesap seciliAltHesap,
       bool hepsiMi) async {
-  await  showDialog(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AltHesapOnaylaVeDegistir(
@@ -642,10 +594,8 @@ _showDialog(List<CariAltHesap> altHesaplar, CariAltHesap seciliAltHesap,
             hepsiMi: hepsiMi);
       },
     ).then((value) {
-      setState(() {
-  
-      });
-      return ;
+      setState(() {});
+      return;
     });
   }
 }
