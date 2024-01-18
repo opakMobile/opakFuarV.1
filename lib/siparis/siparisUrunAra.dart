@@ -182,6 +182,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   final StokKartController stokKartEx = Get.find();
 
   CariAltHesap? seciliAltHesap;
+  bool sepetteara = false;
 
 /*  @override
   void initState() {
@@ -327,6 +328,25 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                         ),
                       ],
                     ),
+                    okumaModu == true
+                        ? SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            child: CheckboxListTile(
+                                title: Text(
+                                  "Sepette arama yap",
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                value: sepetteara,
+                                onChanged: (value) async {
+                                  // bura gidecek
+                                  //     await textAramaYap("", context);
+                                  //editingController.text = "";
+                                  setState(() {
+                                    sepetteara = value!;
+                                  });
+                                }),
+                          )
+                        : Container(),
                     Row(
                       children: [
                         Container(
@@ -526,7 +546,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                           : ekranYuksekligi * 0.57,
                       child: okumaModu == true
                           ? okumaModuList(
-                              seciliAltHesap: seciliAltHesap!.ALTHESAP!,
+                              seciliAltHesap: seciliAltHesap!.ALTHESAP!,sepetteAra: sepetteara,editinControllerText: editingController.text,
                             )
                           : SingleChildScrollView(
                               child: SizedBox(
@@ -1214,7 +1234,13 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
       setState(() {});
       //editingController.text = "";
     } else {
-      int okutulanCarpan = 1;
+
+      if(sepetteara==true){
+       // okumaModuList( seciliAltHesap: seciliAltHesap!.ALTHESAP!,sepetteAra: sepetteara,editinControllerText: editingController.text,);
+         FocusScope.of(context).unfocus(); 
+      }
+      else{
+              int okutulanCarpan = 1;
       List<String> aranacak = [];
       if (value!.contains("*")) {
         aranacak = value.split("*");
@@ -1296,6 +1322,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
       }
       // editingController.text = "";
       //FocusScope.of(context).requestFocus(focusNode);
+
+      }
     }
   }
 
