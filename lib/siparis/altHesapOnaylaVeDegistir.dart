@@ -80,25 +80,14 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
         TextButton(
           onPressed: () async {
             if (widget.hepsiMi == false) {
+              String hataTopla = "";
               for (var element in fisEx.fis!.value.fisStokListesi) {
                 if (element.AltHesapDegistir == true) {
                   if (fisEx.fis!.value.fisStokListesi.any((vv) =>
                       vv.STOKKOD == element.STOKKOD &&
                       vv.ALTHESAP == seciliAltHesap!.ALTHESAP!)) {
-                    await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CustomAlertDialog(
-                            align: TextAlign.left,
-                            title: 'Uyarı',
-                            message:
-                                "Alt hesabını değiştirmek istediğiniz ürün zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.",
-                            onPres: () async {
-                              Navigator.pop(context);
-                            },
-                            buttonText: 'Tamam',
-                          );
-                        });
+                    hataTopla +=
+                        "${element.STOKKOD} ürünü zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";
                   } else {
                     element.ALTHESAP = seciliAltHesap!.ALTHESAP;
                     altHesapDegistirFiseEkle(element);
@@ -106,31 +95,36 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                     await Fis.empty()
                         .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
                     Ctanim.genelToplamHesapla(fisEx);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
                   }
                 }
               }
+              if (hataTopla != "") {
+                await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CustomAlertDialog(
+                        align: TextAlign.left,
+                        title: 'Uyarı',
+                        message: hataTopla,
+                        onPres: () async {
+                          Navigator.pop(context);
+                        },
+                        buttonText: 'Tamam',
+                      );
+                    });
+              } else {
+                Navigator.pop(context);
+       
+              }
             } else {
+              String hataTopla = "";
               for (var element in fisEx.fis!.value.fisStokListesi) {
                 if (element.ALTHESAP == widget.gelenAltHesap!.ALTHESAP) {
                   if (fisEx.fis!.value.fisStokListesi.any((vv) =>
                       vv.STOKKOD == element.STOKKOD &&
                       vv.ALTHESAP == seciliAltHesap!.ALTHESAP!)) {
-                    await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CustomAlertDialog(
-                            align: TextAlign.left,
-                            title: 'Uyarı',
-                            message:
-                                "Alt hesabını değiştirmek istediğiniz ürün zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.",
-                            onPres: () async {
-                              Navigator.pop(context);
-                            },
-                            buttonText: 'Tamam',
-                          );
-                        });
+                    hataTopla +=
+                        "${element.STOKKOD} ürünü zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";
                   } else {
                     element.ALTHESAP = seciliAltHesap!.ALTHESAP;
                     altHesapDegistirFiseEkle(element);
@@ -138,9 +132,25 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                     await Fis.empty()
                         .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
                     Ctanim.genelToplamHesapla(fisEx);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
                   }
+                }
+                if (hataTopla != "") {
+                  await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CustomAlertDialog(
+                          align: TextAlign.left,
+                          title: 'Uyarı',
+                          message: hataTopla,
+                          onPres: () async {
+                            Navigator.pop(context);
+                          },
+                          buttonText: 'Tamam',
+                        );
+                      });
+                } else {
+                  Navigator.pop(context);
+               
                 }
               }
             }
