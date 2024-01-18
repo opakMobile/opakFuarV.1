@@ -39,29 +39,31 @@ class CustomAlertDialog extends StatelessWidget {
    
     return AlertDialog(
       title: Text(title,style: TextStyle(color: textColor!=null ? textColor : Colors.black),),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 3.0),
-            child:
-                SingleChildScrollView(child: Container(child: Text(message, textAlign: align, style: TextStyle(fontSize: 16)))),
-          ),
-          pdfSimgesi == true
-              ? GestureDetector(
-                  onTap: () {
-                    onPres();
-                  },
-                  child: SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: Image.asset(
-                      'assets/pdf.png',
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 3.0),
+              child:
+                  SingleChildScrollView(child: Container(child: Text(message, textAlign: align, style: TextStyle(fontSize: 16)))),
+            ),
+            pdfSimgesi == true
+                ? GestureDetector(
+                    onTap: () {
+                      onPres();
+                    },
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Image.asset(
+                        'assets/pdf.png',
+                      ),
                     ),
-                  ),
-                )
-              : Container(),
-        ],
+                  )
+                : Container(),
+          ],
+        ),
       ),
       actions: [
         TextButton(

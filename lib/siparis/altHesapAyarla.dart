@@ -643,7 +643,7 @@ _showDialog(List<CariAltHesap> altHesaplar, CariAltHesap seciliAltHesap,
       },
     ).then((value) {
       setState(() {
-        print("EBRAR");
+  
       });
       return ;
     });

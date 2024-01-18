@@ -263,6 +263,9 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                         ),
                         child: Text("Alt Hesap Ayarla"),
                         onPressed: (){
+                          fisEx.fis!.value.fisStokListesi.where((element) => element.AltHesapDegistir == true).forEach((element) {
+                            element.AltHesapDegistir = false;
+                          });
                           Navigator.push(
                               context,
                               MaterialPageRoute(

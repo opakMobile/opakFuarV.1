@@ -8,6 +8,7 @@ import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/model/satisTipiModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
+import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/siparis/siparisTamamla.dart';
@@ -80,15 +81,26 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
         TextButton(
           onPressed: () async {
             if (widget.hepsiMi == false) {
+                       showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return LoadingSpinner(
+                                color: Colors.black,
+                                message:
+                                    "Seçili ürünlerin althesapları değiştiriliyor. Lütfen Bekleyiniz...",
+                              );
+                            },
+                          );
               String hataTopla = "";
               for (var element in fisEx.fis!.value.fisStokListesi) {
                 if (element.AltHesapDegistir == true) {
                   if (fisEx.fis!.value.fisStokListesi.any((vv) =>
                       vv.STOKKOD == element.STOKKOD &&
                       vv.ALTHESAP == seciliAltHesap!.ALTHESAP!)) {
-                    hataTopla +=
-                        "${element.STOKKOD} ürünü zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";
-                  } else {
+                        element.AltHesapDegistir = false;
+              hataTopla +=
+                        "${element.STOKKOD} / ${element.STOKADI}  zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";                  } else {
                     element.ALTHESAP = seciliAltHesap!.ALTHESAP;
                     altHesapDegistirFiseEkle(element);
                     fisEx.fis!.value.AKTARILDIMI = false;
@@ -109,6 +121,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                         onPres: () async {
                           Navigator.pop(context);
                            Navigator.pop(context);
+                            Navigator.pop(context);
                         },
                         buttonText: 'Tamam',
                       );
@@ -118,18 +131,32 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                     });
               } else {
                 Navigator.pop(context);
+               Navigator.pop(context);
        
               }
             } else {
               String hataTopla = "";
+                       showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return LoadingSpinner(
+                                color: Colors.black,
+                                message:
+                                    "${seciliAltHesap!.ALTHESAP}'a ait ürünlerin alt hesapları değiştiriliyor. Lütfen Bekleyiniz...",
+                              );
+                            },
+                          );
               for (var element in fisEx.fis!.value.fisStokListesi) {
                 if (element.ALTHESAP == widget.gelenAltHesap!.ALTHESAP) {
                   if (fisEx.fis!.value.fisStokListesi.any((vv) =>
                       vv.STOKKOD == element.STOKKOD &&
                       vv.ALTHESAP == seciliAltHesap!.ALTHESAP!)) {
+                     element.AltHesapDegistir = false;
                     hataTopla +=
-                        "${element.STOKKOD} ürünü zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";
+                        "${element.STOKKOD} / ${element.STOKADI}  zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.\n";
                   } else {
+                    element.AltHesapDegistir = true;
                     element.ALTHESAP = seciliAltHesap!.ALTHESAP;
                     altHesapDegistirFiseEkle(element);
                     fisEx.fis!.value.AKTARILDIMI = false;
@@ -140,7 +167,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                 }
           
               }
-                    if (hataTopla != "") {
+              if (hataTopla != "") {
                    
                   await showDialog(
                       context: context,
@@ -152,6 +179,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                           onPres: () async {
                             Navigator.pop(context);
                              Navigator.pop(context);
+                              Navigator.pop(context);
                    
                           },
                           buttonText: 'Tamam',
@@ -160,6 +188,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                   
                  
                 } else {
+                  Navigator.pop(context);
                   Navigator.pop(context);
                
                 }
