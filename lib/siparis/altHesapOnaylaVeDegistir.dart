@@ -223,7 +223,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
         Ctanim.seciliStokFiyatListesi,
         seciliAltHesap!.ALTHESAPID);
 
-    stok.first.guncelDegerler!.guncelBarkod = stok.first.KOD;
+    stok.first.guncelDegerler!.guncelBarkod = element.STOKKOD;
     stok.first.guncelDegerler!.carpan = 1;
     stok.first.guncelDegerler!.fiyat =
         double.parse(gelenFiyatVeIskonto[0].toString());

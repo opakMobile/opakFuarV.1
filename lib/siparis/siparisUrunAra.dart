@@ -301,6 +301,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 // FocusScope.of(context).requestFocus(focusNode);
                                 setState(() {
                                   okumaModu = value!;
+                                  sepetteara = false;
                                   if (value == true) {
                                     aramaModu = false;
                                   }
@@ -320,6 +321,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
                                 editingController.text = "";
                                 setState(() {
                                   aramaModu = value!;
+                                   sepetteara = false;
                                   if (value == true) {
                                     okumaModu = false;
                                   }
