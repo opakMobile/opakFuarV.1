@@ -108,9 +108,13 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                         message: hataTopla,
                         onPres: () async {
                           Navigator.pop(context);
+                           Navigator.pop(context);
                         },
                         buttonText: 'Tamam',
                       );
+                    });
+                    setState(() {
+                      
                     });
               } else {
                 Navigator.pop(context);
@@ -134,7 +138,10 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                     Ctanim.genelToplamHesapla(fisEx);
                   }
                 }
-                if (hataTopla != "") {
+          
+              }
+                    if (hataTopla != "") {
+                   
                   await showDialog(
                       context: context,
                       builder: (context) {
@@ -144,15 +151,19 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                           message: hataTopla,
                           onPres: () async {
                             Navigator.pop(context);
+                             Navigator.pop(context);
+                   
                           },
                           buttonText: 'Tamam',
                         );
                       });
+                  
+                 
                 } else {
                   Navigator.pop(context);
                
                 }
-              }
+
             }
           },
           child: Text('Tamam'),

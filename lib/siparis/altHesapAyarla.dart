@@ -113,7 +113,12 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                 ),
                 label: "Seçilen stokların althesabını güncelle",
                 onTap: () async {
-                  await _showDialog(altHesaplar, seciliAltHesap!, false);
+                  await _showDialog(altHesaplar, seciliAltHesap!, false).then((value) {
+                    setState(() {
+                      
+                    });
+                    return ;
+                  });
                 }),
             SpeedDialChild(
                 backgroundColor: Color.fromARGB(255, 70, 89, 105),
@@ -124,7 +129,12 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                 ),
                 label: "Tamamının althesabını güncelle",
                 onTap: () async {
-                  await _showDialog(altHesaplar, seciliAltHesap!, true);
+                  await _showDialog(altHesaplar, seciliAltHesap!, true).then((value) {
+                    setState(() {
+                      print("TURAN");
+                    });
+                    return null;
+                  });
                 }),
           ],
         ),
@@ -621,9 +631,9 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                                   );
   }
 
-  _showDialog(List<CariAltHesap> altHesaplar, CariAltHesap seciliAltHesap,
-      bool hepsiMi) {
-    showDialog(
+_showDialog(List<CariAltHesap> altHesaplar, CariAltHesap seciliAltHesap,
+      bool hepsiMi) async {
+  await  showDialog(
       context: context,
       builder: (BuildContext context) {
         return AltHesapOnaylaVeDegistir(
@@ -631,6 +641,11 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
             gelenAltHesap: seciliAltHesap,
             hepsiMi: hepsiMi);
       },
-    );
+    ).then((value) {
+      setState(() {
+        print("EBRAR");
+      });
+      return ;
+    });
   }
 }
