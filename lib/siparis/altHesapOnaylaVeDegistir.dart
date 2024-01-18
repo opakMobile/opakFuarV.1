@@ -99,8 +99,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                       vv.STOKKOD == element.STOKKOD &&
                       vv.ALTHESAP == seciliAltHesap!.ALTHESAP!)) {
                     element.AltHesapDegistir = false;
-                    hataTopla +=
-                        "${element.STOKKOD} / ${element.STOKADI} \n";
+                    hataTopla += "${element.STOKKOD} / ${element.STOKADI} \n";
                   } else {
                     element.ALTHESAP = seciliAltHesap!.ALTHESAP;
                     altHesapDegistirFiseEkle(element);
@@ -198,21 +197,163 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
   }
 
   void altHesapDegistirFiseEkle(FisHareket element) {
-    List<StokKart> stok = stokKartEx.searchList
-        .where((element2) => (element2.KOD == element.STOKKOD ||
-            element2.BARKOD1 == element.STOKKOD ||
-            element2.BARKOD2 == element.STOKKOD ||
-            element2.BARKOD3 == element.STOKKOD ||
-            element2.BARKOD4 == element.STOKKOD ||
-            element2.BARKOD5 == element.STOKKOD ||
-            element2.BARKOD6 == element.STOKKOD))
-        .toList();
+    List<StokKart> stok = [];
+    bool barkodMu = false;
+    for (var el in stokKartEx.searchList) {
+      if (el.KOD == element.STOKKOD) {
+        stok.add(el);
+      } else if (el.BARKOD1 == element.STOKKOD) {
+        stok.add(el);
+        barkodMu = true;
+        if (stok.first.BARKODCARPAN1! > 0) {
+          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN1!;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD1!;
+        } else {
+          stok.first.guncelDegerler!.carpan = 1.0;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.KOD!;
+        }
+        if (stok.first.BARKODFIYAT1! > 0) {
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD1!;
+          stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT1;
+          stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK1;
+          stok.first.guncelDegerler!.seciliFiyati = "Barkod"; // hata verebilir
+          stok.first.guncelDegerler!.fiyatDegistirMi = false;
+          stok.first.guncelDegerler!.netfiyat =
+              stok.first.guncelDegerler!.hesaplaNetFiyat();
+          if (!Ctanim.fiyatListesiKosul
+              .contains(stok.first.guncelDegerler!.seciliFiyati)) {
+            Ctanim.fiyatListesiKosul
+                .add(stok.first.guncelDegerler!.seciliFiyati!);
+          }
+        }
+      } else if (el.BARKOD2 == element.STOKKOD) {
+        stok.add(el);
+        barkodMu = true;
+        if (stok.first.BARKODCARPAN2! > 0) {
+          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN2!;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD2!;
+        } else {
+          stok.first.guncelDegerler!.carpan = 1.0;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.KOD!;
+        }
+        if (stok.first.BARKODFIYAT2! > 0) {
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD2!;
+          stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT2;
+          stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK2;
+          stok.first.guncelDegerler!.seciliFiyati = "Barkod"; // hata verebilir
+          stok.first.guncelDegerler!.fiyatDegistirMi = false;
+          stok.first.guncelDegerler!.netfiyat =
+              stok.first.guncelDegerler!.hesaplaNetFiyat();
+          if (!Ctanim.fiyatListesiKosul
+              .contains(stok.first.guncelDegerler!.seciliFiyati)) {
+            Ctanim.fiyatListesiKosul
+                .add(stok.first.guncelDegerler!.seciliFiyati!);
+          }
+        }
+      } else if (el.BARKOD3 == element.STOKKOD) {
+        stok.add(el);
+        barkodMu = true;
+        if (stok.first.BARKODCARPAN3! > 0) {
+          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN3!;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD3!;
+        } else {
+          stok.first.guncelDegerler!.carpan = 1.0;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.KOD!;
+        }
+        if (stok.first.BARKODFIYAT3! > 0) {
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD3!;
+          stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT3;
+          stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK3;
+          stok.first.guncelDegerler!.seciliFiyati = "Barkod"; // hata verebilir
+          stok.first.guncelDegerler!.fiyatDegistirMi = false;
+          stok.first.guncelDegerler!.netfiyat =
+              stok.first.guncelDegerler!.hesaplaNetFiyat();
+          if (!Ctanim.fiyatListesiKosul
+              .contains(stok.first.guncelDegerler!.seciliFiyati)) {
+            Ctanim.fiyatListesiKosul
+                .add(stok.first.guncelDegerler!.seciliFiyati!);
+          }
+        }
+      } else if (el.BARKOD4 == element.STOKKOD) {
+        stok.add(el);
+        barkodMu = true;
+        if (stok.first.BARKODCARPAN4! > 0) {
+          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN4!;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD4!;
+        } else {
+          stok.first.guncelDegerler!.carpan = 1.0;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.KOD!;
+        }
+        if (stok.first.BARKODFIYAT4! > 0) {
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD4!;
+          stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT4;
+          stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK4;
+          stok.first.guncelDegerler!.seciliFiyati = "Barkod"; // hata verebilir
+          stok.first.guncelDegerler!.fiyatDegistirMi = false;
+          stok.first.guncelDegerler!.netfiyat =
+              stok.first.guncelDegerler!.hesaplaNetFiyat();
+          if (!Ctanim.fiyatListesiKosul
+              .contains(stok.first.guncelDegerler!.seciliFiyati)) {
+            Ctanim.fiyatListesiKosul
+                .add(stok.first.guncelDegerler!.seciliFiyati!);
+          }
+        }
+      } else if (el.BARKOD5 == element.STOKKOD) {
+        stok.add(el);
+        barkodMu = true;
+        if (stok.first.BARKODCARPAN5! > 0) {
+          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN5!;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD5!;
+        } else {
+          stok.first.guncelDegerler!.carpan = 1.0;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.KOD!;
+        }
+        if (stok.first.BARKODFIYAT5! > 0) {
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD5!;
+          stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT5;
+          stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK5;
+          stok.first.guncelDegerler!.seciliFiyati = "Barkod"; // hata verebilir
+          stok.first.guncelDegerler!.fiyatDegistirMi = false;
+          stok.first.guncelDegerler!.netfiyat =
+              stok.first.guncelDegerler!.hesaplaNetFiyat();
+          if (!Ctanim.fiyatListesiKosul
+              .contains(stok.first.guncelDegerler!.seciliFiyati)) {
+            Ctanim.fiyatListesiKosul
+                .add(stok.first.guncelDegerler!.seciliFiyati!);
+          }
+        }
+      } else if (el.BARKOD6 == element.STOKKOD) {
+        stok.add(el);
+        barkodMu = true;
+        if (stok.first.BARKODCARPAN6! > 0) {
+          stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN6!;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD6!;
+        } else {
+          stok.first.guncelDegerler!.carpan = 1.0;
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.KOD!;
+        }
+        if (stok.first.BARKODFIYAT6! > 0) {
+          stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD6!;
+          stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT6;
+          stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK6;
+          stok.first.guncelDegerler!.seciliFiyati = "Barkod"; // hata verebilir
+          stok.first.guncelDegerler!.fiyatDegistirMi = false;
+          stok.first.guncelDegerler!.netfiyat =
+              stok.first.guncelDegerler!.hesaplaNetFiyat();
+          if (!Ctanim.fiyatListesiKosul
+              .contains(stok.first.guncelDegerler!.seciliFiyati)) {
+            Ctanim.fiyatListesiKosul
+                .add(stok.first.guncelDegerler!.seciliFiyati!);
+          }
+        }
+      }
+    }
     if (stok.isEmpty) {
       listeler.listDahaFazlaBarkod
           .where((dahaFazla) => dahaFazla.KOD == element.STOKKOD);
     }
-
-    SatisTipiModel satisTipiModel =
+  if(barkodMu == false){
+        SatisTipiModel satisTipiModel =
         SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
 
     List<dynamic> gelenFiyatVeIskonto = stokKartEx.fiyatgetir(
@@ -256,6 +397,9 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
         .contains(stok.first.guncelDegerler!.seciliFiyati)) {
       Ctanim.fiyatListesiKosul.add(stok.first.guncelDegerler!.seciliFiyati!);
     }
+
+
+  }
 
     double tempFiyat = 0;
 
