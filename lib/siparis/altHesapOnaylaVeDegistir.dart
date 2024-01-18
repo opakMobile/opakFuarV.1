@@ -104,6 +104,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                     element.ALTHESAP = seciliAltHesap!.ALTHESAP;
                     altHesapDegistirFiseEkle(element);
                     fisEx.fis!.value.AKTARILDIMI = false;
+                    element.AltHesapDegistir = false;
                     await Fis.empty()
                         .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
                     Ctanim.genelToplamHesapla(fisEx);
@@ -159,6 +160,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
                     element.ALTHESAP = seciliAltHesap!.ALTHESAP;
                     altHesapDegistirFiseEkle(element);
                     fisEx.fis!.value.AKTARILDIMI = false;
+                    element.AltHesapDegistir = false;
                     await Fis.empty()
                         .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
                     Ctanim.genelToplamHesapla(fisEx);

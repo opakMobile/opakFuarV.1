@@ -93,10 +93,25 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
       }
     }
   }*/
+  String? althesapAdi;
+  String? altHesapToplami;
 
   @override
   Widget build(BuildContext context) {
+    bool buldu = false;
     double ekranYuksekligi = MediaQuery.of(context).size.height;
+    //Ctanim.genelToplamHesapla(fisEx);
+    for(var el in fisEx.fis!.value.altHesapToplamlar){
+      if(el.ALTHESAPADI == seciliAltHesap!.ALTHESAP){
+        buldu = true;
+        althesapAdi = el.ALTHESAPADI;
+        altHesapToplami = el.TOPLAM.toString();
+      }
+    }
+    if(buldu==false){
+      althesapAdi = seciliAltHesap!.ALTHESAP;
+      altHesapToplami = "0";
+    }
     return SafeArea(
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
@@ -410,7 +425,7 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Satış Toplamı:",
+                            "${althesapAdi}  Toplamı:",
                             style: TextStyle(
                               fontSize: 15,
                             ),
@@ -425,7 +440,7 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                             child: Center(
                                 child: Text(
                               Ctanim.donusturMusteri(
-                                  fisEx.fis!.value.GENELTOPLAM.toString()),
+                                  altHesapToplami!),
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.red,
@@ -565,7 +580,79 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                       ),
                       child: Center(
                         child: Text(
-                          stokModel.KDVDAHILNETFIYAT!.toStringAsFixed(2),
+                          stokModel.BRUTFIYAT!.toStringAsFixed(2),
+                        ),
+                      ),
+                    ),
+                    
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Toplam: ",
+                      style: TextStyle(fontSize: 11, color: Colors.orange),
+                    ),
+                    Text(
+                      stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
+                ),
+          
+                Row(
+                  children: [
+                    Text(
+                      "İskonto: ",
+                      style: TextStyle(fontSize: 11, color: Colors.orange),
+                    ),
+                    Text(
+                      stokModel.ISKONTOTOPLAM!.toStringAsFixed(2),
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "KDV: ",
+                      style: TextStyle(fontSize: 11, color: Colors.orange),
+                    ),
+                    Text(
+                      stokModel.KDVTOPLAM!.toStringAsFixed(2),
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Genel Toplam: ",
+                      style: TextStyle(fontSize: 11, color: Colors.orange),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Text(
+                        stokModel.KDVDAHILNETTOPLAM!.toStringAsFixed(2),
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
                         ),
                       ),
                     )
@@ -573,6 +660,7 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                 ),
               ],
             ),
+                  ),
           ),
           Divider(
             thickness: 1.5,
