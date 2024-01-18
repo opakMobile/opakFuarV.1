@@ -7,6 +7,7 @@ import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/model/satisTipiModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/siparis/siparisTamamla.dart';
@@ -81,25 +82,68 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
             if (widget.hepsiMi == false) {
               for (var element in fisEx.fis!.value.fisStokListesi) {
                 if (element.AltHesapDegistir == true) {
-                  element.ALTHESAP = seciliAltHesap!.ALTHESAP;
-                  altHesapDegistirFiseEkle(element);
+                  if (fisEx.fis!.value.fisStokListesi.any((vv) =>
+                      vv.STOKKOD == element.STOKKOD &&
+                      vv.ALTHESAP == seciliAltHesap!.ALTHESAP!)) {
+                    await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomAlertDialog(
+                            align: TextAlign.left,
+                            title: 'Uyarı',
+                            message:
+                                "Alt hesabını değiştirmek istediğiniz ürün zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.",
+                            onPres: () async {
+                              Navigator.pop(context);
+                            },
+                            buttonText: 'Tamam',
+                          );
+                        });
+                  } else {
+                    element.ALTHESAP = seciliAltHesap!.ALTHESAP;
+                    altHesapDegistirFiseEkle(element);
+                    fisEx.fis!.value.AKTARILDIMI = false;
+                    await Fis.empty()
+                        .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+                    Ctanim.genelToplamHesapla(fisEx);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
                 }
               }
             } else {
               for (var element in fisEx.fis!.value.fisStokListesi) {
                 if (element.ALTHESAP == widget.gelenAltHesap!.ALTHESAP) {
-                  element.ALTHESAP = seciliAltHesap!.ALTHESAP;
-                   altHesapDegistirFiseEkle(element);
-
+                  if (fisEx.fis!.value.fisStokListesi.any((vv) =>
+                      vv.STOKKOD == element.STOKKOD &&
+                      vv.ALTHESAP == seciliAltHesap!.ALTHESAP!)) {
+                    await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomAlertDialog(
+                            align: TextAlign.left,
+                            title: 'Uyarı',
+                            message:
+                                "Alt hesabını değiştirmek istediğiniz ürün zaten değiştirilmek istenen althesapta mevcut. Lütfen farklı bir althesap seçiniz.",
+                            onPres: () async {
+                              Navigator.pop(context);
+                            },
+                            buttonText: 'Tamam',
+                          );
+                        });
+                  } else {
+                    element.ALTHESAP = seciliAltHesap!.ALTHESAP;
+                    altHesapDegistirFiseEkle(element);
+                    fisEx.fis!.value.AKTARILDIMI = false;
+                    await Fis.empty()
+                        .fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+                    Ctanim.genelToplamHesapla(fisEx);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
                 }
               }
             }
-
-            fisEx.fis!.value.AKTARILDIMI = false;
-            await Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
-            Ctanim.genelToplamHesapla(fisEx);
-            Navigator.pop(context);
-            Navigator.pop(context);
           },
           child: Text('Tamam'),
         ),
@@ -121,11 +165,10 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
       listeler.listDahaFazlaBarkod
           .where((dahaFazla) => dahaFazla.KOD == element.STOKKOD);
     }
-    
-    
-    SatisTipiModel satisTipiModel = SatisTipiModel(
-        ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
-    
+
+    SatisTipiModel satisTipiModel =
+        SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
+
     List<dynamic> gelenFiyatVeIskonto = stokKartEx.fiyatgetir(
         stok.first,
         fisEx.fis!.value.CARIKOD!,
@@ -133,60 +176,54 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
         satisTipiModel,
         Ctanim.seciliStokFiyatListesi,
         seciliAltHesap!.ALTHESAPID);
-    
-    
+
     stok.first.guncelDegerler!.guncelBarkod = stok.first.KOD;
     stok.first.guncelDegerler!.carpan = 1;
     stok.first.guncelDegerler!.fiyat =
         double.parse(gelenFiyatVeIskonto[0].toString());
-    
+
     stok.first.guncelDegerler!.iskonto1 =
         double.parse(gelenFiyatVeIskonto[1].toString());
-    
+
     stok.first.guncelDegerler!.iskonto2 =
         double.parse(gelenFiyatVeIskonto[4].toString());
-    
+
     stok.first.guncelDegerler!.iskonto3 =
         double.parse(gelenFiyatVeIskonto[5].toString());
-    
+
     stok.first.guncelDegerler!.iskonto4 =
         double.parse(gelenFiyatVeIskonto[6].toString());
-    
+
     stok.first.guncelDegerler!.iskonto5 =
         double.parse(gelenFiyatVeIskonto[7].toString());
-    
+
     stok.first.guncelDegerler!.iskonto6 =
         double.parse(gelenFiyatVeIskonto[8].toString());
-    
-    stok.first.guncelDegerler!.seciliFiyati =
-        gelenFiyatVeIskonto[2].toString();
-    stok.first.guncelDegerler!.fiyatDegistirMi =
-        gelenFiyatVeIskonto[3];
-    
+
+    stok.first.guncelDegerler!.seciliFiyati = gelenFiyatVeIskonto[2].toString();
+    stok.first.guncelDegerler!.fiyatDegistirMi = gelenFiyatVeIskonto[3];
+
     stok.first.guncelDegerler!.netfiyat =
         stok.first.guncelDegerler!.hesaplaNetFiyat();
     //fiyat listesi koşul arama fonksiyonua gönderiliyor orda ekleme yapsanda buraya eklemez giyatListesiKosulu cTanima ekle !
     if (!Ctanim.fiyatListesiKosul
         .contains(stok.first.guncelDegerler!.seciliFiyati)) {
-      Ctanim.fiyatListesiKosul
-          .add(stok.first.guncelDegerler!.seciliFiyati!);
+      Ctanim.fiyatListesiKosul.add(stok.first.guncelDegerler!.seciliFiyati!);
     }
-    
+
     double tempFiyat = 0;
-    
+
     tempFiyat = stok.first.guncelDegerler!.fiyat!;
-    
-    double KDVTUtarTemp = stok.first.guncelDegerler!.fiyat! *
-        (1 + (stok.first.SATIS_KDV!));
 
+    double KDVTUtarTemp =
+        stok.first.guncelDegerler!.fiyat! * (1 + (stok.first.SATIS_KDV!));
 
- //  fisEx.fis!.value.fisStokListesi.remove(element);
-    
-                     
+    //  fisEx.fis!.value.fisStokListesi.remove(element);
+
     fisEx.fiseStokEkle(
       // belgeTipi: widget.belgeTipi,
       altHesapDegistirMi: true,
-    
+
       malFazlasi: element.MALFAZLASI,
       ALTHESAP: seciliAltHesap!.ALTHESAP!,
       urunListedenMiGeldin: true,

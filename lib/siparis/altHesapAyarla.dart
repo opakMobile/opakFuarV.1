@@ -26,26 +26,25 @@ import '../model/satisTipiModel.dart';
 import '../sabitler/Ctanim.dart';
 
 class AltHesapAyarla extends StatefulWidget {
-
-
   @override
   State<AltHesapAyarla> createState() => _SiparisUrunAraState();
 }
 
 class _SiparisUrunAraState extends State<AltHesapAyarla> {
-
+  bool aramaAktif = false;
   List<CariAltHesap> altHesaplar = [];
   @override
   void initState() {
     super.initState();
     altHesaplar.clear();
-    for (var element in fisEx.fis!.value.fisStokListesi) {
+   
       for (var element1 in listeler.listCariAltHesap) {
-        if (element1.ALTHESAP == element.ALTHESAP && !altHesaplar.contains(element1)) {
+        if (fisEx.fis!.value.cariKart.cariAltHesaplar.any((asd) => asd.ALTHESAP == element1.ALTHESAP) &&
+            !altHesaplar.contains(element1)) {
           altHesaplar.add(element1);
         }
       }
-    }
+    
     if (altHesaplar.length > 0) {
       seciliAltHesap = altHesaplar[0];
     }
@@ -96,48 +95,42 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     double ekranYuksekligi = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
         floatingActionButton: SpeedDial(
-        animatedIcon: AnimatedIcons.menu_arrow,
-        backgroundColor: Color.fromARGB(255, 30, 38, 45),
-        buttonSize: Size(65, 65),
-        children: [
-          SpeedDialChild(
-              backgroundColor: Color.fromARGB(255, 70, 89, 105),
-              child: Icon(
-                Icons.all_inbox,
-                color: Colors.green,
-                size: 32,
-              ),
-              label: "Seçilen stokların althesabını güncelle",
-              onTap: () async {
-                await _showDialog(altHesaplar,seciliAltHesap!,false);
-              }),
-          SpeedDialChild(
-              backgroundColor: Color.fromARGB(255, 70, 89, 105),
-              child: Icon(
-                Icons.check,
-                color: Colors.blue,
-                size: 32,
-              ),
-              label: "Tamamının althesabını güncelle",
-              onTap: () async { 
-                await _showDialog(altHesaplar,seciliAltHesap!,true);
-            
-              }),
-        ],
-      ),
+          animatedIcon: AnimatedIcons.menu_arrow,
+          backgroundColor: Color.fromARGB(255, 30, 38, 45),
+          buttonSize: Size(65, 65),
+          children: [
+            SpeedDialChild(
+                backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                child: Icon(
+                  Icons.all_inbox,
+                  color: Colors.green,
+                  size: 32,
+                ),
+                label: "Seçilen stokların althesabını güncelle",
+                onTap: () async {
+                  await _showDialog(altHesaplar, seciliAltHesap!, false);
+                }),
+            SpeedDialChild(
+                backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                child: Icon(
+                  Icons.check,
+                  color: Colors.blue,
+                  size: 32,
+                ),
+                label: "Tamamının althesabını güncelle",
+                onTap: () async {
+                  await _showDialog(altHesaplar, seciliAltHesap!, true);
+                }),
+          ],
+        ),
         // appBar: appBarDizayn(context),
- body: GestureDetector(
-          onTap: () {
-      
-          },
+        body: GestureDetector(
+          onTap: () {},
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -181,10 +174,8 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: TextFormField(
-
                             controller: editingController,
                             onTap: () {
-                           
                               editingController.text = "";
                               /*
                               editingController.selection = TextSelection(
@@ -194,6 +185,7 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                                       */
                             },
                             onFieldSubmitted: ((value) async {
+                              aramaAktif  = true;
                               // await textAramaYap(value, context);
                             }),
                             decoration: InputDecoration(
@@ -232,6 +224,7 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                               if (res is String) {
                                 result = res;
                                 editingController.text = result;
+                                aramaAktif = true;
                               }
                               //  await textAramaYap(result, context);
                               /*
@@ -309,7 +302,6 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                             padding: EdgeInsets.only(top: 15.0),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<CariAltHesap>(
-                            
                                 value: seciliAltHesap,
                                 items: altHesaplar.map((CariAltHesap banka) {
                                   return DropdownMenuItem<CariAltHesap>(
@@ -322,7 +314,6 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                                 }).toList(),
                                 onChanged: (CariAltHesap? selected) async {
                                   setState(() {
-                      
                                     seciliAltHesap = selected!;
                                     fisEx.fis!.value.ALTHESAP =
                                         selected.ALTHESAP;
@@ -353,199 +344,29 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                             itemCount: fisEx.fis!.value.fisStokListesi
                                 .length, // stokKartEx.searchList.length,
                             itemBuilder: (context, index) {
-                              FisHareket stokModel = fisEx.fis!.value!.fisStokListesi[index]!;
+                              FisHareket stokModel =
+                                  fisEx.fis!.value!.fisStokListesi[index]!;
+
+                              if(aramaAktif == true && editingController.text != ""){
+                                if((stokModel.STOKKOD == editingController.text || stokModel.STOKADI!.toLowerCase().contains(editingController.text))&& stokModel.ALTHESAP == seciliAltHesap!.ALTHESAP){
+                                  //aramaAktif = false;
+                                  return altHesapDegistirListe(ekranYuksekligi, context, stokModel);
+                                }else{
+                                  return Container();
+                                }
+
+                              }else{
+                                         return stokModel.ALTHESAP ==
+                                      seciliAltHesap!.ALTHESAP
+                                  ? altHesapDegistirListe(ekranYuksekligi, context, stokModel)
+                                  : Container();
+
+                              }
+
+
+
                               //    stokKartEx.searchList[index];
-                              return 
-                              
-                              stokModel.ALTHESAP == seciliAltHesap!.ALTHESAP ?
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  bottom: ekranYuksekligi < 650
-                                      ? ekranYuksekligi * 0.07
-                                      : ekranYuksekligi * 0.002,
-                                ),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.75,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                stokModel.STOKADI!,
-                                              
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              Text(
-                                                stokModel.STOKKOD! +
-                                                    "  " +
-                                                    "KDV " +
-                                                    stokModel.KDVORANI
-                                                        .toString(),
-                                              
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Checkbox(
-                                              value:stokModel
-                                                  .AltHesapDegistir,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  stokModel
-                                                  .AltHesapDegistir = value!;
-                                                });
-                                              },
-                                            ),
-                                     
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 5,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            children: [
-                                              Text(
-                                                "İskonto",
-                                                style: TextStyle(fontSize: 13),
-                                              ),
-                                              Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.04,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.13,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  border: Border.all(
-                                                      color: Colors.grey),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    stokModel.ISK!
-                                                        .toStringAsFixed(2),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                "Miktar",
-                                                style: TextStyle(fontSize: 13),
-                                              ),
-                                              Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.04,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.13,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  border: Border.all(
-                                                      color: Colors.grey),
-                                                ),
-                                                child: Center(
-                                                  child: Text(stokModel.MIKTAR!
-                                                      .toStringAsFixed(2)),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text("Birim",
-                                                  style:
-                                                      TextStyle(fontSize: 13)),
-                                              Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.04,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.13,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  border: Border.all(
-                                                      color: Colors.grey),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    stokModel.BIRIM!,
-                                                    style:
-                                                        TextStyle(fontSize: 12),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text("Fiyat",
-                                                  style:
-                                                      TextStyle(fontSize: 13)),
-                                              Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.04,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.13,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  border: Border.all(
-                                                      color: Colors.grey),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    stokModel.KDVDAHILNETFIYAT!
-                                                        .toStringAsFixed(2),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                       
-                                        ],
-                                      ),
-                                    ),
-                                  
-                                    Divider(
-                                      thickness: 1.5,
-                                      color: Colors.black87,
-                                    )
-                                  ],
-                                ),
-                              ):Container();
+                     
                             },
                           ),
                         ),
@@ -593,13 +414,222 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
     );
   }
 
+  Padding altHesapDegistirListe(double ekranYuksekligi, BuildContext context, FisHareket stokModel) {
+    return Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: ekranYuksekligi < 650
+                                          ? ekranYuksekligi * 0.07
+                                          : ekranYuksekligi * 0.002,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.75,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    stokModel.STOKADI!,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  Text(
+                                                    stokModel.STOKKOD! +
+                                                        "  " +
+                                                        "KDV " +
+                                                        stokModel.KDVORANI
+                                                            .toString(),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Checkbox(
+                                              value:
+                                                  stokModel.AltHesapDegistir,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  stokModel.AltHesapDegistir =
+                                                      value!;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 5,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    "İskonto",
+                                                    style: TextStyle(
+                                                        fontSize: 13),
+                                                  ),
+                                                  Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.04,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.13,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius
+                                                              .circular(5),
+                                                      border: Border.all(
+                                                          color: Colors.grey),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        stokModel.ISK!
+                                                            .toStringAsFixed(
+                                                                2),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    "Miktar",
+                                                    style: TextStyle(
+                                                        fontSize: 13),
+                                                  ),
+                                                  Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.04,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.13,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius
+                                                              .circular(5),
+                                                      border: Border.all(
+                                                          color: Colors.grey),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(stokModel
+                                                          .MIKTAR!
+                                                          .toStringAsFixed(
+                                                              2)),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Text("Birim",
+                                                      style: TextStyle(
+                                                          fontSize: 13)),
+                                                  Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.04,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.13,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius
+                                                              .circular(5),
+                                                      border: Border.all(
+                                                          color: Colors.grey),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        stokModel.BIRIM!,
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Text("Fiyat",
+                                                      style: TextStyle(
+                                                          fontSize: 13)),
+                                                  Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.04,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.13,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius
+                                                              .circular(5),
+                                                      border: Border.all(
+                                                          color: Colors.grey),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        stokModel
+                                                            .KDVDAHILNETFIYAT!
+                                                            .toStringAsFixed(
+                                                                2),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Divider(
+                                          thickness: 1.5,
+                                          color: Colors.black87,
+                                        )
+                                      ],
+                                    ),
+                                  );
+  }
 
-
- _showDialog(List<CariAltHesap> altHesaplar,CariAltHesap seciliAltHesap,bool hepsiMi) {
+  _showDialog(List<CariAltHesap> altHesaplar, CariAltHesap seciliAltHesap,
+      bool hepsiMi) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AltHesapOnaylaVeDegistir(listCariAltHesap:altHesaplar,gelenAltHesap:seciliAltHesap,hepsiMi:hepsiMi);
+        return AltHesapOnaylaVeDegistir(
+            listCariAltHesap: altHesaplar,
+            gelenAltHesap: seciliAltHesap,
+            hepsiMi: hepsiMi);
       },
     );
   }
