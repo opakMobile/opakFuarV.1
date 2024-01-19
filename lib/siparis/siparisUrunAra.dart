@@ -33,10 +33,13 @@ class SiparisUrunAra extends StatefulWidget {
   State<SiparisUrunAra> createState() => _SiparisUrunAraState();
 }
 
-class _SiparisUrunAraState extends State<SiparisUrunAra> {
+class _SiparisUrunAraState extends State<SiparisUrunAra>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+
     //doğrudan cari alt hesapları verecez
 
     seciliAltHesap = widget.cari.cariAltHesaplar.first;
@@ -167,11 +170,46 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
       Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
       fisEx.fis!.value = Fis.empty();
     }
-
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
     //Ctanim.seciliMarkalarFiltreMap.clear();
     /* stokKartEx.searchC(
         "", "", "", Ctanim.seciliIslemTip, Ctanim.seciliStokFiyatListesi);*/
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      print('Uygulama ön planda');
+    }
+    if (state == AppLifecycleState.paused) {
+      if (fisEx.fis!.value.fisStokListesi.length > 0) {
+        fisEx.fis!.value.DURUM = true;
+        final now = DateTime.now();
+        final formatter = DateFormat('HH:mm');
+        String saat = formatter.format(now);
+        fisEx.fis!.value.SAAT = saat;
+        fisEx.fis!.value.AKTARILDIMI = false;
+        Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+        fisEx.fis!.value = Fis.empty();
+      }
+      print('Uygulama arka planda');
+    }
+    if (state == AppLifecycleState.inactive) {
+      if (fisEx.fis!.value.fisStokListesi.length > 0) {
+        fisEx.fis!.value.DURUM = true;
+        final now = DateTime.now();
+        final formatter = DateFormat('HH:mm');
+        String saat = formatter.format(now);
+        fisEx.fis!.value.SAAT = saat;
+        fisEx.fis!.value.AKTARILDIMI = false;
+        Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+        fisEx.fis!.value = Fis.empty();
+      }
+      print('Uygulama arka planda');
+    }
+    
   }
 
   String result = '';
