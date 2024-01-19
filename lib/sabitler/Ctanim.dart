@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:money_formatter/money_formatter.dart';
 import 'package:opak_fuar/controller/fisController.dart';
+import 'package:opak_fuar/db/veriTabaniIslemleri.dart';
 import 'package:opak_fuar/model/altHesapToplamModel.dart';
 import 'package:opak_fuar/model/fisHareket.dart';
+import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 
 import '../model/kullaniciModel.dart';
@@ -68,6 +70,24 @@ class Ctanim {
   };
 
   //fonksiyonalar
+  static StokKart harekettenStokBul(FisHareket hareket){
+    List<StokKart> stok = stokKartEx.searchList.where((p0) => p0.ADI == hareket.STOKADI ||
+    p0.KOD == hareket.STOKKOD ||
+    p0.BARKOD1 == hareket.STOKKOD ||
+    p0.BARKOD2 == hareket.STOKKOD||
+    p0.BARKOD3 == hareket.STOKKOD||
+    p0.BARKOD4 == hareket.STOKKOD||
+    p0.BARKOD5 == hareket.STOKKOD||
+    p0.BARKOD6 == hareket.STOKKOD ).toList();
+    return stok.first; 
+  }
+
+
+
+
+
+
+
   static double genelToplamHesapla(FisController fisEx,
       {bool KDVtipDegisti = false}) {
     double KDVTutari = 0.0;

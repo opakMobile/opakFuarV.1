@@ -43,23 +43,28 @@ class _okumaModuListState extends State<okumaModuList> {
                 itemCount: fisEx.fis!.value.fisStokListesi.length,
                 itemBuilder: (context, index) {
                   FisHareket stokModel = fisEx.fis!.value.fisStokListesi[index];
-                  if (widget.sepetteAra == true && widget.editinControllerText != "") {
-                    print("SEPETE ARA AKTİF");
-                    if (stokModel.STOKKOD! == widget.editinControllerText || stokModel.STOKADI!.toLowerCase().contains(widget.editinControllerText.toLowerCase())) {
-                      print("EDİTİNGCONTROLLER:"+widget.editinControllerText);
-                      return  okumaModuUrunListe(context, stokModel);
-                    }else{
+                  if (widget.sepetteAra == true &&
+                      widget.editinControllerText != "") {
+                    StokKart bulunanStok = Ctanim.harekettenStokBul(stokModel);
+                    if (bulunanStok.KOD! == widget.editinControllerText ||
+                        bulunanStok.BARKOD1! == widget.editinControllerText ||
+                        bulunanStok.BARKOD2! == widget.editinControllerText ||
+                        bulunanStok.BARKOD3! == widget.editinControllerText ||
+                        bulunanStok.BARKOD4! == widget.editinControllerText ||
+                        bulunanStok.BARKOD5! == widget.editinControllerText ||
+                        bulunanStok.BARKOD6! == widget.editinControllerText ||
+                        bulunanStok.ADI!.toLowerCase().contains(
+                            widget.editinControllerText.toLowerCase())) {
+                      return okumaModuUrunListe(context, stokModel);
+                    } else {
                       return Container();
                     }
+                  } else {
+                    print("SEPETE ARA PASİF");
+                    return stokModel.ALTHESAP == widget.seciliAltHesap
+                        ? okumaModuUrunListe(context, stokModel)
+                        : Container();
                   }
-                  else{
-                        print("SEPETE ARA PASİF");
-                        return stokModel.ALTHESAP == widget.seciliAltHesap
-                      ? okumaModuUrunListe(context, stokModel)
-                      : Container();
-
-                  }
-              
                 },
               ),
       ),
