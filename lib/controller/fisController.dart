@@ -11,18 +11,12 @@ import '../model/fisHareket.dart';
 import '../sabitler/Ctanim.dart';
 
 class FisController extends GetxController {
-  RxList<FisHareket> gecmisFisHareket = <FisHareket>[].obs;
-  RxList<Fis> sonListem = <Fis>[].obs;
   Rx<Fis>? fis = Fis.empty().obs;
   RxList<Fis> list_fis = <Fis>[].obs;
   RxList<Fis> list_tum_fis = <Fis>[].obs;
-  RxList<Fis> list_fis_son10 = <Fis>[].obs;
+  RxList<Fis> list_fis_son = <Fis>[].obs;
   RxList<Fis> list_fis_gidecek = <Fis>[].obs;
-  RxList<Fis> list_fis_giden = <Fis>[].obs;
   RxList<Fis> list_fis_cari_ozel = <Fis>[].obs;
-  RxList<Fis> list_fis_kaydedilen = <Fis>[].obs;
-  RxList<Fis> list_fis_giden_tarihli = <Fis>[].obs;
-  RxList<Fis> list_fis_kaydedilen_tarihli = <Fis>[].obs;
   RxDouble toplam = 0.0.obs;
   late DateTime fis_tarihi;
   List<FisHareket> denemelistesi = [];
@@ -272,72 +266,36 @@ class FisController extends GetxController {
     return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
   }
 
-  Future<void> listGidecekTekFisGetir(
-      {required String belgeTip, required int fisID}) async {
-    list_fis_gidecek.clear();
-    List<Fis> tt = await getGidecekTekfis(belgeTip, fisID);
-    for (var i = 0; i < tt.length; i++) {
-      var element = tt[i];
-      List<FisHareket> fisHar = await getFisHar(element.ID!);
-      element.fisStokListesi = fisHar;
-      if (belgeTip != "Depo_Transfer") {
-        element.cariKart =
-            cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
-      }
-    }
-    list_fis_gidecek.addAll(tt);
-  }
 
-  Future<List<Fis>> getGidecekTekfis(String belgeTip, int fisID) async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'ID = ?',
-        whereArgs: [
-          fisID
-        ]); // doprudan fiş ıd veriyosun diğer bakılacaklara gerek yok ki
-    return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
-  }
 
-  Future<RxList<Fis>> listSonFisleriGetir() async {
+
+
+  Future<RxList<Fis>> listSonFisGetir() async {
     List<Fis> tt = await getSonFis();
 
     // FisHareketlerini alırken forEach kullanmak yerine Future.forEach kullanın
     await Future.forEach(tt, (element) async {
       List<FisHareket> fisHarList = await getFisHar(element.ID!);
       element.fisStokListesi = fisHarList;
-      if (Ctanim().MapFisTipTersENG[element.TIP] != "Depo_Transfer") {
-        element.cariKart =
-            cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
-      }
+      element.cariKart =
+          cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
+
+     
     });
 
-    list_fis_son10.assignAll(tt);
-    return list_fis_son10;
+    list_fis_son.assignAll(tt);
+    return list_fis_son;
   }
 
   Future<List<Fis>> getSonFis() async {
     List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'DURUM = ?', whereArgs: [false], orderBy: 'ID DESC', limit: 10);
+        where: 'DURUM = ?', whereArgs: [true], orderBy: 'ID DESC', limit: 1);
     List<Fis> son10Fis =
         List.generate(result.length, (i) => Fis.fromJson(result[i]));
     return son10Fis;
   }
 
-  Future<RxList<Fis>> listGidenFisleriGetir() async {
-    List<Fis> tt = await getGidenFis();
 
-    // FisHareketlerini alırken forEach kullanmak yerine Future.forEach kullanın
-    await Future.forEach(tt, (element) async {
-      List<FisHareket> fisHarList = await getFisHar(element.ID!);
-      element.fisStokListesi = fisHarList;
-      if (Ctanim().MapFisTipTersENG[element.TIP] != "Depo_Transfer") {
-        element.cariKart =
-            cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
-      }
-    });
-
-    list_fis_giden.assignAll(tt);
-    return list_fis_giden;
-  }
 
   Future<List<Fis>> getCariFis(String cariadi) async {
     List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
@@ -356,161 +314,5 @@ class FisController extends GetxController {
 
     list_fis_cari_ozel.assignAll(tt);
     return list_fis_cari_ozel;
-  }
-
-  Future<List<Fis>> getGidenFis() async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'AKTARILDIMI = ?',
-        whereArgs: [true],
-        limit: 50,
-        orderBy: 'ID DESC');
-    List<Fis> gidenFis =
-        List.generate(result.length, (i) => Fis.fromJson(result[i]));
-    return gidenFis;
-  }
-
-  Future<RxList<Fis>> listKaydedilmisFisleriGetir() async {
-    List<Fis> tt = await getKaydedilmisFis();
-    await Future.forEach(tt, (element) async {
-      List<FisHareket> fisHarList = await getFisHar(element.ID!);
-      element.fisStokListesi = fisHarList;
-      if (Ctanim().MapFisTipTersENG[element.TIP] != "Depo_Transfer") {
-        element.cariKart =
-            cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
-      }
-    });
-
-    list_fis_kaydedilen.assignAll(tt);
-    return list_fis_kaydedilen;
-  }
-
-  Future<List<Fis>> getKaydedilmisFis() async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'DURUM = ? AND AKTARILDIMI = ?',
-        whereArgs: [true, false],
-        limit: 50,
-        orderBy: 'ID DESC');
-    List<Fis> gidenFis =
-        List.generate(result.length, (i) => Fis.fromJson(result[i]));
-    return gidenFis;
-  }
-
-  Future<RxList<Fis>> listTarihliGidenFisleriGetir(
-      String basTar, String bitTar) async {
-    List<Fis> tt = await getTarihliGidenFis(basTar, bitTar);
-
-    // FisHareketlerini alırken forEach kullanmak yerine Future.forEach kullanın
-    await Future.forEach(tt, (element) async {
-      List<FisHareket> fisHarList = await getFisHar(element.ID!);
-      element.fisStokListesi = fisHarList;
-      if (Ctanim().MapFisTipTersENG[element.TIP] != "Depo_Transfer") {
-        element.cariKart =
-            cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
-      }
-    });
-
-    list_fis_giden_tarihli.assignAll(tt);
-    return list_fis_giden_tarihli;
-  }
-
-  Future<List<Fis>> getTarihliGidenFis(String basTar, String bitTar) async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'AKTARILDIMI = ? AND TARIH >= ? AND TARIH <= ?',
-        whereArgs: [true, basTar, bitTar],
-        orderBy: 'ID DESC');
-    List<Fis> gidenFis =
-        List.generate(result.length, (i) => Fis.fromJson(result[i]));
-    return gidenFis;
-  }
-
-  Future<RxList<Fis>> listTarihliKaydedilenFisleriGetir(
-      String basTar, String bitTar) async {
-    List<Fis> tt = await getTarihliKaydedilenFis(basTar, bitTar);
-    await Future.forEach(tt, (element) async {
-      List<FisHareket> fisHarList = await getFisHar(element.ID!);
-      element.fisStokListesi = fisHarList;
-      if (Ctanim().MapFisTipTersENG[element.TIP] != "Depo_Transfer") {
-        element.cariKart =
-            cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
-      }
-    });
-
-    list_fis_kaydedilen_tarihli.assignAll(tt);
-    return list_fis_kaydedilen_tarihli;
-  }
-
-  Future<List<Fis>> getTarihliKaydedilenFis(
-      String basTar, String bitTar) async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'AKTARILDIMI = ? AND TARIH >= ? AND TARIH <= ? AND DURUM = ?',
-        whereArgs: [false, basTar, bitTar, true],
-        orderBy: 'ID DESC');
-    List<Fis> gidenFis =
-        List.generate(result.length, (i) => Fis.fromJson(result[i]));
-    return gidenFis;
-  }
-
-  Future<int> getFisSayisi({required String belgeTipi}) async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query(
-      "TBLFISSB",
-      columns: ["TIP"],
-      where: 'DURUM = ? AND TIP = ?',
-      whereArgs: [false, Ctanim().MapFisTip[belgeTipi]],
-    );
-    return result.length;
-  }
-
-  Future<int> getFislerSayisi(
-      {required String belgeTipi1,
-      required String belgeTipi2,
-      required String belgeTipi3}) async {
-    List<Map<String, dynamic>> result = await Ctanim.db?.query(
-      "TBLFISSB",
-      columns: ["TIP"],
-      where: 'DURUM = ? AND (TIP = ? OR TIP = ? OR TIP = ?)',
-      whereArgs: [
-        false,
-        Ctanim().MapFisTip[belgeTipi1],
-        Ctanim().MapFisTip[belgeTipi2],
-        Ctanim().MapFisTip[belgeTipi3]
-      ],
-    );
-    return result.length;
-  }
-
-  Widget gecmisSatisYok() {
-    return Center(child: Text("Geçmiş Satış Bilgisi Bulunamadı."));
-  }
-
-  Future<void> listFisStokHareketGetir(String Kod) async {
-    gecmisFisHareket.clear();
-    sonListem.clear();
-
-    List<Map<String, dynamic>> result = await Ctanim.db
-        ?.query("TBLFISHAR", where: 'STOKKOD = ?', whereArgs: [Kod]);
-    if (result.isEmpty) {
-      gecmisSatisYok();
-      return;
-    }
-
-    String fisIDs = result
-        .map((e) => e['FIS_ID'].toString())
-        .join(','); // fiş idler , ayrılıp stringe at
-
-    List<Map<String, dynamic>> donus = await Ctanim.db?.query("TBLFISSB",
-        where: 'ID IN ($fisIDs)'); // Tüm fişler tek seferde getirilir
-
-    for (Map<String, dynamic> fisMap in donus) {
-      Fis fis = Fis.fromJson(fisMap);
-
-      // Fişteki stok hareketlerinden sadece Kod'a uygun olanlar seçilir ve gecmisFisHareket listesine eklenir
-      List<FisHareket> fisHareketleri = result
-          .where((e) => e['FIS_ID'] == fis.ID && e['STOKKOD'] == Kod)
-          .map((e) => FisHareket.fromJson(e))
-          .toList();
-      fis.fisStokListesi = fisHareketleri;
-
-      sonListem.add(Fis.fromFis(fis, fisHareketleri));
-    }
   }
 }

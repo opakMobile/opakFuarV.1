@@ -26,16 +26,24 @@ class SiparisTamamla extends StatefulWidget {
   State<SiparisTamamla> createState() => _SiparisTamamlaState();
 }
 
-class _SiparisTamamlaState extends State<SiparisTamamla> {
+class _SiparisTamamlaState extends State<SiparisTamamla>{
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     if (fisEx.fis!.value.ISK1 != 0.0) {
       genelIskonto1Controller.text =
           (fisEx.fis!.value.ISK1!.toInt()).toString();
     }
     aciklamaController.text = fisEx.fis!.value.ACIKLAMA1!;
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  
+    
   }
 
   Color getRandomColor() {

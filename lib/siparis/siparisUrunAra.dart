@@ -33,11 +33,13 @@ class SiparisUrunAra extends StatefulWidget {
   State<SiparisUrunAra> createState() => _SiparisUrunAraState();
 }
 
-class _SiparisUrunAraState extends State<SiparisUrunAra> {
+class _SiparisUrunAraState extends State<SiparisUrunAra>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
     //doğrudan cari alt hesapları verecez
+    WidgetsBinding.instance!.addObserver(this);
 
     seciliAltHesap = widget.cari.cariAltHesaplar.first;
 
@@ -155,6 +157,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
   @override
   void dispose() {
     // TODO: implement dispose
+    WidgetsBinding.instance!.removeObserver(this);
 
     Ctanim.secililiMarkalarFiltre.clear();
     if (fisEx.fis!.value.fisStokListesi.length > 0) {
@@ -172,6 +175,30 @@ class _SiparisUrunAraState extends State<SiparisUrunAra> {
     //Ctanim.seciliMarkalarFiltreMap.clear();
     /* stokKartEx.searchC(
         "", "", "", Ctanim.seciliIslemTip, Ctanim.seciliStokFiyatListesi);*/
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      //son fişi getir
+      List a = await fisEx.listSonFisGetir();
+      fisEx.fis!.value = a.first;
+      Ctanim.genelToplamHesapla(fisEx);
+    } else if (state == AppLifecycleState.paused) {
+      //son fişi kaydet
+      if (fisEx.fis!.value.fisStokListesi.length > 0) {
+        fisEx.fis!.value.DURUM = true;
+        final now = DateTime.now();
+        final formatter = DateFormat('HH:mm');
+        String saat = formatter.format(now);
+        fisEx.fis!.value.SAAT = saat;
+        fisEx.fis!.value.AKTARILDIMI = false;
+        Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+        fisEx.fis!.value = Fis.empty();
+      }
+    }
   }
 
   String result = '';
