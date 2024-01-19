@@ -116,8 +116,9 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
         floatingActionButton: SpeedDial(
+          
           animatedIcon: AnimatedIcons.menu_arrow,
-          backgroundColor: Color.fromARGB(255, 30, 38, 45),
+          backgroundColor: Color.fromARGB(255, 3, 4, 4),
           buttonSize: Size(65, 65),
           children: [
             SpeedDialChild(
@@ -233,6 +234,7 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.search),
                                 onPressed: () async {
+                                  aramaAktif = true;
                                   //   await textAramaYap( editingController.text, context);
                                 },
                               ),
@@ -390,9 +392,22 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
 
                               if (aramaAktif == true &&
                                   editingController.text != "") {
-                                if ((stokModel.STOKKOD ==
+                                 StokKart bulunanStok = Ctanim.harekettenStokBul(stokModel);   
+                                if ((bulunanStok.KOD ==
                                             editingController.text ||
-                                        stokModel.STOKADI!
+                                            bulunanStok.BARKOD1 ==
+                                            editingController.text ||
+                                             bulunanStok.BARKOD2 ==
+                                            editingController.text ||
+                                             bulunanStok.BARKOD3 ==
+                                            editingController.text ||
+                                             bulunanStok.BARKOD4 ==
+                                            editingController.text ||
+                                             bulunanStok.BARKOD5 ==
+                                            editingController.text ||
+                                             bulunanStok.BARKOD6 ==
+                                            editingController.text ||
+                                        bulunanStok.ADI!
                                             .toLowerCase()
                                             .contains(
                                                 editingController.text)) &&
@@ -427,7 +442,7 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                           Text(
                             "${althesapAdi}  Toplamı:",
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: MediaQuery.of(context).size.width * 0.035,
                             ),
                           ),
                           Container(

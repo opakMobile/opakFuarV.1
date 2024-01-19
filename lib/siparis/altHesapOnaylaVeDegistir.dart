@@ -42,7 +42,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Alt Hesap Onayla ve Değiştir '),
+      title: Text('Ürün(ler)\'in gönderileceği alt hesabı seçiniz.'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
