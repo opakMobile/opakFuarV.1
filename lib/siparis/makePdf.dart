@@ -122,7 +122,7 @@ Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath) async {
                                               fontWeight: pw.FontWeight.bold,
                                               font: boldttfFont))
                                     ])),
-                                    SizedBox(
+                                SizedBox(
                                     height: 15,
                                     width: 400,
                                     child: Row(children: [
@@ -211,27 +211,26 @@ Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath) async {
                     'Kod',
                     'Adı',
                     'Miktar',
-                    Ctanim.kullanici!.MALFAZLASI == "E"
-                        ? 'M.Fazlası'
-                        : '',
+                    Ctanim.kullanici!.MALFAZLASI == "E" ? 'M.Fazlası' : '',
                     'Fiyat',
                     'İsk',
                     'Toplam'
                   ],
                   data: buildTableRows(m, start: i, end: i + 1),
                   cellHeight: 4,
+                  cellPadding: EdgeInsets.only(bottom: 2, left: 5, right: 5, top: 1),
                   cellStyle: TextStyle(
                     font: ttfFont,
-                    fontSize: 6,
+                    fontSize: 5.5,
                   ),
                   oddCellStyle: TextStyle(
                     font: ttfFont,
-                    fontSize: 6,
+                    fontSize: 5.5,
                   ),
                   headerStyle: TextStyle(
                     font: boldttfFont,
                     fontWeight: pw.FontWeight.bold,
-                    fontSize: 6,
+                    fontSize: 5.5,
                   ),
                   cellAlignments: {
                     0: pw.Alignment.centerLeft,
@@ -252,27 +251,30 @@ Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath) async {
                     1: pw.FractionColumnWidth(0.15),
                     2: pw.FractionColumnWidth(0.6),
                     3: pw.FractionColumnWidth(0.1),
-                    4: Ctanim.kullanici!.MALFAZLASI == "E"? pw.FractionColumnWidth(0.15):pw.FractionColumnWidth(0),
+                    4: Ctanim.kullanici!.MALFAZLASI == "E"
+                        ? pw.FractionColumnWidth(0.15)
+                        : pw.FractionColumnWidth(0),
                     5: pw.FractionColumnWidth(0.1),
                     6: pw.FractionColumnWidth(0.15),
-                    7: pw.FractionColumnWidth(0.15), 
+                    7: pw.FractionColumnWidth(0.15),
                   },
                   headerHeight: 10)
               : pw.Table.fromTextArray(
                   data: buildTableRows(m, start: i, end: i + 1),
                   cellHeight: 4,
+                  cellPadding: EdgeInsets.only(bottom: 2, left: 5, right: 5, top: 1),
                   cellStyle: TextStyle(
                     font: ttfFont,
-                    fontSize: 6,
+                    fontSize: 5.5,
                   ),
                   oddCellStyle: TextStyle(
                     font: ttfFont,
-                    fontSize: 6,
+                    fontSize: 5.5,
                   ),
                   headerStyle: TextStyle(
                     font: ttfFont,
                     fontWeight: pw.FontWeight.bold,
-                    fontSize: 6,
+                    fontSize: 5.5,
                   ),
                   cellAlignments: {
                     0: pw.Alignment.centerLeft,
@@ -290,10 +292,12 @@ Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath) async {
                     1: pw.FractionColumnWidth(0.15),
                     2: pw.FractionColumnWidth(0.6),
                     3: pw.FractionColumnWidth(0.1),
-                    4: Ctanim.kullanici!.MALFAZLASI == "E"? pw.FractionColumnWidth(0.15):pw.FractionColumnWidth(0),
+                    4: Ctanim.kullanici!.MALFAZLASI == "E"
+                        ? pw.FractionColumnWidth(0.15)
+                        : pw.FractionColumnWidth(0),
                     5: pw.FractionColumnWidth(0.1),
                     6: pw.FractionColumnWidth(0.15),
-                    7: pw.FractionColumnWidth(0.15), 
+                    7: pw.FractionColumnWidth(0.15),
                   },
                 ),
           i == m.fisStokListesi.length - 1
@@ -364,12 +368,11 @@ List<List<String>> buildTableRows(Fis m, {int start = 0, int end = 0}) {
       "${m.fisStokListesi[j].STOKKOD}",
       "${m.fisStokListesi[j].STOKADI}",
       "${m.fisStokListesi[j].MIKTAR}",
-            Ctanim.kullanici!.MALFAZLASI == "E"
+      Ctanim.kullanici!.MALFAZLASI == "E"
           ? "${Ctanim.donusturMusteri(m.fisStokListesi[j].MALFAZLASI.toString())}"
           : "",
       "${Ctanim.donusturMusteri(m.fisStokListesi[j].BRUTFIYAT.toString())}",
       "${Ctanim.donusturMusteri(m.fisStokListesi[j].ISKONTOTOPLAM.toString())}",
-
       "${Ctanim.donusturMusteri(m.fisStokListesi[j].NETTOPLAM.toString())}",
     ];
     rows.add(row);

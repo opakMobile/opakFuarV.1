@@ -630,6 +630,18 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                                                                         .guncelBarkod)
                                                             ? Colors.red
                                                             : Colors.black,
+                                                        fontWeight: fisEx
+                                                                .fis!
+                                                                .value
+                                                                .fisStokListesi
+                                                                .any((element) =>
+                                                                    element
+                                                                        .STOKKOD ==
+                                                                    stokModel
+                                                                        .guncelDegerler!
+                                                                        .guncelBarkod)
+                                                            ? FontWeight.bold
+                                                            : FontWeight.normal,
                                                       ),
                                                       maxLines: 2,
                                                       overflow:
@@ -655,6 +667,24 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                                                             : Colors.black,
                                                       ),
                                                     ),
+                                                       fisEx.fis!.value
+                                                                    .fisStokListesi
+                                                                    .any((element) =>
+                                                                        element
+                                                                            .STOKKOD ==
+                                                                        stokModel
+                                                                            .guncelDegerler!
+                                                                            .guncelBarkod)?   Text(
+                                                          " Sepette Var!",
+                                                          style: TextStyle(
+                                                            color: Colors.green,
+                                                            fontWeight: FontWeight.bold
+                                                               
+                                                          ),
+                                                          maxLines: 1,
+                                                          overflow:
+                                                              TextOverflow.ellipsis,
+                                                        ):Container(),
                                                   ],
                                                 ),
                                               ),

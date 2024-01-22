@@ -430,6 +430,7 @@ class StokKartController extends GetxController {
             }
           }
         } else if (Ctanim.kullanici!.SATISTIPI == "2") {
+          
           return [0, 0, seciliCari.FIYAT, false, 0.0, 0.0, 0.0, 0.0, 0.0];
         } else if (Ctanim.kullanici!.SATISTIPI == "3") {
           if (Ctanim.seciliStokFiyatListesi.ID != -1) {

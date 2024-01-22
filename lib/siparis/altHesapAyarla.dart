@@ -235,6 +235,9 @@ class _SiparisUrunAraState extends State<AltHesapAyarla> {
                                 icon: Icon(Icons.search),
                                 onPressed: () async {
                                   aramaAktif = true;
+                                  setState(() {
+                                    
+                                  });
                                   //   await textAramaYap( editingController.text, context);
                                 },
                               ),

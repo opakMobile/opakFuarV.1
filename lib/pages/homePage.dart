@@ -45,12 +45,16 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    "Kullanıcı : " + Ctanim.kullanici!.KOD!,
-                    style: GoogleFonts.lato(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.38,
+                    child: Text(
+                      "Kullanıcı : " + Ctanim.kullanici!.KULLANICIADI!,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.lato(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
                   Text(
@@ -72,8 +76,9 @@ class _HomePageState extends State<HomePage> {
                    // "Versiyon: 1.1.9", // artık pdf den önce kayıt yapılıyor
                    // "Versiyon: 1.2.0", // cari eklemede koda tarih saat eklendi
                    // "Versiyon: 1.2.1", // mal fazlası 0 gelirseeeee.....
-                    "Versiyon: 1.2.2", // mal fazlası üste yuvarlama
-                    
+                   // "Versiyon: 1.2.2", // mal fazlası üste yuvarlama
+                  //  "Versiyon: 2.0.0", // ilk fuar sonrası güncellemeler (althesap change vs vs)
+                    "Versiyon:2.0.1", //local pdf düzenleme sepette var
 
                     style: TextStyle(fontSize: 9),
                   ),

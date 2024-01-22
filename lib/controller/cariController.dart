@@ -15,6 +15,26 @@ class CariController extends GetxController {
   void onInit() {
     super.onInit();
   }
+  String turkishToEnglish(String input) {
+  // Küçük harfe çevir
+  String lowerCaseText = input.toLowerCase();
+
+  // Türkçe karakterleri İngilizce karakterlere çevir
+  final Map<String, String> turkishToEnglishMap = {
+    'ç': 'c',
+    'ğ': 'g',
+    'ı': 'i',
+    'ö': 'o',
+    'ş': 's',
+    'ü': 'u',
+  };
+
+  for (var entry in turkishToEnglishMap.entries) {
+    lowerCaseText = lowerCaseText.replaceAll(entry.key, entry.value);
+  }
+
+  return lowerCaseText;
+}
 
   void searchCari(String query) {
     if (query.isEmpty) {
@@ -22,12 +42,11 @@ class CariController extends GetxController {
     } else {
       var results ;
 
-    List<String> queryparcali = query.split(" ");
+    List<String> queryparcali = turkishToEnglish(query).split(" ");
       if (queryparcali.length == 1) {
         results = listeler.listCari
             .where((value) =>
-                value.ADI!
-                    .toLowerCase()
+                turkishToEnglish(value.ADI!)
                     .contains(queryparcali[0].toLowerCase()) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.TELEFON!.toLowerCase().contains(query.toLowerCase())||
@@ -37,11 +56,9 @@ class CariController extends GetxController {
       } else if (queryparcali.length == 2) {
         results = listeler.listCari
             .where((value) =>
-                (value.ADI!
-                        .toLowerCase()
+                (turkishToEnglish(value.ADI!)
                         .contains(queryparcali[0].toLowerCase()) &&
-                    value.ADI!
-                        .toLowerCase()
+                    turkishToEnglish(value.ADI!)
                         .contains(queryparcali[1].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.TELEFON!.toLowerCase().contains(query.toLowerCase())||
@@ -49,30 +66,27 @@ class CariController extends GetxController {
                 value.ILCE!.toLowerCase().contains(query.toLowerCase())||
                 (value.IL!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[1].toLowerCase()))||
                 (value.ILCE!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase())) ||
-                (value.ADI!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase()))||
-                (value.IL!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.ADI!.toLowerCase().contains(queryparcali[1].toLowerCase()))
+                (turkishToEnglish(value.ADI!).contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase()))||
+                (value.IL!.toLowerCase().contains(queryparcali[0].toLowerCase())&& turkishToEnglish(value.ADI!).contains(queryparcali[1].toLowerCase()))
                 )
             .toList();
       } else if (queryparcali.length == 3) {
         results = listeler.listCari
             .where((value) =>
-                (value.ADI!
-                        .toLowerCase()
+                (turkishToEnglish(value.ADI!)
                         .contains(queryparcali[0].toLowerCase()) &&
-                    value.ADI!
-                        .toLowerCase()
+                    turkishToEnglish(value.ADI!)
                         .contains(queryparcali[1].toLowerCase()) &&
-                    value.ADI!
-                        .toLowerCase()
+                    turkishToEnglish(value.ADI!)
                         .contains(queryparcali[2].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.TELEFON!.toLowerCase().contains(query.toLowerCase())||
                 value.IL!.toLowerCase().contains(query.toLowerCase())||
                 value.ILCE!.toLowerCase().contains(query.toLowerCase())||
-                (value.IL!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.ADI!.toLowerCase().contains(queryparcali[2].toLowerCase()))||
-                (value.ILCE!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.ADI!.toLowerCase().contains(queryparcali[2].toLowerCase())) ||
-                (value.ADI!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[2].toLowerCase())) ||
-                (value.ADI!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[2].toLowerCase()))
+                (value.IL!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[1].toLowerCase())&& turkishToEnglish(value.ADI!).contains(queryparcali[2].toLowerCase()))||
+                (value.ILCE!.toLowerCase().contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase())&& turkishToEnglish(value.ADI!).contains(queryparcali[2].toLowerCase())) ||
+                (turkishToEnglish(value.ADI!).contains(queryparcali[0].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[2].toLowerCase())) ||
+                (turkishToEnglish(value.ADI!).contains(queryparcali[0].toLowerCase())&& value.IL!.toLowerCase().contains(queryparcali[1].toLowerCase())&& value.ILCE!.toLowerCase().contains(queryparcali[2].toLowerCase()))
                 
                 )
             .toList();

@@ -72,6 +72,92 @@ class BaseService {
     List<String> donecek = result.text.split("|");
     return donecek;
   }
+    String temizleKontrolKarakterleri1(String metin) {
+  final kontrolKarakterleri = RegExp(r'[\x00-\x1F\x7F]');
+
+  final int chunkSize = 1024; // Metni kaç karakterlik parçalara böleceğimizi belirtiyoruz.
+  final int length = metin.length;
+  final StringBuffer result = StringBuffer();
+
+  for (int i = 0; i < length; i += chunkSize) {
+    int end = (i + chunkSize < length) ? i + chunkSize : length;
+    String chunk = metin.substring(i, end);
+    result.write(chunk.replaceAll(kontrolKarakterleri, ''));
+  }
+
+  return result.toString();
+}
+    Future<String> getirStoklar({required sirket, required kullaniciKodu}) async {
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirStok'
+    };
+
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetirStok xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+      <PlasiyerKod>$kullaniciKodu</PlasiyerKod>
+    </GetirStok>
+  </soap:Body>
+</soap:Envelope>
+''';
+
+    if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      listeler.listStok = [];
+      return "İnternet Yok";
+    }
+
+    List<StokKart> tt = [];
+    try {
+      http.Response response =
+          await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        //var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(response.body);
+        //Map<String, dynamic> jsonData = jsonDecode(parsedXml.innerText);
+        //SHataModel gelenHata = SHataModel.fromJson(jsonData);
+      //  if (gelenHata.Hata == "true") {
+      //    print(gelenHata.HataMesaj);
+      //    return gelenHata.HataMesaj!;
+     //   } 
+      //  else {
+       
+         var jsonData = [];
+          try {
+            var tt = temizleKontrolKarakterleri1(parsedXml.innerText);
+            jsonData = json.decode(tt);
+          } catch (e) {
+            print(e);
+          }
+          List<StokKart> liststokTemp = [];
+
+        liststokTemp =
+             List<StokKart>.from(jsonData.map((model) => StokKart.fromJson(model)));
+          listeler.listStok.clear();
+          await VeriIslemleri().stokTabloTemizle();
+
+          liststokTemp.forEach((webservisStok) async {
+            await VeriIslemleri().stokEkle(webservisStok);
+          });
+
+          await VeriIslemleri().stokGetir();
+          return "";
+       // }
+      } else {
+        return " Stok Getirilirken İstek Oluşturulamadı. " +
+            response.statusCode.toString();
+      }
+    } on PlatformException catch (e) {
+      return "Stoklar için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
+    }
+  }
+  /*
 
   Future<String> getirStoklar({required sirket, required kullaniciKodu}) async {
     var url = Uri.parse(
@@ -142,6 +228,7 @@ class BaseService {
           e.toString();
     }
   }
+  */
 
   Future<String> getirCariler({required sirket, required kullaniciKodu}) async {
     var url = Uri.parse(Ctanim.IP);
