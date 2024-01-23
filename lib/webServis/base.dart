@@ -51,6 +51,8 @@ class BaseService {
 
   Future<void> stokVerileriGuncelle() async {
     await getirStoklar(sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);
+    //valla billa
+    await getirStokKosul(sirket: Ctanim.sirket!);
   }
 
   String temizleKontrolKarakterleri(String metin) {
