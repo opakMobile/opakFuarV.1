@@ -48,14 +48,16 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.38,
-                    child: Text(
-                      "Kullanıcı : " + Ctanim.kullanici!.KULLANICIADI!+"sadsdsadsadasd",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: GoogleFonts.lato(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
+                    child: Center(
+                      child: Text(
+                        "Kullanıcı : " + Ctanim.kullanici!.KULLANICIADI!,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: GoogleFonts.lato(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
                       ),
                     ),
                   ),
