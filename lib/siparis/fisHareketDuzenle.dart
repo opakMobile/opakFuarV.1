@@ -219,7 +219,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
   @override
   Widget build(BuildContext context) {
     if (i == 0 && Ctanim.urunAraFocus == false) {
-      print("ŞLKLKFDLKFSŞLKFKŞLSDKLKFLKDŞF");
+
       /*
       FocusScope.of(context).requestFocus(focusNode1);
       */
@@ -262,7 +262,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 )
               ],
             ),
-            SizedBox(
+SizedBox(
               width: MediaQuery.of(context).size.width * .8,
               child: Padding(
                 padding: EdgeInsets.only(top: 8.0),
@@ -272,19 +272,32 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                       children: [
                         widget.gelenStokKart.OLCUBIRIM2 != ""
                             ? SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.23,
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
                                 child: Row(
                                   children: [
-                                    Text(
-                                      widget.gelenStokKart.OLCUBIRIM2! + " :",
-                                      style: TextStyle(
-                                          fontSize: 11, color: Colors.orange),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
+                                        widget.gelenStokKart.OLCUBIRIM2! + " :",
+                                        style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            fontSize: 11,
+                                            color: Colors.orange),
+                                      ),
                                     ),
-                                    Text(
-                                      widget.gelenStokKart
-                                          .BIRIMADET1!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                      style: TextStyle(
-                                        fontSize: 12,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.09,
+                                      child: Text(
+                                        widget.gelenStokKart
+                                            .BIRIMADET1!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     )
                                   ],
@@ -298,19 +311,35 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                                         0.05),
                                 child: SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.23,
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.04,
                                   child: Row(
                                     children: [
-                                      Text(
-                                        widget.gelenStokKart.OLCUBIRIM3! + " :",
-                                        style: TextStyle(
-                                            fontSize: 11, color: Colors.orange),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        child: Text(
+                                          widget.gelenStokKart.OLCUBIRIM3! +
+                                              " :",
+                                          style: TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                              fontSize: 11,
+                                              color: Colors.orange),
+                                        ),
                                       ),
-                                      Text(
-                                        widget.gelenStokKart
-                                            .BIRIMADET2!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                        style: TextStyle(
-                                          fontSize: 12,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.09,
+                                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                                          widget.gelenStokKart
+                                              .BIRIMADET2!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
                                         ),
                                       )
                                     ],
@@ -324,19 +353,33 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                       children: [
                         widget.gelenStokKart.OLCUBIRIM4 != ""
                             ? SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.23,
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
                                 child: Row(
                                   children: [
-                                    Text(
-                                      widget.gelenStokKart.OLCUBIRIM4! + " :",
-                                      style: TextStyle(
-                                          fontSize: 11, color: Colors.orange),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
+                                        widget.gelenStokKart.OLCUBIRIM4! + " :",
+                                        style: TextStyle(
+
+                                            overflow: TextOverflow.ellipsis,
+                                            fontSize: 11,
+                                            color: Colors.orange),
+                                      ),
                                     ),
-                                    Text(
-                                      widget.gelenStokKart
-                                          .BIRIMADET3!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
-                                      style: TextStyle(
-                                        fontSize: 12,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.09,
+                                      child: Text(
+                                                overflow: TextOverflow.ellipsis,
+                                        widget.gelenStokKart
+                                            .BIRIMADET3!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
                                       ),
                                     )
                                   ],
@@ -344,56 +387,75 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                               )
                             : Container(),
                         widget.gelenStokKart.OLCUBIRIM5 != ""
-                            ? Padding(
-                                padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.05),
-                                child: SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.23,
-                                  child: Row(
-                                    children: [
-                                      Text(
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
                                         widget.gelenStokKart.OLCUBIRIM5! + " :",
                                         style: TextStyle(
-                                            fontSize: 11, color: Colors.orange),
+                                            overflow: TextOverflow.ellipsis,
+                                            fontSize: 11,
+                                            color: Colors.orange),
                                       ),
-                                      Text(
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.09,
+                                      child: Text(
+                                                overflow: TextOverflow.ellipsis,
                                         widget.gelenStokKart
                                             .BIRIMADET4!, // widget.gelenStokKart.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
                                         style: TextStyle(
                                           fontSize: 12,
                                         ),
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               )
                             : Container(),
+                      ],
+                    ),
+                    Row(
+                      children: [
                         widget.gelenStokKart.OLCUBIRIM6 != ""
-                            ? Padding(
-                                padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.04),
-                                child: SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.23,
-                                  child: Row(
-                                    children: [
-                                      Text(
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
                                         widget.gelenStokKart.OLCUBIRIM6! + " :",
                                         style: TextStyle(
-                                            fontSize: 11, color: Colors.orange),
+                                            overflow: TextOverflow.ellipsis,
+                                            fontSize: 11,
+                                            color: Colors.orange),
                                       ),
-                                      Text(
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.09,
+                                      child: Text(
+                               overflow: TextOverflow.ellipsis,
                                         widget.gelenStokKart
+                                        
                                             .BIRIMADET5!, // stokModel.BRUTTOPLAMFIYAT!.toStringAsFixed(2),//
                                         style: TextStyle(
                                           fontSize: 12,
                                         ),
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               )
                             : Container(),
@@ -402,8 +464,7 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                   ],
                 ),
               ),
-            ),
-            Row(
+            ), Row(
               children: [
                 Text(
                   "Bakiye: ",

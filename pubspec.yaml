@@ -17,7 +17,7 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.2.2
-  connectivity_plus: 
+  connectivity_plus: ^3.0.4
   sqflite: ^2.3.0
   path: ^1.8.3
   http: ^1.1.0

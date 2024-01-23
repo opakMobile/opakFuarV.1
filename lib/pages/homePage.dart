@@ -83,7 +83,8 @@ class _HomePageState extends State<HomePage> {
                    // "Versiyon: 1.2.2", // mal fazlası üste yuvarlama
                   //  "Versiyon: 2.0.0", // ilk fuar sonrası güncellemeler (althesap change vs vs)
                   //  "Versiyon:2.0.1", //local pdf düzenleme sepette var
-                    "Versiyon:2.0.2", // kullancı adı yazdık
+                 //  "Versiyon:2.0.2", // kullancı adı yazdık
+                    "Versiyon:2.0.3" ,// fişharekt düzenle birim taşması
 
                     style: TextStyle(fontSize: 9),
                   ),
