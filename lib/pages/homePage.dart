@@ -44,12 +44,14 @@ class _HomePageState extends State<HomePage> {
             button: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.38,
                     child: Text(
-                      "Kullanıcı : " + Ctanim.kullanici!.KULLANICIADI!,
+                      "Kullanıcı : " + Ctanim.kullanici!.KULLANICIADI!+"sadsdsadsadasd",
                       overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                       style: GoogleFonts.lato(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
@@ -78,7 +80,8 @@ class _HomePageState extends State<HomePage> {
                    // "Versiyon: 1.2.1", // mal fazlası 0 gelirseeeee.....
                    // "Versiyon: 1.2.2", // mal fazlası üste yuvarlama
                   //  "Versiyon: 2.0.0", // ilk fuar sonrası güncellemeler (althesap change vs vs)
-                    "Versiyon:2.0.1", //local pdf düzenleme sepette var
+                  //  "Versiyon:2.0.1", //local pdf düzenleme sepette var
+                    "Versiyon:2.0.2", // kullancı adı yazdık
 
                     style: TextStyle(fontSize: 9),
                   ),
