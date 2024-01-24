@@ -183,11 +183,15 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
 
     if (state == AppLifecycleState.resumed) {
       //son fişi getir
-      List a = await fisEx.listSonFisGetir();
-      fisEx.fis!.value = a.first;
-      Ctanim.genelToplamHesapla(fisEx);
+      if (kameradanOkuma == false) {
+        List a = await fisEx.listSonFisGetir();
+        fisEx.fis!.value = a.first;
+        Ctanim.genelToplamHesapla(fisEx);
+      }
+      kameradanOkuma = false;
     } else if (state == AppLifecycleState.paused) {
       //son fişi kaydet
+      print("paused");
       if (fisEx.fis!.value.fisStokListesi.length > 0) {
         fisEx.fis!.value.DURUM = true;
         final now = DateTime.now();
@@ -196,7 +200,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
         fisEx.fis!.value.SAAT = saat;
         fisEx.fis!.value.AKTARILDIMI = false;
         Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
-        fisEx.fis!.value = Fis.empty();
+        if (kameradanOkuma == false) {
+          fisEx.fis!.value = Fis.empty();
+        }
       }
     }
   }
@@ -225,6 +231,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
     }
   }*/
   List<FocusNode> focusNodeList = [];
+  bool kameradanOkuma = false;
   @override
   Widget build(BuildContext context) {
     FocusNode focusNode = FocusNode();
@@ -432,6 +439,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                         ),
                         IconButton(
                             onPressed: () async {
+                              kameradanOkuma = true;
                               var res = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -448,6 +456,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                                 result = res;
                                 editingController.text = result;
                               }
+
+                              // bura
                               await textAramaYap(result, context);
                               /*
                               stokKartEx.searchC(
@@ -667,24 +677,28 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                                                             : Colors.black,
                                                       ),
                                                     ),
-                                                       fisEx.fis!.value
-                                                                    .fisStokListesi
-                                                                    .any((element) =>
-                                                                        element
-                                                                            .STOKKOD ==
-                                                                        stokModel
-                                                                            .guncelDegerler!
-                                                                            .guncelBarkod)?   Text(
-                                                          " Sepette Var!",
-                                                          style: TextStyle(
-                                                            color: Colors.green,
-                                                            fontWeight: FontWeight.bold
-                                                               
-                                                          ),
-                                                          maxLines: 1,
-                                                          overflow:
-                                                              TextOverflow.ellipsis,
-                                                        ):Container(),
+                                                    fisEx.fis!.value
+                                                            .fisStokListesi
+                                                            .any((element) =>
+                                                                element
+                                                                    .STOKKOD ==
+                                                                stokModel
+                                                                    .guncelDegerler!
+                                                                    .guncelBarkod)
+                                                        ? Text(
+                                                            " Sepette Var!",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .green,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          )
+                                                        : Container(),
                                                   ],
                                                 ),
                                               ),
