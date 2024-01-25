@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 11; // atarken 10 yap
+  static final _databaseVersion = 12; // atarken 10 yap
 
   static Database? _database;
 
@@ -47,6 +47,13 @@ class DatabaseHelper {
     print(oldVersion);
     print(newVersion);
     for (int i = oldVersion; i <= newVersion; i++) {
+      if(i==12){
+        //FUARADI
+        String sorgu = """
+        ALTER TABLE TBLFISSB ADD COLUMN FUARADI TEXT;
+        """;
+        await db.execute(sorgu);
+      }
  
       if (i == 11) {
  
@@ -281,7 +288,8 @@ class DatabaseHelper {
     AKTARILDIMI BOOLEAN,
     USTUUID TEXT,
     SIPARISSAYISI INTEGER,
-    KALEMSAYISI INTEGER
+    KALEMSAYISI INTEGER,
+    FUARADI TEXT
     )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {

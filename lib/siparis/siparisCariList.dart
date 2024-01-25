@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/controller/fisController.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
@@ -46,7 +47,6 @@ class _SiparisCariListState extends State<SiparisCariList> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-
         bottomNavigationBar: bottombarDizayn(context),
         body: Container(
           width: MediaQuery.of(context).size.width,
@@ -58,16 +58,37 @@ class _SiparisCariListState extends State<SiparisCariList> {
                 right: MediaQuery.of(context).size.width * 0.05,
                 top: MediaQuery.of(context).size.height * 0.01),
             child: SingleChildScrollView(
-              child: Column(children: [
+              child: Column(
+                children: [
                 // ! Üst Kısım
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back_ios),
-                  ),
+                Row(
+                  
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.arrow_back_ios),
+                      ),
+                    ),
+                    SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: Center(
+                      child: Text(
+                        "Fuar : " + Ctanim.kullanici!.FUARADI!,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: GoogleFonts.lato(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepOrange,
+                        ),
+                      ),
+                    ),
+                                    ),
+                  ],
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
@@ -180,7 +201,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                         .kullanici!.YERELDEPOID!); //TODO
                                     fisEx.fis!.value.ISLEMTIPI = "0";
                                     fisEx.fis!.value.ALTHESAP = vs!=null?vs.ALTHESAP:cari.cariAltHesaplar.first.ALTHESAP;
-
+                                    fisEx.fis!.value.FUARADI = Ctanim.kullanici!.FUARADI;
                                     fisEx.fis!.value.UUID = uuid.v1();
                                     fisEx.fis!.value.VADEGUNU = cari.VADEGUNU;
                                     fisEx.fis!.value.BELGENO =

@@ -61,6 +61,7 @@ class Fis {
   int? SIPARISSAYISI = 0;
   int? KALEMSAYISI = 0;
   bool? seciliFisGonder = false;
+  String? FUARADI = "";
 
   Fis(
       this.ID,
@@ -108,6 +109,7 @@ class Fis {
       this.USTUUID,
       this.SIPARISSAYISI,
       this.KALEMSAYISI,
+      this.FUARADI,
       {this.isExpanded = false,this.seciliFisGonder=false});
   Fis.empty()
       : this(
@@ -155,7 +157,8 @@ class Fis {
             "H",
             "",
             0,
-            0);
+            0,
+            "");
 
   Fis.fromFis(Fis fis, List<FisHareket> fisHareket) {
     this.ID = fis.ID;
@@ -204,9 +207,9 @@ class Fis {
     this.SIPARISSAYISI = SIPARISSAYISI;
     this.KALEMSAYISI = KALEMSAYISI;
     this.cariKart = fis.cariKart;
-
     this.fisStokListesi = fisHareket;
     this.altHesapToplamlar = altHesapToplamlar;
+    this.FUARADI = fis.FUARADI;
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -255,6 +258,7 @@ class Fis {
     data['USTUUID'] = USTUUID;
     data['SIPARISSAYISI']= SIPARISSAYISI;
     data['KALEMSAYISI']= KALEMSAYISI;
+    data['FUARADI']= FUARADI;
 
 
 
@@ -313,6 +317,7 @@ class Fis {
     data['KALEMSAYISI'] = KALEMSAYISI.toString();
 
     data['STOKLISTESI'] = fisStokListesi.map((fis1) => fis1.toJson()).toList();
+    data['FUARADI'] = FUARADI.toString();
 
     //data['CARIKART'] = cariKart.toJson();
    // data['altHesapToplamlar'] = altHesapToplamlar.map((fis1) => fis1.toJson()).toList();
@@ -366,6 +371,7 @@ class Fis {
     ALTHESAPID = int.parse(json['ALTHESAPID'].toString());
     DOVIZID = int.parse(json['DOVIZID'].toString());
     ONAY = json['ONAY'];
+    FUARADI = json['FUARADI'];
   }
   Fis.fromJson2(Map<String, dynamic> json) {
     ID = int.parse(json['ID'].toString());
@@ -412,6 +418,7 @@ class Fis {
     SIPARISSAYISI =int.parse(json['SIPARISSAYISI'].toString());
     KALEMSAYISI =int.parse(json['KALEMSAYISI'].toString());
     ONAY = json['ONAY'];
+    FUARADI = json['FUARADI'];
   }
   //database fiş ekle
   Future<int?> fisEkle({required Fis fis, required String belgeTipi}) async {

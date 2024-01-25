@@ -163,8 +163,21 @@ class _LoginPageState extends State<LoginPage> {
               );
             },
           );
-
+          bool internetVarMi = false;
           await SharedPrefsHelper.yetkiCek("yetkiler");
+          
+          if (await Connectivity().checkConnectivity() ==
+              ConnectivityResult.none) {
+            internetVarMi = false;
+          } else {
+            internetVarMi = true;
+
+            await bs.getKullanicilar(
+                kullaniciKodu: Ctanim.kullanici!.KOD!,
+                sirket: Ctanim.sirket!,
+                IP: Ctanim.IP);
+            await KullaniciModel.saveUser(Ctanim.kullanici!);
+          }
 
           veriislemi.veriGetir().then((value) async {
             if (value == 0) {
@@ -181,8 +194,7 @@ class _LoginPageState extends State<LoginPage> {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar1);
 
-              if (await Connectivity().checkConnectivity() ==
-                  ConnectivityResult.none) {
+              if (internetVarMi == false) {
                 print("İnternet bağlantısı yok.");
                 const snackBar = SnackBar(
                   content: Text(
@@ -211,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
                 hatalar.add(await bs.getirDahaFazlaBarkod(
                     sirket: Ctanim.sirket!,
                     kullaniciKodu: Ctanim.kullanici!.KOD!));
-                    
+
                 if (hatalar.length > 0) {
                   for (var element in hatalar) {
                     if (element != "") {
@@ -315,7 +327,6 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       showAlertDialogLogin1(context, "Kullanıcı Tanımı Yapılamış.");
     }
-
   }
 
   Future<void> _getSavedPassword() async {
@@ -523,7 +534,6 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      
                                       SizedBox(
                                         width: ekranGenisligi * .5,
                                         child: CheckboxListTile(

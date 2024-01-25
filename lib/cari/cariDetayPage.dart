@@ -65,7 +65,6 @@ var uuid = Uuid();
                                         }
                                       }
                                     }
-
                                     Fis fis = Fis.empty();
                                     fisEx.fis!.value = fis;
                                     fisEx.fis!.value.cariKart = widget.cari;
@@ -79,7 +78,7 @@ var uuid = Uuid();
                                         .kullanici!.YERELDEPOID!); //TODO
                                     fisEx.fis!.value.ISLEMTIPI = "0";
                                     fisEx.fis!.value.ALTHESAP = widget.cari.cariAltHesaplar.first.ALTHESAP;
-
+                                    fisEx.fis!.value.FUARADI = Ctanim.kullanici!.FUARADI;
                                     fisEx.fis!.value.UUID = uuid.v1();
                                     fisEx.fis!.value.VADEGUNU = widget.cari.VADEGUNU;
                                     fisEx.fis!.value.BELGENO =

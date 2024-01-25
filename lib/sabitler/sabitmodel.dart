@@ -70,7 +70,7 @@ bottombarDizayn(context, {Widget? button, bool buttonVarMi = false}) {
           Padding(
               padding: EdgeInsets.only(
                 left: MediaQuery.of(context).size.width * 0.0,
-                bottom: MediaQuery.of(context).size.height * 0.01,
+               
               ),
               child: button),
           Padding(

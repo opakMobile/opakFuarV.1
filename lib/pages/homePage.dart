@@ -50,6 +50,21 @@ class _HomePageState extends State<HomePage> {
                     width: MediaQuery.of(context).size.width * 0.38,
                     child: Center(
                       child: Text(
+                        "Fuar : " + Ctanim.kullanici!.FUARADI!,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: GoogleFonts.lato(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepOrange,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.38,
+                    child: Center(
+                      child: Text(
                         "Kullanıcı : " + Ctanim.kullanici!.KULLANICIADI!,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -86,7 +101,8 @@ class _HomePageState extends State<HomePage> {
                  //  "Versiyon:2.0.2", // kullancı adı yazdık
                   //  "Versiyon:2.0.3" ,// fişharekt düzenle birim taşması
                   //  "Versiyon: 2.0.4", // stok güncellemeye koşul güncelleme de eklendi
-                    "Versiyon:2.0.5" ,// kamera açınca fiş kaydetme
+                   // "Versiyon:2.0.5" ,// kamera açınca fiş kaydetme
+                    "Versiyon:2.0.6",//fuaradi eklendi
 
                     style: TextStyle(fontSize: 9),
                   ),

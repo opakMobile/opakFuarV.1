@@ -406,10 +406,8 @@ class BaseService {
         } else {
           String modelNode = gelenHata.HataMesaj!;
           List<dynamic> parsedList = json.decode(temizleKontrolKarakterleri(modelNode));
-
           Map<String, dynamic> kullaniciJson = parsedList[0];
           Ctanim.kullanici = KullaniciModel.fromjson(kullaniciJson);
-    
           return "";
         }
       } else {
@@ -910,7 +908,6 @@ class BaseService {
     // dış ve iç denecek;
 
     jsonString = jsonEncode(jsonDataList);
-   
      String base64EncodedString = base64Encode(utf8.encode(jsonString));
       printWrapped(base64EncodedString);
     
