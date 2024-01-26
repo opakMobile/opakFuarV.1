@@ -57,51 +57,66 @@ class _FuarSecState extends State<FuarSec> {
                     child: Card(
                       elevation: 55,
                       borderOnForeground: true,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
                       color: Colors.grey[350],
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Fuar Tipi:"),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.07,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 15.0),
-                                child: DropdownButtonHideUnderline(
-                                  
-                                  child: DropdownButton<FuarModel>(
-                                    dropdownColor: Colors.grey[300],
-                                    hint: Text("Fuar Seçiniz"),
-                                    //  focusNode: focusDrop,
-                                    value: secilifuar,
-                                    items:
-                                        listeler.listFuar.map((FuarModel fuar) {
-                                      return DropdownMenuItem<FuarModel>(
-                                        value: fuar,
-                                        child: Text(
-                                          fuar.KOD!,
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (FuarModel? fuar) async {
-                                      setState(() {
-                                        secilifuar = fuar;
-                                        Ctanim.kullanici!.FUARADI =
-                                            secilifuar!.KOD;
-                                      });
-                                    },
-                                  ),
-                                ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.825,
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.045,
+                                right: MediaQuery.of(context).size.width * 0.01,
+                                top: MediaQuery.of(context).size.height * 0.01),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<FuarModel>(
+                                dropdownColor: Colors.grey[300],
+
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    right: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    top: MediaQuery.of(context).size.height *
+                                        0.01),
+                                isExpanded: true,
+                                borderRadius: BorderRadius.circular(10),
+
+                                icon: Icon(Icons.arrow_drop_down_circle),
+                                itemHeight:
+                                    MediaQuery.of(context).size.height * 0.1,
+                                hint: Text("Fuar Seçiniz"),
+                                value: secilifuar,
+                                items: listeler.listFuar.map((FuarModel fuar) {
+                                  return DropdownMenuItem<FuarModel>(
+                                    value: fuar,
+                                    child: Text(fuar.KOD!,
+                                        style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.023,
+                                        )),
+                                  );
+                                }).toList(),
+                                onChanged: (FuarModel? fuar) async {
+                                  setState(() {
+                                    secilifuar = fuar;
+                                    Ctanim.kullanici!.FUARADI = secilifuar!.KOD;
+                                  });
+                                },
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Divider(
+                            color: Colors.black,
+                            thickness: 1,
+                            indent: MediaQuery.of(context).size.width * 0.05,
+                            endIndent: MediaQuery.of(context).size.width * 0.05,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -123,14 +138,15 @@ class _FuarSecState extends State<FuarSec> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (secilifuar == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Fuar tipi seçilmeden uygulamaya devam edilemez.")));
-                        }else{
-                             Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                    (route) => false,
-                  );
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "Fuar tipi seçilmeden uygulamaya devam edilemez.")));
+                        } else {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                            (route) => false,
+                          );
                         }
                       },
                       child: Text("Uygulamaya Devam Et",
