@@ -470,6 +470,9 @@ class _settings_pageState extends State<settings_page> {
                                                                         .text,
                                                                 IP: donenAPIler[
                                                                     0]);
+                                                                    //!!!!!Bura
+                                                        await bs.getFuar(sirket: sirket.text, IP: donenAPIler[0]);
+                                                        
                                                         await SharedPrefsHelper
                                                             .saveList([]);
 
@@ -566,6 +569,8 @@ class _settings_pageState extends State<settings_page> {
                                                                         .text,
                                                                 IP: donenAPIler[
                                                                     1]);
+                                                                ///!!!1 bura 
+                                                        await bs.getFuar(sirket: sirket.text, IP: donenAPIler[1]);
                                                         await SharedPrefsHelper
                                                             .saveList([]);
 

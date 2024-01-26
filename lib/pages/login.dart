@@ -165,18 +165,18 @@ class _LoginPageState extends State<LoginPage> {
           );
           bool internetVarMi = false;
           await SharedPrefsHelper.yetkiCek("yetkiler");
-          
+
           if (await Connectivity().checkConnectivity() ==
               ConnectivityResult.none) {
             internetVarMi = false;
           } else {
             internetVarMi = true;
 
-            await bs.getKullanicilar(
+       /*     await bs.getKullanicilar(
                 kullaniciKodu: Ctanim.kullanici!.KOD!,
                 sirket: Ctanim.sirket!,
                 IP: Ctanim.IP);
-            await KullaniciModel.saveUser(Ctanim.kullanici!);
+            await KullaniciModel.saveUser(Ctanim.kullanici!);*/
           }
 
           veriislemi.veriGetir().then((value) async {
@@ -209,8 +209,6 @@ class _LoginPageState extends State<LoginPage> {
               } else {
                 String genelHata = "";
                 List<String?> hatalar = [];
-
-                // burdan sonra
                 hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
                 hatalar.add(await stokKartEx.servisStokGetir());
                 hatalar.add(await cariEx.servisCariGetir());

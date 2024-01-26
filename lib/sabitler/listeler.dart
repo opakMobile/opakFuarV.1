@@ -1,3 +1,4 @@
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:opak_fuar/model/KurModel.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
@@ -8,6 +9,7 @@ import 'package:opak_fuar/model/stokKartModel.dart';
 import '../model/cariKosulModel.dart';
 import '../model/cariStokKosulModel.dart';
 import '../model/dahaFazlaBarkodModel.dart';
+import '../model/fuarModel.dart';
 import '../model/kullanıcıYetki.dart';
 import '../model/stokFiyatListesiHarModel.dart';
 import '../model/stokFiyatListesiModel.dart';
@@ -92,16 +94,15 @@ class listeler {
   static List<CariStokKosulModel> listCariStokKosul = [];
   static List<StokFiyatListesiHarModel> listStokFiyatListesiHar = [];
   static List<StokFiyatListesiModel> listStokFiyatListesi = [];
-
   static List<DahaFazlaBarkod> listDahaFazlaBarkod = [];
   static List<KurModel> listKur = [];
-
   static List<Cari> listCari = [];
   static List<OlcuBirimModel> listOlcuBirim = [];
   static List<CariAltHesap> listCariAltHesap = [];
   static List<Cari> aktarilmayanCariler = [];
   static List<CariAltHesap> aktarilmayanAlthesaplar = [];
   static List<KullaniciYetki> yetki = [];
+  static List<FuarModel> listFuar = [];
   static List<bool> plasiyerYetkileri = [
     false,
     false,

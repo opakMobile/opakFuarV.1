@@ -23,6 +23,7 @@ import 'package:opak_fuar/webServis/base.dart';
 import 'package:uuid/uuid.dart';
 import '../controller/fisController.dart';
 import '../model/fis.dart';
+import '../model/fuarModel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,6 +35,54 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   BaseService bs = BaseService();
   FisController fisEx = Get.find();
+  FuarModel? secilifuar;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FuarSec();
+    });
+  }
+
+  FuarSec() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.5,
+            height: MediaQuery.of(context).size.height * 0.07,
+            child: Material(
+              child: Padding(
+                padding: EdgeInsets.only(top: 15.0),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<FuarModel>(
+                    //  focusNode: focusDrop,
+                    value: secilifuar,
+                    items: listeler.listFuar.map((FuarModel fuar) {
+                      return DropdownMenuItem<FuarModel>(
+                        value: fuar,
+                        child: Text(
+                          fuar.KOD!,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (FuarModel? fuar) async {
+                      setState(() {
+                        secilifuar = fuar;
+                      });
+
+                      //     await FuarModel.saveFuar(secilifuar!);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,22 +136,22 @@ class _HomePageState extends State<HomePage> {
                     //"Versiyon:1.1.1" ,// cariArama düzenleme, saciklama9
                     //"Versiyon 1.1.2", // sacikla9 daki 0.0 hatası
                     // "Versiyon : 1.1.3", // alt hesap değişince boş arama yapıldı
-                   // "Versiyon : 1.1.4", // focus düzenlemeleri
-                   // "Versiyon : 1.1.5", // mal fazlası eklendi
-                   // "Versiyon: 1.1.6", // malfazlası değiştirme eklendi for temat
-                   //"Versiyon: 1.1.7", // tablette ürün arama düzeltilmesi for südor
-                   // "Versiyon:1.1.8",//MF HESABI DÜZELTİLDİ (BENCE BOZULDU)
-                   // "Versiyon: 1.1.9", // artık pdf den önce kayıt yapılıyor
-                   // "Versiyon: 1.2.0", // cari eklemede koda tarih saat eklendi
-                   // "Versiyon: 1.2.1", // mal fazlası 0 gelirseeeee.....
-                   // "Versiyon: 1.2.2", // mal fazlası üste yuvarlama
-                  //  "Versiyon: 2.0.0", // ilk fuar sonrası güncellemeler (althesap change vs vs)
-                  //  "Versiyon:2.0.1", //local pdf düzenleme sepette var
-                 //  "Versiyon:2.0.2", // kullancı adı yazdık
-                  //  "Versiyon:2.0.3" ,// fişharekt düzenle birim taşması
-                  //  "Versiyon: 2.0.4", // stok güncellemeye koşul güncelleme de eklendi
-                   // "Versiyon:2.0.5" ,// kamera açınca fiş kaydetme
-                    "Versiyon:2.0.6",//fuaradi eklendi
+                    // "Versiyon : 1.1.4", // focus düzenlemeleri
+                    // "Versiyon : 1.1.5", // mal fazlası eklendi
+                    // "Versiyon: 1.1.6", // malfazlası değiştirme eklendi for temat
+                    //"Versiyon: 1.1.7", // tablette ürün arama düzeltilmesi for südor
+                    // "Versiyon:1.1.8",//MF HESABI DÜZELTİLDİ (BENCE BOZULDU)
+                    // "Versiyon: 1.1.9", // artık pdf den önce kayıt yapılıyor
+                    // "Versiyon: 1.2.0", // cari eklemede koda tarih saat eklendi
+                    // "Versiyon: 1.2.1", // mal fazlası 0 gelirseeeee.....
+                    // "Versiyon: 1.2.2", // mal fazlası üste yuvarlama
+                    //  "Versiyon: 2.0.0", // ilk fuar sonrası güncellemeler (althesap change vs vs)
+                    //  "Versiyon:2.0.1", //local pdf düzenleme sepette var
+                    //  "Versiyon:2.0.2", // kullancı adı yazdık
+                    //  "Versiyon:2.0.3" ,// fişharekt düzenle birim taşması
+                    //  "Versiyon: 2.0.4", // stok güncellemeye koşul güncelleme de eklendi
+                    // "Versiyon:2.0.5" ,// kamera açınca fiş kaydetme
+                    "Versiyon:2.0.6", //fuaradi eklendi
 
                     style: TextStyle(fontSize: 9),
                   ),
