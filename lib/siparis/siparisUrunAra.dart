@@ -269,6 +269,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                   ),
                 ),
                 onPressed: () async {
+                  await Cari.bayiCek();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

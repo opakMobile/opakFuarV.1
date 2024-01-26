@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 12; // atarken 10 yap
+  static final _databaseVersion = 13; // atarken 10 yap
 
   static Database? _database;
 
@@ -46,21 +46,27 @@ class DatabaseHelper {
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     print(oldVersion);
     print(newVersion);
-    for (int i = oldVersion; i <= newVersion; i++) {
-      if(i==12){
+    for (int i = oldVersion+1; i <= newVersion; i++) {
+      if (i == 13) {
+        String Sorgu = """
+    CREATE TABLE IF NOT EXISTS TBLFUARMODELSB (
+      ID INTEGER,
+      KOD TEXT,
+      ADI TEXT,
+      SIRA INTEGER
+    )""";
+        await db.execute(Sorgu);
+      }
+      if (i == 12) {
         //FUARADI
         String sorgu = """
         ALTER TABLE TBLFISSB ADD COLUMN FUARADI TEXT;
         """;
         await db.execute(sorgu);
       }
- 
-      if (i == 11) {
- 
-      }
-      if (i == 10) {
-   
-      }
+
+      if (i == 11) {}
+      if (i == 10) {}
     }
     if (oldVersion < newVersion) {
       //   db.execute("ALTER TABLE TBLCARIALTHESAPSB ADD COLUMN  INTEGER;");
@@ -553,6 +559,19 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         image_path TEXT NOT NULL
       
+    )""";
+      await db.execute(Sorgu);
+    } on PlatformException catch (e) {
+      print(e);
+    }
+ 
+    try {
+      String Sorgu = """
+    CREATE TABLE TBLFUARMODELSB (
+      ID INTEGER,
+      KOD TEXT,
+      ADI TEXT,
+      SIRA INTEGER
     )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {

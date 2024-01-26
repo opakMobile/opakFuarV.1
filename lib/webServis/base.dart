@@ -548,7 +548,7 @@ class BaseService {
         }
       } else {
         print('SOAP isteği başarısız: ${response.statusCode}');
-        return " Kullanıcı Bilgileri Getirilirken İstek Oluşturulamadı. " +
+        return " Kullanıcı Sayısı Bilgileri Getirilirken İstek Oluşturulamadı. " +
             response.statusCode.toString();
       }
     } catch (e) {
@@ -1097,6 +1097,7 @@ class BaseService {
           return gelenHata.HataMesaj!;
         } else {
           await VeriIslemleri().StokKosulTemizle();
+          listeler.listStokKosul.clear();
 
           List<dynamic> jsonData =
               jsonDecode(temizleKontrolKarakterleri(gelenHata.HataMesaj!));
@@ -1124,8 +1125,9 @@ class BaseService {
     }
   }
 
-  Future<String> getFuar({required String sirket, required String IP}) async {
-    var url = Uri.parse(IP); // dış ve iç denecek;
+  Future<String> getFuar({required String sirket,}) async {
+    // dış ve iç denecek;
+    var url = Uri.parse(Ctanim.IP); 
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
       'SOAPAction': 'http://tempuri.org/GetirFuar'
@@ -1157,18 +1159,24 @@ class BaseService {
           return gelenHata.HataMesaj!;
         } else {
           listeler.listFuar.clear();
-
+          await VeriIslemleri().fuarModelTemizle();
           List<dynamic> jsonData =
               jsonDecode(temizleKontrolKarakterleri(gelenHata.HataMesaj!));
           for (var element in jsonData) {
             FuarModel a = FuarModel.fromJson(element);
             listeler.listFuar.add(a);
+            
           }
+           listeler.listFuar.forEach((webservisStokKosul) async {
+            await VeriIslemleri().fuarModelEkle(webservisStokKosul);
+          });
+
+          await VeriIslemleri().fuarModelGetir();
           return "";
         }
       } else {
         print('SOAP isteği başarısız: ${response.statusCode}');
-        return " Kullanıcı Bilgileri Getirilirken İstek Oluşturulamadı. " +
+        return " Fuar Tipleri Getirilirken İstek Oluşturulamadı. " +
             response.statusCode.toString();
       }
     } catch (e) {

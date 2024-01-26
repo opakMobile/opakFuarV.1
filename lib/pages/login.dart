@@ -2,9 +2,10 @@ import 'dart:ui';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:opak_fuar/model/fuarModel.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
-import 'package:opak_fuar/pages/homePage.dart';
+import 'package:opak_fuar/pages/fuarSec.dart';
 import 'package:opak_fuar/pages/settingsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../db/veriTabaniIslemleri.dart';
@@ -221,6 +222,8 @@ class _LoginPageState extends State<LoginPage> {
                 hatalar.add(await bs.getirDahaFazlaBarkod(
                     sirket: Ctanim.sirket!,
                     kullaniciKodu: Ctanim.kullanici!.KOD!));
+                hatalar.add(
+                    await bs.getFuar(sirket: Ctanim.sirket!));
 
                 if (hatalar.length > 0) {
                   for (var element in hatalar) {
@@ -233,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (paremetreHatasiVarMi == false) {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(builder: (context) => FuarSec()),
                       (route) => false,
                     );
 
@@ -250,7 +253,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage()),
+                                    builder: (context) => FuarSec()),
                                 (route) => false,
                               );
                             },
@@ -265,7 +268,7 @@ class _LoginPageState extends State<LoginPage> {
                 } else {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => FuarSec()),
                     (route) => false,
                   );
                 }
@@ -277,7 +280,7 @@ class _LoginPageState extends State<LoginPage> {
                 } else {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => FuarSec()),
                     (route) => false,
                   );
                 }

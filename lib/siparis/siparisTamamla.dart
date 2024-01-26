@@ -21,30 +21,25 @@ class SiparisTamamla extends StatefulWidget {
   const SiparisTamamla({
     super.key,
   });
+  
 
   @override
   State<SiparisTamamla> createState() => _SiparisTamamlaState();
 }
 
-class _SiparisTamamlaState extends State<SiparisTamamla>{
+class _SiparisTamamlaState extends State<SiparisTamamla> {
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     if (fisEx.fis!.value.ISK1 != 0.0) {
       genelIskonto1Controller.text =
           (fisEx.fis!.value.ISK1!.toInt()).toString();
     }
     aciklamaController.text = fisEx.fis!.value.ACIKLAMA1!;
   }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  
-    
-  }
+
 
   Color getRandomColor() {
     List<Color> colors = [
@@ -137,6 +132,13 @@ class _SiparisTamamlaState extends State<SiparisTamamla>{
 
   @override
   Widget build(BuildContext context) {
+    if (Ctanim.seciliBayi == null) {
+    } 
+    else {
+      fisEx.fis!.value.ACIKLAMA4 = Ctanim.seciliBayi!.KOD;
+      fisEx.fis!.value.ACIKLAMA5 = Ctanim.seciliBayi!.ADI;
+    }
+
     altHesaplar.clear();
 
     List<Color> colors =
@@ -258,33 +260,33 @@ class _SiparisTamamlaState extends State<SiparisTamamla>{
                       scrollDirection: Axis.horizontal,
                     ),
                   ),
-                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
+                          child: Text("Alt Hesap Ayarla"),
+                          onPressed: () {
+                            fisEx.fis!.value.fisStokListesi
+                                .where((element) =>
+                                    element.AltHesapDegistir == true)
+                                .forEach((element) {
+                              element.AltHesapDegistir = false;
+                            });
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AltHesapAyarla()))
+                                .then((value) => setState(() {}));
+                          },
                         ),
-                        child: Text("Alt Hesap Ayarla"),
-                        onPressed: (){
-                          fisEx.fis!.value.fisStokListesi.where((element) => element.AltHesapDegistir == true).forEach((element) {
-                            element.AltHesapDegistir = false;
-                          });
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AltHesapAyarla())).then((value) => setState(() {
-                                    
-                                  }));
-                    
-                        },
-                      ),
-                    )
-                  ),
+                      )),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -532,7 +534,8 @@ class _SiparisTamamlaState extends State<SiparisTamamla>{
                           onPressed: () async {
                             List<Cari> bayiler = [];
                             for (var element in listeler.listCari) {
-                              if (element.TIPI == "Bayi" || element.TIPI == "Alt Bayi") {
+                              if (element.TIPI == "Bayi" ||
+                                  element.TIPI == "Alt Bayi") {
                                 bayiler.add(element);
                               }
                             }

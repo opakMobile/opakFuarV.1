@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
+import 'package:opak_fuar/sabitler/Ctanim.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Cari {
   int? ID;
@@ -117,6 +121,10 @@ class Cari {
     ACIKLAMA4 = json['ACIKLAMA4'];
     ALTHESAPLAR = json['ALTHESAPLAR'];
   }
+    Cari.fromJson2(Map<String, dynamic> json) {
+    KOD = json['KOD'];
+    ADI = json['ADI'];
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
@@ -146,5 +154,28 @@ class Cari {
     data['ACIKLAMA4'] = ACIKLAMA4;
     data['ALTHESAPLAR'] = ALTHESAPLAR;
     return data;
+  }
+    Map<String, dynamic> toJson2() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['KOD'] = KOD;
+    data['ADI'] = ADI;
+    return data;
+  }
+    static Future<void> bayiKaydet(Cari user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userJson = jsonEncode(user.toJson2());
+    await prefs.setString("bayi", userJson);
+  }
+
+  static Future<Cari?> bayiCek() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userJson = prefs.getString("bayi");
+
+    if (userJson != null) {
+      Map<String, dynamic> userMap = jsonDecode(userJson);
+      Ctanim.seciliBayi = Cari.fromJson2(userMap);
+      return Cari.fromJson2(userMap);
+    }
+    return null;
   }
 }

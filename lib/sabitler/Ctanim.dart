@@ -8,6 +8,7 @@ import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 
+import '../model/cariModel.dart';
 import '../model/kullaniciModel.dart';
 import '../model/satisTipiModel.dart';
 import '../model/stokFiyatListesiModel.dart';
@@ -26,6 +27,7 @@ class Ctanim {
   static List<String> satisIskontoListesi = [];
   static List<String> genelIskontoListesi = [];
   static int cariKod = 1;
+  static Cari? seciliBayi;
 
   static SatisTipiModel seciliIslemTip =
       SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");

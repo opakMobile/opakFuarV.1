@@ -35,54 +35,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   BaseService bs = BaseService();
   FisController fisEx = Get.find();
-  FuarModel? secilifuar;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FuarSec();
-    });
-  }
 
-  FuarSec() {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            height: MediaQuery.of(context).size.height * 0.07,
-            child: Material(
-              child: Padding(
-                padding: EdgeInsets.only(top: 15.0),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<FuarModel>(
-                    //  focusNode: focusDrop,
-                    value: secilifuar,
-                    items: listeler.listFuar.map((FuarModel fuar) {
-                      return DropdownMenuItem<FuarModel>(
-                        value: fuar,
-                        child: Text(
-                          fuar.KOD!,
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (FuarModel? fuar) async {
-                      setState(() {
-                        secilifuar = fuar;
-                      });
+ 
 
-                      //     await FuarModel.saveFuar(secilifuar!);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              ),
-            ),
-          );
-        });
-  }
 
   @override
   Widget build(BuildContext context) {

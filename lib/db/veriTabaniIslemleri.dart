@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:opak_fuar/model/KurModel.dart';
 import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
+import 'package:opak_fuar/model/fuarModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/model/stokKosulModel.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
@@ -572,6 +573,50 @@ class VeriIslemleri {
     }
   }
 
+  Future<List<FuarModel>?> fuarModelGetir() async {
+    //   var result = await Ctanim.db?.query("TBLCARISB");
+    List<Map<String, dynamic>> maps = await Ctanim.db?.query("TBLFUARMODELSB");
+    listeler.listFuar =
+        List.generate(maps.length, (i) => FuarModel.fromJson(maps[i]));
+
+    return listeler.listFuar;
+  }
+
+  //database cari ekle
+  Future<int?> fuarModelEkle(FuarModel fuarModel) async {
+    try {
+      var result =
+          await Ctanim.db?.insert("TBLFUARMODELSB", fuarModel.toJson());
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fuarModelTemizle() async {
+    try {
+      // Veritabanında "TBLCARISTOKKOSULSB" tablosunu temizle.
+      await Ctanim.db?.delete("TBLFUARMODELSB");
+      print("TBLFUARMODELSB tablosu temizlendi.");
+
+      // "TBLCARISTOKKOSULSB" tablosunu sil.
+      await Ctanim.db?.execute("DROP TABLE IF EXISTS TBLFUARMODELSB");
+
+      // "TBLCARISTOKKOSULSB" tablosunu yeniden oluştur.
+      await Ctanim.db?.execute("""
+  CREATE TABLE TBLFUARMODELSB (
+      ID INTEGER,
+      KOD TEXT,
+      ADI TEXT,
+      SIRA INTEGER
+    )""");
+
+      print("TBLFUARMODELSB tablosu temizlendi ve yeniden oluşturuldu.");
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
+
   Future<int> veriGetir() async {
     await cariGetir();
     await stokGetir();
@@ -582,7 +627,8 @@ class VeriIslemleri {
     await stokKosulGetir();
     await dahaFazlaBarkodGetir();
     await cariAltHesapGetir();
-    
+    await fuarModelGetir();
+
     if (listeler.listCari.length > 0 ||
         listeler.listStok.length > 0 /* || temp3!.length > 0*/) {
       return 1;

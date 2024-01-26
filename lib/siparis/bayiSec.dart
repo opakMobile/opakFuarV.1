@@ -208,6 +208,8 @@ class _BayiSecState extends State<BayiSec> {
                               onTap: () async {
                                 fisEx.fis!.value.ACIKLAMA4 = cari.KOD;
                                 fisEx.fis!.value.ACIKLAMA5 = cari.ADI;
+                                await Cari.bayiKaydet(cari);
+                            
                                 Navigator.pop(context);
                               },
                             ),
