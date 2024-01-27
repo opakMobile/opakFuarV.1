@@ -251,7 +251,9 @@ class _fisHareketDuzenleState extends State<fisHareketDuzenle> {
                 Spacer(),
                 IconButton(
                   onPressed: () {
+                    Ctanim.urunAraFocus = true;
                     Navigator.pop(context);
+                    
                   },
                   icon: Icon(
                     Icons.cancel,

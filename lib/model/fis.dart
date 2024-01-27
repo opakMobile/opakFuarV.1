@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/model/altHesapToplamModel.dart';
 
@@ -62,6 +63,7 @@ class Fis {
   int? KALEMSAYISI = 0;
   bool? seciliFisGonder = false;
   String? FUARADI = "";
+  
 
   Fis(
       this.ID,
@@ -483,9 +485,8 @@ class Fis {
   }
 
   Future<void> fisHareketSil(int fisId, String stokKodu,String altHesap) async {
-    //FisHareket idsi fiş id te eşitleri sil
-
     await Ctanim.db?.delete("TBLFISHAR",
         where: "FIS_ID = ? AND STOKKOD = ? AND ALTHESAP = ?", whereArgs: [fisId, stokKodu,altHesap]);
+       
   }
 }

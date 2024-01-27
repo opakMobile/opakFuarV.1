@@ -29,45 +29,87 @@ class _okumaModuListState extends State<okumaModuList> {
   Widget build(BuildContext context) {
     var result = fisEx.fis!.value!.fisStokListesi
         .where((value) => value.ALTHESAP == widget.seciliAltHesap);
-    return SingleChildScrollView(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.55,
+    return Column(
+      children: [
+        SingleChildScrollView(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height < 650
+                                        ? MediaQuery.of(context).size.height *
+                                            0.465
+                                        : MediaQuery.of(context).size.height *
+                                            0.480,
 
-        //!! Sepet Listesi Buraya Gelecek
-        child: result.isEmpty
-            ? Center(
-                child: Text("Bu alt hesaba ait ürün bulunmamaktadır."),
-              )
-            : ListView.builder(
-                itemCount: fisEx.fis!.value.fisStokListesi.length,
-                itemBuilder: (context, index) {
-                  FisHareket stokModel = fisEx.fis!.value.fisStokListesi[index];
-                  if (widget.sepetteAra == true &&
-                      widget.editinControllerText != "") {
-                    StokKart bulunanStok = Ctanim.harekettenStokBul(stokModel);
-                    if (bulunanStok.KOD! == widget.editinControllerText ||
-                        bulunanStok.BARKOD1! == widget.editinControllerText ||
-                        bulunanStok.BARKOD2! == widget.editinControllerText ||
-                        bulunanStok.BARKOD3! == widget.editinControllerText ||
-                        bulunanStok.BARKOD4! == widget.editinControllerText ||
-                        bulunanStok.BARKOD5! == widget.editinControllerText ||
-                        bulunanStok.BARKOD6! == widget.editinControllerText ||
-                        bulunanStok.ADI!.toLowerCase().contains(
-                            widget.editinControllerText.toLowerCase())) {
-                      return okumaModuUrunListe(context, stokModel);
-                    } else {
-                      return Container();
-                    }
-                  } else {
-                    print("SEPETE ARA PASİF");
-                    return stokModel.ALTHESAP == widget.seciliAltHesap
-                        ? okumaModuUrunListe(context, stokModel)
-                        : Container();
-                  }
-                },
-              ),
-      ),
+            //!! Sepet Listesi Buraya Gelecek
+            child: result.isEmpty
+                ? Center(
+                    child: Text("Bu alt hesaba ait ürün bulunmamaktadır."),
+                  )
+                : ListView.builder(
+                    itemCount: fisEx.fis!.value.fisStokListesi.length,
+                    itemBuilder: (context, index) {
+                      FisHareket stokModel = fisEx.fis!.value.fisStokListesi[index];
+                      if (widget.sepetteAra == true &&
+                          widget.editinControllerText != "") {
+                        StokKart bulunanStok = Ctanim.harekettenStokBul(stokModel);
+                        if (bulunanStok.KOD! == widget.editinControllerText ||
+                            bulunanStok.BARKOD1! == widget.editinControllerText ||
+                            bulunanStok.BARKOD2! == widget.editinControllerText ||
+                            bulunanStok.BARKOD3! == widget.editinControllerText ||
+                            bulunanStok.BARKOD4! == widget.editinControllerText ||
+                            bulunanStok.BARKOD5! == widget.editinControllerText ||
+                            bulunanStok.BARKOD6! == widget.editinControllerText ||
+                            bulunanStok.ADI!.toLowerCase().contains(
+                                widget.editinControllerText.toLowerCase())) {
+                          return okumaModuUrunListe(context, stokModel);
+                        } else {
+                          return Container();
+                        }
+                      } else {
+                        print("SEPETE ARA PASİF");
+                        return stokModel.ALTHESAP == widget.seciliAltHesap
+                            ? okumaModuUrunListe(context, stokModel)
+                            : Container();
+                      }
+                    },
+                  ),
+          ),
+        ),
+                         SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                          height:
+                                      MediaQuery.of(context).size.height * 0.04,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Satış Toplamı:",
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            height: MediaQuery.of(context).size.height * 0.06,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.grey),
+                            ),
+                            child: Center(
+                                child: Text(
+                              Ctanim.donusturMusteri(
+                                  fisEx.fis!.value.ARA_TOPLAM.toString()),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                        ],
+                      ),
+                    ),
+     
+      ],
     );
   }
 
@@ -311,14 +353,18 @@ class _okumaModuListState extends State<okumaModuList> {
 
                           return a == stokModel.STOKKOD!;
                         });
+                        //hügffff
                         fisEx.fis?.value.fisStokListesi.removeWhere((item) =>
                             item.STOKKOD == stokModel.STOKKOD! &&
                             item.ALTHESAP == stokModel.ALTHESAP!);
 
                         await Fis.empty().fisHareketSil(fisEx.fis!.value.ID!,
                             stokModel.STOKKOD!, stokModel.ALTHESAP!);
-                        setState(() {});
-                        Ctanim.genelToplamHesapla(fisEx);
+                        setState(() {
+                           Ctanim.genelToplamHesapla(fisEx);
+                           print("ARA TOPLAM DEĞİŞTİ : "+fisEx.fis!.value!.ARA_TOPLAM!.toString());
+                        });
+            
                       },
                       child: Text(
                         "Sil",

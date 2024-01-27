@@ -221,8 +221,8 @@ class KullaniciModel {
     EIRSNO = json['EIRSNO'];
     OTOMATIKSTOKKODU = json['OTOMATIKSTOKKODU'];
     PDFACIKLAMA = json['PDFACIKLAMA'];
-    KULLANICIADI = json['KULLANICIADI'];
-    FUARADI = json['FUARADI'];
+    KULLANICIADI = json['KULLANICIADI'] ?? "KULLANICIADI";
+    FUARADI = json['FUARADI'] ?? "FUARADI";
   }
 
   Map<String, dynamic> tojson() {
@@ -319,8 +319,8 @@ class KullaniciModel {
     data['EIRSNO'] = EIRSNO;
     data['OTOMATIKSTOKKODU'] = OTOMATIKSTOKKODU;
     data['PDFACIKLAMA'] = PDFACIKLAMA;
-    data['KULLANICIADI'] = KULLANICIADI;
-    data['FUARADI'] = FUARADI;
+    data['KULLANICIADI'] = KULLANICIADI   ?? "KULLANICIADI";
+    data['FUARADI'] = FUARADI ?? "FUARADI";
     return data;
   }
 

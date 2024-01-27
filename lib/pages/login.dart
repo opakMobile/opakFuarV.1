@@ -274,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
                 }
               }
             } else {
-              if (Ctanim.kullanici!.ONLINE == "H") {
+              
                 if (paremetreHatasiVarMi == true) {
                   hataGoster();
                 } else {
@@ -284,10 +284,6 @@ class _LoginPageState extends State<LoginPage> {
                     (route) => false,
                   );
                 }
-              } else {
-                showAlertDialogLogin(
-                    context, "Kullanıcının Ofline Giriş İzni Yok");
-              }
             }
           });
 

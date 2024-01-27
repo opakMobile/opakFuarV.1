@@ -313,7 +313,6 @@ class _SepetCariListState extends State<SepetCariList> {
                     )
                   ],
                 ),
-
                 localAktarildiMi == false
                     ? Text(
                         "Siparişi silmek için uzun basınız",
@@ -346,6 +345,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                     Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                                 String harf2 =
                                     Ctanim.cariIlkIkiDon(cari.ADI!)[0];
+
                                 return Column(
                                   children: [
                                     ListTile(
@@ -498,7 +498,8 @@ class _SepetCariListState extends State<SepetCariList> {
                                                                 .cariAltHesaplar
                                                                 .first,
                                                         cari: cari,
-                                                      )));
+                                                      ))).then(
+                                              (value) => setState(() {}));
                                         } else {
                                           DateTime date =
                                               DateFormat("yyyy-MM-dd")

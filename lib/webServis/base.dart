@@ -94,6 +94,7 @@ class BaseService {
 
     return result.toString();
   }
+  
 
   Future<String> getirStoklar({required sirket, required kullaniciKodu}) async {
     var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
@@ -165,6 +166,7 @@ class BaseService {
           e.toString();
     }
   }
+  
   /*
 
   Future<String> getirStoklar({required sirket, required kullaniciKodu}) async {

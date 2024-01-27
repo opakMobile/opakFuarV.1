@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                     width: MediaQuery.of(context).size.width * 0.38,
                     child: Center(
                       child: Text(
-                        "Fuar : " + Ctanim.kullanici!.FUARADI!,
+                        "Fuar : " + Ctanim.kullanici!.FUARADI! == "" ? "Fuar Seçilmedi" : Ctanim.kullanici!.FUARADI!,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: GoogleFonts.lato(
