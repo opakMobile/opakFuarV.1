@@ -499,7 +499,22 @@ class _SepetCariListState extends State<SepetCariList> {
                                                                 .first,
                                                         cari: cari,
                                                       ))).then(
-                                              (value) => setState(() {}));
+                                              (value)  {
+                                                  fisEx.list_tum_fis.clear();
+                                                     fisEx
+                                                        .listTumFisleriGetir();
+                                                setState(()  {
+                                                  
+                                                    tempFis.clear();
+                                                    for (var element
+                                                        in fisEx.list_tum_fis) {
+                                                      if (element.AKTARILDIMI ==
+                                                          localAktarildiMi) {
+                                                        tempFis.add(element);
+                                                      }
+                                                    }
+                                                  });
+                                              });
                                         } else {
                                           DateTime date =
                                               DateFormat("yyyy-MM-dd")

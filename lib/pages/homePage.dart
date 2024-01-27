@@ -269,6 +269,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () async {
                       fisEx.list_tum_fis.clear();
                       await fisEx.listTumFisleriGetir();
+                      
                       Navigator.push(
                           context,
                           MaterialPageRoute(

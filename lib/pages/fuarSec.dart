@@ -19,6 +19,7 @@ class _FuarSecState extends State<FuarSec> {
   FuarModel? secilifuar;
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.width);
     return SafeArea(
       child: Scaffold(
         appBar: appBarDizayn(context),
@@ -54,7 +55,7 @@ class _FuarSecState extends State<FuarSec> {
                   Container(
                     height: MediaQuery.of(context).size.height * 0.25,
                     width: MediaQuery.of(context).size.width,
-                
+                    
                     child: Card(
                       elevation: 45,
                       borderOnForeground: true,
@@ -70,44 +71,44 @@ class _FuarSecState extends State<FuarSec> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.925,
                               height: MediaQuery.of(context).size.height * 0.07,
-                            
                               decoration: BoxDecoration(
-
                                 borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.black, width: 1),
+                                border:
+                                    Border.all(color: Colors.black, width: 1),
                               ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      MediaQuery.of(context).size.width * 0.05,
-                                  vertical:
-                                      MediaQuery.of(context).size.height * 0.01),
+                              padding: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.027,
+                                  right: MediaQuery.of(context).size.width *
+                                      0.047),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<FuarModel>(
                                   dropdownColor: Colors.grey[300],
-                                
-                
                                   borderRadius: BorderRadius.circular(10),
                                   icon: Icon(Icons.arrow_drop_down),
                                   itemHeight:
                                       MediaQuery.of(context).size.height * 0.09,
                                   hint: Text("Fuar Seçiniz"),
                                   value: secilifuar,
-                                  items: listeler.listFuar.map((FuarModel fuar) {
+                                  items:
+                                      listeler.listFuar.map((FuarModel fuar) {
                                     return DropdownMenuItem<FuarModel>(
                                       value: fuar,
                                       child: Text(fuar.KOD!,
                                           style: TextStyle(
                                             overflow: TextOverflow.ellipsis,
-                                            fontSize:
-                                                MediaQuery.of(context).size.height *
-                                                    0.018,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.018,
                                           )),
                                     );
                                   }).toList(),
                                   onChanged: (FuarModel? fuar) async {
                                     setState(() {
                                       secilifuar = fuar;
-                                      Ctanim.kullanici!.FUARADI = secilifuar!.KOD;
+                                      Ctanim.kullanici!.FUARADI =
+                                          secilifuar!.KOD;
                                     });
                                   },
                                 ),
@@ -136,15 +137,9 @@ class _FuarSecState extends State<FuarSec> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (secilifuar == null) {
-                          /*   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
-                                  "Fuar tipi seçilmeden uygulamaya devam edilemez.")));*/
-                          // !!!!! denemek için kapatıldı !!!!!
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                            (route) => false,
-                          );
+                                  "Fuar tipi seçilmeden uygulamaya devam edilemez.")));
                         } else {
                           Navigator.pushAndRemoveUntil(
                             context,
