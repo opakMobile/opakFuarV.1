@@ -501,7 +501,8 @@ class _SepetCariListState extends State<SepetCariList> {
                                                                 .first,
                                                         cari: cari,
                                                       ))).then(
-                                              (value)  async {
+                                              (value)   {
+                                                /*
                                                   fisEx.list_tum_fis.clear();
                                                     await  fisEx
                                                         .listTumFisleriGetir();
@@ -513,6 +514,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                                         tempFis.add(element);
                                                       }
                                                     }
+                                                    */
                                                 setState(()  {         });
                                               });
                                         } else {

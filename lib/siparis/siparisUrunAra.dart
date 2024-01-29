@@ -172,8 +172,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
    
     }else{
       try{
-       Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
-       
+      // Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
+     // Ctanim.genelToplamHesapla(fisEx);
       }catch(e){
         print(e);
       }
