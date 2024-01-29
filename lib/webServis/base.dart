@@ -899,6 +899,7 @@ class BaseService {
     required String sirket,
     required List<Map<String, dynamic>> jsonDataList,
     required String UstUuid,
+    required String pdfMi
   }) async {
     SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
 
@@ -923,6 +924,7 @@ class BaseService {
       <Sirket>$sirket</Sirket>
       <Fis>$base64EncodedString</Fis>
       <UstUuid>$UstUuid</UstUuid>
+      <Pdf>$pdfMi</Pdf>
     </EkleSiparisFuar>
   </soap:Body>
 </soap:Envelope>

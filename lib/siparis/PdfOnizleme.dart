@@ -59,7 +59,10 @@ class _PdfOnizlemeState extends State<PdfOnizleme> {
   SHataModel gelenHata =   await bs.ekleSiparisFuar(
         sirket: Ctanim.sirket!,
         jsonDataList: listeFisler,
-        UstUuid: listeFisler[0]["USTUUID"]);
+        UstUuid: listeFisler[0]["USTUUID"],
+        pdfMi: "E"
+        
+        );
 
 
    if(gelenHata.Hata == "false"){

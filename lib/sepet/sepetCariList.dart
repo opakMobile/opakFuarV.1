@@ -460,7 +460,9 @@ class _SepetCariListState extends State<SepetCariList> {
                                       onTap: () {
                                         if (tempFis[index].AKTARILDIMI! ==
                                             false) {
+
                                           fisEx.fis!.value = tempFis[index];
+                                          print(fisEx.fis!.value.TIP);
                                           Ctanim.genelToplamHesapla(fisEx);
                                           CariAltHesap? vs;
                                           cari.cariAltHesaplar.clear();
@@ -499,13 +501,11 @@ class _SepetCariListState extends State<SepetCariList> {
                                                                 .first,
                                                         cari: cari,
                                                       ))).then(
-                                              (value)  {
+                                              (value)  async {
                                                   fisEx.list_tum_fis.clear();
-                                                     fisEx
+                                                    await  fisEx
                                                         .listTumFisleriGetir();
-                                                setState(()  {
-                                                  
-                                                    tempFis.clear();
+                                                        tempFis.clear();
                                                     for (var element
                                                         in fisEx.list_tum_fis) {
                                                       if (element.AKTARILDIMI ==
@@ -513,7 +513,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                                         tempFis.add(element);
                                                       }
                                                     }
-                                                  });
+                                                setState(()  {         });
                                               });
                                         } else {
                                           DateTime date =
@@ -579,7 +579,9 @@ class _SepetCariListState extends State<SepetCariList> {
                                                       List<Fis> pdfeGidecek =
                                                           parcalaFis(
                                                               tempFis[index]);
-
+                                                              
+                                                
+                                                     
                                                       // ha bura
 
                                                       Navigator.of(context)
@@ -726,7 +728,7 @@ class _SepetCariListState extends State<SepetCariList> {
               SHataModel gelenHata = await bs.ekleSiparisFuar(
                   UstUuid: jsonListesi[0]["USTUUID"]!,
                   jsonDataList: jsonListesi,
-                  sirket: Ctanim.sirket!);
+                  sirket: Ctanim.sirket!,pdfMi: "H");
 
               if (gelenHata.Hata == "true") {
                 genelHata += gelenHata.HataMesaj!;

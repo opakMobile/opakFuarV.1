@@ -201,6 +201,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                     fis: fisEx.fis!.value, belgeTipi: "YOK");
                                 List<Fis> pdfeGidecek =
                                     parcalaFis(fisEx.fis!.value);
+                                
                                 fisEx.fis!.value = Fis.empty();
                                 Navigator.pop(context);
                                 Navigator.pop(context);

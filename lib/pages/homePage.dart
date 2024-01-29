@@ -106,7 +106,9 @@ class _HomePageState extends State<HomePage> {
                     //  "Versiyon:2.0.3" ,// fişharekt düzenle birim taşması
                     //  "Versiyon: 2.0.4", // stok güncellemeye koşul güncelleme de eklendi
                     // "Versiyon:2.0.5" ,// kamera açınca fiş kaydetme
-                    "Versiyon:2.0.6", //fuaradi eklendi
+                   // "Versiyon:2.0.6", //fuaradi eklendi
+                    "Versiyon:2.0.7", // faur adı dropdown oldu falan fişman
+                    
 
                     style: TextStyle(fontSize: 9),
                   ),
@@ -1179,7 +1181,9 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                                         .ekleSiparisFuar(
                                             UstUuid: listeFisler[0]["USTUUID"],
                                             jsonDataList: listeFisler,
-                                            sirket: Ctanim.sirket!);
+                                            sirket: Ctanim.sirket!,
+                                            pdfMi: "H"
+                                            );
                                     if (gelenHata.Hata == "true") {
                                       genelHata += gelenHata.HataMesaj!;
                                     }
