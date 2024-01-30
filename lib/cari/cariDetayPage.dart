@@ -97,6 +97,7 @@ var uuid = Uuid();
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 SiparisUrunAra(
+                                                  sepettenMiGeldin: false,
                                                   varsayilan: vs!=null?vs:widget.cari.cariAltHesaplar.first,
                                                   cari: widget.cari,
                                                 )));

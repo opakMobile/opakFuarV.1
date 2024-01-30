@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -21,14 +22,12 @@ class SiparisTamamla extends StatefulWidget {
   const SiparisTamamla({
     super.key,
   });
-  
 
   @override
   State<SiparisTamamla> createState() => _SiparisTamamlaState();
 }
 
 class _SiparisTamamlaState extends State<SiparisTamamla> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -39,7 +38,6 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
     }
     aciklamaController.text = fisEx.fis!.value.ACIKLAMA1!;
   }
-
 
   Color getRandomColor() {
     List<Color> colors = [
@@ -133,8 +131,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
   @override
   Widget build(BuildContext context) {
     if (Ctanim.seciliBayi == null) {
-    } 
-    else {
+    } else {
       fisEx.fis!.value.ACIKLAMA4 = Ctanim.seciliBayi!.KOD;
       fisEx.fis!.value.ACIKLAMA5 = Ctanim.seciliBayi!.ADI;
     }
@@ -201,18 +198,24 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                     fis: fisEx.fis!.value, belgeTipi: "YOK");
                                 List<Fis> pdfeGidecek =
                                     parcalaFis(fisEx.fis!.value);
-                                
+
                                 fisEx.fis!.value = Fis.empty();
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
-                                // ha bura
+                                bool internet = true;
+
+                                if (await Connectivity().checkConnectivity() ==
+                                    ConnectivityResult.none) {
+                                      internet = false;
+                                 
+                                }
 
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) => PdfOnizleme(
                                             m: pdfeGidecek,
-                                            fastReporttanMiGelsin: true,
+                                            fastReporttanMiGelsin: internet,
                                           )),
                                 );
                               },

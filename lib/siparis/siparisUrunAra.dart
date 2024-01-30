@@ -24,10 +24,11 @@ import '../sabitler/Ctanim.dart';
 FisController fisEx = Get.find();
 
 class SiparisUrunAra extends StatefulWidget {
-  SiparisUrunAra({required this.cari, required this.varsayilan});
+  SiparisUrunAra({required this.cari, required this.varsayilan, required this.sepettenMiGeldin});
 
   late Cari cari;
   late CariAltHesap varsayilan;
+  final bool sepettenMiGeldin;
 
   @override
   State<SiparisUrunAra> createState() => _SiparisUrunAraState();
@@ -160,7 +161,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
     WidgetsBinding.instance!.removeObserver(this);
 
     Ctanim.secililiMarkalarFiltre.clear();
-    if (fisEx.fis!.value.fisStokListesi.length > 0) {
+    // sepet cari listden gelince kaydetsin
+    if (fisEx.fis!.value.fisStokListesi.length > 0 && widget.sepettenMiGeldin == false) {
       fisEx.fis!.value.DURUM = true;
       final now = DateTime.now();
       final formatter = DateFormat('HH:mm');
@@ -170,14 +172,15 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
       Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
       fisEx.fis!.value = Fis.empty();
    
-    }else{
-      try{
-      // Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
-     // Ctanim.genelToplamHesapla(fisEx);
-      }catch(e){
-        print(e);
-      }
-     
+    }else if(widget.sepettenMiGeldin == true){
+    fisEx.fis!.value.DURUM = true;
+      final now = DateTime.now();
+      final formatter = DateFormat('HH:mm');
+      String saat = formatter.format(now);
+      fisEx.fis!.value.SAAT = saat;
+      fisEx.fis!.value.AKTARILDIMI = false;
+      Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+      fisEx.fis!.value = Fis.empty();
     }
     super.dispose();
     //Ctanim.seciliMarkalarFiltreMap.clear();

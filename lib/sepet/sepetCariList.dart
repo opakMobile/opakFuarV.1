@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -460,7 +461,6 @@ class _SepetCariListState extends State<SepetCariList> {
                                       onTap: () {
                                         if (tempFis[index].AKTARILDIMI! ==
                                             false) {
-
                                           fisEx.fis!.value = tempFis[index];
                                           print(fisEx.fis!.value.TIP);
                                           Ctanim.genelToplamHesapla(fisEx);
@@ -494,15 +494,15 @@ class _SepetCariListState extends State<SepetCariList> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       SiparisUrunAra(
+                                                        sepettenMiGeldin: true,
                                                         varsayilan: vs != null
                                                             ? vs
                                                             : cari
                                                                 .cariAltHesaplar
                                                                 .first,
                                                         cari: cari,
-                                                      ))).then(
-                                              (value)   {
-                                                /*
+                                                      ))).then((value) {
+                                            /*
                                                   fisEx.list_tum_fis.clear();
                                                     await  fisEx
                                                         .listTumFisleriGetir();
@@ -515,8 +515,8 @@ class _SepetCariListState extends State<SepetCariList> {
                                                       }
                                                     }
                                                     */
-                                                setState(()  {         });
-                                              });
+                                            setState(() {});
+                                          });
                                         } else {
                                           DateTime date =
                                               DateFormat("yyyy-MM-dd")
@@ -562,6 +562,8 @@ class _SepetCariListState extends State<SepetCariList> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         SiparisUrunAra(
+                                                          sepettenMiGeldin:
+                                                              true,
                                                           varsayilan: vs != null
                                                               ? vs
                                                               : cari
@@ -581,10 +583,16 @@ class _SepetCariListState extends State<SepetCariList> {
                                                       List<Fis> pdfeGidecek =
                                                           parcalaFis(
                                                               tempFis[index]);
-                                                              
-                                                
-                                                     
+
                                                       // ha bura
+                                                      bool internet = true;
+
+                                                      if (await Connectivity()
+                                                              .checkConnectivity() ==
+                                                          ConnectivityResult
+                                                              .none) {
+                                                        internet = false;
+                                                      }
 
                                                       Navigator.of(context)
                                                           .push(
@@ -594,7 +602,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                                                     PdfOnizleme(
                                                                       m: pdfeGidecek,
                                                                       fastReporttanMiGelsin:
-                                                                          true,
+                                                                          internet,
                                                                     )),
                                                       );
                                                     },
@@ -730,7 +738,8 @@ class _SepetCariListState extends State<SepetCariList> {
               SHataModel gelenHata = await bs.ekleSiparisFuar(
                   UstUuid: jsonListesi[0]["USTUUID"]!,
                   jsonDataList: jsonListesi,
-                  sirket: Ctanim.sirket!,pdfMi: "H");
+                  sirket: Ctanim.sirket!,
+                  pdfMi: "H");
 
               if (gelenHata.Hata == "true") {
                 genelHata += gelenHata.HataMesaj!;

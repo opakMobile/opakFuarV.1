@@ -107,7 +107,8 @@ class _HomePageState extends State<HomePage> {
                     //  "Versiyon: 2.0.4", // stok güncellemeye koşul güncelleme de eklendi
                     // "Versiyon:2.0.5" ,// kamera açınca fiş kaydetme
                    // "Versiyon:2.0.6", //fuaradi eklendi
-                    "Versiyon:2.0.7", // faur adı dropdown oldu falan fişman
+                   // "Versiyon:2.0.7", // faur adı dropdown oldu falan fişman
+                    "Versiyon:2.0.8", // sepet çıkıışı fiş kaydetme,
                     
 
                     style: TextStyle(fontSize: 9),

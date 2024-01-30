@@ -219,6 +219,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 SiparisUrunAra(
+                                                  sepettenMiGeldin: false,
                                                   varsayilan: vs!=null?vs:cari.cariAltHesaplar.first,
                                                   cari: cari,
                                                 )));
