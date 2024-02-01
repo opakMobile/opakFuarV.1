@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +17,8 @@ class FuarSec extends StatefulWidget {
 }
 
 class _FuarSecState extends State<FuarSec> {
+ 
+  
   FuarModel? secilifuar;
   @override
   Widget build(BuildContext context) {
@@ -50,12 +53,11 @@ class _FuarSecState extends State<FuarSec> {
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.2,
+                    height: MediaQuery.of(context).size.height * 0.1,
                   ),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.25,
                     width: MediaQuery.of(context).size.width,
-                    
                     child: Card(
                       elevation: 45,
                       borderOnForeground: true,
@@ -69,19 +71,56 @@ class _FuarSecState extends State<FuarSec> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              width: MediaQuery.of(context).size.width * 0.925,
-                              height: MediaQuery.of(context).size.height * 0.07,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border:
-                                    Border.all(color: Colors.black, width: 1),
-                              ),
-                              padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.027,
-                                  right: MediaQuery.of(context).size.width *
-                                      0.047),
-                              child: DropdownButtonHideUnderline(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.925,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border:
+                                      Border.all(color: Colors.black, width: 1),
+                                ),
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.027,
+                                    right: MediaQuery.of(context).size.width *
+                                        0.047),
+                                child: DropdownSearch<String>(
+                                  
+                                  popupProps: PopupProps.menu(
+
+                                    showSelectedItems: true,
+                                    showSearchBox: true,
+                                    searchDelay: Duration.zero,
+                                    searchFieldProps: TextFieldProps(
+                                        decoration: InputDecoration(
+                                      hintText: "Fuar Ara",
+                                      border: OutlineInputBorder(),
+                                      prefixIcon: Icon(Icons.search),
+                                      fillColor: Colors.pink
+                                    )),
+                                  ),
+                                  items: listeler.listFuar.map((e) => e.KOD!).toList(),
+                                  
+                                  
+                                  dropdownDecoratorProps:
+                                      DropDownDecoratorProps(
+
+                                    dropdownSearchDecoration: InputDecoration(
+                                      hintText: "Fuar Seçiniz",
+                                      
+                                    ),
+                                  ),
+                                  onChanged: (String? fuar) async {
+                                    setState(() {
+                                      secilifuar = listeler.listFuar.firstWhere((element) => element.KOD == fuar);
+                                      Ctanim.kullanici!.FUARADI =
+                                          secilifuar!.KOD;
+                                    });
+                                  },
+                                )
+
+                                /*DropdownButtonHideUnderline(
                                 child: DropdownButton<FuarModel>(
                                   dropdownColor: Colors.grey[300],
                                   borderRadius: BorderRadius.circular(10),
@@ -113,14 +152,15 @@ class _FuarSecState extends State<FuarSec> {
                                   },
                                 ),
                               ),
-                            ),
+                              */
+                                ),
                           ),
                         ],
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.09,
                   ),
                   Text(
                     "*Uyarı: Seçilen fuar tipi oluşturulan siparişlere yansıyacaktır.",
@@ -131,7 +171,7 @@ class _FuarSecState extends State<FuarSec> {
                         fontSize: 12),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.09,
                   ),
                   Center(
                     child: ElevatedButton(

@@ -210,6 +210,7 @@ class _LoginPageState extends State<LoginPage> {
               } else {
                 String genelHata = "";
                 List<String?> hatalar = [];
+            
                 hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
                 hatalar.add(await stokKartEx.servisStokGetir());
                 hatalar.add(await cariEx.servisCariGetir());

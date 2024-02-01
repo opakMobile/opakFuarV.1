@@ -40,6 +40,7 @@ class BaseService {
 
     await getirKur(sirket: Ctanim.sirket);
     await getirStokKosul(sirket: Ctanim.sirket!);
+    await getFuar(sirket: Ctanim.sirket!);
   }
 
   Future<void> cariVerileriGuncelle() async {
@@ -94,7 +95,6 @@ class BaseService {
 
     return result.toString();
   }
-  
 
   Future<String> getirStoklar({required sirket, required kullaniciKodu}) async {
     var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
@@ -166,7 +166,7 @@ class BaseService {
           e.toString();
     }
   }
-  
+
   /*
 
   Future<String> getirStoklar({required sirket, required kullaniciKodu}) async {
@@ -895,12 +895,11 @@ class BaseService {
     }
   }
 
-  Future<SHataModel> ekleSiparisFuar({
-    required String sirket,
-    required List<Map<String, dynamic>> jsonDataList,
-    required String UstUuid,
-    required String pdfMi
-  }) async {
+  Future<SHataModel> ekleSiparisFuar(
+      {required String sirket,
+      required List<Map<String, dynamic>> jsonDataList,
+      required String UstUuid,
+      required String pdfMi}) async {
     SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
 
     var jsonString;
@@ -1129,9 +1128,11 @@ class BaseService {
     }
   }
 
-  Future<String> getFuar({required String sirket,}) async {
+  Future<String> getFuar({
+    required String sirket,
+  }) async {
     // dış ve iç denecek;
-    var url = Uri.parse(Ctanim.IP); 
+    var url = Uri.parse(Ctanim.IP);
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
       'SOAPAction': 'http://tempuri.org/GetirFuar'
@@ -1169,9 +1170,8 @@ class BaseService {
           for (var element in jsonData) {
             FuarModel a = FuarModel.fromJson(element);
             listeler.listFuar.add(a);
-            
           }
-           listeler.listFuar.forEach((webservisStokKosul) async {
+          listeler.listFuar.forEach((webservisStokKosul) async {
             await VeriIslemleri().fuarModelEkle(webservisStokKosul);
           });
 
@@ -1186,6 +1186,46 @@ class BaseService {
     } catch (e) {
       print('Hata: $e');
       return " Kullanıcı bilgiler için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
+    }
+  }
+
+  Future<String> testFunciton({required sirket,required ip}) async {
+    var url = Uri.parse(ip); // dış ve iç denecek;
+    SHataModel gelenHata = SHataModel(Hata: "true", HataMesaj: "Sunucu ile bağlantı kurulamadı.");
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/Test'
+    };
+
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?> <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> <soap:Body> <Test xmlns="http://tempuri.org/"> <Sirket>$sirket</Sirket> </Test> </soap:Body> </soap:Envelope>
+
+''';
+
+    try {
+      http.Response response =
+          await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+        Map<String, dynamic> jsonData =
+            jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
+        gelenHata  = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          return "";
+        }
+      } else {
+        Exception('Kur verisi alınamadı. StatusCode: ${response.statusCode}');
+        return " Test için İstek Oluşturulamadı. " +
+            response.statusCode.toString();
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return "Test için Webservisten veri çekilemedi. Hata Mesajı : " +
           e.toString();
     }
   }

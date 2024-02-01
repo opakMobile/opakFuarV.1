@@ -51,12 +51,12 @@ else   if (phoneNumber.length == 10) {
   }
   return phoneNumber;
 }
-  sendPDFViaWhatsApp(Uint8List doc) async { 
+  sendPDFViaWhatsApp() async { 
      String phoneNumber = cleanPhoneNumber(widget.m[0].cariKart.TELEFON!);
      print(phoneNumber);
 
       String whatsappURL =
-          "https://wa.me/$phoneNumber?text=Siparişin PDF Dosyası Linktedir \n: ${link}";
+          "https://wa.me/$phoneNumber?text=Değerli müşterimiz mağazamızdan gerçekleştirmiş olduğunuz siparişinize ait belgeye ulaşmak için tıklayınız: ${link}";
 
       // URL'yi başlatma
       if (await canLaunch(whatsappURL)) {
@@ -141,11 +141,20 @@ else   if (phoneNumber.length == 10) {
         backgroundColor: const Color.fromARGB(255, 80, 79, 79),
         floatingActionButton: 
         widget.fastReporttanMiGelsin == true ?
-        FloatingActionButton(
-          onPressed: () async {
-           sendPDFViaWhatsApp(pdfData!);
-          },
-          child: Icon(Icons.send),
+        Padding(
+          padding:  EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.05),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height*0.1,
+          width: MediaQuery.of(context).size.width*0.19,
+            child: FloatingActionButton(
+              backgroundColor: Colors.white,
+              
+              onPressed: () async {
+              await sendPDFViaWhatsApp();
+              },
+              child: Image.asset("assets/wp1.png"),
+            ),
+          ),
         ):Container(),
         body: PdfPreview(
           build: (context) async {

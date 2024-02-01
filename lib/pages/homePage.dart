@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: GoogleFonts.lato(
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.deepOrange,
                         ),
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: GoogleFonts.lato(
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.red,
                         ),
@@ -108,10 +108,11 @@ class _HomePageState extends State<HomePage> {
                     // "Versiyon:2.0.5" ,// kamera açınca fiş kaydetme
                    // "Versiyon:2.0.6", //fuaradi eklendi
                    // "Versiyon:2.0.7", // faur adı dropdown oldu falan fişman
-                    "Versiyon:2.0.8", // sepet çıkıışı fiş kaydetme,
+                   // "Versiyon:2.0.8", // sepet çıkıışı fiş kaydetme,
+                    "Versiyon:2.0.9",//fuar güncelleme,pdf wp
                     
 
-                    style: TextStyle(fontSize: 9),
+                    style: TextStyle(fontSize: 7),
                   ),
                 ],
               ),
@@ -693,6 +694,52 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                         ),
                       ),
                     )),
+                      Align(
+                    alignment: Alignment.topLeft,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.75,
+                      child: TextButton(
+                        onPressed: () async {
+                      
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return LoadingSpinner(
+                                  color: Colors.black,
+                                  message:
+                                      "Fuar Verileri Güncelleniyor. Lütfen Bekleyiniz...",
+                                );
+                              },
+                            );
+                            await widget.bs.getFuar(sirket: Ctanim.sirket!);
+
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.store_mall_directory,
+                              size: 30,
+                              color: Colors.purple,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Fuarları Güncelle",
+                                style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )),
                 Align(
                   alignment: Alignment.topLeft,
                   child: SizedBox(
@@ -982,7 +1029,7 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("Yeni & Güncellenmis Cari Gönder",
+                              child: Text("Yeni Carileri Gönder",
                                   style: GoogleFonts.lato(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
