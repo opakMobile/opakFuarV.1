@@ -89,8 +89,6 @@ class Cari {
           AKTARILDIMI: "H",
           ACIKLAMA4: "",
           ALTHESAPLAR: "",
-
-
         );
 
   Cari.fromJson(Map<String, dynamic> json) {
@@ -121,7 +119,7 @@ class Cari {
     ACIKLAMA4 = json['ACIKLAMA4'];
     ALTHESAPLAR = json['ALTHESAPLAR'];
   }
-    Cari.fromJson2(Map<String, dynamic> json) {
+  Cari.fromJson2(Map<String, dynamic> json) {
     KOD = json['KOD'];
     ADI = json['ADI'];
   }
@@ -155,27 +153,39 @@ class Cari {
     data['ALTHESAPLAR'] = ALTHESAPLAR;
     return data;
   }
-    Map<String, dynamic> toJson2() {
+
+  Map<String, dynamic> toJson2() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['KOD'] = KOD;
     data['ADI'] = ADI;
     return data;
   }
-    static Future<void> bayiKaydet(Cari user) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userJson = jsonEncode(user.toJson2());
-    await prefs.setString("bayi", userJson);
+  //asdad
+
+  static Future<void> bayiKaydet(Cari user) async {
+    if (Ctanim.kullanici!.BAYISECILI! == "E") {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String userJson = jsonEncode(user.toJson2());
+      await prefs.setString("bayi", userJson);
+    } else {
+      Ctanim.seciliBayi = null;
+    }
   }
 
   static Future<Cari?> bayiCek() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userJson = prefs.getString("bayi");
+    if (Ctanim.kullanici!.BAYISECILI! == "E") {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? userJson = prefs.getString("bayi");
 
-    if (userJson != null) {
-      Map<String, dynamic> userMap = jsonDecode(userJson);
-      Ctanim.seciliBayi = Cari.fromJson2(userMap);
-      return Cari.fromJson2(userMap);
+      if (userJson != null) {
+        Map<String, dynamic> userMap = jsonDecode(userJson);
+        Ctanim.seciliBayi = Cari.fromJson2(userMap);
+        return Cari.fromJson2(userMap);
+      }
+      return null;
+    } else {
+      Ctanim.seciliBayi = null;
+      return null;
     }
-    return null;
   }
 }
