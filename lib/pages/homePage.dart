@@ -57,11 +57,12 @@ class _HomePageState extends State<HomePage> {
                         "Fuar : " + Ctanim.kullanici!.FUARADI! == "" ? "Fuar Seçilmedi" : Ctanim.kullanici!.FUARADI!,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: GoogleFonts.lato(
+                        style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: Colors.deepOrange,)
+                        /*GoogleFonts.lato(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.deepOrange,
-                        ),
+                        ),*/
                       ),
                     ),
                   ),
@@ -72,7 +73,12 @@ class _HomePageState extends State<HomePage> {
                         "Kullanıcı : " + Ctanim.kullanici!.KULLANICIADI!,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: GoogleFonts.lato(
+                        style:
+                        /* GoogleFonts.lato(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        )*/TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.red,
@@ -109,7 +115,9 @@ class _HomePageState extends State<HomePage> {
                    // "Versiyon:2.0.6", //fuaradi eklendi
                    // "Versiyon:2.0.7", // faur adı dropdown oldu falan fişman
                    // "Versiyon:2.0.8", // sepet çıkıışı fiş kaydetme,
-                    "Versiyon:2.0.9",//fuar güncelleme,pdf wp
+                  //  "Versiyon:2.0.9",//fuar güncelleme,pdf wp
+                 //   "Versiyon:2.1.0",// bayi seçili parametreli
+                    "Versiyon:2.1.1",// bayi seçili gelmede değişme hatası
                     
 
                     style: TextStyle(fontSize: 7),

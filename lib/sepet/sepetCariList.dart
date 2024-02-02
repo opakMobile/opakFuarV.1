@@ -458,7 +458,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                           await showAlertDialog(context, index);
                                         }
                                       },
-                                      onTap: () {
+                                      onTap: () async {
                                         if (tempFis[index].AKTARILDIMI! ==
                                             false) {
                                           fisEx.fis!.value = tempFis[index];
@@ -518,62 +518,13 @@ class _SepetCariListState extends State<SepetCariList> {
                                             setState(() {});
                                           });
                                         } else {
-                                          DateTime date =
-                                              DateFormat("yyyy-MM-dd")
-                                                  .parse(tempFis[index].TARIH!);
-
-                                          DateTime now = DateTime.now();
-
-                                          int differenceInDays =
-                                              now.difference(date).inDays;
-                                          if (differenceInDays < 1) {
-                                            fisEx.fis!.value = tempFis[index];
-                                            Ctanim.genelToplamHesapla(fisEx);
-                                            CariAltHesap? vs;
-                                            cari.cariAltHesaplar.clear();
-                                            List<String> altListe =
-                                                cari.ALTHESAPLAR!.split(",");
-                                            for (var elemnt
-                                                in listeler.listCariAltHesap) {
-                                              if (altListe.contains(elemnt
-                                                  .ALTHESAPID
-                                                  .toString())) {
-                                                cari.cariAltHesaplar
-                                                    .add(elemnt);
-                                              }
-                                              if (elemnt.ZORUNLU == "E" &&
-                                                  elemnt.VARSAYILAN == "E") {
-                                                vs = elemnt;
-                                              }
-                                            }
-                                            if (cari.cariAltHesaplar.isEmpty) {
-                                              for (var elemnt in listeler
-                                                  .listCariAltHesap) {
-                                                if (elemnt.ZORUNLU == "E" &&
-                                                    elemnt.VARSAYILAN == "E") {
-                                                  cari.cariAltHesaplar
-                                                      .add(elemnt);
-                                                }
-                                              }
-                                            }
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        SiparisUrunAra(
-                                                          sepettenMiGeldin:
-                                                              true,
-                                                          varsayilan: vs != null
-                                                              ? vs
-                                                              : cari
-                                                                  .cariAltHesaplar
-                                                                  .first,
-                                                          cari: cari,
-                                                        )));
-                                          } else {
+                                          print("AKTAILMAMIŞL");
+                                          if (await Connectivity()
+                                                  .checkConnectivity() ==
+                                              ConnectivityResult.none) {
                                             showDialog(
                                                 context: context,
+                                                
                                                 builder: (context) {
                                                   return CustomAlertDialog(
                                                     pdfSimgesi: false,
@@ -583,16 +534,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                                       List<Fis> pdfeGidecek =
                                                           parcalaFis(
                                                               tempFis[index]);
-
-                                                      // ha bura
-                                                      bool internet = true;
-
-                                                      if (await Connectivity()
-                                                              .checkConnectivity() ==
-                                                          ConnectivityResult
-                                                              .none) {
-                                                        internet = false;
-                                                      }
+                                                      Navigator.pop(context);
 
                                                       Navigator.of(context)
                                                           .push(
@@ -602,25 +544,175 @@ class _SepetCariListState extends State<SepetCariList> {
                                                                     PdfOnizleme(
                                                                       m: pdfeGidecek,
                                                                       fastReporttanMiGelsin:
-                                                                          internet,
+                                                                          false,
                                                                     )),
                                                       );
                                                     },
                                                     secondButtonText:
                                                         "PDF Görüntüle",
                                                     message:
-                                                        'Bu sipariş opağa aktarılmış. Düzenleme yapılamaz. PDF görüntülemek ister misiniz?',
+                                                        'İnternet bağlantısı bulunamadı. PDF görüntülemek ister misiniz?',
                                                     onPres: () async {
                                                       Navigator.pop(context);
                                                     },
                                                     buttonText: 'Geri',
                                                   );
                                                 });
-                                          }
+                                          } else {
+                                            //internet var
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (BuildContext context) {
+                                                return LoadingSpinner(
+                                                  color: Colors.black,
+                                                  message:
+                                                      "Siparişin Durumu Kontrol Ediliyor. Lütfen Bekleyiniz...",
+                                                );
+                                              },
+                                            );
+                                            SHataModel shata =
+                                                await bs.SilSiparisFuar(
+                                                    sirket: Ctanim.sirket!,
+                                                    UstUuid:
+                                                        tempFis[index].UUID!);
 
-                                          /*
+                                            if (shata.Hata == "false") {
+                                              print("SİLİNDİ");
+                                              fisEx.fis!.value = tempFis[index];
+                                              fisEx.fis!.value.AKTARILDIMI =
+                                                  false;
+                                              fisEx.fis!.value.DURUM = true;
+                                              final now = DateTime.now();
+                                              final formatter =
+                                                  DateFormat('HH:mm');
+                                              String saat =
+                                                  formatter.format(now);
+                                              fisEx.fis!.value.SAAT = saat;
+                                              fisEx.fis!.value.AKTARILDIMI =
+                                                  false;
+                                              Fis.empty().fisEkle(
+                                                  fis: fisEx.fis!.value,
+                                                  belgeTipi: "YOK");
+                                              
+                                              Ctanim.genelToplamHesapla(fisEx);
+                                              CariAltHesap? vs;
+                                              cari.cariAltHesaplar.clear();
+                                              List<String> altListe =
+                                                  cari.ALTHESAPLAR!.split(",");
+                                              for (var elemnt in listeler
+                                                  .listCariAltHesap) {
+                                                if (altListe.contains(elemnt
+                                                    .ALTHESAPID
+                                                    .toString())) {
+                                                  cari.cariAltHesaplar
+                                                      .add(elemnt);
+                                                }
+                                                if (elemnt.ZORUNLU == "E" &&
+                                                    elemnt.VARSAYILAN == "E") {
+                                                  vs = elemnt;
+                                                }
+                                              }
+                                              if (cari
+                                                  .cariAltHesaplar.isEmpty) {
+                                                for (var elemnt in listeler
+                                                    .listCariAltHesap) {
+                                                  if (elemnt.ZORUNLU == "E" &&
+                                                      elemnt.VARSAYILAN ==
+                                                          "E") {
+                                                    cari.cariAltHesaplar
+                                                        .add(elemnt);
+                                                  }
+                                                }
+                                              }
+                                              Navigator.pop(context);
+
+                                              Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              SiparisUrunAra(
+                                                                sepettenMiGeldin:
+                                                                    true,
+                                                                varsayilan: vs !=
+                                                                        null
+                                                                    ? vs
+                                                                    : cari
+                                                                        .cariAltHesaplar
+                                                                        .first,
+                                                                cari: cari,
+                                                              )))
+                                                  .then((value) async {
+                                                fisEx.list_tum_fis.clear();
+                                                await fisEx
+                                                    .listTumFisleriGetir();
+                                                setState(() {
+                                                  tempFis.clear();
+                                                  for (var element
+                                                      in fisEx.list_tum_fis) {
+                                                    if (element.AKTARILDIMI ==
+                                                        localAktarildiMi) {
+                                                      tempFis.add(element);
+                                                    }
+                                                  }
+                                                });
+                                              });
+                                              //  Navigator.pop(context);
+                                            } else {
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (context) {
+                                                    return CustomAlertDialog(
+                                                      pdfSimgesi: false,
+                                                      align: TextAlign.left,
+                                                      title: 'Uyarı',
+                                                      onSecondPress: () async {
+                                                        List<Fis> pdfeGidecek =
+                                                            parcalaFis(
+                                                                tempFis[index]);
+
+                                                        // ha bura
+                                                        bool internet = true;
+
+                                                        if (await Connectivity()
+                                                                .checkConnectivity() ==
+                                                            ConnectivityResult
+                                                                .none) {
+                                                          internet = false;
+                                                        }
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                        Navigator.of(context)
+                                                            .push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      PdfOnizleme(
+                                                                        m: pdfeGidecek,
+                                                                        fastReporttanMiGelsin:
+                                                                            internet,
+                                                                      )),
+                                                        );
+                                                      },
+                                                      secondButtonText:
+                                                          "PDF Görüntüle",
+                                                      message:
+                                                          'Bu sipariş opağa aktarılmış. Düzenleme yapılamaz. PDF görüntülemek ister misiniz?',
+                                                      onPres: () async {
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                      },
+                                                      buttonText: 'Geri',
+                                                    );
+                                                  });
+                                            }
+
+                                            /*
                                               
                                               */
+                                          }
+                                          // Navigator.pop(context);
                                         }
                                       },
                                     ),
@@ -890,28 +982,60 @@ class _SepetCariListState extends State<SepetCariList> {
     );
     Widget continueButton = TextButton(
       child: Text("Devam"),
-      onPressed: () {
+      onPressed: () async {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return LoadingSpinner(
+              color: Colors.black,
+              message: "Sipariş siliniyor. Lütfen Bekleyiniz...",
+            );
+          },
+        );
         try {
           fisEx.fis?.value = tempFis[index];
-          print(fisEx.fis?.value.ID);
-          Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
-          fisEx.list_tum_fis
-              .removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
 
-          setState(() {
-            tempFis.removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
-          });
-          const snackBar = SnackBar(
-            duration: Duration(microseconds: 500),
-            content: Text(
-              'Sipariş silindi..',
-              style: TextStyle(fontSize: 16),
-            ),
-            showCloseIcon: true,
-            backgroundColor: Colors.blue,
-            closeIconColor: Colors.white,
-          );
-          ScaffoldMessenger.of(context as BuildContext).showSnackBar(snackBar);
+          SHataModel shata = await bs.SilSiparisFuar(
+              sirket: Ctanim.sirket!, UstUuid: fisEx.fis!.value.UUID!);
+          if (shata.Hata == "false") {
+            Fis.empty().fisVeHareketSil(fisEx.fis!.value.ID!);
+            fisEx.list_tum_fis
+                .removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
+
+            setState(() {
+              tempFis.removeWhere((item) => item.ID == fisEx.fis!.value.ID!);
+            });
+            const snackBar = SnackBar(
+              duration: Duration(microseconds: 500),
+              content: Text(
+                'Sipariş silindi..',
+                style: TextStyle(fontSize: 16),
+              ),
+              showCloseIcon: true,
+              backgroundColor: Colors.blue,
+              closeIconColor: Colors.white,
+            );
+            ScaffoldMessenger.of(context as BuildContext)
+                .showSnackBar(snackBar);
+            Navigator.pop(context);
+          } else {
+            print(shata.HataMesaj);
+            await showDialog(
+                context: context,
+                builder: (context) {
+                  return VeriGondermeHataDialog(
+                    align: TextAlign.left,
+                    title: 'Hata',
+                    message: shata.HataMesaj!,
+                    onPres: () async {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    buttonText: 'Tamam',
+                  );
+                });
+          }
         } on PlatformException catch (e) {
           print(e);
         }

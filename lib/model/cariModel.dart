@@ -167,6 +167,7 @@ class Cari {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String userJson = jsonEncode(user.toJson2());
       await prefs.setString("bayi", userJson);
+      Ctanim.seciliBayi = user;
     } else {
       Ctanim.seciliBayi = null;
     }

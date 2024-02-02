@@ -1229,4 +1229,60 @@ class BaseService {
           e.toString();
     }
   }
+
+    Future<SHataModel> SilSiparisFuar(
+      {required String sirket,
+      required String UstUuid,
+  }) async {
+    SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
+
+
+    var url = Uri.parse(Ctanim.IP);
+    // dış ve iç denecek;
+
+
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/SilSiparisFuar',
+    };
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?> 
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+ <soap:Body>
+  <SilSiparisFuar xmlns="http://tempuri.org/">
+ <Sirket>$sirket</Sirket> 
+ <UstUuid>$UstUuid</UstUuid> 
+ </SilSiparisFuar> 
+ </soap:Body> 
+ </soap:Envelope>
+
+
+''';
+    //printWrapped(base64EncodedString);
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+
+        Map<String, dynamic> jsonData = jsonDecode(parsedXml.innerText);
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        return gelenHata;
+      } else {
+        Exception(
+            'Sipariş Silme İsteği gönderilemedi. StatusCode: ${response.statusCode}');
+        return hata;
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return hata;
+    }
+  }
+  
 }

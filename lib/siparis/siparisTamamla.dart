@@ -549,8 +549,10 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                                   builder: (context) => BayiSec(
                                         bayiList: bayiler,
                                       )),
-                            );
-                            setState(() {});
+                            ).then((value) {
+                              setState(() {});
+                            });
+                       
                             /*
                             Navigator.push(
                                 context,

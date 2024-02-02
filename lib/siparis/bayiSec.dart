@@ -206,6 +206,7 @@ class _BayiSecState extends State<BayiSec> {
                                 child: Text(cari.IL!.toString()),
                               ),
                               onTap: () async {
+                                print(cari.ADI);
                                 fisEx.fis!.value.ACIKLAMA4 = cari.KOD;
                                 fisEx.fis!.value.ACIKLAMA5 = cari.ADI;
                                 await Cari.bayiKaydet(cari);
