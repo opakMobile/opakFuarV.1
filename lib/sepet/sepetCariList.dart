@@ -428,12 +428,24 @@ class _SepetCariListState extends State<SepetCariList> {
                                                           .size
                                                           .width *
                                                       0.45,
-                                                  child: Text(
-                                                    cari.ADRES!.toString() ??
-                                                        "",
-                                                    maxLines: 3,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        cari.ADRES!.toString() ??
+                                                            "",
+                                                        maxLines: 3,
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                      ),
+                                                      Text(
+                                                        cari.IL! + " / " + cari.ILCE!,
+                                                      
+                                                        maxLines: 3,
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                                 widget.islem == true

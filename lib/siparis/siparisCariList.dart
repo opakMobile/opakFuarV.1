@@ -151,11 +151,23 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                   child: SizedBox(
                                     width: MediaQuery.of(context).size.width *
                                         0.8,
-                                    child: Text(
-                                      cari.ADRES!.toString(),
-                                      maxLines: 3,
-                                      
-                                      overflow: TextOverflow.ellipsis,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          cari.ADRES!.toString(),
+                                          maxLines: 3,
+                                          
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+
+                                        Text(
+                                          cari.IL! + " / " + cari.ILCE!,
+                                          maxLines: 3,
+                                          
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
                                     ), 
                                 )),
                                 onTap: () async {

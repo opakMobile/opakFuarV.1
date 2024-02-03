@@ -117,7 +117,8 @@ class _HomePageState extends State<HomePage> {
                    // "Versiyon:2.0.8", // sepet çıkıışı fiş kaydetme,
                   //  "Versiyon:2.0.9",//fuar güncelleme,pdf wp
                  //   "Versiyon:2.1.0",// bayi seçili parametreli
-                    "Versiyon:2.1.1",// bayi seçili gelmede değişme hatası
+                 //   "Versiyon:2.1.1",// bayi seçili gelmede değişme hatası
+                    "Versiyon:2.1.2",// il ilçe eklendi
                     
 
                     style: TextStyle(fontSize: 7),
