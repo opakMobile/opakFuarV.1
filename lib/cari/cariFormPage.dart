@@ -969,198 +969,198 @@ class _CariFormPageState extends State<CariFormPage> {
                                       ),
                                     )
                                   : Container(
+                                  
+                                  
                                        height:
                                           MediaQuery.of(context).size.height *
                                               0.1,
                                       width:
                                           MediaQuery.of(context).size.width * 9,
-                                      child: Center(
-                                        child: ElevatedButton.icon(
-                                          onPressed: () async {
-                                            if (_MailAdresi.text != "" &&
-                                                _CepTelefonu.text != "" &&
-                                                _AdresBilgileri.text != "" &&
-                                                _SirketIsmi.text != "") {
-                                              showDialog(
-                                                context: context,
-                                                barrierDismissible: false,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return LoadingSpinner(
-                                                    color: Colors.black,
-                                                    message:
-                                                        "Cari kaydı yapılıyor. Lütfen Bekleyiniz...",
-                                                  );
-                                                },
-                                              );
-                                              Cari cari = Cari.empty();
-                                              DateTime now = DateTime.now();
-                                              String formattedDate =
-                                                  DateFormat('ddMMHHmm')
-                                                      .format(now);
+                                      child: ElevatedButton.icon(
+                                        onPressed: () async {
+                                          if (_MailAdresi.text != "" &&
+                                              _CepTelefonu.text != "" &&
+                                              _AdresBilgileri.text != "" &&
+                                              _SirketIsmi.text != "") {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder:
+                                                  (BuildContext context) {
+                                                return LoadingSpinner(
+                                                  color: Colors.black,
+                                                  message:
+                                                      "Cari kaydı yapılıyor. Lütfen Bekleyiniz...",
+                                                );
+                                              },
+                                            );
+                                            Cari cari = Cari.empty();
+                                            DateTime now = DateTime.now();
+                                            String formattedDate =
+                                                DateFormat('ddMMHHmm')
+                                                    .format(now);
 
-                                              String paddedString = Ctanim
-                                                  .cariKod
-                                                  .toString()
-                                                  .padLeft(5, "0");
-                                              print(Ctanim.kullanici!.KOD! +
-                                                  "-" +
-                                                  formattedDate +
-                                                  paddedString);
-                                              cari.KOD =
-                                                  Ctanim.kullanici!.KOD! +
-                                                      "-" +
-                                                      formattedDate +
-                                                      paddedString;
-                                              cari.PLASIYERID = int.parse(
-                                                  Ctanim.kullanici!.KOD!);
-                                              cari.ADI = _SirketIsmi.text;
-                                              cari.ADRES = _AdresBilgileri.text;
-                                              cari.IL = _SehirSeciniz.text;
-                                              cari.ILCE = _IlceSeciniz.text;
-                                              cari.VERGI_DAIRESI =
-                                                  _VergiDairesi.text;
-                                              cari.VERGINO =
-                                                  _VergiNumarasi.text;
-                                              cari.TELEFON = _CepTelefonu.text;
-                                              cari.EMAIL = _MailAdresi.text;
-                                              cari.ACIKLAMA1 = _Aciklama.text;
-                                              cari.ACIKLAMA4 =
-                                                  _YetkiliKisi.text;
-                                              cari.AKTARILDIMI = "H";
-                                              cari.TIPI = altBayi == true
-                                                  ? "Alt Bayi"
-                                                  : "Bayi";
-                                              cari.KOSULID = seciliStokKosul != null ?
-                                                  seciliStokKosul!.ID:0;
-                                            
+                                            String paddedString = Ctanim
+                                                .cariKod
+                                                .toString()
+                                                .padLeft(5, "0");
+                                            print(Ctanim.kullanici!.KOD! +
+                                                "-" +
+                                                formattedDate +
+                                                paddedString);
+                                            cari.KOD =
+                                                Ctanim.kullanici!.KOD! +
+                                                    "-" +
+                                                    formattedDate +
+                                                    paddedString;
+                                            cari.PLASIYERID = int.parse(
+                                                Ctanim.kullanici!.KOD!);
+                                            cari.ADI = _SirketIsmi.text;
+                                            cari.ADRES = _AdresBilgileri.text;
+                                            cari.IL = _SehirSeciniz.text;
+                                            cari.ILCE = _IlceSeciniz.text;
+                                            cari.VERGI_DAIRESI =
+                                                _VergiDairesi.text;
+                                            cari.VERGINO =
+                                                _VergiNumarasi.text;
+                                            cari.TELEFON = _CepTelefonu.text;
+                                            cari.EMAIL = _MailAdresi.text;
+                                            cari.ACIKLAMA1 = _Aciklama.text;
+                                            cari.ACIKLAMA4 =
+                                                _YetkiliKisi.text;
+                                            cari.AKTARILDIMI = "H";
+                                            cari.TIPI = altBayi == true
+                                                ? "Alt Bayi"
+                                                : "Bayi";
+                                            cari.KOSULID = seciliStokKosul != null ?
+                                                seciliStokKosul!.ID:0;
+                                          
 
-                                              for (int i = 0;
-                                                  i <
-                                                      listeler.listCariAltHesap
-                                                          .length;
-                                                  i++) {
-                                                if (seciliAltHesaplar[i] ==
-                                                    true) {
-                                                  CariAltHesap yeniAltHesap = CariAltHesap(
-                                                      ALTHESAP: listeler
-                                                          .listCariAltHesap[i]
-                                                          .ALTHESAP,
-                                                      DOVIZID: listeler
-                                                          .listCariAltHesap[i]
-                                                          .DOVIZID,
-                                                      VARSAYILAN: listeler
-                                                                  .listCariAltHesap[
-                                                                      i]
-                                                                  .VARSAYILAN ==
-                                                              "E"
-                                                          ? "E"
-                                                          : "H",
-                                                      ALTHESAPID: listeler
-                                                          .listCariAltHesap[i]
-                                                          .ALTHESAPID,
-                                                      ZORUNLU: listeler
-                                                                  .listCariAltHesap[
-                                                                      i]
-                                                                  .ZORUNLU ==
-                                                              "E"
-                                                          ? "E"
-                                                          : "H");
+                                            for (int i = 0;
+                                                i <
+                                                    listeler.listCariAltHesap
+                                                        .length;
+                                                i++) {
+                                              if (seciliAltHesaplar[i] ==
+                                                  true) {
+                                                CariAltHesap yeniAltHesap = CariAltHesap(
+                                                    ALTHESAP: listeler
+                                                        .listCariAltHesap[i]
+                                                        .ALTHESAP,
+                                                    DOVIZID: listeler
+                                                        .listCariAltHesap[i]
+                                                        .DOVIZID,
+                                                    VARSAYILAN: listeler
+                                                                .listCariAltHesap[
+                                                                    i]
+                                                                .VARSAYILAN ==
+                                                            "E"
+                                                        ? "E"
+                                                        : "H",
+                                                    ALTHESAPID: listeler
+                                                        .listCariAltHesap[i]
+                                                        .ALTHESAPID,
+                                                    ZORUNLU: listeler
+                                                                .listCariAltHesap[
+                                                                    i]
+                                                                .ZORUNLU ==
+                                                            "E"
+                                                        ? "E"
+                                                        : "H");
 
-                                                  cari.ALTHESAPLAR =
-                                                      cari.ALTHESAPLAR != ""
-                                                          ? cari.ALTHESAPLAR! +
-                                                              "," +
-                                                              yeniAltHesap
-                                                                  .ALTHESAPID
-                                                                  .toString()
-                                                          : yeniAltHesap
-                                                              .ALTHESAPID
-                                                              .toString();
-                                                }
+                                                cari.ALTHESAPLAR =
+                                                    cari.ALTHESAPLAR != ""
+                                                        ? cari.ALTHESAPLAR! +
+                                                            "," +
+                                                            yeniAltHesap
+                                                                .ALTHESAPID
+                                                                .toString()
+                                                        : yeniAltHesap
+                                                            .ALTHESAPID
+                                                            .toString();
                                               }
-                                              print("ALT HESAPLAR");
-                                              print(cari.ALTHESAPLAR);
-
-                                              await VeriIslemleri()
-                                                  .cariEkle(cari);
-                                              await VeriIslemleri().cariGetir();
-                                              Ctanim.cariKod =
-                                                  Ctanim.cariKod! + 1;
-                                              await SharedPrefsHelper
-                                                  .cariKoduKaydet(
-                                                      Ctanim.cariKod!);
-
-                                              seciliAltHesaplar.clear();
-                                              seciliKosullar.clear();
-                                              for (var element in listeler
-                                                  .listCariAltHesap) {
-                                                seciliAltHesaplar.add(
-                                                    element.VARSAYILAN == "E" &&
-                                                            element.ZORUNLU ==
-                                                                "E"
-                                                        ? true
-                                                        : false);
-                                              }
-                                              if (listeler.listStokKosulAna
-                                                  .isNotEmpty) {
-                                                for (var element2 in listeler
-                                                    .listStokKosulAna) {
-                                                  seciliKosullar.add(false);
-                                                }
-                                                seciliKosullar[0] = true;
-                                                seciliStokKosul = listeler
-                                                    .listStokKosulAna[0];
-                                              }
-                                              setState(() {});
-
-                                              Navigator.pop(context);
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return CustomAlertDialog(
-                                                      align: TextAlign.left,
-                                                      title: 'Başarılı',
-                                                      message:
-                                                          'Cari kaydı yapıldı.',
-                                                      onPres: () async {
-                                                        sayfayiTemizle();
-                                                        Navigator.pop(context);
-                                                      },
-                                                      buttonText: 'Tamam',
-                                                    );
-                                                  });
-                                            } else {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return CustomAlertDialog(
-                                                      align: TextAlign.left,
-                                                      title: 'Hata',
-                                                      message:
-                                                          'Yeni cari eklemede cari adı, mail adresi, telefon numarası ve adres bilgileri boş bırakılamaz.',
-                                                      onPres: () async {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      buttonText: 'Geri',
-                                                    );
-                                                  });
                                             }
-                                          },
-                                          icon: Icon(Icons.save),
-                                          label: Text(
-                                            "Kaydet",
-                                            style: TextStyle(fontSize: 15),
-                                          ),
-                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.green,
-                                          onPrimary: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
+                                            print("ALT HESAPLAR");
+                                            print(cari.ALTHESAPLAR);
+
+                                            await VeriIslemleri()
+                                                .cariEkle(cari);
+                                            await VeriIslemleri().cariGetir();
+                                            Ctanim.cariKod =
+                                                Ctanim.cariKod! + 1;
+                                            await SharedPrefsHelper
+                                                .cariKoduKaydet(
+                                                    Ctanim.cariKod!);
+
+                                            seciliAltHesaplar.clear();
+                                            seciliKosullar.clear();
+                                            for (var element in listeler
+                                                .listCariAltHesap) {
+                                              seciliAltHesaplar.add(
+                                                  element.VARSAYILAN == "E" &&
+                                                          element.ZORUNLU ==
+                                                              "E"
+                                                      ? true
+                                                      : false);
+                                            }
+                                            if (listeler.listStokKosulAna
+                                                .isNotEmpty) {
+                                              for (var element2 in listeler
+                                                  .listStokKosulAna) {
+                                                seciliKosullar.add(false);
+                                              }
+                                              seciliKosullar[0] = true;
+                                              seciliStokKosul = listeler
+                                                  .listStokKosulAna[0];
+                                            }
+                                            setState(() {});
+
+                                            Navigator.pop(context);
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return CustomAlertDialog(
+                                                    align: TextAlign.left,
+                                                    title: 'Başarılı',
+                                                    message:
+                                                        'Cari kaydı yapıldı.',
+                                                    onPres: () async {
+                                                      sayfayiTemizle();
+                                                      Navigator.pop(context);
+                                                    },
+                                                    buttonText: 'Tamam',
+                                                  );
+                                                });
+                                          } else {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return CustomAlertDialog(
+                                                    align: TextAlign.left,
+                                                    title: 'Hata',
+                                                    message:
+                                                        'Yeni cari eklemede cari adı, mail adresi, telefon numarası ve adres bilgileri boş bırakılamaz.',
+                                                    onPres: () async {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    buttonText: 'Geri',
+                                                  );
+                                                });
+                                          }
+                                        },
+                                        icon: Icon(Icons.data_saver_off),
+                                        label: Text(
+                                          "Kaydet",
+                                          style: TextStyle(fontSize: 15),
                                         ),
+                                       style: ElevatedButton.styleFrom(
+                                        primary: Colors.green,
+                                        onPrimary: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
                                         ),
+                                      ),
                                       ),
                                     )
                             ],
