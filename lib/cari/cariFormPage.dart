@@ -926,6 +926,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                           cari.AKTARILDIMI = "H";
                                           cari.ALTHESAPLAR =
                                               widget.cari.ALTHESAPLAR;
+                                          cari.KOSULID = widget.cari.KOSULID;    
                                           cari.TIPI = altBayi == true
                                               ? "Alt Bayi"
                                               : "Bayi";
@@ -968,7 +969,7 @@ class _CariFormPageState extends State<CariFormPage> {
                                       ),
                                     )
                                   : Container(
-                                      height:
+                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.1,
                                       width:
@@ -1151,14 +1152,14 @@ class _CariFormPageState extends State<CariFormPage> {
                                             "Kaydet",
                                             style: TextStyle(fontSize: 15),
                                           ),
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.green,
-                                            onPrimary: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0),
-                                            ),
+                                         style: ElevatedButton.styleFrom(
+                                          primary: Colors.green,
+                                          onPrimary: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
                                           ),
+                                        ),
                                         ),
                                       ),
                                     )
