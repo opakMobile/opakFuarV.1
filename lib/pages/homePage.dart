@@ -119,7 +119,8 @@ class _HomePageState extends State<HomePage> {
                  //   "Versiyon:2.1.0",// bayi seçili parametreli
                  //   "Versiyon:2.1.1",// bayi seçili gelmede değişme hatası
                   //  "Versiyon:2.1.2",// il ilçe eklendi
-                  "Versiyon:2.1.3", // barkodcarpan 1 gelirse koddan eklesin
+                //  "Versiyon:2.1.3", // barkodcarpan 1 gelirse koddan eklesin
+                  "Versiyon:2.1.4", // yeni cari eklemeye alt hesap ve koşul eklendi
                     
 
                     style: TextStyle(fontSize: 7),
