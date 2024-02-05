@@ -248,334 +248,355 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
             ),
             buttonVarMi: true),
         body: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (BuildContext context, int index) {
-                        return altHesaplar[index];
-                      },
-                      itemCount: altHesaplar.length,
-                      scrollDirection: Axis.horizontal,
+          child: Padding(
+            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext context, int index) {
+                      return altHesaplar[index];
+                    },
+                    itemCount: altHesaplar.length,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text("Alt Hesap Ayarla"),
+                        onPressed: () {
+                          fisEx.fis!.value.fisStokListesi
+                              .where((element) =>
+                                  element.AltHesapDegistir == true)
+                              .forEach((element) {
+                            element.AltHesapDegistir = false;
+                          });
+                          Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AltHesapAyarla()))
+                              .then((value) => setState(() {}));
+                        },
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    fisEx.fis!.value.cariKart.ADI!,
+                    maxLines: 1,
+                    style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
+                  ),
+                ),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  elevation: 5,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01,
+                        ),
+                        Text("Satış Toplamı"),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          height: MediaQuery.of(context).size.height * 0.04,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Center(
+                              child: Text(
+                            Ctanim.donusturMusteri(
+                              fisEx.fis!.value.TOPLAM.toString(),
+                            ),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                children: [
+                                  Text("İskonto Toplamı"),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.4,
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                            0.04,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      Ctanim.donusturMusteri(
+                                        fisEx.fis!.value.INDIRIM_TOPLAMI
+                                            .toString(),
+                                      ),
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.blueAccent,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text("KDV Toplamı"),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.4,
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                            0.04,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      Ctanim.donusturMusteri(
+                                        fisEx.fis!.value.KDVTUTARI.toString(),
+                                      ),
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.blueAccent,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01,
+                        ),
+                        Text("Sipariş Toplamı"),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.65,
+                          height: MediaQuery.of(context).size.height * 0.05,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Center(
+                              child: Text(
+                            Ctanim.donusturMusteri(
+                              fisEx.fis!.value.GENELTOPLAM.toString(),
+                            ),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                      ],
                     ),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.green,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
+                    ? SizedBox(
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: TextFormField(
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                            controller: genelIskonto1Controller,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value == "") {
+                                  fisEx.fis!.value.ISK1 = 0.0;
+                                  Ctanim.genelToplamHesapla(fisEx);
+                                } else {
+                                  fisEx.fis!.value.ISK1 = Ctanim
+                                      .noktadanSonraAlinacak(double.tryParse(
+                                              genelIskonto1Controller.text) ??
+                                          0.0);
+                                  Ctanim.genelToplamHesapla(fisEx);
+                                }
+                              });
+                            },
+                            maxLines: 1,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,2}')),
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: InputDecoration(
+                              /* contentPadding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * 0.05,
+                          ),*/
+
+                              hintText: 'Genel İskonto (ör:50)',
+                              hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
                             ),
                           ),
-                          child: Text("Alt Hesap Ayarla"),
-                          onPressed: () {
-                            fisEx.fis!.value.fisStokListesi
-                                .where((element) =>
-                                    element.AltHesapDegistir == true)
-                                .forEach((element) {
-                              element.AltHesapDegistir = false;
-                            });
-                            Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AltHesapAyarla()))
-                                .then((value) => setState(() {}));
-                          },
                         ),
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      fisEx.fis!.value.cariKart.ADI!,
-                      maxLines: 1,
-                      style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
-                    ),
-                  ),
-                  Card(
+                      )
+                    : Container(),
+
+                // ! sipariş açıklaması
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.17,
+                  child: Card(
+                    elevation: 5,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    elevation: 5,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          Text("Satış Toplamı"),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            height: MediaQuery.of(context).size.height * 0.04,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.grey),
-                            ),
-                            child: Center(
-                                child: Text(
-                              Ctanim.donusturMusteri(
-                                fisEx.fis!.value.TOPLAM.toString(),
-                              ),
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.blueAccent,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Column(
-                                  children: [
-                                    Text("İskonto Toplamı"),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.04,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: Colors.grey),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                        Ctanim.donusturMusteri(
-                                          fisEx.fis!.value.INDIRIM_TOPLAMI
-                                              .toString(),
-                                        ),
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.blueAccent,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text("KDV Toplamı"),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.04,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: Colors.grey),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                        Ctanim.donusturMusteri(
-                                          fisEx.fis!.value.KDVTUTARI.toString(),
-                                        ),
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.blueAccent,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          Text("Sipariş Toplamı"),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.65,
-                            height: MediaQuery.of(context).size.height * 0.05,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.grey),
-                            ),
-                            child: Center(
-                                child: Text(
-                              Ctanim.donusturMusteri(
-                                fisEx.fis!.value.GENELTOPLAM.toString(),
-                              ),
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  Ctanim.kullanici!.GISKDEGISTIRILSIN1 == "E"
-                      ? SizedBox(
-                          child: Card(
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            child: TextFormField(
-                              style: TextStyle(
-                                fontSize: 14.0,
-                              ),
-                              controller: genelIskonto1Controller,
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                setState(() {
-                                  if (value == "") {
-                                    fisEx.fis!.value.ISK1 = 0.0;
-                                    Ctanim.genelToplamHesapla(fisEx);
-                                  } else {
-                                    fisEx.fis!.value.ISK1 = Ctanim
-                                        .noktadanSonraAlinacak(double.tryParse(
-                                                genelIskonto1Controller.text) ??
-                                            0.0);
-                                    Ctanim.genelToplamHesapla(fisEx);
-                                  }
-                                });
-                              },
-                              maxLines: 1,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+\.?\d{0,2}')),
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              decoration: InputDecoration(
-                                /* contentPadding: EdgeInsets.symmetric(
-                              vertical: MediaQuery.of(context).size.height * 0.05,
-                            ),*/
+                    child: TextFormField(
+                      controller: aciklamaController,
+                      onChanged: (value) {
+                        fisEx.fis!.value.ACIKLAMA1 = value;
+                      },
+                      maxLines: 8,
+                      decoration: InputDecoration(
+                        /* contentPadding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * 0.05,
+                          ),*/
 
-                                hintText: 'Genel İskonto (ör:50)',
-                                hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(),
-
-                  // ! sipariş açıklaması
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.17,
-                    child: Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: TextFormField(
-                        controller: aciklamaController,
-                        onChanged: (value) {
-                          fisEx.fis!.value.ACIKLAMA1 = value;
-                        },
-                        maxLines: 8,
-                        decoration: InputDecoration(
-                          /* contentPadding: EdgeInsets.symmetric(
-                              vertical: MediaQuery.of(context).size.height * 0.05,
-                            ),*/
-
-                          hintText: 'Sipariş Açıklaması',
-                          hintStyle: TextStyle(
-                            color: Colors.grey.shade400,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14.0,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
+                        hintText: 'Sipariş Açıklaması',
+                        hintStyle: TextStyle(
+                          color: Colors.grey.shade400,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.0,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                       SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * .9,
+                    child: CheckboxListTile(
+                      title: Text("Bayi seçili gelsin"),
+                      value: Ctanim.kullanici!.BAYISECILI == "E" ? true : false,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          if (value == true) {
+                            Ctanim.kullanici!.BAYISECILI = "E";
+                          } else {
+                            Ctanim.kullanici!.BAYISECILI = "H";
+                          }
+                        });
+                      },
+                    ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    child: Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * .8,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.green,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                ),
+           
+                 SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.001,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  child: Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * .9,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed: () async {
-                            List<Cari> bayiler = [];
-                            for (var element in listeler.listCari) {
-                              if (element.TIPI == "Bayi" ||
-                                  element.TIPI == "Alt Bayi") {
-                                bayiler.add(element);
-                              }
+                        ),
+                        onPressed: () async {
+                          List<Cari> bayiler = [];
+                          for (var element in listeler.listCari) {
+                            if (element.TIPI == "Bayi" ||
+                                element.TIPI == "Alt Bayi") {
+                              bayiler.add(element);
                             }
-                            final value = await Navigator.push(
+                          }
+                          final value = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BayiSec(
+                                      bayiList: bayiler,
+                                    )),
+                          ).then((value) {
+                            setState(() {});
+                          });
+                     
+                          /*
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => BayiSec(
                                         bayiList: bayiler,
-                                      )),
-                            ).then((value) {
-                              setState(() {});
-                            });
-                       
-                            /*
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BayiSec(
-                                          bayiList: bayiler,
-                                        )));*/
-                          },
-                          child: Text(
-                            fisEx.fis!.value.ACIKLAMA4 != "" &&
-                                    fisEx.fis!.value.ACIKLAMA5 != ""
-                                ? "Bayi : " +
-                                    fisEx.fis!.value!.ACIKLAMA4! +
-                                    " - " +
-                                    fisEx.fis!.value!.ACIKLAMA5!
-                                : "Bayi Seç",
-                          ),
+                                      )));*/
+                        },
+                        child: Text(
+                          fisEx.fis!.value.ACIKLAMA4 != "" &&
+                                  fisEx.fis!.value.ACIKLAMA5 != ""
+                              ? "Bayi : " +
+                                  fisEx.fis!.value!.ACIKLAMA4! +
+                                  " - " +
+                                  fisEx.fis!.value!.ACIKLAMA5!
+                              : "Bayi Seç",
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                ),
+              
+              ],
             ),
           ),
         ),

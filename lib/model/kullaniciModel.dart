@@ -224,7 +224,7 @@ class KullaniciModel {
     OTOMATIKSTOKKODU = json['OTOMATIKSTOKKODU'] ?? "OTOMATIKSTOKKODU";
     PDFACIKLAMA = json['PDFACIKLAMA'] ?? "PDFACIKLAMA";
     KULLANICIADI = json['KULLANICIADI'] ?? "KULLANICIADI";
-    BAYISECILI = json['BAYISECILI'] ?? "BAYISECILI";
+    BAYISECILI =json['BAYISECILI'] ?? "H";
     FUARADI = "";
   }
 
@@ -323,7 +323,7 @@ class KullaniciModel {
     data['OTOMATIKSTOKKODU'] = OTOMATIKSTOKKODU;
     data['PDFACIKLAMA'] = PDFACIKLAMA;
     data['KULLANICIADI'] = KULLANICIADI ?? "KULLANICIADI";
-    data['BAYISECILI'] = BAYISECILI ?? "BAYISECILI";
+    data['BAYISECILI'] = BAYISECILI ?? "H";
     data['FUARADI'] = "";
     return data;
   }

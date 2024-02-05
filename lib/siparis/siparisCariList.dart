@@ -197,6 +197,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                       for(var elemnt in listeler.listCariAltHesap){
                                         if(elemnt.ZORUNLU == "E" && elemnt.VARSAYILAN == "E"){
                                           cari.cariAltHesaplar.add(elemnt);
+                                          vs = elemnt;
                                         }
                                       }
                                     }

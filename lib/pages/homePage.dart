@@ -118,7 +118,8 @@ class _HomePageState extends State<HomePage> {
                   //  "Versiyon:2.0.9",//fuar güncelleme,pdf wp
                  //   "Versiyon:2.1.0",// bayi seçili parametreli
                  //   "Versiyon:2.1.1",// bayi seçili gelmede değişme hatası
-                    "Versiyon:2.1.2",// il ilçe eklendi
+                  //  "Versiyon:2.1.2",// il ilçe eklendi
+                  "Versiyon:2.1.3", // barkodcarpan 1 gelirse koddan eklesin
                     
 
                     style: TextStyle(fontSize: 7),

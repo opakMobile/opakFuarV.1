@@ -42,7 +42,11 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
     //doğrudan cari alt hesapları verecez
     WidgetsBinding.instance!.addObserver(this);
 
-    seciliAltHesap = widget.cari.cariAltHesaplar.first;
+
+
+    
+
+    seciliAltHesap = widget.varsayilan;
 
     for (int i = 0; i < stokKartEx.searchList.length; i++) {
       String tempMiktar = stokKartEx.searchList[i].SACIKLAMA9!.split(".")[0];

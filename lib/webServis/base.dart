@@ -13,6 +13,7 @@ import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/fuarModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/model/stokKosulAnaModel.dart';
 import 'package:opak_fuar/model/stokKosulModel.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:xml/xml.dart' as xml;
@@ -49,7 +50,9 @@ class BaseService {
         kullaniciKodu:
             Ctanim.kullanici!.KOD!); //aktarilmayanVarmi: aktarilmayanVarmi);
     await getirCariAltHesap(
-        sirket: Ctanim.sirket!); //aktarilmayanVarMi:aktarilmayanVarmi);
+        sirket: Ctanim.sirket!); 
+        await getirStokKosulAna(sirket: Ctanim.sirket!); 
+        //aktarilmayanVarMi:aktarilmayanVarmi);
   }
 
   Future<void> stokVerileriGuncelle() async {
@@ -57,6 +60,7 @@ class BaseService {
         sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);
     //valla billa
     await getirStokKosul(sirket: Ctanim.sirket!);
+    await getirStokKosulAna(sirket: Ctanim.sirket!); 
   }
 
   String temizleKontrolKarakterleri(String metin) {
@@ -1282,6 +1286,67 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.
     } catch (e) {
       Exception('Hata: $e');
       return hata;
+    }
+  }
+    Future<String> getirStokKosulAna({required String sirket}) async {
+    var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/GetirStokKosulAna'
+    };
+
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetirStokKosulAna xmlns="http://tempuri.org/">
+      <Sirket>$sirket</Sirket>
+    </GetirStokKosulAna>
+  </soap:Body>
+</soap:Envelope>
+''';
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+        Map<String, dynamic> jsonData =
+            jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+        if (gelenHata.Hata == "true") {
+          return gelenHata.HataMesaj!;
+        } else {
+          await VeriIslemleri().StokKosulAnaTemizle();
+          listeler.listStokKosulAna.clear();
+
+          List<dynamic> jsonData =
+              jsonDecode(temizleKontrolKarakterleri(gelenHata.HataMesaj!));
+          List<StokKosulAnaModel> tempList = [];
+          tempList = List<StokKosulAnaModel>.from(
+              jsonData.map((model) => StokKosulAnaModel.fromJson(model)));
+
+          tempList.forEach((webservisStokKosul) async {
+            await VeriIslemleri().stokKosulAnaEkle(webservisStokKosul);
+          });
+
+          await VeriIslemleri().stokKosulAnaGetir();
+          return "";
+        }
+      } else {
+        Exception(
+            'Ana Stok Kosul verisi alınamadı. StatusCode: ${response.statusCode}');
+        return "Ana Stok Kosul  Getirilirken İstek Oluşturulamadı. " +
+            response.statusCode.toString();
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return "Ana Stok Kosul için Webservisten veri çekilemedi. Hata Mesajı : " +
+          e.toString();
     }
   }
   

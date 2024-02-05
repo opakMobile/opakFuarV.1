@@ -5,6 +5,7 @@ import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/fuarModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/model/stokKosulAnaModel.dart';
 import 'package:opak_fuar/model/stokKosulModel.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
@@ -616,6 +617,46 @@ class VeriIslemleri {
       print("Hata: $e");
     }
   }
+    Future<List<StokKosulAnaModel>?> stokKosulAnaGetir() async {
+    //   var result = await Ctanim.db?.query("TBLCARISB");
+    List<Map<String, dynamic>> maps = await Ctanim.db?.query("TBLSTOKKOSULANASB");
+    listeler.listStokKosulAna =
+        List.generate(maps.length, (i) => StokKosulAnaModel.fromJson(maps[i]));
+
+    return listeler.listStokKosulAna;
+  }
+
+  //database cari ekle
+  Future<int?> stokKosulAnaEkle(StokKosulAnaModel stokKosul) async {
+    try {
+      var result =
+          await Ctanim.db?.insert("TBLSTOKKOSULANASB", stokKosul.toJson());
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> StokKosulAnaTemizle() async {
+    try {
+      // Veritabanında "TBLCARISTOKKOSULSB" tablosunu temizle.
+      await Ctanim.db?.delete("TBLSTOKKOSULANASB");
+      print("TBLSTOKKOSULANASB tablosu temizlendi.");
+
+      // "TBLCARISTOKKOSULSB" tablosunu sil.
+      await Ctanim.db?.execute("DROP TABLE IF EXISTS TBLSTOKKOSULANASB");
+
+      // "TBLCARISTOKKOSULSB" tablosunu yeniden oluştur.
+      await Ctanim.db?.execute("""CREATE TABLE TBLSTOKKOSULANASB (
+     ID INTEGER,
+      ADI TEXT
+      )""");
+
+      print("TBLSTOKKOSULANASB tablosu temizlendi ve yeniden oluşturuldu.");
+    } catch (e) {
+      print("Hata: $e");
+    }
+  }
 
   Future<int> veriGetir() async {
     await cariGetir();
@@ -628,6 +669,7 @@ class VeriIslemleri {
     await dahaFazlaBarkodGetir();
     await cariAltHesapGetir();
     await fuarModelGetir();
+    await stokKosulAnaGetir();
 
     if (listeler.listCari.length > 0 ||
         listeler.listStok.length > 0 /* || temp3!.length > 0*/) {

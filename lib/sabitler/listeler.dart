@@ -5,6 +5,7 @@ import 'package:opak_fuar/model/cariModel.dart';
 import 'package:opak_fuar/model/olcuBirimModel.dart';
 import 'package:opak_fuar/model/raporModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/model/stokKosulAnaModel.dart';
 
 import '../model/cariKosulModel.dart';
 import '../model/cariStokKosulModel.dart';
@@ -103,6 +104,7 @@ class listeler {
   static List<CariAltHesap> aktarilmayanAlthesaplar = [];
   static List<KullaniciYetki> yetki = [];
   static List<FuarModel> listFuar = [];
+  static List<StokKosulAnaModel> listStokKosulAna = [];
   static List<bool> plasiyerYetkileri = [
     false,
     false,

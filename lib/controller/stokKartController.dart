@@ -1106,16 +1106,22 @@ String turkishToEnglish(String input) {
           if (cariKod == "") {
             tempList.assignAll(results);
           } else {
-            if (results[0].BARKODCARPAN1! > 0) {
+            if (results[0].BARKODCARPAN1! > 1) {
+              
               results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN1!;
               results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD1!;
-            } else {
-              results[0].guncelDegerler!.carpan = 1.0;
+            } 
+            else {
+              results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
               results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
             }
+
+
             if (results[0].BARKODFIYAT1! > 0) {
+               results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN1!;
               results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD1!;
               results[0].guncelDegerler!.fiyat = results[0].BARKODFIYAT1;
+
               results[0].guncelDegerler!.iskonto1 = results[0].BARKODISK1;
               results[0].guncelDegerler!.seciliFiyati =
                   "Barkod"; // hata verebilir
@@ -1171,14 +1177,15 @@ String turkishToEnglish(String input) {
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
-              if (results[0].BARKODCARPAN2! > 0) {
+              if (results[0].BARKODCARPAN2! > 1) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN2!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD2!;
               } else {
-                results[0].guncelDegerler!.carpan = 1.0;
+               results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT2! > 0) {
+                results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN2!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD2!;
                 results[0].guncelDegerler!.fiyat = results[0].BARKODFIYAT2;
                 results[0].guncelDegerler!.iskonto1 = results[0].BARKODISK2;
@@ -1236,14 +1243,15 @@ String turkishToEnglish(String input) {
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
-              if (results[0].BARKODCARPAN3! > 0) {
+              if (results[0].BARKODCARPAN3! > 1) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN3!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD3!;
               } else {
-                results[0].guncelDegerler!.carpan = 1.0;
+               results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT3! > 0) {
+                results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN3!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD3!;
                 results[0].guncelDegerler!.fiyat = results[0].BARKODFIYAT3;
                 results[0].guncelDegerler!.iskonto1 = results[0].BARKODISK3;
@@ -1302,14 +1310,15 @@ String turkishToEnglish(String input) {
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
-              if (results[0].BARKODCARPAN4! > 0) {
+              if (results[0].BARKODCARPAN4! > 1) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN4!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD4!;
               } else {
-                results[0].guncelDegerler!.carpan = 1.0;
+               results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT4! > 0) {
+                results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN4!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD4!;
                 results[0].guncelDegerler!.fiyat = results[0].BARKODFIYAT4;
                 results[0].guncelDegerler!.iskonto1 = results[0].BARKODISK4;
@@ -1368,14 +1377,15 @@ String turkishToEnglish(String input) {
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
-              if (results[0].BARKODCARPAN5! > 0) {
+              if (results[0].BARKODCARPAN5! > 1) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN5!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD5!;
               } else {
-                results[0].guncelDegerler!.carpan = 1.0;
+              results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT5! > 0) {
+                results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN5!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD5!;
                 results[0].guncelDegerler!.fiyat = results[0].BARKODFIYAT5;
                 results[0].guncelDegerler!.iskonto1 = results[0].BARKODISK5;
@@ -1434,14 +1444,15 @@ String turkishToEnglish(String input) {
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
-              if (results[0].BARKODCARPAN6! > 0) {
+              if (results[0].BARKODCARPAN6! > 1) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN6!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD6!;
               } else {
-                results[0].guncelDegerler!.carpan = 1.0;
+                results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT6! > 0) {
+                results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN6!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD6!;
                 results[0].guncelDegerler!.fiyat = results[0].BARKODFIYAT6;
                 results[0].guncelDegerler!.iskonto1 = results[0].BARKODISK6;

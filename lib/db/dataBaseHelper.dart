@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 13; // atarken 10 yap
+  static final _databaseVersion = 14;
 
   static Database? _database;
 
@@ -47,6 +47,20 @@ class DatabaseHelper {
     print(oldVersion);
     print(newVersion);
     for (int i = oldVersion+1; i <= newVersion; i++) {
+      /*
+      CREATE TABLE TBLSTOKKOSULANASB (
+      ID INTEGER,
+      ADI TEXT
+    )
+      */
+      if (i == 14) {
+        String Sorgu = """
+    CREATE TABLE IF NOT EXISTS TBLSTOKKOSULANASB (
+      ID INTEGER,
+      ADI TEXT
+    )""";
+        await db.execute(Sorgu);
+      }
       if (i == 13) {
         String Sorgu = """
     CREATE TABLE IF NOT EXISTS TBLFUARMODELSB (
@@ -572,6 +586,16 @@ class DatabaseHelper {
       KOD TEXT,
       ADI TEXT,
       SIRA INTEGER
+    )""";
+      await db.execute(Sorgu);
+    } on PlatformException catch (e) {
+      print(e);
+    }
+       try {
+      String Sorgu = """
+    CREATE TABLE TBLSTOKKOSULANASB (
+      ID INTEGER,
+      ADI TEXT
     )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {

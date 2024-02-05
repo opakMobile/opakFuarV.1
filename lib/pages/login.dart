@@ -210,6 +210,7 @@ class _LoginPageState extends State<LoginPage> {
               } else {
                 String genelHata = "";
                 List<String?> hatalar = [];
+                //
             
                 hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
                 hatalar.add(await stokKartEx.servisStokGetir());
@@ -225,6 +226,7 @@ class _LoginPageState extends State<LoginPage> {
                     kullaniciKodu: Ctanim.kullanici!.KOD!));
                 hatalar.add(
                     await bs.getFuar(sirket: Ctanim.sirket!));
+                     hatalar.add(await bs.getirStokKosulAna(sirket: Ctanim.sirket!));
 
                 if (hatalar.length > 0) {
                   for (var element in hatalar) {
