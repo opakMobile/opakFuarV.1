@@ -267,7 +267,7 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
       } else if (el.BARKOD3 == element.STOKKOD) {
         stok.add(el);
         barkodMu = true;
-        if (stok.first.BARKODCARPAN3! > 0) {
+        if (stok.first.BARKODCARPAN3! >   0) {
           stok.first.guncelDegerler!.carpan = stok.first.BARKODCARPAN3!;
           stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD3!;
         } else {
@@ -451,7 +451,6 @@ class _AltHesapOnaylaVeDegistirState extends State<AltHesapOnaylaVeDegistir> {
     fisEx.fiseStokEkle(
       // belgeTipi: widget.belgeTipi,
       altHesapDegistirMi: true,
-
       malFazlasi: element.MALFAZLASI,
       ALTHESAP: seciliAltHesap!.ALTHESAP!,
       urunListedenMiGeldin: true,

@@ -65,6 +65,8 @@ class _CariFormPageState extends State<CariFormPage> {
       _CepTelefonu.text = widget.cari.TELEFON!;
       _MailAdresi.text = widget.cari.EMAIL!;
       _Aciklama.text = widget.cari.ACIKLAMA1!;
+    }else{
+      altBayi = true;
     }
     for (var element in listeler.listCariAltHesap) {
       seciliAltHesaplar.add(
@@ -841,6 +843,8 @@ class _CariFormPageState extends State<CariFormPage> {
                                                     altBayi = value!;
                                                     if (altBayi == true) {
                                                       bayi = false;
+                                                    }else{
+                                                      bayi = true;
                                                     }
                                                   });
                                                 }),
@@ -866,6 +870,8 @@ class _CariFormPageState extends State<CariFormPage> {
                                                     bayi = value!;
                                                     if (bayi == true) {
                                                       altBayi = false;
+                                                    }else{
+                                                      altBayi = true;
                                                     }
                                                   });
                                                 }),

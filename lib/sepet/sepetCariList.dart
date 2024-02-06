@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,7 @@ import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/sepet/sepetDetay.dart';
 import 'package:opak_fuar/siparis/PdfOnizleme.dart';
+import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 import 'package:opak_fuar/webServis/base.dart';
 import 'package:uuid/uuid.dart';
@@ -201,7 +203,108 @@ class _SepetCariListState extends State<SepetCariList> {
     return SafeArea(
       child: Scaffold(
         // Gönderilecek fişleri gönder butonu
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton:
+        
+        localAktarildiMi == false ? SpeedDial( 
+          animatedIcon: AnimatedIcons.menu_arrow,
+          backgroundColor: Color.fromARGB(255, 3, 4, 4),
+          buttonSize: Size(65, 65),
+          children: [
+            SpeedDialChild(
+                backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                child: Icon(
+                  Icons.swap_vert_circle,
+                  color: Colors.blue,
+                  size: 32,
+                ),
+                label: "Siparşin Carisini Değiştir",
+                onTap: () async {
+                List<Fis> secililer = tempFis
+                    .where((element) => element.seciliFisGonder == true)
+                    .toList();
+                    if(secililer.length == 1){
+                      fisEx.fis!.value = secililer[0];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SiparisCariList(
+                                    islem: true,
+                                  ))).then((value) async {
+                                    fisEx.list_tum_fis.clear();
+                                                await fisEx
+                                                    .listTumFisleriGetir();
+                                                setState(() {
+                                                  tempFis.clear();
+                                                  for (var element
+                                                      in fisEx.list_tum_fis) {
+                                                    if (element.AKTARILDIMI ==
+                                                        localAktarildiMi) {
+                                                      tempFis.add(element);
+                                                    }
+                                                  }
+                                                });
+                                  });
+                    }else{
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomAlertDialog(
+                            align: TextAlign.left,
+                            title: 'Uyarı',
+                            message: 'Lütfen bir adet sipariş seçiniz.',
+                            onPres: () async {
+                              Navigator.pop(context);
+                            },
+                            buttonText: 'Tamam',
+                          );
+                        });
+                    }
+                }),
+            SpeedDialChild(
+                backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                child: Icon(
+                  Icons.file_copy,
+                  color: Colors.orange,
+                  size: 32,
+                ),
+                label: "Siparişi Kopyala",
+                onTap: () async {
+                  showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomAlertDialog(
+                            align: TextAlign.left,
+                            title: 'Bilgilendirme',
+                            message: 'Çalışmalarımız devam etmektedir. Bu işlem de kısa sürede hizmetinizde olacaktır.',
+                            onPres: () async {
+                              Navigator.pop(context);
+                            },
+                            buttonText: 'Tamam',
+                          );
+                        });
+                 
+                }),
+            SpeedDialChild(
+                backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                child: Icon(
+                  Icons.send,
+                  color: Colors.green,
+                  size: 32,
+                ),
+                label: "Sipariş(ler)i Gönder",
+                onTap: () async {
+                   await seciliFisGonder(
+                context,
+                tempFis
+                    .where((element) => element.seciliFisGonder == true)
+                    .toList());
+                }),
+          ],
+        ):Container(),
+        
+        
+        /*
+        FloatingActionButton(
           onPressed: () async {
             await seciliFisGonder(
                 context,
@@ -211,6 +314,7 @@ class _SepetCariListState extends State<SepetCariList> {
           },
           child: Icon(Icons.send),
         ),
+        */
         bottomNavigationBar: bottombarDizayn(context),
         body: Container(
           width: MediaQuery.of(context).size.width,
@@ -1075,3 +1179,4 @@ class _SepetCariListState extends State<SepetCariList> {
     );
   }
 }
+

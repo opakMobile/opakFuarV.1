@@ -295,6 +295,7 @@ class Ctanim {
     String result = veri.toStringAsFixed(2);
     return double.parse(result);
   }
+  
 
   List<Map<String, dynamic>> jsonIlIlce = [
     {
