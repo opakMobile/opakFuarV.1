@@ -53,6 +53,7 @@ class StokKartController extends GetxController {
     double iskontoDegeri4 = 0;
     double iskontoDegeri5 = 0;
     double iskontoDegeri6 = 0;
+    Stok.guncelDegerler!.guncelDegerSifirla();
 
     for (var cari in listeler.listCari) {
       if (cari.KOD == CariKod) {
@@ -430,7 +431,6 @@ class StokKartController extends GetxController {
             }
           }
         } else if (Ctanim.kullanici!.SATISTIPI == "2") {
-          
           return [0, 0, seciliCari.FIYAT, false, 0.0, 0.0, 0.0, 0.0, 0.0];
         } else if (Ctanim.kullanici!.SATISTIPI == "3") {
           if (Ctanim.seciliStokFiyatListesi.ID != -1) {
@@ -730,26 +730,27 @@ class StokKartController extends GetxController {
     }
   }
 */
-String turkishToEnglish(String input) {
-  // Küçük harfe çevir
-  String lowerCaseText = input.toLowerCase();
+  String turkishToEnglish(String input) {
+    // Küçük harfe çevir
+    String lowerCaseText = input.toLowerCase();
 
-  // Türkçe karakterleri İngilizce karakterlere çevir
-  final Map<String, String> turkishToEnglishMap = {
-    'ç': 'c',
-    'ğ': 'g',
-    'ı': 'i',
-    'ö': 'o',
-    'ş': 's',
-    'ü': 'u',
-  };
+    // Türkçe karakterleri İngilizce karakterlere çevir
+    final Map<String, String> turkishToEnglishMap = {
+      'ç': 'c',
+      'ğ': 'g',
+      'ı': 'i',
+      'ö': 'o',
+      'ş': 's',
+      'ü': 'u',
+    };
 
-  for (var entry in turkishToEnglishMap.entries) {
-    lowerCaseText = lowerCaseText.replaceAll(entry.key, entry.value);
+    for (var entry in turkishToEnglishMap.entries) {
+      lowerCaseText = lowerCaseText.replaceAll(entry.key, entry.value);
+    }
+
+    return lowerCaseText;
   }
 
-  return lowerCaseText;
-}
   void searchC(
       String query,
       String cariKod,
@@ -1045,15 +1046,11 @@ String turkishToEnglish(String input) {
     // QUERY DOLUYSA
     else {
       var results;
-      
-
-      
       List<String> queryparcali = turkishToEnglish(query).split(" ");
       if (queryparcali.length == 1) {
         results = listeler.listStok
             .where((value) =>
                 turkishToEnglish(value.ADI!)
-                    
                     .contains(queryparcali[0].toLowerCase()) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.MARKA!.toLowerCase().contains(query.toLowerCase()))
@@ -1061,9 +1058,9 @@ String turkishToEnglish(String input) {
       } else if (queryparcali.length == 2) {
         results = listeler.listStok
             .where((value) =>
-                ( turkishToEnglish(value.ADI!)
+                (turkishToEnglish(value.ADI!)
                         .contains(queryparcali[0].toLowerCase()) &&
-                   turkishToEnglish(value.ADI!)
+                    turkishToEnglish(value.ADI!)
                         .contains(queryparcali[1].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.MARKA!.toLowerCase().contains(query.toLowerCase()))
@@ -1071,11 +1068,11 @@ String turkishToEnglish(String input) {
       } else if (queryparcali.length == 3) {
         results = listeler.listStok
             .where((value) =>
-                ( turkishToEnglish(value.ADI!)
+                (turkishToEnglish(value.ADI!)
                         .contains(queryparcali[0].toLowerCase()) &&
-                     turkishToEnglish(value.ADI!)
+                    turkishToEnglish(value.ADI!)
                         .contains(queryparcali[1].toLowerCase()) &&
-                     turkishToEnglish(value.ADI!)
+                    turkishToEnglish(value.ADI!)
                         .contains(queryparcali[2].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.MARKA!.toLowerCase().contains(query.toLowerCase()))
@@ -1083,13 +1080,13 @@ String turkishToEnglish(String input) {
       } else if (queryparcali.length == 4) {
         results = listeler.listStok
             .where((value) =>
-                ( turkishToEnglish(value.ADI!)
+                (turkishToEnglish(value.ADI!)
                         .contains(queryparcali[0].toLowerCase()) &&
-                     turkishToEnglish(value.ADI!)
+                    turkishToEnglish(value.ADI!)
                         .contains(queryparcali[1].toLowerCase()) &&
-                     turkishToEnglish(value.ADI!)
+                    turkishToEnglish(value.ADI!)
                         .contains(queryparcali[2].toLowerCase()) &&
-                     turkishToEnglish(value.ADI!)
+                    turkishToEnglish(value.ADI!)
                         .contains(queryparcali[3].toLowerCase())) ||
                 value.KOD!.toLowerCase().contains(query.toLowerCase()) ||
                 value.MARKA!.toLowerCase().contains(query.toLowerCase()))
@@ -1103,22 +1100,21 @@ String turkishToEnglish(String input) {
             .toList();
         //BARKOD1 İLE BULUNURSA YAPILACAKALAR
         if (results.length > 0) {
+          results[0].guncelDegerler!.guncelDegerSifirla();
           if (cariKod == "") {
             tempList.assignAll(results);
           } else {
             if (results[0].BARKODCARPAN1! > 1) {
-              
               results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN1!;
               results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD1!;
-            } 
-            else {
-              results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
+            } else {
+              results[0].guncelDegerler!.carpan =
+                  double.tryParse(results[0].SACIKLAMA9) ?? 1;
               results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
             }
 
-
             if (results[0].BARKODFIYAT1! > 0) {
-               results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN1!;
+              results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN1!;
               results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD1!;
               results[0].guncelDegerler!.fiyat = results[0].BARKODFIYAT1;
 
@@ -1141,11 +1137,24 @@ String turkishToEnglish(String input) {
                   satisTipi,
                   stokFiyatListesiModel,
                   seciliAltHesapID);
+
+              results[0].guncelDegerler.guncelBarkod = results[0].KOD!;
               results[0].guncelDegerler!.fiyat =
                   double.parse(gelenFiyatVeIskonto[0].toString());
 
               results[0].guncelDegerler!.iskonto1 =
                   double.parse(gelenFiyatVeIskonto[1].toString());
+
+              results[0].guncelDegerler!.iskonto2 =
+                  double.parse(gelenFiyatVeIskonto[4].toString());
+              results[0].guncelDegerler!.iskonto3 =
+                  double.parse(gelenFiyatVeIskonto[5].toString());
+              results[0].guncelDegerler!.iskonto4 =
+                  double.parse(gelenFiyatVeIskonto[6].toString());
+              results[0].guncelDegerler!.iskonto5 =
+                  double.parse(gelenFiyatVeIskonto[7].toString());
+              results[0].guncelDegerler!.iskonto6 =
+                  double.parse(gelenFiyatVeIskonto[8].toString());
 
               results[0].guncelDegerler!.seciliFiyati =
                   gelenFiyatVeIskonto[2].toString();
@@ -1174,6 +1183,7 @@ String turkishToEnglish(String input) {
               .toList();
           //BARKOD2 İLE BULUNURSA YAPILACAKALAR
           if (results.length > 0) {
+            results[0].guncelDegerler!.guncelDegerSifirla();
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
@@ -1181,7 +1191,8 @@ String turkishToEnglish(String input) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN2!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD2!;
               } else {
-               results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
+                results[0].guncelDegerler!.carpan =
+                    double.tryParse(results[0].SACIKLAMA9) ?? 1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT2! > 0) {
@@ -1209,9 +1220,20 @@ String turkishToEnglish(String input) {
                     seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
+                results[0].guncelDegerler.guncelBarkod = results[0].KOD!;
 
                 results[0].guncelDegerler!.iskonto1 =
                     double.parse(gelenFiyatVeIskonto[1].toString());
+                results[0].guncelDegerler!.iskonto2 =
+                    double.parse(gelenFiyatVeIskonto[4].toString());
+                results[0].guncelDegerler!.iskonto3 =
+                    double.parse(gelenFiyatVeIskonto[5].toString());
+                results[0].guncelDegerler!.iskonto4 =
+                    double.parse(gelenFiyatVeIskonto[6].toString());
+                results[0].guncelDegerler!.iskonto5 =
+                    double.parse(gelenFiyatVeIskonto[7].toString());
+                results[0].guncelDegerler!.iskonto6 =
+                    double.parse(gelenFiyatVeIskonto[8].toString());
 
                 results[0].guncelDegerler!.seciliFiyati =
                     gelenFiyatVeIskonto[2].toString();
@@ -1240,6 +1262,7 @@ String turkishToEnglish(String input) {
               .toList();
           //BARKOD3 İLE BULUNURSA YAPILACAKALAR
           if (results.length > 0) {
+            results[0].guncelDegerler!.guncelDegerSifirla();
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
@@ -1247,7 +1270,8 @@ String turkishToEnglish(String input) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN3!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD3!;
               } else {
-               results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
+                results[0].guncelDegerler!.carpan =
+                    double.tryParse(results[0].SACIKLAMA9) ?? 1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT3! > 0) {
@@ -1275,9 +1299,19 @@ String turkishToEnglish(String input) {
                     seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
-
+                results[0].guncelDegerler.guncelBarkod = results[0].KOD!;
                 results[0].guncelDegerler!.iskonto1 =
                     double.parse(gelenFiyatVeIskonto[1].toString());
+                results[0].guncelDegerler!.iskonto2 =
+                    double.parse(gelenFiyatVeIskonto[4].toString());
+                results[0].guncelDegerler!.iskonto3 =
+                    double.parse(gelenFiyatVeIskonto[5].toString());
+                results[0].guncelDegerler!.iskonto4 =
+                    double.parse(gelenFiyatVeIskonto[6].toString());
+                results[0].guncelDegerler!.iskonto5 =
+                    double.parse(gelenFiyatVeIskonto[7].toString());
+                results[0].guncelDegerler!.iskonto6 =
+                    double.parse(gelenFiyatVeIskonto[8].toString());
 
                 results[0].guncelDegerler!.seciliFiyati =
                     gelenFiyatVeIskonto[2].toString();
@@ -1307,6 +1341,7 @@ String turkishToEnglish(String input) {
               .toList();
           //BARKOD4 İLE BULUNURSA YAPILACAKALAR
           if (results.length > 0) {
+            results[0].guncelDegerler!.guncelDegerSifirla();
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
@@ -1314,7 +1349,8 @@ String turkishToEnglish(String input) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN4!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD4!;
               } else {
-               results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
+                results[0].guncelDegerler!.carpan =
+                    double.tryParse(results[0].SACIKLAMA9) ?? 1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT4! > 0) {
@@ -1342,9 +1378,20 @@ String turkishToEnglish(String input) {
                     seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
+                results[0].guncelDegerler.guncelBarkod = results[0].KOD!;
 
                 results[0].guncelDegerler!.iskonto1 =
                     double.parse(gelenFiyatVeIskonto[1].toString());
+                results[0].guncelDegerler!.iskonto2 =
+                    double.parse(gelenFiyatVeIskonto[4].toString());
+                results[0].guncelDegerler!.iskonto3 =
+                    double.parse(gelenFiyatVeIskonto[5].toString());
+                results[0].guncelDegerler!.iskonto4 =
+                    double.parse(gelenFiyatVeIskonto[6].toString());
+                results[0].guncelDegerler!.iskonto5 =
+                    double.parse(gelenFiyatVeIskonto[7].toString());
+                results[0].guncelDegerler!.iskonto6 =
+                    double.parse(gelenFiyatVeIskonto[8].toString());
 
                 results[0].guncelDegerler!.seciliFiyati =
                     gelenFiyatVeIskonto[2].toString();
@@ -1374,6 +1421,7 @@ String turkishToEnglish(String input) {
               .toList();
           //BARKOD5 İLE BULUNURSA YAPILACAKALAR
           if (results.length > 0) {
+            results[0].guncelDegerler!.guncelDegerSifirla();
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
@@ -1381,7 +1429,8 @@ String turkishToEnglish(String input) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN5!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD5!;
               } else {
-              results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
+                results[0].guncelDegerler!.carpan =
+                    double.tryParse(results[0].SACIKLAMA9) ?? 1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT5! > 0) {
@@ -1409,9 +1458,20 @@ String turkishToEnglish(String input) {
                     seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
+                results[0].guncelDegerler.guncelBarkod = results[0].KOD!;
 
                 results[0].guncelDegerler!.iskonto1 =
                     double.parse(gelenFiyatVeIskonto[1].toString());
+                results[0].guncelDegerler!.iskonto2 =
+                    double.parse(gelenFiyatVeIskonto[4].toString());
+                results[0].guncelDegerler!.iskonto3 =
+                    double.parse(gelenFiyatVeIskonto[5].toString());
+                results[0].guncelDegerler!.iskonto4 =
+                    double.parse(gelenFiyatVeIskonto[6].toString());
+                results[0].guncelDegerler!.iskonto5 =
+                    double.parse(gelenFiyatVeIskonto[7].toString());
+                results[0].guncelDegerler!.iskonto6 =
+                    double.parse(gelenFiyatVeIskonto[8].toString());
 
                 results[0].guncelDegerler!.seciliFiyati =
                     gelenFiyatVeIskonto[2].toString();
@@ -1441,6 +1501,7 @@ String turkishToEnglish(String input) {
               .toList();
           //BARKO6 İLE BULUNURSA YAPILACAKALAR
           if (results.length > 0) {
+            results[0].guncelDegerler!.guncelDegerSifirla();
             if (cariKod == "") {
               tempList.assignAll(results);
             } else {
@@ -1448,7 +1509,8 @@ String turkishToEnglish(String input) {
                 results[0].guncelDegerler!.carpan = results[0].BARKODCARPAN6!;
                 results[0].guncelDegerler!.guncelBarkod = results[0].BARKOD6!;
               } else {
-                results[0].guncelDegerler!.carpan = double.tryParse(results[0].SACIKLAMA9)??1;
+                results[0].guncelDegerler!.carpan =
+                    double.tryParse(results[0].SACIKLAMA9) ?? 1;
                 results[0].guncelDegerler!.guncelBarkod = results[0].KOD!;
               }
               if (results[0].BARKODFIYAT6! > 0) {
@@ -1476,9 +1538,20 @@ String turkishToEnglish(String input) {
                     seciliAltHesapID);
                 results[0].guncelDegerler!.fiyat =
                     double.parse(gelenFiyatVeIskonto[0].toString());
+                results[0].guncelDegerler.guncelBarkod = results[0].KOD!;
 
                 results[0].guncelDegerler!.iskonto1 =
                     double.parse(gelenFiyatVeIskonto[1].toString());
+                results[0].guncelDegerler!.iskonto2 =
+                    double.parse(gelenFiyatVeIskonto[4].toString());
+                results[0].guncelDegerler!.iskonto3 =
+                    double.parse(gelenFiyatVeIskonto[5].toString());
+                results[0].guncelDegerler!.iskonto4 =
+                    double.parse(gelenFiyatVeIskonto[6].toString());
+                results[0].guncelDegerler!.iskonto5 =
+                    double.parse(gelenFiyatVeIskonto[7].toString());
+                results[0].guncelDegerler!.iskonto6 =
+                    double.parse(gelenFiyatVeIskonto[8].toString());
 
                 results[0].guncelDegerler!.seciliFiyati =
                     gelenFiyatVeIskonto[2].toString();

@@ -311,8 +311,8 @@ class _okumaModuListState extends State<okumaModuList> {
                     ),
                     child: Center(
                       child: Text(
-                        "Adet",
-                        // stokModel.BIRIMID.toString()!,
+                      
+                        stokModel.BIRIM.toString()!,
                         style: TextStyle(fontSize: 12),
                       ),
                     ),

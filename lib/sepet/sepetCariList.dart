@@ -203,106 +203,54 @@ class _SepetCariListState extends State<SepetCariList> {
     return SafeArea(
       child: Scaffold(
         // Gönderilecek fişleri gönder butonu
-        floatingActionButton:
-        
-        localAktarildiMi == false ? SpeedDial( 
-          animatedIcon: AnimatedIcons.menu_arrow,
-          backgroundColor: Color.fromARGB(255, 3, 4, 4),
-          buttonSize: Size(65, 65),
-          children: [
-            SpeedDialChild(
-                backgroundColor: Color.fromARGB(255, 70, 89, 105),
-                child: Icon(
-                  Icons.swap_vert_circle,
-                  color: Colors.blue,
-                  size: 32,
-                ),
-                label: "Siparşin Carisini Değiştir",
-                onTap: () async {
-                List<Fis> secililer = tempFis
-                    .where((element) => element.seciliFisGonder == true)
-                    .toList();
-                    if(secililer.length == 1){
-                      fisEx.fis!.value = secililer[0];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SiparisCariList(
-                                    islem: true,
-                                  ))).then((value) async {
-                                    fisEx.list_tum_fis.clear();
-                                                await fisEx
-                                                    .listTumFisleriGetir();
-                                                setState(() {
-                                                  tempFis.clear();
-                                                  for (var element
-                                                      in fisEx.list_tum_fis) {
-                                                    if (element.AKTARILDIMI ==
-                                                        localAktarildiMi) {
-                                                      tempFis.add(element);
-                                                    }
-                                                  }
-                                                });
-                                  });
-                    }else{
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CustomAlertDialog(
-                            align: TextAlign.left,
-                            title: 'Uyarı',
-                            message: 'Lütfen bir adet sipariş seçiniz.',
-                            onPres: () async {
-                              Navigator.pop(context);
-                            },
-                            buttonText: 'Tamam',
-                          );
-                        });
-                    }
-                }),
-            SpeedDialChild(
-                backgroundColor: Color.fromARGB(255, 70, 89, 105),
-                child: Icon(
-                  Icons.file_copy,
-                  color: Colors.orange,
-                  size: 32,
-                ),
-                label: "Siparişi Kopyala",
-                onTap: () async {
-                  showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CustomAlertDialog(
-                            align: TextAlign.left,
-                            title: 'Bilgilendirme',
-                            message: 'Çalışmalarımız devam etmektedir. Bu işlem de kısa sürede hizmetinizde olacaktır.',
-                            onPres: () async {
-                              Navigator.pop(context);
-                            },
-                            buttonText: 'Tamam',
-                          );
-                        });
-                 
-                }),
-            SpeedDialChild(
-                backgroundColor: Color.fromARGB(255, 70, 89, 105),
-                child: Icon(
-                  Icons.send,
-                  color: Colors.green,
-                  size: 32,
-                ),
-                label: "Sipariş(ler)i Gönder",
-                onTap: () async {
-                   await seciliFisGonder(
-                context,
-                tempFis
-                    .where((element) => element.seciliFisGonder == true)
-                    .toList());
-                }),
-          ],
-        ):Container(),
-        
-        
+        floatingActionButton: localAktarildiMi == false
+            ? SpeedDial(
+                animatedIcon: AnimatedIcons.menu_arrow,
+                backgroundColor: Color.fromARGB(255, 3, 4, 4),
+                buttonSize: Size(65, 65),
+                children: [
+                  SpeedDialChild(
+                      backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                      child: Icon(
+                        Icons.swap_vert_circle,
+                        color: Colors.blue,
+                        size: 32,
+                      ),
+                      label: "Siparşin Carisini Değiştir",
+                      onTap: () async {
+                        tekFisMiSeciliKontrolVeCariListeGonderme(context,"cariKopyala");
+                      }),
+                  SpeedDialChild(
+                      backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                      child: Icon(
+                        Icons.file_copy,
+                        color: Colors.orange,
+                        size: 32,
+                      ),
+                      label: "Siparişi Kopyala",
+                      onTap: () async {
+                        tekFisMiSeciliKontrolVeCariListeGonderme(context,"siparisKopyala");
+                      }),
+                  SpeedDialChild(
+                      backgroundColor: Color.fromARGB(255, 70, 89, 105),
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.green,
+                        size: 32,
+                      ),
+                      label: "Sipariş(ler)i Gönder",
+                      onTap: () async {
+                        await seciliFisGonder(
+                            context,
+                            tempFis
+                                .where((element) =>
+                                    element.seciliFisGonder == true)
+                                .toList());
+                      }),
+                ],
+              )
+            : Container(),
+
         /*
         FloatingActionButton(
           onPressed: () async {
@@ -533,21 +481,25 @@ class _SepetCariListState extends State<SepetCariList> {
                                                           .width *
                                                       0.45,
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
-                                                        cari.ADRES!.toString() ??
+                                                        cari.ADRES!
+                                                                .toString() ??
                                                             "",
                                                         maxLines: 3,
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                       Text(
-                                                        cari.IL! + " / " + cari.ILCE!,
-                                                      
+                                                        cari.IL! +
+                                                            " / " +
+                                                            cari.ILCE!,
                                                         maxLines: 3,
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ],
                                                   ),
@@ -577,6 +529,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                       onTap: () async {
                                         if (tempFis[index].AKTARILDIMI! ==
                                             false) {
+                                          // FIS AKTARILMAMIŞ DÜZENLEMEYE GİT!
                                           fisEx.fis!.value = tempFis[index];
                                           print(fisEx.fis!.value.TIP);
                                           Ctanim.genelToplamHesapla(fisEx);
@@ -591,7 +544,8 @@ class _SepetCariListState extends State<SepetCariList> {
                                               cari.cariAltHesaplar.add(elemnt);
                                             }
                                             if (elemnt.ZORUNLU == "E" &&
-                                                elemnt.VARSAYILAN == "E") {
+                                                elemnt.VARSAYILAN == "E" &&
+                                                vs == null) {
                                               vs = elemnt;
                                             }
                                           }
@@ -618,21 +572,9 @@ class _SepetCariListState extends State<SepetCariList> {
                                                                 .first,
                                                         cari: cari,
                                                       ))).then((value) {
-                                            /*
-                                                  fisEx.list_tum_fis.clear();
-                                                    await  fisEx
-                                                        .listTumFisleriGetir();
-                                                        tempFis.clear();
-                                                    for (var element
-                                                        in fisEx.list_tum_fis) {
-                                                      if (element.AKTARILDIMI ==
-                                                          localAktarildiMi) {
-                                                        tempFis.add(element);
-                                                      }
-                                                    }
-                                                    */
                                             setState(() {});
                                           });
+                                          // FIS AKTARILMAMIŞ DÜZENLEMEYE GİT SON!
                                         } else {
                                           print("AKTAILMAMIŞL");
                                           if (await Connectivity()
@@ -640,7 +582,6 @@ class _SepetCariListState extends State<SepetCariList> {
                                               ConnectivityResult.none) {
                                             showDialog(
                                                 context: context,
-                                                
                                                 builder: (context) {
                                                   return CustomAlertDialog(
                                                     pdfSimgesi: false,
@@ -710,7 +651,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                               Fis.empty().fisEkle(
                                                   fis: fisEx.fis!.value,
                                                   belgeTipi: "YOK");
-                                              
+
                                               Ctanim.genelToplamHesapla(fisEx);
                                               CariAltHesap? vs;
                                               cari.cariAltHesaplar.clear();
@@ -725,7 +666,8 @@ class _SepetCariListState extends State<SepetCariList> {
                                                       .add(elemnt);
                                                 }
                                                 if (elemnt.ZORUNLU == "E" &&
-                                                    elemnt.VARSAYILAN == "E") {
+                                                    elemnt.VARSAYILAN == "E" &&
+                                                    vs == null) {
                                                   vs = elemnt;
                                                 }
                                               }
@@ -742,6 +684,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                                 }
                                               }
                                               Navigator.pop(context);
+                                              print("GIDIOK");
 
                                               Navigator.push(
                                                       context,
@@ -847,6 +790,49 @@ class _SepetCariListState extends State<SepetCariList> {
         ),
       ),
     );
+  }
+
+  void tekFisMiSeciliKontrolVeCariListeGonderme(BuildContext context,String islem) {
+    List<Fis> secililer =
+        tempFis.where((element) => element.seciliFisGonder == true).toList();
+    if (secililer.length == 1) {
+      fisEx.fis!.value = secililer[0];
+      fisEx.fis!.value.ACIKLAMA4 = secililer[0].ACIKLAMA4;
+       fisEx.fis!.value.ACIKLAMA5 = secililer[0].ACIKLAMA5;
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SiparisCariList(
+                    islem:islem,
+
+                  ))).then((value) async {
+
+        fisEx.list_tum_fis.clear();
+        await fisEx.listTumFisleriGetir();
+        setState(() {
+          tempFis.clear();
+          for (var element in fisEx.list_tum_fis) {
+            if (element.AKTARILDIMI == localAktarildiMi) {
+              tempFis.add(element);
+            }
+          }
+        });
+      });
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              align: TextAlign.left,
+              title: 'Uyarı',
+              message: 'Lütfen bir adet sipariş seçiniz.',
+              onPres: () async {
+                Navigator.pop(context);
+              },
+              buttonText: 'Tamam',
+            );
+          });
+    }
   }
 
   Future<void> seciliFisGonder(
@@ -1158,8 +1144,6 @@ class _SepetCariListState extends State<SepetCariList> {
         Navigator.pop(context);
       },
     );
-
-    // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("İşlem Onayı"),
       content: Text(
@@ -1179,4 +1163,3 @@ class _SepetCariListState extends State<SepetCariList> {
     );
   }
 }
-

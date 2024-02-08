@@ -60,6 +60,20 @@ double hesaplaNetFiyat() {
     return netfiyat =double.parse((fiyat! -_iskonto - _iskonto2Tutar - _iskonto3Tutar - _iskonto4Tutar - _iskonto5Tutar - _iskonto6Tutar).toStringAsFixed(2));
         //double.parse((fiyat! * ((1 - (iskonto! / 100)))).toStringAsFixed(2));
   }
+  void guncelDegerSifirla()
+  {
+    fiyat = 0.0;
+    iskonto1 = 0.0;
+    iskonto2 = 0.0;
+    iskonto3 = 0.0;
+    iskonto4 = 0.0;
+    iskonto5 = 0.0;
+    iskonto6 = 0.0;
+    netfiyat = 0.0;
+    seciliFiyati = "";
+    fiyatDegistirMi = false;
+    hesaplaNetFiyat();
+  }
 }
 
 class StokKart {

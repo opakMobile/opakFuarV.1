@@ -121,7 +121,9 @@ class _HomePageState extends State<HomePage> {
                   //  "Versiyon:2.1.2",// il ilçe eklendi
                 //  "Versiyon:2.1.3", // barkodcarpan 1 gelirse koddan eklesin
                //   "Versiyon:2.1.4", // yeni cari eklemeye alt hesap ve koşul eklendi WEB SERVİS GÜNCELLENMELİ
-                  "Versiyon:2.1.5", // fisin carissini değilştrme
+               //   "Versiyon:2.1.5", // fisin carissini değilştrme
+                 // "Versiyon:2.1.6", // vs ve zorunlu ilk hesap seçili geliyor artıkın usman aga
+                "Versiyon:TEST",
                     
 
                     style: TextStyle(fontSize: 7),
@@ -155,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => SiparisCariList(
-                                    islem: false,
+                                    islem: "",
                                   )));
                     },
                     child: Card(

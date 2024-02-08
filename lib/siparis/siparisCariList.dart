@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +11,7 @@ import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/model/satisTipiModel.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/pages/ver%C4%B1GondermeHataDiyalog.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
@@ -24,7 +26,7 @@ import '../sabitler/sharedPreferences.dart';
 class SiparisCariList extends StatefulWidget {
   SiparisCariList({required this.islem});
 
-  final bool islem;
+  final String islem;
   @override
   State<SiparisCariList> createState() => _SiparisCariListState();
 }
@@ -171,7 +173,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                       ),
                                     )),
                                 onTap: () async {
-                                  if (widget.islem) {
+                                  if (widget.islem == "cariKopyala") {
                                     List<String> altListeCari =
                                         cari.ALTHESAPLAR!.split(",");
                                     List<String> altListeFis = fisEx
@@ -182,20 +184,25 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                     for (var el in altListeFis) {
                                       bool varMi = altListeCari
                                           .any((elele) => elele == el);
-                                      if (varMi == true ) {
+                                      if (varMi == true) {
                                         print("Var" + el);
-                                      } else{
+                                      } else {
                                         String altHesapAdi = "";
-                                        for(var element2 in listeler.listCariAltHesap){
-                                          if(element2.ALTHESAPID.toString() == el){
+                                        for (var element2
+                                            in listeler.listCariAltHesap) {
+                                          if (element2.ALTHESAPID.toString() ==
+                                              el) {
                                             altHesapAdi = element2.ALTHESAP!;
                                           }
                                         }
-                                        List<FisHareket> opala = fisEx.fis!.value.fisStokListesi.where((element) => element.ALTHESAP == altHesapAdi).toList();
-                                        if(opala.isNotEmpty){
+                                        List<FisHareket> opala = fisEx
+                                            .fis!.value.fisStokListesi
+                                            .where((element) =>
+                                                element.ALTHESAP == altHesapAdi)
+                                            .toList();
+                                        if (opala.isNotEmpty) {
                                           olmayanlar.add(int.parse(el));
                                         }
-                                        
                                       }
                                     }
                                     if (olmayanlar.isNotEmpty) {
@@ -224,30 +231,174 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                               buttonText: 'Tamam',
                                             );
                                           });
-                                    }else{
-                                  
-                                      fisEx.fis!.value.CARIKOD = cari.KOD;
-                                      fisEx.fis!.value.CARIADI = cari.ADI;
-                                      List<CariAltHesap> altHesaplar = [];
-                                      for (var element in listeler.listCariAltHesap) {
-                                        if (altListeCari.contains(element.ALTHESAPID.toString())) {
-                                          altHesaplar.add(element);
-                                        }
-                                      }
-                                      for(var element in fisEx.fis!.value.fisStokListesi){
-                                        List<CariAltHesap> altHesaplar2 = listeler.listCariAltHesap.where((element2) => element2.ALTHESAP == element.ALTHESAP).toList();
-                                        altHesapDegistirFiseEkle(element, altHesaplar2.first);
-                                      }   
-                                       fisEx.fis!.value.cariKart.cariAltHesaplar.clear();
-                                      fisEx.fis!.value.cariKart.cariAltHesaplar = altHesaplar;
-                                   
-                                      Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+                                    } else {
+                                      await showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return CustomAlertDialog(
+                                              align: TextAlign.left,
+                                              title: 'İşlem Onayı',
+                                              message:
+                                                  '${fisEx.fis!.value.CARIADI} carisine ait sipariş ${cari.ADI} carisi adına değiştirilecektir. Bu işlem sonunda ürünlerin fiyatları cari koşullarına göre değişebilir ve eski cariye ait sipariş silinir. İşleme devam etmek istiyor musunuz?',
+                                              onPres: () async {
+                                                Navigator.pop(context);
+                                                
+                                           
+                                              },
+                                              buttonText: 'İptal',
+                                              secondButtonText: "Devam Et",
+                                              onSecondPress: () {
+                                                  cariKopyala(cari, altListeCari);
+                                                Navigator.pop(context);
+                                              },
+                                            );
+                                          });
+
                                       Navigator.pop(context);
                                     }
+                                  } else if (widget.islem == "siparisKopyala") {
+                                    Fis fis = Fis.empty();
+                                    //  fisEx.fis!.value = fis;
+                                    fis.cariKart = cari;
+                                    fis.CARIKOD = cari.KOD;
+                                    fis.CARIADI = cari.ADI;
+                                    fis.SUBEID = int.parse(
+                                        Ctanim.kullanici!.YERELSUBEID!);
+                                    fis.PLASIYERKOD = Ctanim.kullanici!.KOD;
+                                    fis.DEPOID = int.parse(
+                                        Ctanim.kullanici!.YERELDEPOID!); //TODO
+                                    fis.ISLEMTIPI = "0";
+                                    //fisEx.fis!.value.ALTHESAP = cari.cariAltHesaplar.first.ALTHESAP;
+                                    fis.FUARADI = Ctanim.kullanici!.FUARADI;
+                                    fis.UUID = uuid.v1();
+                                    fis.VADEGUNU = cari.VADEGUNU;
+                                    fis.BELGENO =
+                                        Ctanim.siparisNumarasi.toString();
+                                    Ctanim.siparisNumarasi =
+                                        Ctanim.siparisNumarasi + 1;
+                                    await SharedPrefsHelper
+                                        .siparisNumarasiKaydet(
+                                            Ctanim.siparisNumarasi);
+                                    fis.TARIH = DateFormat("yyyy-MM-dd")
+                                        .format(DateTime.now());
+                                    List<String> altListeCari =
+                                        cari.ALTHESAPLAR!.split(",");
+                                    List<String> altListeFis = fisEx
+                                        .fis!.value.cariKart.ALTHESAPLAR!
+                                        .split(",");
+                                    List<int> olmayanlar = [];
 
-                            
-                                   
-                                  
+                                    for (var el in altListeFis) {
+                                      bool varMi = altListeCari
+                                          .any((elele) => elele == el);
+                                      if (varMi == true) {
+                                        print("Var" + el);
+                                      } else {
+                                        String altHesapAdi = "";
+                                        for (var element2
+                                            in listeler.listCariAltHesap) {
+                                          if (element2.ALTHESAPID.toString() ==
+                                              el) {
+                                            altHesapAdi = element2.ALTHESAP!;
+                                          }
+                                        }
+                                        List<FisHareket> opala = fisEx
+                                            .fis!.value.fisStokListesi
+                                            .where((element) =>
+                                                element.ALTHESAP == altHesapAdi)
+                                            .toList();
+                                        if (opala.isNotEmpty) {
+                                          olmayanlar.add(int.parse(el));
+                                        }
+                                      }
+                                    }
+                                    if (olmayanlar.isNotEmpty) {
+                                      String hataTopla = "";
+                                      for (var element in olmayanlar) {
+                                        for (var elemnt
+                                            in listeler.listCariAltHesap) {
+                                          if (elemnt.ALTHESAPID == element) {
+                                            hataTopla +=
+                                                elemnt.ALTHESAP! + "\n";
+                                          }
+                                        }
+                                      }
+                                      await showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return VeriGondermeHataDialog(
+                                              align: TextAlign.left,
+                                              title: 'Hata',
+                                              message:
+                                                  'Kopyalanmak istenilen cari alt hesapları ile siparişin alt hesapları uyuşmuyor.\nSeçilen caride bulunmayan alt hesaplar:\n' +
+                                                      hataTopla,
+                                              onPres: () async {
+                                                Navigator.pop(context);
+                                              },
+                                              buttonText: 'Tamam',
+                                            );
+                                          });
+                                    } else {
+                                      
+                                      //githuba atmadım.....................................................
+
+
+                                      await showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return CustomAlertDialog(
+                                              align: TextAlign.left,
+                                              title: 'İşlem Onayı',
+                                              message:
+                                                  '${fisEx.fis!.value.CARIADI} carisine ait sipariş ${cari.ADI} carisi adına kopyalanacaktır. Bu işlem sonunda kopyalanan ürünlerin fiyatları yeni cari koşullarına göre değişebilir. İşleme devam etmek istiyor musunuz?',
+                                              onPres: () async {
+                                             Navigator.pop(context);
+                                              },
+                                              buttonText: 'İptal',
+                                              secondButtonText: "Devam Et",
+                                              onSecondPress: () async {
+                                                   List<CariAltHesap> altHesaplar =
+                                                    [];
+                                                for (var element in listeler
+                                                    .listCariAltHesap) {
+                                                  if (altListeCari.contains(
+                                                      element.ALTHESAPID
+                                                          .toString())) {
+                                                    altHesaplar.add(element);
+                                                  }
+                                                }
+                                                for (var ee in fisEx.fis!.value
+                                                    .fisStokListesi) {
+                                                  fis.fisStokListesi.add(
+                                                      FisHareket.fromFishareket(
+                                                          ee));
+                                                }
+                                                fisEx.fis!.value = fis;
+                                                for (var element in fisEx.fis!
+                                                    .value.fisStokListesi) {
+                                                  List<CariAltHesap>
+                                                      altHesaplar2 = listeler
+                                                          .listCariAltHesap
+                                                          .where((element2) =>
+                                                              element2
+                                                                  .ALTHESAP ==
+                                                              element.ALTHESAP)
+                                                          .toList();
+                                                  altHesapDegistirFiseEkle(
+                                                      element,
+                                                      altHesaplar2.first);
+                                                  Ctanim.genelToplamHesapla(
+                                                      fisEx);
+                                                }
+                                                await Fis.empty().fisEkle(
+                                                    fis: fisEx.fis!.value,
+                                                    belgeTipi: "YOK");
+                                                    Navigator.pop(context);
+                                              },
+                                            );
+                                          });
+                                   Navigator.pop(context);
+                                    }
                                   } else {
                                     CariAltHesap? vs;
                                     cari.cariAltHesaplar.clear();
@@ -260,7 +411,8 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                         cari.cariAltHesaplar.add(elemnt);
                                       }
                                       if (elemnt.ZORUNLU == "E" &&
-                                          elemnt.VARSAYILAN == "E") {
+                                          elemnt.VARSAYILAN == "E" &&
+                                          vs == null) {
                                         vs = elemnt;
                                       }
                                     }
@@ -337,7 +489,31 @@ class _SiparisCariListState extends State<SiparisCariList> {
       ),
     );
   }
-    void altHesapDegistirFiseEkle(FisHareket element,CariAltHesap seciliAltHesap) {
+
+  void cariKopyala(Cari cari, List<String> altListeCari) {
+    fisEx.fis!.value.CARIKOD = cari.KOD;
+    fisEx.fis!.value.CARIADI = cari.ADI;
+    List<CariAltHesap> altHesaplar = [];
+    for (var element in listeler.listCariAltHesap) {
+      if (altListeCari.contains(element.ALTHESAPID.toString())) {
+        altHesaplar.add(element);
+      }
+    }
+    for (var element in fisEx.fis!.value.fisStokListesi) {
+      List<CariAltHesap> altHesaplar2 = listeler.listCariAltHesap
+          .where((element2) => element2.ALTHESAP == element.ALTHESAP)
+          .toList();
+      altHesapDegistirFiseEkle(element, altHesaplar2.first);
+      Ctanim.genelToplamHesapla(fisEx);
+    }
+    fisEx.fis!.value.cariKart.cariAltHesaplar.clear();
+    fisEx.fis!.value.cariKart.cariAltHesaplar = altHesaplar;
+
+    Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+  }
+
+  void altHesapDegistirFiseEkle(
+      FisHareket element, CariAltHesap seciliAltHesap) {
     List<StokKart> stok = [];
     bool barkodMu = false;
     for (var el in stokKartEx.searchList) {
@@ -357,7 +533,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
           stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD1!;
           stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT1;
           stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK1;
-               stok.first.guncelDegerler!.iskonto2 = 0;
+          stok.first.guncelDegerler!.iskonto2 = 0;
           stok.first.guncelDegerler!.iskonto3 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
@@ -387,7 +563,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
           stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD2!;
           stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT2;
           stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK2;
-               stok.first.guncelDegerler!.iskonto2 = 0;
+          stok.first.guncelDegerler!.iskonto2 = 0;
           stok.first.guncelDegerler!.iskonto3 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
@@ -417,7 +593,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
           stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD3!;
           stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT3;
           stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK3;
-               stok.first.guncelDegerler!.iskonto2 = 0;
+          stok.first.guncelDegerler!.iskonto2 = 0;
           stok.first.guncelDegerler!.iskonto3 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
@@ -447,7 +623,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
           stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD4!;
           stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT4;
           stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK4;
-               stok.first.guncelDegerler!.iskonto2 = 0;
+          stok.first.guncelDegerler!.iskonto2 = 0;
           stok.first.guncelDegerler!.iskonto3 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
@@ -477,7 +653,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
           stok.first.guncelDegerler!.guncelBarkod = stok.first.BARKOD5!;
           stok.first.guncelDegerler!.fiyat = stok.first.BARKODFIYAT5;
           stok.first.guncelDegerler!.iskonto1 = stok.first.BARKODISK5;
-               stok.first.guncelDegerler!.iskonto2 = 0;
+          stok.first.guncelDegerler!.iskonto2 = 0;
           stok.first.guncelDegerler!.iskonto3 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
           stok.first.guncelDegerler!.iskonto4 = 0;
@@ -529,54 +705,53 @@ class _SiparisCariListState extends State<SiparisCariList> {
       listeler.listDahaFazlaBarkod
           .where((dahaFazla) => dahaFazla.KOD == element.STOKKOD);
     }
-  if(barkodMu == false){
-        SatisTipiModel satisTipiModel =
-        SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
+    if (barkodMu == false) {
+      SatisTipiModel satisTipiModel =
+          SatisTipiModel(ID: -1, TIP: "a", FIYATTIP: "", ISK1: "", ISK2: "");
 
-    List<dynamic> gelenFiyatVeIskonto = stokKartEx.fiyatgetir(
-        stok.first,
-        fisEx.fis!.value.CARIKOD!,
-        Ctanim.satisFiyatListesi.first,
-        satisTipiModel,
-        Ctanim.seciliStokFiyatListesi,
-        seciliAltHesap!.ALTHESAPID);
+      List<dynamic> gelenFiyatVeIskonto = stokKartEx.fiyatgetir(
+          stok.first,
+          fisEx.fis!.value.CARIKOD!,
+          Ctanim.satisFiyatListesi.first,
+          satisTipiModel,
+          Ctanim.seciliStokFiyatListesi,
+          seciliAltHesap!.ALTHESAPID);
 
-    stok.first.guncelDegerler!.guncelBarkod = element.STOKKOD;
-    stok.first.guncelDegerler!.carpan = 1;
-    stok.first.guncelDegerler!.fiyat =
-        double.parse(gelenFiyatVeIskonto[0].toString());
+      stok.first.guncelDegerler!.guncelBarkod = element.STOKKOD;
+      stok.first.guncelDegerler!.carpan = 1; // çarpan s9 dan gelmeli
+      stok.first.guncelDegerler!.fiyat =
+          double.parse(gelenFiyatVeIskonto[0].toString());
 
-    stok.first.guncelDegerler!.iskonto1 =
-        double.parse(gelenFiyatVeIskonto[1].toString());
+      stok.first.guncelDegerler!.iskonto1 =
+          double.parse(gelenFiyatVeIskonto[1].toString());
 
-    stok.first.guncelDegerler!.iskonto2 =
-        double.parse(gelenFiyatVeIskonto[4].toString());
+      stok.first.guncelDegerler!.iskonto2 =
+          double.parse(gelenFiyatVeIskonto[4].toString());
 
-    stok.first.guncelDegerler!.iskonto3 =
-        double.parse(gelenFiyatVeIskonto[5].toString());
+      stok.first.guncelDegerler!.iskonto3 =
+          double.parse(gelenFiyatVeIskonto[5].toString());
 
-    stok.first.guncelDegerler!.iskonto4 =
-        double.parse(gelenFiyatVeIskonto[6].toString());
+      stok.first.guncelDegerler!.iskonto4 =
+          double.parse(gelenFiyatVeIskonto[6].toString());
 
-    stok.first.guncelDegerler!.iskonto5 =
-        double.parse(gelenFiyatVeIskonto[7].toString());
+      stok.first.guncelDegerler!.iskonto5 =
+          double.parse(gelenFiyatVeIskonto[7].toString());
 
-    stok.first.guncelDegerler!.iskonto6 =
-        double.parse(gelenFiyatVeIskonto[8].toString());
+      stok.first.guncelDegerler!.iskonto6 =
+          double.parse(gelenFiyatVeIskonto[8].toString());
 
-    stok.first.guncelDegerler!.seciliFiyati = gelenFiyatVeIskonto[2].toString();
-    stok.first.guncelDegerler!.fiyatDegistirMi = gelenFiyatVeIskonto[3];
+      stok.first.guncelDegerler!.seciliFiyati =
+          gelenFiyatVeIskonto[2].toString();
+      stok.first.guncelDegerler!.fiyatDegistirMi = gelenFiyatVeIskonto[3];
 
-    stok.first.guncelDegerler!.netfiyat =
-        stok.first.guncelDegerler!.hesaplaNetFiyat();
-    //fiyat listesi koşul arama fonksiyonua gönderiliyor orda ekleme yapsanda buraya eklemez giyatListesiKosulu cTanima ekle !
-    if (!Ctanim.fiyatListesiKosul
-        .contains(stok.first.guncelDegerler!.seciliFiyati)) {
-      Ctanim.fiyatListesiKosul.add(stok.first.guncelDegerler!.seciliFiyati!);
+      stok.first.guncelDegerler!.netfiyat =
+          stok.first.guncelDegerler!.hesaplaNetFiyat();
+      //fiyat listesi koşul arama fonksiyonua gönderiliyor orda ekleme yapsanda buraya eklemez giyatListesiKosulu cTanima ekle !
+      if (!Ctanim.fiyatListesiKosul
+          .contains(stok.first.guncelDegerler!.seciliFiyati)) {
+        Ctanim.fiyatListesiKosul.add(stok.first.guncelDegerler!.seciliFiyati!);
+      }
     }
-
-
-  }
 
     double tempFiyat = 0;
 
