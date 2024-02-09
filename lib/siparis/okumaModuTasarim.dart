@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
+import 'package:opak_fuar/pages/CustomAlertDialog.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/siparis/fisHareketDuzenle.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
@@ -34,11 +35,9 @@ class _okumaModuListState extends State<okumaModuList> {
         SingleChildScrollView(
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height < 650
-                                        ? MediaQuery.of(context).size.height *
-                                            0.465
-                                        : MediaQuery.of(context).size.height *
-                                            0.480,
+            height: MediaQuery.of(context).size.height < 650
+                ? MediaQuery.of(context).size.height * 0.465
+                : MediaQuery.of(context).size.height * 0.480,
 
             //!! Sepet Listesi Buraya Gelecek
             child: result.isEmpty
@@ -48,17 +47,26 @@ class _okumaModuListState extends State<okumaModuList> {
                 : ListView.builder(
                     itemCount: fisEx.fis!.value.fisStokListesi.length,
                     itemBuilder: (context, index) {
-                      FisHareket stokModel = fisEx.fis!.value.fisStokListesi[index];
+                      FisHareket stokModel =
+                          fisEx.fis!.value.fisStokListesi[index];
                       if (widget.sepetteAra == true &&
                           widget.editinControllerText != "") {
-                        StokKart bulunanStok = Ctanim.harekettenStokBul(stokModel);
-                        if (bulunanStok.KOD! == widget.editinControllerText ||
-                            bulunanStok.BARKOD1! == widget.editinControllerText ||
-                            bulunanStok.BARKOD2! == widget.editinControllerText ||
-                            bulunanStok.BARKOD3! == widget.editinControllerText ||
-                            bulunanStok.BARKOD4! == widget.editinControllerText ||
-                            bulunanStok.BARKOD5! == widget.editinControllerText ||
-                            bulunanStok.BARKOD6! == widget.editinControllerText ||
+                        StokKart bulunanStok =
+                            Ctanim.harekettenStokBul(stokModel);
+                        if (bulunanStok.KOD!.toLowerCase().contains(
+                                widget.editinControllerText.toLowerCase()) ||
+                            bulunanStok.BARKOD1! ==
+                                widget.editinControllerText ||
+                            bulunanStok.BARKOD2! ==
+                                widget.editinControllerText ||
+                            bulunanStok.BARKOD3! ==
+                                widget.editinControllerText ||
+                            bulunanStok.BARKOD4! ==
+                                widget.editinControllerText ||
+                            bulunanStok.BARKOD5! ==
+                                widget.editinControllerText ||
+                            bulunanStok.BARKOD6! ==
+                                widget.editinControllerText ||
                             bulunanStok.ADI!.toLowerCase().contains(
                                 widget.editinControllerText.toLowerCase())) {
                           return okumaModuUrunListe(context, stokModel);
@@ -75,40 +83,38 @@ class _okumaModuListState extends State<okumaModuList> {
                   ),
           ),
         ),
-                         SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                          height:
-                                      MediaQuery.of(context).size.height * 0.04,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Satış Toplamı:",
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            height: MediaQuery.of(context).size.height * 0.06,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.grey),
-                            ),
-                            child: Center(
-                                child: Text(
-                              Ctanim.donusturMusteri(
-                                  fisEx.fis!.value.ARA_TOPLAM.toString()),
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          ),
-                        ],
-                      ),
-                    ),
-     
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.04,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Satış Toplamı:",
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.6,
+                height: MediaQuery.of(context).size.height * 0.06,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: Center(
+                    child: Text(
+                  Ctanim.donusturMusteri(
+                      fisEx.fis!.value.ARA_TOPLAM.toString()),
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold),
+                )),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -311,7 +317,6 @@ class _okumaModuListState extends State<okumaModuList> {
                     ),
                     child: Center(
                       child: Text(
-                      
                         stokModel.BIRIM.toString()!,
                         style: TextStyle(fontSize: 12),
                       ),
@@ -343,28 +348,51 @@ class _okumaModuListState extends State<okumaModuList> {
                   elevation: 10,
                   child: TextButton(
                       onPressed: () async {
-                        fisEx.fis?.value.altHesapToplamlar.removeWhere((item) {
-                          String a = "";
-                          for (var element in item.STOKKODLIST!) {
-                            if (element == stokModel.STOKKOD) {
-                              a = element;
-                            }
-                          }
+                        await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CustomAlertDialog(
+                                align: TextAlign.left,
+                                title: 'İşlem Onayı',
+                                message:
+                                    '${stokModel.STOKADI} siparişten silinecek. İşleme devam etmek istiyor musunuz?',
+                                onPres: () async {
+                                  Navigator.pop(context);
+                                },
+                                buttonText: 'İptal',
+                                secondButtonText: "Devam Et",
+                                onSecondPress: () async {
+                                  fisEx.fis?.value.altHesapToplamlar
+                                      .removeWhere((item) {
+                                    String a = "";
+                                    for (var element in item.STOKKODLIST!) {
+                                      if (element == stokModel.STOKKOD) {
+                                        a = element;
+                                      }
+                                    }
+                                    return a == stokModel.STOKKOD!;
+                                  });
 
-                          return a == stokModel.STOKKOD!;
-                        });
-                        //hügffff
-                        fisEx.fis?.value.fisStokListesi.removeWhere((item) =>
-                            item.STOKKOD == stokModel.STOKKOD! &&
-                            item.ALTHESAP == stokModel.ALTHESAP!);
+                                  fisEx.fis?.value.fisStokListesi.removeWhere(
+                                      (item) =>
+                                          item.STOKKOD == stokModel.STOKKOD! &&
+                                          item.ALTHESAP == stokModel.ALTHESAP!);
 
-                        await Fis.empty().fisHareketSil(fisEx.fis!.value.ID!,
-                            stokModel.STOKKOD!, stokModel.ALTHESAP!);
-                        setState(() {
-                           Ctanim.genelToplamHesapla(fisEx);
-                           print("ARA TOPLAM DEĞİŞTİ : "+fisEx.fis!.value!.ARA_TOPLAM!.toString());
-                        });
-            
+                                  await Fis.empty().fisHareketSil(
+                                      fisEx.fis!.value.ID!,
+                                      stokModel.STOKKOD!,
+                                      stokModel.ALTHESAP!);
+                                  setState(() {
+                                    Ctanim.genelToplamHesapla(fisEx);
+                                    print("ARA TOPLAM DEĞİŞTİ : " +
+                                        fisEx.fis!.value!.ARA_TOPLAM!
+                                            .toString());
+                                  });
+
+                                  Navigator.pop(context);
+                                },
+                              );
+                            });
                       },
                       child: Text(
                         "Sil",

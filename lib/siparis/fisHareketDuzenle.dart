@@ -1196,7 +1196,21 @@ SizedBox(
       miktarController.text = miktar.toString();
     }
     if (double.parse(miktarController.text) == 0) {
-      //sil
+          await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CustomAlertDialog(
+                                align: TextAlign.left,
+                                title: 'İşlem Onayı',
+                                message:
+                                    '${widget.gelenStokKart.ADI} siparişten silinecek. İşleme devam etmek istiyor musunuz?',
+                                onPres: () async {
+                                  Navigator.pop(context);
+                                },
+                                buttonText: 'İptal',
+                                secondButtonText: "Devam Et",
+                                onSecondPress: () async {
+                                        //sil
       Ctanim.urunAraFocus = true;
       if (fisEx.fis!.value.fisStokListesi.any((item1) =>
           item1.STOKKOD == widget.gelenStokKart.guncelDegerler!.guncelBarkod &&
@@ -1243,6 +1257,13 @@ SizedBox(
               );
             });
       }
+                                  
+
+                                  Navigator.pop(context);
+                                },
+                              );
+                            });
+
     } else {
       String tempSacikalama9 = widget.gelenStokKart.SACIKLAMA9!.split(".")[0];
       double kontrolCarpan = 0.0;

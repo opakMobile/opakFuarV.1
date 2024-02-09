@@ -218,7 +218,8 @@ class _SepetCariListState extends State<SepetCariList> {
                       ),
                       label: "Siparşin Carisini Değiştir",
                       onTap: () async {
-                        tekFisMiSeciliKontrolVeCariListeGonderme(context,"cariKopyala");
+                        tekFisMiSeciliKontrolVeCariListeGonderme(
+                            context, "cariKopyala");
                       }),
                   SpeedDialChild(
                       backgroundColor: Color.fromARGB(255, 70, 89, 105),
@@ -229,7 +230,8 @@ class _SepetCariListState extends State<SepetCariList> {
                       ),
                       label: "Siparişi Kopyala",
                       onTap: () async {
-                        tekFisMiSeciliKontrolVeCariListeGonderme(context,"siparisKopyala");
+                        tekFisMiSeciliKontrolVeCariListeGonderme(
+                            context, "siparisKopyala");
                       }),
                   SpeedDialChild(
                       backgroundColor: Color.fromARGB(255, 70, 89, 105),
@@ -559,6 +561,20 @@ class _SepetCariListState extends State<SepetCariList> {
                                               }
                                             }
                                           }
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SiparisUrunAra(
+                                                      sepettenMiGeldin: true,
+                                                      varsayilan: vs != null
+                                                          ? vs
+                                                          : cari.cariAltHesaplar
+                                                              .first,
+                                                      cari: cari,
+                                                    )),
+                                          );
+                                          /*
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -571,9 +587,25 @@ class _SepetCariListState extends State<SepetCariList> {
                                                                 .cariAltHesaplar
                                                                 .first,
                                                         cari: cari,
-                                                      ))).then((value) {
-                                            setState(() {});
+                                                      ))).then((value) async {
+                                            fisEx.list_tum_fis.clear();
+                                                await fisEx
+                                                    .listTumFisleriGetir();
+                                                setState(() {
+                                                  tempFis.clear();
+                                                  for (var element
+                                                      in fisEx.list_tum_fis) {
+                                                    if (element.AKTARILDIMI ==
+                                                        localAktarildiMi) {
+                                                      tempFis.add(element);
+                                                    }
+                                                  }
+                                                });
+                                                setState(() {
+                                                  
+                                                });
                                           });
+                                          */
                                           // FIS AKTARILMAMIŞ DÜZENLEMEYE GİT SON!
                                         } else {
                                           print("AKTAILMAMIŞL");
@@ -792,21 +824,20 @@ class _SepetCariListState extends State<SepetCariList> {
     );
   }
 
-  void tekFisMiSeciliKontrolVeCariListeGonderme(BuildContext context,String islem) {
+  void tekFisMiSeciliKontrolVeCariListeGonderme(
+      BuildContext context, String islem) {
     List<Fis> secililer =
         tempFis.where((element) => element.seciliFisGonder == true).toList();
     if (secililer.length == 1) {
       fisEx.fis!.value = secililer[0];
       fisEx.fis!.value.ACIKLAMA4 = secililer[0].ACIKLAMA4;
-       fisEx.fis!.value.ACIKLAMA5 = secililer[0].ACIKLAMA5;
+      fisEx.fis!.value.ACIKLAMA5 = secililer[0].ACIKLAMA5;
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => SiparisCariList(
-                    islem:islem,
-
+                    islem: islem,
                   ))).then((value) async {
-
         fisEx.list_tum_fis.clear();
         await fisEx.listTumFisleriGetir();
         setState(() {

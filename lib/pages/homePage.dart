@@ -123,7 +123,8 @@ class _HomePageState extends State<HomePage> {
                //   "Versiyon:2.1.4", // yeni cari eklemeye alt hesap ve koşul eklendi WEB SERVİS GÜNCELLENMELİ
                //   "Versiyon:2.1.5", // fisin carissini değilştrme
                  // "Versiyon:2.1.6", // vs ve zorunlu ilk hesap seçili geliyor artıkın usman aga
-                "Versiyon:TEST",
+              //  "Versiyon:TEST",
+                "Versiyon:2.1.8" ,// sip kopyalama sepet listesi göstermede bazı değişiklikler artık sepetten sora anasayfa dönüyoz,
                     
 
                     style: TextStyle(fontSize: 7),
