@@ -515,7 +515,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                                             .ellipsis,
                                                         Ctanim.donusturMusteri(
                                                             tempFis[index]
-                                                                .GENELTOPLAM!
+                                                                .ARA_TOPLAM!
                                                                 .toString()))
                                                     : Container(),
                                               ],

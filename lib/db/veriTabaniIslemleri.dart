@@ -9,6 +9,7 @@ import 'package:opak_fuar/model/stokKosulAnaModel.dart';
 import 'package:opak_fuar/model/stokKosulModel.dart';
 import 'package:opak_fuar/sabitler/Ctanim.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
+import 'package:opak_fuar/webServis/base.dart';
 
 import '../controller/cariController.dart';
 import '../controller/stokKartController.dart';
@@ -577,9 +578,15 @@ class VeriIslemleri {
   Future<List<FuarModel>?> fuarModelGetir() async {
     //   var result = await Ctanim.db?.query("TBLCARISB");
     List<Map<String, dynamic>> maps = await Ctanim.db?.query("TBLFUARMODELSB");
-    listeler.listFuar =
+    if(maps.length<=0){
+      print("FUAR MODEL GETİRİLİYOR NETTEEEN");
+      BaseService bb = BaseService();
+      await bb.getFuar(sirket: Ctanim.sirket!);
+    }else{
+      print("FUAR MODEL BULDUK DBDEEEEEEEN");
+       listeler.listFuar =
         List.generate(maps.length, (i) => FuarModel.fromJson(maps[i]));
-
+    }
     return listeler.listFuar;
   }
 

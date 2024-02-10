@@ -124,9 +124,8 @@ class _HomePageState extends State<HomePage> {
                //   "Versiyon:2.1.5", // fisin carissini değilştrme
                  // "Versiyon:2.1.6", // vs ve zorunlu ilk hesap seçili geliyor artıkın usman aga
               //  "Versiyon:TEST",
-                "Versiyon:2.1.8" ,// sip kopyalama sepet listesi göstermede bazı değişiklikler artık sepetten sora anasayfa dönüyoz,
-                    
-
+              //  "Versiyon:2.1.8" ,// sip kopyalama sepet listesi göstermede bazı değişiklikler artık sepetten sora anasayfa dönüyoz,
+                "Versiyon:2.1.9" ,// fuarı db de yoksa hemen çekiyor
                     style: TextStyle(fontSize: 7),
                   ),
                 ],

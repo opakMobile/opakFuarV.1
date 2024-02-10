@@ -224,8 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                 hatalar.add(await bs.getirDahaFazlaBarkod(
                     sirket: Ctanim.sirket!,
                     kullaniciKodu: Ctanim.kullanici!.KOD!));
-                hatalar.add(
-                    await bs.getFuar(sirket: Ctanim.sirket!));
+                hatalar.add(await bs.getFuar(sirket: Ctanim.sirket!));
                      hatalar.add(await bs.getirStokKosulAna(sirket: Ctanim.sirket!));
 
                 if (hatalar.length > 0) {
