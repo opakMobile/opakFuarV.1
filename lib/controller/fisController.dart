@@ -315,4 +315,43 @@ class FisController extends GetxController {
     list_fis_cari_ozel.assignAll(tt);
     return list_fis_cari_ozel;
   }
+    Future<List<double>> PlasiyerRaporFisGetir() async {
+    List<Fis> tt = await getBekleyenFis(false);
+    double bekleyenGenelToplam = 0;
+    double bekleyenAdet = 0;
+    double tamamlananGenelToplam = 0;
+    double tamamlananAdet = 0;
+    if (tt.length == 0) {
+      bekleyenAdet = 0;
+      bekleyenGenelToplam = 0; 
+    } else {
+      for (var i = 0; i < tt.length; i++) {
+        var element = tt[i];
+        bekleyenGenelToplam += element.GENELTOPLAM!;
+      }
+      bekleyenAdet = tt.length.toDouble();
+    }
+    tt.clear();
+    tt = await getBekleyenFis(true);
+    if (tt.length == 0) {
+      tamamlananAdet = 0;
+      tamamlananGenelToplam = 0; 
+    } else {
+      for (var i = 0; i < tt.length; i++) {
+        var element = tt[i];
+        tamamlananGenelToplam += element.GENELTOPLAM!;
+      }
+      tamamlananAdet = tt.length.toDouble();
+    }
+    tt.clear();
+    double genelAdet = bekleyenAdet + tamamlananAdet;
+    double genelToplam = bekleyenGenelToplam + tamamlananGenelToplam;
+    return [bekleyenAdet, bekleyenGenelToplam, tamamlananAdet, tamamlananGenelToplam, genelAdet, genelToplam];
+  }
+
+  Future<List<Fis>> getBekleyenFis(bool durum) async {
+    List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
+        where: 'AKTARILDIMI = ?', whereArgs: [durum]);
+    return List<Fis>.from(result.map((json) => Fis.fromJson(json)).toList());
+  }
 }

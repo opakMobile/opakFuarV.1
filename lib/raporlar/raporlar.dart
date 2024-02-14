@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:opak_fuar/raporlar/plasiyerToplam.dart';
 
 import 'package:opak_fuar/raporlar/raporBelgeSecim.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 
 class RaporlarPage extends StatefulWidget {
   const RaporlarPage({super.key});
@@ -37,12 +39,13 @@ class _RaporlarPageState extends State<RaporlarPage> {
                   ),
                   // ! Cari Listesi
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      List<double> gelen = await fisEx.PlasiyerRaporFisGetir();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RaporBelgeSecim(
-                                    baslik: "Plasiyer Satış Raporu",
+                              builder: (context) => PlasiyerToplam(
+                                    gelenVeri: gelen,
                                   )));
                     },
                     child: Card(
@@ -113,6 +116,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                           )),
                     ),
                   ),
+                  /*
                   // ! Cari Bilgi Raporu
                   GestureDetector(
                     onTap: () {
@@ -349,6 +353,7 @@ class _RaporlarPageState extends State<RaporlarPage> {
                           )),
                     ),
                   ),
+              */
                 ],
               ),
             ),

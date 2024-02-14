@@ -125,7 +125,8 @@ class _HomePageState extends State<HomePage> {
                  // "Versiyon:2.1.6", // vs ve zorunlu ilk hesap seçili geliyor artıkın usman aga
               //  "Versiyon:TEST",
               //  "Versiyon:2.1.8" ,// sip kopyalama sepet listesi göstermede bazı değişiklikler artık sepetten sora anasayfa dönüyoz,
-                "Versiyon:2.1.9" ,// fuarı db de yoksa hemen çekiyor
+              //  "Versiyon:2.1.9" ,// fuarı db de yoksa hemen çekiyor
+                "Versiyon:2.2.0" ,// plasiyer satış rapru eklendi
                     style: TextStyle(fontSize: 7),
                   ),
                 ],
@@ -356,7 +357,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   // ! Raporlar
-                  /*
+                  
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -424,7 +425,7 @@ class _HomePageState extends State<HomePage> {
                           )),
                     ),
                   ),
-                  */
+                  
                   // ! Verileri Güncelle
                   GestureDetector(
                     onTap: () async {
