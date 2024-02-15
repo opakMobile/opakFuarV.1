@@ -44,7 +44,7 @@ class _FuarSecState extends State<FuarSec> {
                   Center(
                     child: Text(
                       textAlign: TextAlign.center,
-                      "Uygulmaya devam etmek için fuar seçimi zorunludur. Lütfen işlem yapılacak fuarı seçiniz.",
+                      "Uygulamaya devam etmek için fuar seçimi zorunludur. Lütfen işlem yapılacak fuarı seçiniz.",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.normal,

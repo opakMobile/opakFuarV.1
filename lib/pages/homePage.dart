@@ -126,8 +126,9 @@ class _HomePageState extends State<HomePage> {
               //  "Versiyon:TEST",
               //  "Versiyon:2.1.8" ,// sip kopyalama sepet listesi göstermede bazı değişiklikler artık sepetten sora anasayfa dönüyoz,
               //  "Versiyon:2.1.9" ,// fuarı db de yoksa hemen çekiyor
-                "Versiyon:2.2.0" ,// plasiyer satış rapru eklendi
-                    style: TextStyle(fontSize: 7),
+               // "Versiyon:2.2.0" ,// plasiyer satış rapru eklendi
+                "Versiyon:2.2.1" ,// UYGULAMAYA YAZAN YER BAYİ VEEEE ALT BAYİ DEĞİŞTİ
+                style: TextStyle(fontSize: 7),
                   ),
                 ],
               ),

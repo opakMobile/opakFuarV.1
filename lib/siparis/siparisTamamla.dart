@@ -560,7 +560,7 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
                           List<Cari> bayiler = [];
                           for (var element in listeler.listCari) {
                             if (element.TIPI == "Bayi" ||
-                                element.TIPI == "Alt Bayi") {
+                                element.TIPI == "Bayi ve Alt Bayi") {
                               bayiler.add(element);
                             }
                           }
