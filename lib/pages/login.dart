@@ -8,7 +8,9 @@ import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/pages/fuarSec.dart';
 import 'package:opak_fuar/pages/settingsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../db/veriTabaniIslemleri.dart';
+import '../model/ShataModel.dart';
 import '../model/kullaniciModel.dart';
 import '../sabitler/Ctanim.dart';
 import '../sabitler/sharedPreferences.dart';
@@ -59,6 +61,14 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     // ctanim şirketi doldurur
+  }
+
+  _launchURL() async {
+    final Uri url =
+        Uri.parse('https://github.com/opakMobile/Apk/raw/main/opakfuar.apk');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch');
+    }
   }
 
   Future<void> hataGoster(
@@ -173,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
           } else {
             internetVarMi = true;
 
-       /*     await bs.getKullanicilar(
+            /*     await bs.getKullanicilar(
                 kullaniciKodu: Ctanim.kullanici!.KOD!,
                 sirket: Ctanim.sirket!,
                 IP: Ctanim.IP);
@@ -194,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                 closeIconColor: Colors.white,
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar1);
-
+              // ! internet yok ise
               if (internetVarMi == false) {
                 print("İnternet bağlantısı yok.");
                 const snackBar = SnackBar(
@@ -208,75 +218,99 @@ class _LoginPageState extends State<LoginPage> {
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               } else {
-                String genelHata = "";
-                List<String?> hatalar = [];
-                //
-            
-                hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
-                hatalar.add(await stokKartEx.servisStokGetir());
-                hatalar.add(await cariEx.servisCariGetir());
-                hatalar.add(await bs.getirStokKosul(sirket: Ctanim.sirket!));
-                hatalar.add(await bs.getirKur(sirket: Ctanim.sirket!));
-                hatalar.add(
-                    await bs.getirStokFiyatListesi(sirket: Ctanim.sirket!));
-                hatalar.add(
-                    await bs.getirStokFiyatHarListesi(sirket: Ctanim.sirket!));
-                hatalar.add(await bs.getirDahaFazlaBarkod(
-                    sirket: Ctanim.sirket!,
-                    kullaniciKodu: Ctanim.kullanici!.KOD!));
-                hatalar.add(await bs.getFuar(sirket: Ctanim.sirket!));
-                     hatalar.add(await bs.getirStokKosulAna(sirket: Ctanim.sirket!));
+                // ! internet var ise
+                SHataModel sonuc =
+                    await bs.VersiyonGuncelle(Versiyon: Ctanim.mobilversiyon);
 
-                if (hatalar.length > 0) {
-                  for (var element in hatalar) {
-                    if (element != "") {
-                      genelHata = genelHata + "\n" + element!;
+                if (sonuc.HataMesaj == "") {
+                  String genelHata = "";
+                  List<String?> hatalar = [];
+                  //
+
+                  hatalar.add(await bs.getirOlcuBirim(sirket: Ctanim.sirket!));
+                  hatalar.add(await stokKartEx.servisStokGetir());
+                  hatalar.add(await cariEx.servisCariGetir());
+                  hatalar.add(await bs.getirStokKosul(sirket: Ctanim.sirket!));
+                  hatalar.add(await bs.getirKur(sirket: Ctanim.sirket!));
+                  hatalar.add(
+                      await bs.getirStokFiyatListesi(sirket: Ctanim.sirket!));
+                  hatalar.add(await bs.getirStokFiyatHarListesi(
+                      sirket: Ctanim.sirket!));
+                  hatalar.add(await bs.getirDahaFazlaBarkod(
+                      sirket: Ctanim.sirket!,
+                      kullaniciKodu: Ctanim.kullanici!.KOD!));
+                  hatalar.add(await bs.getFuar(sirket: Ctanim.sirket!));
+                  hatalar
+                      .add(await bs.getirStokKosulAna(sirket: Ctanim.sirket!));
+
+                  if (hatalar.length > 0) {
+                    for (var element in hatalar) {
+                      if (element != "") {
+                        genelHata = genelHata + "\n" + element!;
+                      }
                     }
                   }
-                }
-                if (genelHata != "") {
-                  if (paremetreHatasiVarMi == false) {
+                  if (genelHata != "") {
+                    if (paremetreHatasiVarMi == false) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => FuarSec()),
+                        (route) => false,
+                      );
+
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomAlertDialog(
+                              align: TextAlign.left,
+                              title: 'Uyarı',
+                              message:
+                                  'Web Servisten Veri Alınırken Bazı Hatalar İle Karşılaşıldı:\n' +
+                                      genelHata,
+                              onPres: () async {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FuarSec()),
+                                  (route) => false,
+                                );
+                              },
+                              buttonText: 'Devam Et',
+                            );
+                          });
+                    } else {
+                      hataGoster(
+                          mesajVarMi: true,
+                          mesaj: "Parametre hatası...:\n" + genelHata);
+                    }
+                  } else {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => FuarSec()),
                       (route) => false,
                     );
-
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CustomAlertDialog(
-                            align: TextAlign.left,
-                            title: 'Uyarı',
-                            message:
-                                'Web Servisten Veri Alınırken Bazı Hatalar İle Karşılaşıldı:\n' +
-                                    genelHata,
-                            onPres: () async {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FuarSec()),
-                                (route) => false,
-                              );
-                            },
-                            buttonText: 'Devam Et',
-                          );
-                        });
-                  } else {
-                    hataGoster(
-                        mesajVarMi: true,
-                        mesaj: "Parametre hatası...:\n" + genelHata);
                   }
                 } else {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => FuarSec()),
-                    (route) => false,
-                  );
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return CustomAlertDialog(
+                          align: TextAlign.left,
+                          title: 'Hata',
+                          message: sonuc.HataMesaj!,
+                          onPres: () async {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          buttonText: 'Tamam',
+                        );
+                      }).then((value) => _launchURL());
                 }
               }
             } else {
-              
+              // ! internet yok ise
+              if (internetVarMi == false) {
                 if (paremetreHatasiVarMi == true) {
                   hataGoster();
                 } else {
@@ -286,6 +320,39 @@ class _LoginPageState extends State<LoginPage> {
                     (route) => false,
                   );
                 }
+              } else {
+                // ! internet var ise
+                SHataModel sonuc =
+                    await bs.VersiyonGuncelle(Versiyon: Ctanim.mobilversiyon);
+
+                if (sonuc.HataMesaj == "") {
+                  if (paremetreHatasiVarMi == true) {
+                    hataGoster();
+                  } else {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => FuarSec()),
+                      (route) => false,
+                    );
+                  }
+                } else {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return CustomAlertDialog(
+                          align: TextAlign.left,
+                          title: 'Hata',
+                          message: sonuc.HataMesaj!,
+                          onPres: () async {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          buttonText: 'Tamam',
+                        );
+                      }).then((value) => _launchURL());
+                }
+              }
             }
           });
 

@@ -14,7 +14,10 @@ import '../model/satisTipiModel.dart';
 import '../model/stokFiyatListesiModel.dart';
 
 class Ctanim {
-  //degiskenler
+  static String mobilversiyon =
+      "2.2.3"; //! (Web servisi güncellemeyi unutma) // Yeni versiyonu Github a yükle
+  //Todo 2.2.3 mobil versiyon kontrol eklendi ve güncelleme yapılıyor
+
   static var db;
   static bool urunAraFocus = true;
   static String? sirket;
@@ -72,23 +75,20 @@ class Ctanim {
   };
 
   //fonksiyonalar
-  static StokKart harekettenStokBul(FisHareket hareket){
-    List<StokKart> stok = stokKartEx.searchList.where((p0) => p0.ADI == hareket.STOKADI ||
-    p0.KOD == hareket.STOKKOD ||
-    p0.BARKOD1 == hareket.STOKKOD ||
-    p0.BARKOD2 == hareket.STOKKOD||
-    p0.BARKOD3 == hareket.STOKKOD||
-    p0.BARKOD4 == hareket.STOKKOD||
-    p0.BARKOD5 == hareket.STOKKOD||
-    p0.BARKOD6 == hareket.STOKKOD ).toList();
-    return stok.first; 
+  static StokKart harekettenStokBul(FisHareket hareket) {
+    List<StokKart> stok = stokKartEx.searchList
+        .where((p0) =>
+            p0.ADI == hareket.STOKADI ||
+            p0.KOD == hareket.STOKKOD ||
+            p0.BARKOD1 == hareket.STOKKOD ||
+            p0.BARKOD2 == hareket.STOKKOD ||
+            p0.BARKOD3 == hareket.STOKKOD ||
+            p0.BARKOD4 == hareket.STOKKOD ||
+            p0.BARKOD5 == hareket.STOKKOD ||
+            p0.BARKOD6 == hareket.STOKKOD)
+        .toList();
+    return stok.first;
   }
-
-
-
-
-
-
 
   static double genelToplamHesapla(FisController fisEx,
       {bool KDVtipDegisti = false}) {
@@ -109,16 +109,15 @@ class Ctanim {
     }
     fisEx.fis!.value!.altHesapToplamlar.clear();
     List<AltHesapToplamModel> altHesapToplamList = [];
-    for(var element in fisEx.fis!.value.fisStokListesi){
-
-      if(!altHesapToplamList.any((alt) => alt.ALTHESAPADI == element.ALTHESAP)){
+    for (var element in fisEx.fis!.value.fisStokListesi) {
+      if (!altHesapToplamList
+          .any((alt) => alt.ALTHESAPADI == element.ALTHESAP)) {
         AltHesapToplamModel alt = AltHesapToplamModel.empty();
         alt.ALTHESAPADI = element.ALTHESAP;
-        
+
         //alt.FISID = fisEx.fis!.value.ID;
         alt.TOPLAM = 0;
         altHesapToplamList.add(alt);
-        
       }
     }
 
@@ -130,11 +129,11 @@ class Ctanim {
 
       double kdvOrani = element.KDVORANI! / 100;
       int miktar = element.MIKTAR!;
-     int a = (miktar / (1+(element.MALFAZLASI / 100))).ceil();  
-     if(a>0){
-      miktar = a;
-     } 
-      
+      int a = (miktar / (1 + (element.MALFAZLASI / 100))).ceil();
+      if (a > 0) {
+        miktar = a;
+      }
+
 //listefiyatınını kurun gelmedi????
       if (fisEx.fis!.value.DOVIZID != anaBirimID) {
         brut = brut / fisEx.fis!.value.KUR!;
@@ -174,12 +173,12 @@ class Ctanim {
       }
 
       genelUrunToplami += urunToplami;
-      for(var altHesap in altHesapToplamList){
-        if(altHesap.ALTHESAPADI == element.ALTHESAP){
-          altHesap.TOPLAM = altHesap.TOPLAM! + urunToplami - kalemindirimToplami;
+      for (var altHesap in altHesapToplamList) {
+        if (altHesap.ALTHESAPADI == element.ALTHESAP) {
+          altHesap.TOPLAM =
+              altHesap.TOPLAM! + urunToplami - kalemindirimToplami;
         }
       }
-     
 
       //  alt hesap için
       /*
@@ -295,7 +294,6 @@ class Ctanim {
     String result = veri.toStringAsFixed(2);
     return double.parse(result);
   }
-  
 
   List<Map<String, dynamic>> jsonIlIlce = [
     {

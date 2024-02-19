@@ -26,6 +26,8 @@ import '../controller/fisController.dart';
 import '../model/fis.dart';
 import '../model/fuarModel.dart';
 
+BaseService bs = BaseService();
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -34,14 +36,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  BaseService bs = BaseService();
   FisController fisEx = Get.find();
-   
- 
-
- 
-
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -57,16 +52,22 @@ class _HomePageState extends State<HomePage> {
                     width: MediaQuery.of(context).size.width * 0.38,
                     child: Center(
                       child: Text(
-                        "Fuar : " + Ctanim.kullanici!.FUARADI! == "" ? "Fuar Seçilmedi" : Ctanim.kullanici!.FUARADI!,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: Colors.deepOrange,)
-                        /*GoogleFonts.lato(
+                          "Fuar : " + Ctanim.kullanici!.FUARADI! == ""
+                              ? "Fuar Seçilmedi"
+                              : Ctanim.kullanici!.FUARADI!,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepOrange,
+                          )
+                          /*GoogleFonts.lato(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.deepOrange,
                         ),*/
-                      ),
+                          ),
                     ),
                   ),
                   SizedBox(
@@ -77,11 +78,12 @@ class _HomePageState extends State<HomePage> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style:
-                        /* GoogleFonts.lato(
+                            /* GoogleFonts.lato(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.red,
-                        )*/TextStyle(
+                        )*/
+                            TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.red,
@@ -115,25 +117,27 @@ class _HomePageState extends State<HomePage> {
                     //  "Versiyon:2.0.3" ,// fişharekt düzenle birim taşması
                     //  "Versiyon: 2.0.4", // stok güncellemeye koşul güncelleme de eklendi
                     // "Versiyon:2.0.5" ,// kamera açınca fiş kaydetme
-                   // "Versiyon:2.0.6", //fuaradi eklendi
-                   // "Versiyon:2.0.7", // faur adı dropdown oldu falan fişman
-                   // "Versiyon:2.0.8", // sepet çıkıışı fiş kaydetme,
-                  //  "Versiyon:2.0.9",//fuar güncelleme,pdf wp
-                 //   "Versiyon:2.1.0",// bayi seçili parametreli
-                 //   "Versiyon:2.1.1",// bayi seçili gelmede değişme hatası
-                  //  "Versiyon:2.1.2",// il ilçe eklendi
-                //  "Versiyon:2.1.3", // barkodcarpan 1 gelirse koddan eklesin
-               //   "Versiyon:2.1.4", // yeni cari eklemeye alt hesap ve koşul eklendi WEB SERVİS GÜNCELLENMELİ
-               //   "Versiyon:2.1.5", // fisin carissini değilştrme
-                 // "Versiyon:2.1.6", // vs ve zorunlu ilk hesap seçili geliyor artıkın usman aga
-              //  "Versiyon:TEST",
-              //  "Versiyon:2.1.8" ,// sip kopyalama sepet listesi göstermede bazı değişiklikler artık sepetten sora anasayfa dönüyoz,
-              //  "Versiyon:2.1.9" ,// fuarı db de yoksa hemen çekiyor
-               // "Versiyon:2.2.0" ,// plasiyer satış rapru eklendi
-               // "Versiyon:2.2.1" ,// UYGULAMAYA YAZAN YER BAYİ VEEEE ALT BAYİ DEĞİŞTi
-                "Verisyon:2.2.2", // fise adres eklendi b6b  yok arada gönderilecek
+                    // "Versiyon:2.0.6", //fuaradi eklendi
+                    // "Versiyon:2.0.7", // faur adı dropdown oldu falan fişman
+                    // "Versiyon:2.0.8", // sepet çıkıışı fiş kaydetme,
+                    //  "Versiyon:2.0.9",//fuar güncelleme,pdf wp
+                    //   "Versiyon:2.1.0",// bayi seçili parametreli
+                    //   "Versiyon:2.1.1",// bayi seçili gelmede değişme hatası
+                    //  "Versiyon:2.1.2",// il ilçe eklendi
+                    //  "Versiyon:2.1.3", // barkodcarpan 1 gelirse koddan eklesin
+                    //   "Versiyon:2.1.4", // yeni cari eklemeye alt hesap ve koşul eklendi WEB SERVİS GÜNCELLENMELİ
+                    //   "Versiyon:2.1.5", // fisin carissini değilştrme
+                    // "Versiyon:2.1.6", // vs ve zorunlu ilk hesap seçili geliyor artıkın usman aga
+                    //  "Versiyon:TEST",
+                    //  "Versiyon:2.1.8" ,// sip kopyalama sepet listesi göstermede bazı değişiklikler artık sepetten sora anasayfa dönüyoz,
+                    //  "Versiyon:2.1.9" ,// fuarı db de yoksa hemen çekiyor
+                    // "Versiyon:2.2.0" ,// plasiyer satış rapru eklendi
+                    // "Versiyon:2.2.1" ,// UYGULAMAYA YAZAN YER BAYİ VEEEE ALT BAYİ DEĞİŞTi
+                    // 2.2.2 fise adres eklendi b6b  yok arada gönderilecek
+                    // 2.2.3 uygulama güncelleme eklendi
+                    "Verisyon:" + Ctanim.mobilversiyon,
 
-                style: TextStyle(fontSize: 7),
+                    style: TextStyle(fontSize: 7),
                   ),
                 ],
               ),
@@ -294,7 +298,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () async {
                       fisEx.list_tum_fis.clear();
                       await fisEx.listTumFisleriGetir();
-                      
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -363,7 +367,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   // ! Raporlar
-                  
+
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -431,7 +435,7 @@ class _HomePageState extends State<HomePage> {
                           )),
                     ),
                   ),
-                  
+
                   // ! Verileri Güncelle
                   GestureDetector(
                     onTap: () async {
@@ -529,11 +533,12 @@ class verilerGuncelle extends StatefulWidget {
 
 class _verilerGuncelleState extends State<verilerGuncelle> {
   _launchURL() async {
-   final Uri url = Uri.parse('http://opakyazilim.net/opakfuar.rar');
-   if (!await launchUrl(url)) {
-        throw Exception('Could not launch');
+    final Uri url = Uri.parse(
+        'https://github.com/opakMobile/ApkFuar/raw/main/opakfuar.apk');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch');
     }
-}
+  }
 
   final FisController fisEx = Get.find();
 
@@ -722,29 +727,27 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                         ),
                       ),
                     )),
-                      Align(
+                Align(
                     alignment: Alignment.topLeft,
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.75,
                       child: TextButton(
                         onPressed: () async {
-                      
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return LoadingSpinner(
-                                  color: Colors.black,
-                                  message:
-                                      "Fuar Verileri Güncelleniyor. Lütfen Bekleyiniz...",
-                                );
-                              },
-                            );
-                            await widget.bs.getFuar(sirket: Ctanim.sirket!);
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return LoadingSpinner(
+                                color: Colors.black,
+                                message:
+                                    "Fuar Verileri Güncelleniyor. Lütfen Bekleyiniz...",
+                              );
+                            },
+                          );
+                          await widget.bs.getFuar(sirket: Ctanim.sirket!);
 
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                         child: Row(
                           children: [
@@ -1258,8 +1261,7 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                                             UstUuid: listeFisler[0]["USTUUID"],
                                             jsonDataList: listeFisler,
                                             sirket: Ctanim.sirket!,
-                                            pdfMi: "H"
-                                            );
+                                            pdfMi: "H");
                                     if (gelenHata.Hata == "true") {
                                       genelHata += gelenHata.HataMesaj!;
                                     }
@@ -1372,25 +1374,24 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                         )),
                   ),
                 ),
-                 Align(
+                Align(
                   alignment: Alignment.topLeft,
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.85,
                     child: TextButton(
                         onPressed: () async {
                           _launchURL();
-                       
                         },
                         child: Row(
                           children: [
                             Icon(
-                              Icons.backup,
+                              Icons.new_releases_outlined,
                               size: 30,
-                              color: Colors.red,
+                              color: Colors.green,
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("Apk Güncelle",
+                              child: Text("Uygulama Güncelle",
                                   style: GoogleFonts.lato(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
@@ -1401,7 +1402,6 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                         )),
                   ),
                 ),
-            
               ],
             ),
           ),

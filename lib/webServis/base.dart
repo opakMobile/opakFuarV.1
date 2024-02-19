@@ -49,10 +49,9 @@ class BaseService {
         sirket: Ctanim.sirket,
         kullaniciKodu:
             Ctanim.kullanici!.KOD!); //aktarilmayanVarmi: aktarilmayanVarmi);
-    await getirCariAltHesap(
-        sirket: Ctanim.sirket!); 
-        await getirStokKosulAna(sirket: Ctanim.sirket!); 
-        //aktarilmayanVarMi:aktarilmayanVarmi);
+    await getirCariAltHesap(sirket: Ctanim.sirket!);
+    await getirStokKosulAna(sirket: Ctanim.sirket!);
+    //aktarilmayanVarMi:aktarilmayanVarmi);
   }
 
   Future<void> stokVerileriGuncelle() async {
@@ -60,7 +59,7 @@ class BaseService {
         sirket: Ctanim.sirket, kullaniciKodu: Ctanim.kullanici!.KOD!);
     //valla billa
     await getirStokKosul(sirket: Ctanim.sirket!);
-    await getirStokKosulAna(sirket: Ctanim.sirket!); 
+    await getirStokKosulAna(sirket: Ctanim.sirket!);
   }
 
   String temizleKontrolKarakterleri(String metin) {
@@ -1194,9 +1193,10 @@ class BaseService {
     }
   }
 
-  Future<String> testFunciton({required sirket,required ip}) async {
+  Future<String> testFunciton({required sirket, required ip}) async {
     var url = Uri.parse(ip); // dış ve iç denecek;
-    SHataModel gelenHata = SHataModel(Hata: "true", HataMesaj: "Sunucu ile bağlantı kurulamadı.");
+    SHataModel gelenHata =
+        SHataModel(Hata: "true", HataMesaj: "Sunucu ile bağlantı kurulamadı.");
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
       'SOAPAction': 'http://tempuri.org/Test'
@@ -1216,7 +1216,7 @@ class BaseService {
         xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
         Map<String, dynamic> jsonData =
             jsonDecode(temizleKontrolKarakterleri(parsedXml.innerText));
-        gelenHata  = SHataModel.fromJson(jsonData);
+        gelenHata = SHataModel.fromJson(jsonData);
         if (gelenHata.Hata == "true") {
           return gelenHata.HataMesaj!;
         } else {
@@ -1234,16 +1234,14 @@ class BaseService {
     }
   }
 
-    Future<SHataModel> SilSiparisFuar(
-      {required String sirket,
-      required String UstUuid,
+  Future<SHataModel> SilSiparisFuar({
+    required String sirket,
+    required String UstUuid,
   }) async {
     SHataModel hata = SHataModel(Hata: "true", HataMesaj: "Veri Gönderilemedi");
 
-
     var url = Uri.parse(Ctanim.IP);
     // dış ve iç denecek;
-
 
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
@@ -1288,7 +1286,8 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.
       return hata;
     }
   }
-    Future<String> getirStokKosulAna({required String sirket}) async {
+
+  Future<String> getirStokKosulAna({required String sirket}) async {
     var url = Uri.parse(Ctanim.IP); // dış ve iç denecek;
     var headers = {
       'Content-Type': 'text/xml; charset=utf-8',
@@ -1349,5 +1348,55 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.
           e.toString();
     }
   }
-  
+
+  Future<SHataModel> VersiyonGuncelle({
+    required String Versiyon,
+  }) async {
+    SHataModel hata =
+        SHataModel(Hata: "true", HataMesaj: "İstek Gönderilemedi");
+
+    var url = Uri.parse(Ctanim.IP);
+    // dış ve iç denecek;
+
+    var headers = {
+      'Content-Type': 'text/xml; charset=utf-8',
+      'SOAPAction': 'http://tempuri.org/VersiyonGuncelleFuar',
+    };
+    String body = '''
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <VersiyonGuncelleFuar xmlns="http://tempuri.org/">
+      <Version>$Versiyon</Version>
+    </VersiyonGuncelleFuar>
+  </soap:Body>
+</soap:Envelope>
+
+''';
+    //printWrapped(base64EncodedString);
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        var rawXmlResponse = response.body;
+        xml.XmlDocument parsedXml = xml.XmlDocument.parse(rawXmlResponse);
+
+        Map<String, dynamic> jsonData = jsonDecode(parsedXml.innerText);
+        SHataModel gelenHata = SHataModel.fromJson(jsonData);
+
+        return gelenHata;
+      } else {
+        Exception(
+            'Güncelleme İsteği gönderilemedi. StatusCode: ${response.statusCode}');
+        return hata;
+      }
+    } catch (e) {
+      Exception('Hata: $e');
+      return hata;
+    }
+  }
 }
