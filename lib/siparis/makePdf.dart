@@ -82,7 +82,7 @@ Future<Uint8List> makePdf(List<Fis> gelen, Uint8List imagePath) async {
                                               fontSize: 9,
                                               fontWeight: pw.FontWeight.bold,
                                               font: boldttfFont)),
-                                      Text(m.cariKart.ADRES.toString(),
+                                      Text(m.ADRES.toString(),
                                           style: pw.TextStyle(
                                               fontSize: 9,
                                               fontWeight: pw.FontWeight.bold,

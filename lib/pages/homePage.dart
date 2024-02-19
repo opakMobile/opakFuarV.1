@@ -20,6 +20,7 @@ import 'package:opak_fuar/sabitler/sharedPreferences.dart';
 import 'package:opak_fuar/sepet/sepetCariList.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/webServis/base.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import '../controller/fisController.dart';
 import '../model/fis.dart';
@@ -35,6 +36,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   BaseService bs = BaseService();
   FisController fisEx = Get.find();
+   
+ 
 
  
 
@@ -127,7 +130,9 @@ class _HomePageState extends State<HomePage> {
               //  "Versiyon:2.1.8" ,// sip kopyalama sepet listesi göstermede bazı değişiklikler artık sepetten sora anasayfa dönüyoz,
               //  "Versiyon:2.1.9" ,// fuarı db de yoksa hemen çekiyor
                // "Versiyon:2.2.0" ,// plasiyer satış rapru eklendi
-                "Versiyon:2.2.1" ,// UYGULAMAYA YAZAN YER BAYİ VEEEE ALT BAYİ DEĞİŞTİ
+               // "Versiyon:2.2.1" ,// UYGULAMAYA YAZAN YER BAYİ VEEEE ALT BAYİ DEĞİŞTi
+                "Verisyon:2.2.2", // fise adres eklendi b6b  yok arada gönderilecek
+
                 style: TextStyle(fontSize: 7),
                   ),
                 ],
@@ -523,6 +528,13 @@ class verilerGuncelle extends StatefulWidget {
 }
 
 class _verilerGuncelleState extends State<verilerGuncelle> {
+  _launchURL() async {
+   final Uri url = Uri.parse('http://opakyazilim.net/opakfuar.rar');
+   if (!await launchUrl(url)) {
+        throw Exception('Could not launch');
+    }
+}
+
   final FisController fisEx = Get.find();
 
   XFile? _selectedImage;
@@ -1360,6 +1372,36 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                         )),
                   ),
                 ),
+                 Align(
+                  alignment: Alignment.topLeft,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    child: TextButton(
+                        onPressed: () async {
+                          _launchURL();
+                       
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.backup,
+                              size: 30,
+                              color: Colors.red,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Apk Güncelle",
+                                  style: GoogleFonts.lato(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  )),
+                            ),
+                          ],
+                        )),
+                  ),
+                ),
+            
               ],
             ),
           ),

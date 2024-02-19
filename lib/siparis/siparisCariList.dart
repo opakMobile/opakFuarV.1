@@ -261,6 +261,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                     //  fisEx.fis!.value = fis;
                                     fis.cariKart = cari;
                                     fis.CARIKOD = cari.KOD;
+                                    fis.ADRES = cari.ADRES! + "\n" + cari.IL! + " / " + cari.ILCE!;
                                     fis.CARIADI = cari.ADI;
                                     fis.SUBEID = int.parse(
                                         Ctanim.kullanici!.YERELSUBEID!);
@@ -429,6 +430,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                     Fis fis = Fis.empty();
                                     fisEx.fis!.value = fis;
                                     fisEx.fis!.value.cariKart = cari;
+                                   fisEx.fis!.value.ADRES = cari.ADRES! + "\n" + cari.IL! + " / " + cari.ILCE!;
                                     fisEx.fis!.value.CARIKOD = cari.KOD;
                                     fisEx.fis!.value.CARIADI = cari.ADI;
                                     fisEx.fis!.value.SUBEID = int.parse(
@@ -493,6 +495,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
   void cariKopyala(Cari cari, List<String> altListeCari) {
     fisEx.fis!.value.CARIKOD = cari.KOD;
     fisEx.fis!.value.CARIADI = cari.ADI;
+    fisEx.fis!.value.ADRES = cari.ADRES! + "\n" + cari.IL! + " / " + cari.ILCE!;
     List<CariAltHesap> altHesaplar = [];
     for (var element in listeler.listCariAltHesap) {
       if (altListeCari.contains(element.ALTHESAPID.toString())) {

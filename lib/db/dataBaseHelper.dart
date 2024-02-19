@@ -14,7 +14,7 @@ class DatabaseHelper {
     _databaseName = databaseName;
   }
   static String? _databaseName;
-  static final _databaseVersion = 14;
+  static final _databaseVersion = 15;
 
   static Database? _database;
 
@@ -53,6 +53,13 @@ class DatabaseHelper {
       ADI TEXT
     )
       */
+      if(i==15){
+        String sorgu = """
+        ALTER TABLE TBLFISSB ADD COLUMN ADRES TEXT;
+        """;
+        await db.execute(sorgu);
+
+      }
       if (i == 14) {
         String Sorgu = """
     CREATE TABLE IF NOT EXISTS TBLSTOKKOSULANASB (
@@ -309,7 +316,8 @@ class DatabaseHelper {
     USTUUID TEXT,
     SIPARISSAYISI INTEGER,
     KALEMSAYISI INTEGER,
-    FUARADI TEXT
+    FUARADI TEXT,
+    ADRES TEXT
     )""";
       await db.execute(Sorgu);
     } on PlatformException catch (e) {

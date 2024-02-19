@@ -1044,7 +1044,7 @@ class BaseService {
   </soap:Body>
 </soap:Envelope>
 ''';
-    //printWrapped(jsonString);
+    printWrapped(jsonString);
     try {
       http.Response response = await http.post(
         url,

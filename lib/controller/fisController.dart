@@ -231,12 +231,13 @@ class FisController extends GetxController {
       var element = tt[i];
       List<FisHareket> fisHar = await getFisHar(element.ID!);
       element.fisStokListesi = fisHar;
-
+      /*
       element.cariKart = cariEx.searchCariList.firstWhere(
         (c) => c.KOD == element.CARIKOD,
         orElse: () =>
             element.cariKart = Cari(ADI: "CARİ GÖNDERİLMEDEN SİLİNMİŞ"),
       );
+      */
     }
     list_tum_fis.addAll(tt);
   }
@@ -253,9 +254,11 @@ class FisController extends GetxController {
       var element = tt[i];
       List<FisHareket> fisHar = await getFisHar(element.ID!);
       element.fisStokListesi = fisHar;
-
-      element.cariKart =
+        /*
+          element.cariKart =
           cariEx.searchCariList.firstWhere((c) => c.KOD == element.CARIKOD);
+          */
+  
     }
     list_fis_gidecek.addAll(tt);
   }

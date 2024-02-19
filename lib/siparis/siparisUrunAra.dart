@@ -185,10 +185,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
       fisEx.fis!.value.AKTARILDIMI = false;
       Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
       fisEx.fis!.value = Fis.empty();
-      /*
-      fisEx.list_tum_fis.clear(); 
-      fisEx.listTumFisleriGetir();
-      */
+      
     }
     super.dispose();
     //Ctanim.seciliMarkalarFiltreMap.clear();

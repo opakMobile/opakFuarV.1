@@ -36,7 +36,7 @@ dependencies:
   htmltopdfwidgets: ^0.0.9+2
   flutter_speed_dial: ^7.0.0
   #url_launcher: ^6.2.4
-  url_launcher:
+  url_launcher: ^6.2.4
   whatsapp_share: ^2.0.2
   
   

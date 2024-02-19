@@ -63,6 +63,7 @@ class Fis {
   int? KALEMSAYISI = 0;
   bool? seciliFisGonder = false;
   String? FUARADI = "";
+  String? ADRES = "";
   
 
   Fis(
@@ -112,6 +113,7 @@ class Fis {
       this.SIPARISSAYISI,
       this.KALEMSAYISI,
       this.FUARADI,
+      this.ADRES,
       {this.isExpanded = false,this.seciliFisGonder=false});
   Fis.empty()
       : this(
@@ -160,6 +162,7 @@ class Fis {
             "",
             0,
             0,
+            "",
             "");
 
   Fis.fromFis(Fis fis, List<FisHareket> fisHareket) {
@@ -212,6 +215,7 @@ class Fis {
     this.fisStokListesi = fisHareket;
     this.altHesapToplamlar = altHesapToplamlar;
     this.FUARADI = fis.FUARADI;
+    this.ADRES = fis.ADRES;
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -261,6 +265,7 @@ class Fis {
     data['SIPARISSAYISI']= SIPARISSAYISI;
     data['KALEMSAYISI']= KALEMSAYISI;
     data['FUARADI']= FUARADI;
+    data['ADRES']= ADRES;
 
 
 
@@ -320,7 +325,7 @@ class Fis {
 
     data['STOKLISTESI'] = fisStokListesi.map((fis1) => fis1.toJson()).toList();
     data['FUARADI'] = FUARADI.toString();
-
+    data['ADRES'] = ADRES.toString();
     //data['CARIKART'] = cariKart.toJson();
    // data['altHesapToplamlar'] = altHesapToplamlar.map((fis1) => fis1.toJson()).toList();
 
@@ -374,6 +379,7 @@ class Fis {
     DOVIZID = int.parse(json['DOVIZID'].toString());
     ONAY = json['ONAY'];
     FUARADI = json['FUARADI'];
+    ADRES = json['ADRES'];
   }
   Fis.fromJson2(Map<String, dynamic> json) {
     ID = int.parse(json['ID'].toString());
@@ -421,6 +427,8 @@ class Fis {
     KALEMSAYISI =int.parse(json['KALEMSAYISI'].toString());
     ONAY = json['ONAY'];
     FUARADI = json['FUARADI'];
+    ADRES = json['ADRES'];
+    
   }
   //database fiş ekle
   Future<int?> fisEkle({required Fis fis, required String belgeTipi}) async {
