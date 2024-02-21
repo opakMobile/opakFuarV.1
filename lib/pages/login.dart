@@ -221,6 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                 // ! internet var ise
                 SHataModel sonuc =
                     await bs.VersiyonGuncelle(Versiyon: Ctanim.mobilversiyon);
+                    
 
                 if (sonuc.HataMesaj == "") {
                   String genelHata = "";

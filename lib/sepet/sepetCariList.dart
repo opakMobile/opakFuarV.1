@@ -393,13 +393,7 @@ class _SepetCariListState extends State<SepetCariList> {
 
                                 }
                              
-                                /*
-                                  element.cariKart = cariEx.searchCariList.firstWhere(
-        (c) => c.KOD == element.CARIKOD,
-        orElse: () =>
-            element.cariKart = Cari(ADI: "CARİ GÖNDERİLMEDEN SİLİNMİŞ"),
-      );
-                                */
+                                
 
                                 String harf1 = Ctanim.cariIlkIkiDon(
                                     tempFis[index].CARIADI!)[0];
@@ -499,6 +493,19 @@ class _SepetCariListState extends State<SepetCariList> {
                                                                 .ADRES
                                                                 .toString() ??
                                                             "",
+                                                        maxLines: 3,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      Text(
+                                                        tempFis[index].ACIKLAMA4 == "" ?
+                                                        "\nBayi Seçilmemiş" :
+                                                     "\nBayi :"+   tempFis[index]
+                                                                .ACIKLAMA4
+                                                                .toString() +
+                                                            " / "+tempFis[index]
+                                                                .ACIKLAMA5
+                                                                .toString() ,
                                                         maxLines: 3,
                                                         overflow: TextOverflow
                                                             .ellipsis,
