@@ -377,6 +377,7 @@ class _okumaModuListState extends State<okumaModuList> {
                                       (item) =>
                                           item.STOKKOD == stokModel.STOKKOD! &&
                                           item.ALTHESAP == stokModel.ALTHESAP!);
+                                          print(fisEx.fis?.value.fisStokListesi.length);
 
                                   await Fis.empty().fisHareketSil(
                                       fisEx.fis!.value.ID!,
@@ -388,8 +389,10 @@ class _okumaModuListState extends State<okumaModuList> {
                                         fisEx.fis!.value!.ARA_TOPLAM!
                                             .toString());
                                   });
-
                                   Navigator.pop(context);
+                                  setState(() {
+                                    
+                                  });
                                 },
                               );
                             });

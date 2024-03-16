@@ -20,6 +20,7 @@ class Ctanim {
 
   static var db;
   static bool urunAraFocus = true;
+  static bool siparisTamamlaAcildi = false;
   static String? sirket;
   static String IP = "";
   static int siparisNumarasi = 0;

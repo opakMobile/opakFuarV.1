@@ -253,7 +253,7 @@ class StokKartController extends GetxController {
           for (var element in listeler.listStokKosul) {
             if (element.KOSULID == seciliCari.KOSULID &&
                 element.GRUPKODU == Stok.KOSULGRUP_KODU &&
-                element.ALTHESAPID == seciliAltHesapID) {
+                (element.ALTHESAPID == seciliAltHesapID || element.ALTHESAPID == 0)) {
               // stok kosul var
               if (element.ISK1 != 0) {
                 iskontoDegeri1 = element.ISK1!;

@@ -24,9 +24,10 @@ import '../sabitler/Ctanim.dart';
 import '../sabitler/sharedPreferences.dart';
 
 class SiparisCariList extends StatefulWidget {
-  SiparisCariList({required this.islem});
+  SiparisCariList({required this.islem, required this.bayiGelsin});
 
   final String islem;
+  final bool bayiGelsin;
   @override
   State<SiparisCariList> createState() => _SiparisCariListState();
 }
@@ -34,6 +35,15 @@ class SiparisCariList extends StatefulWidget {
 class _SiparisCariListState extends State<SiparisCariList> {
   FisController fisEx = Get.find();
   var uuid = Uuid();
+  bool bayiFilitre = false;
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bayiFilitre = widget.bayiGelsin;
+  }
+
+
   Color randomColor() {
     Random random = Random();
     int red = random.nextInt(128); // 0-127 arasında rastgele bir değer
@@ -125,6 +135,26 @@ class _SiparisCariListState extends State<SiparisCariList> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * .9,
+                    child: CheckboxListTile(
+                      title: Text("Bayi Gelmesin"),
+                      value: bayiFilitre,
+                      onChanged: (bool? value) async {
+                        setState(() {
+                          bayiFilitre = value!;
+                        });
+                        await SharedPrefsHelper.bayiKaydet(bayiFilitre);
+                      },
+                    ),
+                  ),
+                ),
+                Divider(
+                  height: 1,
+                  color: Colors.black,
+                ),
                 // ! Cari Listesi
                 SingleChildScrollView(
                   child: SizedBox(
@@ -137,7 +167,9 @@ class _SiparisCariListState extends State<SiparisCariList> {
                           Cari cari = cariEx.searchCariList[index];
                           String harf1 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
                           String harf2 = Ctanim.cariIlkIkiDon(cari.ADI!)[0];
-                          return Column(
+                          return 
+                          (bayiFilitre == true && cari.TIPI != "Bayi") || (bayiFilitre == false) ? 
+                          Column(
                             children: [
                               ListTile(
                                 leading: CircleAvatar(
@@ -478,7 +510,7 @@ class _SiparisCariListState extends State<SiparisCariList> {
                                 color: Colors.black87,
                               )
                             ],
-                          );
+                          ):Container();
                         },
                       );
                     }),

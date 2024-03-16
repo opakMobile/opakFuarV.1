@@ -14,7 +14,6 @@ import 'package:opak_fuar/sabitler/sabitmodel.dart';
 import 'package:opak_fuar/siparis/PdfOnizleme.dart';
 import 'package:opak_fuar/siparis/altHesapAyarla.dart';
 import 'package:opak_fuar/siparis/bayiSec.dart';
-import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/siparis/siparisUrunAra.dart';
 import 'package:uuid/uuid.dart';
 
@@ -32,11 +31,18 @@ class _SiparisTamamlaState extends State<SiparisTamamla> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Ctanim.siparisTamamlaAcildi = true;
     if (fisEx.fis!.value.ISK1 != 0.0) {
       genelIskonto1Controller.text =
           (fisEx.fis!.value.ISK1!.toInt()).toString();
     }
     aciklamaController.text = fisEx.fis!.value.ACIKLAMA1!;
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Ctanim.siparisTamamlaAcildi = false;
   }
 
   Color getRandomColor() {

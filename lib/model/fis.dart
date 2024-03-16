@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/model/altHesapToplamModel.dart';
+import 'package:opak_fuar/sabitler/sharedPreferences.dart';
 
 import '../sabitler/Ctanim.dart';
 import 'cariModel.dart';
@@ -431,11 +432,12 @@ class Fis {
     
   }
   //database fiş ekle
-  Future<int?> fisEkle({required Fis fis, required String belgeTipi}) async {
+  Future<int?>  fisEkle({required Fis fis, required String belgeTipi}) async {
     var result;
     fis.TIP = Ctanim().MapFisTip["Musteri_Siparis"];
 
     if (fis.ID != 0) {
+    //  await SharedPrefsHelper.fisIDKaydet(fis.ID!);
       try {
         await Ctanim.db?.update("TBLFISSB", fis.toJson(),
             where: 'ID = ?',
@@ -466,6 +468,7 @@ class Fis {
           result = await Ctanim.db
               ?.insert("TBLFISSB", fis.toJson())
               .then((value) => fis.ID = value);
+    //          await SharedPrefsHelper.fisIDKaydet(result);
           print("ELse:" + fis.ID.toString());
           for (var element in fis.fisStokListesi) {
             element.FIS_ID = result;

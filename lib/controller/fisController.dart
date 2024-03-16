@@ -273,8 +273,8 @@ class FisController extends GetxController {
 
 
 
-  Future<RxList<Fis>> listSonFisGetir() async {
-    List<Fis> tt = await getSonFis();
+  Future<RxList<Fis>> listSonFisGetir(int fisID) async {
+    List<Fis> tt = await getSonFis(fisID);
 
     // FisHareketlerini alırken forEach kullanmak yerine Future.forEach kullanın
     await Future.forEach(tt, (element) async {
@@ -290,9 +290,9 @@ class FisController extends GetxController {
     return list_fis_son;
   }
 
-  Future<List<Fis>> getSonFis() async {
+  Future<List<Fis>> getSonFis(int fisID) async {
     List<Map<String, dynamic>> result = await Ctanim.db?.query("TBLFISSB",
-        where: 'DURUM = ?', whereArgs: [true], orderBy: 'ID DESC', limit: 1);
+        where: 'ID=?', whereArgs: [fisID],);
     List<Fis> son10Fis =
         List.generate(result.length, (i) => Fis.fromJson(result[i]));
     return son10Fis;

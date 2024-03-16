@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:opak_fuar/controller/fisController.dart';
 import 'package:opak_fuar/model/KurModel.dart';
@@ -10,8 +10,11 @@ import 'package:opak_fuar/model/cariAltHesapModel.dart';
 import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/stokKartModel.dart';
 import 'package:opak_fuar/pages/CustomAlertDialog.dart';
+import 'package:opak_fuar/pages/homePage.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/sabitler/sharedPreferences.dart';
+import 'package:opak_fuar/sepet/sepetCariList.dart';
 import 'package:opak_fuar/siparis/fisHareketDuzenle.dart';
 import 'package:opak_fuar/siparis/okumaModuTasarim.dart';
 import 'package:opak_fuar/siparis/siparisTamamla.dart';
@@ -24,7 +27,10 @@ import '../sabitler/Ctanim.dart';
 FisController fisEx = Get.find();
 
 class SiparisUrunAra extends StatefulWidget {
-  SiparisUrunAra({required this.cari, required this.varsayilan, required this.sepettenMiGeldin});
+  SiparisUrunAra(
+      {required this.cari,
+      required this.varsayilan,
+      required this.sepettenMiGeldin});
 
   late Cari cari;
   late CariAltHesap varsayilan;
@@ -41,10 +47,6 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
     super.initState();
     //doğrudan cari alt hesapları verecez
     WidgetsBinding.instance!.addObserver(this);
-
-
-
-    
 
     seciliAltHesap = widget.varsayilan;
 
@@ -166,7 +168,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
 
     Ctanim.secililiMarkalarFiltre.clear();
     // sepet cari listden gelince kaydetsin
-    if (fisEx.fis!.value.fisStokListesi.length > 0 && widget.sepettenMiGeldin == false) {
+    if (fisEx.fis!.value.fisStokListesi.length > 0 &&
+        widget.sepettenMiGeldin == false) {
       fisEx.fis!.value.DURUM = true;
       final now = DateTime.now();
       final formatter = DateFormat('HH:mm');
@@ -175,9 +178,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
       fisEx.fis!.value.AKTARILDIMI = false;
       Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
       fisEx.fis!.value = Fis.empty();
-   
-    }else if(widget.sepettenMiGeldin == true){
-    fisEx.fis!.value.DURUM = true;
+    } else if (widget.sepettenMiGeldin == true) {
+      fisEx.fis!.value.DURUM = true;
       final now = DateTime.now();
       final formatter = DateFormat('HH:mm');
       String saat = formatter.format(now);
@@ -185,7 +187,6 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
       fisEx.fis!.value.AKTARILDIMI = false;
       Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
       fisEx.fis!.value = Fis.empty();
-      
     }
     super.dispose();
     //Ctanim.seciliMarkalarFiltreMap.clear();
@@ -200,12 +201,51 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
     if (state == AppLifecycleState.resumed) {
       //son fişi getir
       if (kameradanOkuma == false) {
-        List a = await fisEx.listSonFisGetir();
-        fisEx.fis!.value = a.first;
-        Ctanim.genelToplamHesapla(fisEx);
+        /*
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+            (route) => false);
+
+        fisEx.list_tum_fis.clear();
+        await fisEx.listTumFisleriGetir();
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SepetCariList(
+                      islem: true,
+                    )));
+                    */
+        bool pauseMi = await SharedPrefsHelper.pausedGetir();
+        if(pauseMi == true){
+          await SharedPrefsHelper.pausedKaydet(false);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+              (route) => false);
+              /*
+          
+          int gelenFisID = await SharedPrefsHelper.fisIDGetir();
+        if (gelenFisID != -1) {
+          List a = await fisEx.listSonFisGetir(gelenFisID);
+          fisEx.fis!.value = a.first;
+          Ctanim.genelToplamHesapla(fisEx);
+
+        } else {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+              (route) => false);
+        }
+        */
       }
-      kameradanOkuma = false;
+        }
+         await SharedPrefsHelper.pausedKaydet(false);
+         kameradanOkuma = false;
+
     } else if (state == AppLifecycleState.paused) {
+      await SharedPrefsHelper.pausedKaydet(true);
       //son fişi kaydet
       print("paused");
       fisEx.fis!.value.DURUM = true;
@@ -214,7 +254,8 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
       String saat = formatter.format(now);
       fisEx.fis!.value.SAAT = saat;
       fisEx.fis!.value.AKTARILDIMI = false;
-      Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+      await Fis.empty().fisEkle(fis: fisEx.fis!.value, belgeTipi: "YOK");
+      
       if (kameradanOkuma == false) {
         fisEx.fis!.value = Fis.empty();
       }
@@ -366,7 +407,7 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                               ),
                               value: aramaModu,
                               onChanged: (value) async {
-                                      Ctanim.urunAraFocus = true;
+                                Ctanim.urunAraFocus = true;
                                 editingController.text = "";
                                 setState(() {
                                   aramaModu = value!;
@@ -535,14 +576,31 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                     // ! Firma adı
                     Padding(
                       padding: EdgeInsets.all(3.0),
-                      child: Text(
-                        widget.cari.ADI!.toString(),
-                        maxLines: 1,
-                        style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red),
+                      child: Column(
+                        children: [
+                          Text(
+                            widget.cari.ADI!.toString(),
+                            maxLines: 1,
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
+                          /*
+                          Text(
+                            "Sepetteki Kalem Sayısı: " +
+                                fisEx.fis!.value.fisStokListesi.length
+                                    .toString(),
+                            maxLines: 1,
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
+                          */
+                        ],
                       ),
                     ),
 
@@ -600,8 +658,12 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                     ),
                     Container(
                       height: ekranYuksekligi < 650
-                          ?  okumaModu == false ? ekranYuksekligi * .56 : ekranYuksekligi*.51
-                          : okumaModu == false ? ekranYuksekligi*.6 :  ekranYuksekligi*.54,
+                          ? okumaModu == false
+                              ? ekranYuksekligi * .56
+                              : ekranYuksekligi * .51
+                          : okumaModu == false
+                              ? ekranYuksekligi * .6
+                              : ekranYuksekligi * .54,
                       child: okumaModu == true
                           ? okumaModuList(
                               seciliAltHesap: seciliAltHesap!.ALTHESAP!,
@@ -1138,6 +1200,12 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                                                             print("turan" +
                                                                 miktar
                                                                     .toString());
+                                                            ustbildirim(
+                                                              stokModel,
+                                                              miktar,
+                                                              birim: stokModel
+                                                                  .OLCUBIRIM1!,
+                                                            );
                                                             sepeteEkle(
                                                                 stokModel,
                                                                 gidecekKur,
@@ -1164,9 +1232,6 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
                                                                     (double.tryParse(stokModel.SACIKLAMA10!)!)
                                                                             .toInt() ??
                                                                         0);
-                                                            showSnackBar(
-                                                                context,
-                                                                miktar);
                                                           },
                                                         ),
                                                       )),
@@ -1497,6 +1562,9 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
   }
 
   void showSnackBar(BuildContext context, double miktar) {
+    Get.snackbar("Hata", "Borç veya Alacak Alanlarından Birini Doldurunuz",
+        backgroundColor: Colors.red);
+    /*
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -1507,11 +1575,32 @@ class _SiparisUrunAraState extends State<SiparisUrunAra>
         backgroundColor: Colors.blue,
       ),
     );
+    */
     /*
     setState(() {
       Ctanim.urunAraFocus = true;
     });
     */
+  }
+
+  void ustbildirim(StokKart stokModel, double miktar, {String birim = ""}) {
+    bool urunVarMi = fisEx.fis!.value.fisStokListesi.any(
+        (element) => element.STOKKOD == stokModel.guncelDegerler!.guncelBarkod);
+    Color renk = urunVarMi ? Colors.orange : Colors.green;
+    String message = urunVarMi
+        ? stokModel.ADI! +
+            "miktarı " +
+            miktar.toString() +
+            " olarak güncellendi."
+        : miktar.toString() + " adet " + stokModel.ADI! + " sepete eklendi.";
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      backgroundColor: renk,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   void sepeteEkle(StokKart stokKart, KurModel stokKartKur, double miktar,

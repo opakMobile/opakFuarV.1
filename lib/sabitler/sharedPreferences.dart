@@ -1,3 +1,4 @@
+import 'package:get/get_rx/get_rx.dart';
 import 'package:opak_fuar/sabitler/listeler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,19 @@ class SharedPrefsHelper {
       return ip;
     } else {
       return "";
+    }
+  }
+      static Future<void> bayiKaydet(bool bayiGelsin) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('bayiGelsin', bayiGelsin);
+  }
+    static Future<bool> bayiCek() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? storedNumber = prefs.getBool('bayiGelsin');
+    if (storedNumber != null) {
+      return storedNumber;
+    } else {
+      return false;
     }
   }
 
@@ -140,4 +154,33 @@ class SharedPrefsHelper {
       return -1;
     }
   }
+      static Future<void> fisIDKaydet(int number) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('fisID', number.toString());
+  }
+
+  static Future<int> fisIDGetir() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedNumber = prefs.getString('fisID');
+    if (storedNumber != null) {
+      return int.tryParse(storedNumber)??-1;
+    } else {
+      return -1;
+    }
+  }
+     static Future<void> pausedKaydet(bool number) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('pause', number);
+  }
+
+  static Future<bool> pausedGetir() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? storedNumber = prefs.getBool('pause');
+    if (storedNumber != null) {
+      return storedNumber;
+    } else {
+      return false;
+    }
+  }
+
 }

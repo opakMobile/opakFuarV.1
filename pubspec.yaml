@@ -38,6 +38,10 @@ dependencies:
   #url_launcher: ^6.2.4
   url_launcher: ^6.1.14
   whatsapp_share: ^2.0.2
+  fluttertoast: ^8.2.4
+  permission_handler: ^10.4.5
+  flutter_file_downloader: ^1.2.1
+  open_file: ^3.3.2
   
   
   

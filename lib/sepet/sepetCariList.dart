@@ -13,6 +13,7 @@ import 'package:opak_fuar/model/fis.dart';
 import 'package:opak_fuar/model/fisHareket.dart';
 import 'package:opak_fuar/pages/LoadingSpinner.dart';
 import 'package:opak_fuar/sabitler/sabitmodel.dart';
+import 'package:opak_fuar/sabitler/sharedPreferences.dart';
 import 'package:opak_fuar/sepet/sepetDetay.dart';
 import 'package:opak_fuar/siparis/PdfOnizleme.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
@@ -218,8 +219,9 @@ class _SepetCariListState extends State<SepetCariList> {
                       ),
                       label: "Siparşin Carisini Değiştir",
                       onTap: () async {
+                        bool bayiSecili = await SharedPrefsHelper.bayiCek();
                         tekFisMiSeciliKontrolVeCariListeGonderme(
-                            context, "cariKopyala");
+                            context, "cariKopyala", bayiSecili);
                       }),
                   SpeedDialChild(
                       backgroundColor: Color.fromARGB(255, 70, 89, 105),
@@ -230,8 +232,9 @@ class _SepetCariListState extends State<SepetCariList> {
                       ),
                       label: "Siparişi Kopyala",
                       onTap: () async {
+                        bool bayiSecili = await SharedPrefsHelper.bayiCek();
                         tekFisMiSeciliKontrolVeCariListeGonderme(
-                            context, "siparisKopyala");
+                            context, "siparisKopyala", bayiSecili);
                       }),
                   SpeedDialChild(
                       backgroundColor: Color.fromARGB(255, 70, 89, 105),
@@ -382,18 +385,17 @@ class _SepetCariListState extends State<SepetCariList> {
                           : ListView.builder(
                               itemCount: tempFis.length,
                               itemBuilder: (context, index) {
-                                if(tempFis[index].ADRES == null || tempFis[index].ADRES == ""){
-                                  
+                                if (tempFis[index].ADRES == null ||
+                                    tempFis[index].ADRES == "") {
                                   Cari cc = cariEx.searchCariList.firstWhere(
-        (c) => c.KOD == tempFis[index].CARIKOD,
-       
-      );
-                                  tempFis[index].ADRES = cc.ADRES!+"\n"+cc.ILCE!+" /" +cc.IL!;
-
-
+                                    (c) => c.KOD == tempFis[index].CARIKOD,
+                                  );
+                                  tempFis[index].ADRES = cc.ADRES! +
+                                      "\n" +
+                                      cc.ILCE! +
+                                      " /" +
+                                      cc.IL!;
                                 }
-                             
-                                
 
                                 String harf1 = Ctanim.cariIlkIkiDon(
                                     tempFis[index].CARIADI!)[0];
@@ -430,12 +432,17 @@ class _SepetCariListState extends State<SepetCariList> {
                                                     .size
                                                     .width *
                                                 0.45,
-                                            child: Text(
-                                              tempFis[index]
-                                                  .CARIADI!
-                                                  .toString(),
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis,
+                                            child: Column(
+                                              children: [
+                                               
+                                                Text(
+                                                  tempFis[index]
+                                                      .CARIADI!
+                                                      .toString(),
+                                                  maxLines: 3,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ],
                                             ),
                                           ),
                                           Spacer(),
@@ -498,14 +505,18 @@ class _SepetCariListState extends State<SepetCariList> {
                                                             .ellipsis,
                                                       ),
                                                       Text(
-                                                        tempFis[index].ACIKLAMA4 == "" ?
-                                                        "\nBayi Seçilmemiş" :
-                                                     "\nBayi :"+   tempFis[index]
-                                                                .ACIKLAMA4
-                                                                .toString() +
-                                                            " / "+tempFis[index]
-                                                                .ACIKLAMA5
-                                                                .toString() ,
+                                                        tempFis[index]
+                                                                    .ACIKLAMA4 ==
+                                                                ""
+                                                            ? "\nBayi Seçilmemiş"
+                                                            : "\nBayi :" +
+                                                                tempFis[index]
+                                                                    .ACIKLAMA4
+                                                                    .toString() +
+                                                                " / " +
+                                                                tempFis[index]
+                                                                    .ACIKLAMA5
+                                                                    .toString(),
                                                         maxLines: 3,
                                                         overflow: TextOverflow
                                                             .ellipsis,
@@ -544,33 +555,32 @@ class _SepetCariListState extends State<SepetCariList> {
                                             ADI: "CARİ GÖNDERİLMEDEN SİLİNMİŞ",
                                           ),
                                         );
-                                         CariAltHesap? vs;
-                                          cari.cariAltHesaplar.clear();
-                                          List<String> altListe =
-                                              cari.ALTHESAPLAR!.split(",");
+                                        CariAltHesap? vs;
+                                        cari.cariAltHesaplar.clear();
+                                        List<String> altListe =
+                                            cari.ALTHESAPLAR!.split(",");
+                                        for (var elemnt
+                                            in listeler.listCariAltHesap) {
+                                          if (altListe.contains(
+                                              elemnt.ALTHESAPID.toString())) {
+                                            cari.cariAltHesaplar.add(elemnt);
+                                          }
+                                          if (elemnt.ZORUNLU == "E" &&
+                                              elemnt.VARSAYILAN == "E" &&
+                                              vs == null) {
+                                            vs = elemnt;
+                                          }
+                                        }
+                                        if (cari.cariAltHesaplar.isEmpty) {
                                           for (var elemnt
                                               in listeler.listCariAltHesap) {
-                                            if (altListe.contains(
-                                                elemnt.ALTHESAPID.toString())) {
+                                            if (elemnt.ZORUNLU == "E" &&
+                                                elemnt.VARSAYILAN == "E") {
                                               cari.cariAltHesaplar.add(elemnt);
                                             }
-                                            if (elemnt.ZORUNLU == "E" &&
-                                                elemnt.VARSAYILAN == "E" &&
-                                                vs == null) {
-                                              vs = elemnt;
-                                            }
                                           }
-                                          if (cari.cariAltHesaplar.isEmpty) {
-                                            for (var elemnt
-                                                in listeler.listCariAltHesap) {
-                                              if (elemnt.ZORUNLU == "E" &&
-                                                  elemnt.VARSAYILAN == "E") {
-                                                cari.cariAltHesaplar
-                                                    .add(elemnt);
-                                              }
-                                            }
-                                          }
-                                          tempFis[index].cariKart = cari;
+                                        }
+                                        tempFis[index].cariKart = cari;
                                         if (tempFis[index].AKTARILDIMI! ==
                                             false) {
                                           // FIS AKTARILMAMIŞ DÜZENLEMEYE GİT!
@@ -578,7 +588,7 @@ class _SepetCariListState extends State<SepetCariList> {
                                           fisEx.fis!.value = tempFis[index];
                                           print(fisEx.fis!.value.TIP);
                                           Ctanim.genelToplamHesapla(fisEx);
-                                         
+
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
@@ -592,13 +602,12 @@ class _SepetCariListState extends State<SepetCariList> {
                                                       cari: cari,
                                                     )),
                                           );
-                                          
                                         } else {
-                                         // AKTARILMIŞ
+                                          // AKTARILMIŞ
                                           if (await Connectivity()
                                                   .checkConnectivity() ==
                                               ConnectivityResult.none) {
-                                                // INTERNET BAĞLANTISI YOK PDF SOR
+                                            // INTERNET BAĞLANTISI YOK PDF SOR
                                             showDialog(
                                                 context: context,
                                                 builder: (context) {
@@ -782,14 +791,14 @@ class _SepetCariListState extends State<SepetCariList> {
   }
 
   void tekFisMiSeciliKontrolVeCariListeGonderme(
-      BuildContext context, String islem) {
+      BuildContext context, String islem, bool bayiSecili) {
     List<Fis> secililer =
         tempFis.where((element) => element.seciliFisGonder == true).toList();
     if (secililer.length == 1) {
-       secililer[0].cariKart = cariEx.searchCariList.firstWhere(
+      secililer[0].cariKart = cariEx.searchCariList.firstWhere(
         (c) => c.KOD == secililer[0].CARIKOD,
         orElse: () =>
-             secililer[0].cariKart = Cari(ADI: "CARİ GÖNDERİLMEDEN SİLİNMİŞ"),
+            secililer[0].cariKart = Cari(ADI: "CARİ GÖNDERİLMEDEN SİLİNMİŞ"),
       );
       fisEx.fis!.value = secililer[0];
       fisEx.fis!.value.ACIKLAMA4 = secililer[0].ACIKLAMA4;
@@ -798,6 +807,7 @@ class _SepetCariListState extends State<SepetCariList> {
           context,
           MaterialPageRoute(
               builder: (context) => SiparisCariList(
+                    bayiGelsin: bayiSecili,
                     islem: islem,
                   ))).then((value) async {
         fisEx.list_tum_fis.clear();

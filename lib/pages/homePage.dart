@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,6 +21,7 @@ import 'package:opak_fuar/sabitler/sharedPreferences.dart';
 import 'package:opak_fuar/sepet/sepetCariList.dart';
 import 'package:opak_fuar/siparis/siparisCariList.dart';
 import 'package:opak_fuar/webServis/base.dart';
+import 'package:open_file/open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import '../controller/fisController.dart';
@@ -163,11 +165,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                   // ! Siparis Al
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                     bool bayiGelsin =  await SharedPrefsHelper.bayiCek();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => SiparisCariList(
+                                bayiGelsin: bayiGelsin,
                                     islem: "",
                                   )));
                     },
@@ -532,18 +536,23 @@ class verilerGuncelle extends StatefulWidget {
 }
 
 class _verilerGuncelleState extends State<verilerGuncelle> {
+  String path = "";
   _launchURL() async {
     final Uri url = Uri.parse(
         'https://github.com/opakMobile/ApkFuar/raw/main/opakfuar.apk');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch');
-    }
+    }else
+      {
+        print("başarılı");
+      }
   }
+
 
   final FisController fisEx = Get.find();
 
   XFile? _selectedImage;
-
+  double? _progress;
   Future<void> _pickImage() async {
     var pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -1378,15 +1387,36 @@ class _verilerGuncelleState extends State<verilerGuncelle> {
                   alignment: Alignment.topLeft,
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.85,
-                    child: TextButton(
-                        onPressed: () async {
+                    child: 
+                      _progress != null
+                ? const CircularProgressIndicator():TextButton(
+                        onPressed: ()  {
                           _launchURL();
+                          /*
+                        FileDownloader.downloadFile(
+                          
+                          url: 'https://github.com/opakMobile/ApkFuar/raw/main/opakfuar.apk',
+                          onProgress: (name, progress) {
+                            setState(() {
+                              _progress = progress;
+                            });
+                          },
+                          onDownloadCompleted: (value) async {
+                            print('path  $value ');
+                            path = value;
+                            setState(() {
+                              _progress = null;
+                            });
+                             
+                          });
+                          */
                         },
                         child: Row(
                           children: [
                             Icon(
-                              Icons.new_releases_outlined,
-                              size: 30,
+                            Icons.new_releases_outlined,
+                           
+                              
                               color: Colors.green,
                             ),
                             Padding(
